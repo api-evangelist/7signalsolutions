@@ -1,0 +1,83 @@
+generated: '2026-09-05'
+method: searched
+source: registry queries (npm, PyPI, RubyGems, crates.io) + https://github.com/7Signal
+package_count: 0
+official_sdk_count: 0
+summary: >-
+  7SIGNAL publishes NO client library to any package registry. Searched npm (registry.npmjs.org search
+  for "7signal": zero results), PyPI (7signal, sevensignal, py7signal: all 404), RubyGems (empty result
+  set) and crates.io (zero crates). Their public GitHub organization holds six repositories and none of
+  them is a distributable SDK: API-Examples is a collection of runnable Python scripts with a shared
+  auth_utils.py helper and no packaging metadata, and the remaining four are forks of third-party
+  Wi-Fi/proxy libraries (proxy-vole, radiotap-library, ManagedWifi, ManagedNativeWifi) plus a fork of
+  Cisco Meraki's dashboard-api-python. Integration is therefore hand-rolled HTTP against the OpenAPI.
+packages: []
+first_party_code:
+- name: API-Examples
+  kind: example-scripts
+  official: true
+  registry: null
+  version: null
+  published: null
+  repo: https://github.com/7Signal/API-Examples
+  default_branch: develop
+  language: Python
+  last_updated: '2026-08-20'
+  runtime_deps:
+  - requests
+  - matplotlib (visualization examples only)
+  note: >-
+    version/published are null because there is no registry to read them from and the repository cuts no
+    tags or releases — checked, nothing to record. This is the closest thing 7SIGNAL ships to an SDK: a
+    shared OAuth token-cache module (auth_utils.py), a rate-limit retry wrapper
+    (examples/rate_limiting/rate_limit.py) and ~40 category scripts, importable but not installable.
+    It carries a DEVELOPER_GUIDE.md, a 22-chapter docs/ reference and a pytest suite, and it is the
+    de-facto API documentation for this provider.
+forks_not_sdks:
+- name: dashboard-api-python
+  repo: https://github.com/7Signal/dashboard-api-python
+  upstream: Cisco Meraki dashboard-api-python
+  official: false
+  registry: null
+  version: null
+  published: null
+  note: >-
+    A fork of MERAKI's SDK modified only to change the user-agent, used by 7SIGNAL's own Meraki
+    integration. Not a 7SIGNAL client library; recorded so it is never miscounted as one.
+- name: proxy-vole
+  repo: https://github.com/7Signal/proxy-vole
+  upstream: proxy-vole (Java proxy autodetect)
+  official: false
+  version: null
+  published: null
+- name: radiotap-library
+  repo: https://github.com/7Signal/radiotap-library
+  upstream: radiotap-library (C)
+  official: false
+  version: null
+  published: null
+- name: ManagedWifi
+  repo: https://github.com/7Signal/ManagedWifi
+  upstream: ManagedWifi (C#)
+  official: false
+  version: null
+  published: null
+- name: ManagedNativeWifi
+  repo: https://github.com/7Signal/ManagedNativeWifi
+  upstream: ManagedNativeWifi (C#)
+  official: false
+  version: null
+  published: null
+registries_checked:
+- registry: npm
+  query: https://registry.npmjs.org/-/v1/search?text=7signal
+  result: 0 packages
+- registry: pypi
+  query: https://pypi.org/pypi/7signal/json
+  result: 404
+- registry: rubygems
+  query: https://rubygems.org/api/v1/search.json?query=7signal
+  result: 0 gems
+- registry: crates.io
+  query: https://crates.io/api/v1/crates?q=7signal
+  result: 0 crates

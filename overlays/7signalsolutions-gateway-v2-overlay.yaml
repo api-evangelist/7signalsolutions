@@ -1,0 +1,82 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements to the 7SIGNAL Platform API
+  version: 1.0.0
+x-provenance:
+  generated: '2026-09-05'
+  method: generated
+  source: openapi/7signalsolutions-openapi.json
+  extends: openapi/7signalsolutions-openapi.json
+  upstream: https://api-v2.7signal.com/api/gateway-v2.json
+  note: This overlay records ONLY what the enrichment pipeline changed or added on top of 7SIGNAL's published contract.
+    The upstream document is a $ref hub across 51 separately-served JSON fragments; the copy in openapi/ is a faithful
+    bundle of those fragments with external $refs hoisted into components (schemas/parameters/requestBodies/responses).
+    No operation, parameter, schema or response was added, removed or reworded.
+actions:
+- target: $.servers
+  description: 'The published contract declares `servers: [{ "url": "/", "description": "API Gateway" }]` — a relative
+    server, which is correct for a Swagger UI loading the spec from its own host but unusable by any client that
+    reads the file standalone. Replaced with the absolute production host that 7SIGNAL''s own documentation names
+    ("The base URL for all API endpoints is https://api-v2.7signal.com").'
+  update:
+  - url: https://api-v2.7signal.com
+    description: 7SIGNAL API Gateway (production)
+- target: $.info
+  description: Record where the contract was fetched from and the license as published.
+  update:
+    x-origin:
+    - url: https://api-v2.7signal.com/api/gateway-v2.json
+      format: openapi
+      version: 3.0.3
+      fetched: '2026-09-05'
+      http_status: 200
+      discovered_via: https://api-v2.7signal.com/swagger-ui/swagger-initializer.js, which configures SwaggerUIBundle
+        with url "/api/gateway-v2.json". /v3/api-docs, /v2/api-docs and /openapi.json all return 401 on this host;
+        the spec is served anonymously only at that path.
+      fragments: 51
+- target: $.components.securitySchemes.oauth2.flows.clientCredentials
+  description: The published tokenUrl is the relative path "/oauth2/token"; absolutized against the documented base
+    URL so the scheme is usable from a standalone copy of the spec.
+  update:
+    tokenUrl: https://api-v2.7signal.com/oauth2/token
+- target: $.info
+  description: Cross-links to the derived and searched artifacts in this repository, so a consumer of the spec alone
+    can find the runtime semantics that are documented outside it.
+  update:
+    x-apievangelist:
+      authentication: authentication/7signalsolutions-authentication.yml
+      scopes: scopes/7signalsolutions-scopes.yml
+      conventions: conventions/7signalsolutions-conventions.yml
+      errors: errors/7signalsolutions-problem-types.yml
+      rate_limits: rate-limits/7signalsolutions-rate-limits.yml
+      lifecycle: lifecycle/7signalsolutions-lifecycle.yml
+      webhooks: asyncapi/7signalsolutions-webhooks.yml
+      data_model: data-model/7signalsolutions-data-model.yml
+      mcp: mcp/7signalsolutions-mcp.yml
+x-gaps-observed:
+  description: Contract gaps observed but deliberately NOT patched — an overlay that invents responses would be
+    fabrication. Recorded here so the gap is measurable rather than silently repaired.
+  items:
+  - 401 Unauthorized is declared on 0 of 215 operations, although it is the primary auth failure mode
+  - 429 Too Many Requests is declared on 0 of 215 operations, although rate limiting is documented and enforced
+  - The oauth2 scopes map is empty; only 3 operations name a scope (read)
+  - No tags[] declaration at the document root, though all 215 operations carry tags (32 distinct)
+  - 60 of 215 operations have a summary but no description
+  - 'IncidentResponse.resolutionReason (alert-incidents/schema.json) carries `nullable: true` as a sibling of `allOf`
+    with no `type` — the one hard lint error in the contract (Redocly nullable-type-sibling). It is 7SIGNAL''s defect
+    in the fragment they serve, verified present in openapi/_original/, and is deliberately NOT patched here: an
+    overlay that silently repairs a provider''s spec would hide the measurement.'
+  - 47 media-type examples and 6 schema examples do not validate against their own schemas (Redocly no-invalid-media-type-examples
+    / no-invalid-schema-examples) — e.g. common.Range.toAsDateString carries an example that does not match format
+    date-time.
+  - 3 operations reference an oauth2 scope (`read`) that the securityScheme's scopes map does not define (Redocly
+    security-scopes-defined).
+  - 1 operation declares no 4xx response at all (Redocly operation-4xx-response).
+x-lint:
+  tool: '@redocly/cli lint (built-in recommended)'
+  run: '2026-09-05'
+  target: openapi/7signalsolutions-openapi.json
+  result: 1 error, 64 warnings
+  errors: 1
+  warnings: 64
+  note: Every finding traces to the upstream fragments; none was introduced by bundling. Nothing was patched.

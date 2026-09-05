@@ -1,0 +1,1 @@
+{"resource":"https://mcp-v2.7signal.com/mcp","authorization_servers":["https://mcp-v2.7signal.com/"],"scopes_supported":["offline_access","openid","email","profile","https://login.7signal.com/scopes/user.read","https://login.7signal.com/scopes/organization.admin","sap:user.read","sap:user.config","mds:organizations.read"],"bearer_methods_supported":["header"]}

@@ -1,0 +1,45 @@
+{
+  "users-summary": {
+    "get": {
+      "operationId": "users-summary-get-i7j8",
+      "tags": [
+        "Summaries"
+      ],
+      "summary": "Gets the summary of the logged in user for the given organization or the primary organization if not specified.",
+      "parameters": [
+        {
+          "name": "organizationId",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/UserSummaryResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  }
+}

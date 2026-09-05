@@ -1,0 +1,1501 @@
+{
+  "FromRequestParam": {
+    "name": "from",
+    "in": "query",
+    "description": "The time in milliseconds from the epoch after which time series are fetched (the lower bound).",
+    "required": true,
+    "schema": {
+      "type": "integer"
+    }
+  },
+  "ToRequestParam": {
+    "name": "to",
+    "in": "query",
+    "description": "The time in milliseconds from the epoch up to which time series are fetched (the upper bound).",
+    "required": true,
+    "schema": {
+      "type": "integer"
+    }
+  },
+  "AgentsGroupByDimensionFilter": {
+    "name": "groupByDimension",
+    "in": "path",
+    "description": "Group by dimension",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "enum": [
+        "band",
+        "bssid",
+        "deviceId",
+        "driverProvider",
+        "driverVersion",
+        "locationId",
+        "make",
+        "model",
+        "network",
+        "platform",
+        "platformVersion",
+        "target"
+      ]
+    }
+  },
+  "SensorsGroupByDimensionFilter": {
+    "name": "groupByDimension",
+    "in": "path",
+    "description": "Group by dimension",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "enum": [
+        "locationId",
+        "networkband",
+        "networkbandservicearea",
+        "serviceArea",
+        "accessPoint",
+        "sensor",
+        "client",
+        "clientap"
+      ]
+    }
+  },
+  "SensorTimeBucketFilter": {
+    "name": "timeBucket",
+    "in": "query",
+    "description": "Interval by which the time range will be divided",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "enum": [
+        "1_MIN",
+        "10_MIN",
+        "1_HOUR",
+        "1_DAY",
+        "1_MONTH"
+      ]
+    }
+  },
+  "TimeBucketFilter": {
+    "name": "timeBucket",
+    "in": "query",
+    "description": "Interval by which the time range will be divided",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "enum": [
+        "1_MIN",
+        "10_MIN",
+        "15_MIN",
+        "1_HOUR",
+        "2_HOUR",
+        "1_DAY",
+        "1_WEEK",
+        "1_MONTH"
+      ]
+    }
+  },
+  "AggregateFunctionsDiscreteFilter": {
+    "name": "aggregateFunctions",
+    "in": "query",
+    "description": "Filter by aggregate functions to be applied to the data.",
+    "required": true,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "MODE",
+          "COUNT"
+        ]
+      }
+    }
+  },
+  "AgentsAggregateFunctionsNumericFilter": {
+    "name": "aggregateFunctions",
+    "in": "query",
+    "description": "Filter by aggregate functions to be applied to the data.",
+    "required": true,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "SUM",
+          "AVG",
+          "GRADE",
+          "SCORE",
+          "MIN",
+          "MAX",
+          "COUNT"
+        ]
+      }
+    }
+  },
+  "SensorsAggregateFunctionsNumericFilter": {
+    "name": "aggregateFunctions",
+    "in": "query",
+    "description": "Filter by aggregate functions to be applied to the data.",
+    "required": true,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "AVG",
+          "MIN",
+          "MAX",
+          "COUNT",
+          "SUM",
+          "PCTL"
+        ]
+      }
+    }
+  },
+  "MetricsDiscreteFilter": {
+    "name": "metrics",
+    "in": "query",
+    "description": "Filter by metrics to be applied to the data.",
+    "required": true,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "ADAPTER_STATE",
+          "BAND",
+          "BEST_NEIGHBOR_BSSID",
+          "BSSID",
+          "CHANNEL",
+          "CONNECTION_TYPE",
+          "LOCATION",
+          "MLD_BSSIDS",
+          "MLD_CHANNELS",
+          "MLD_MAC_ADDRESS",
+          "NETWORK",
+          "RESTRICTED_NETWORK",
+          "SEVEN_MCS",
+          "TX_RATE",
+          "VPN_CONNECTION",
+          "WIFI_STANDARD"
+        ]
+      }
+    }
+  },
+  "MetricHistogramFilter": {
+    "name": "metric",
+    "in": "query",
+    "description": "Filter by metric to be applied to the data.",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "enum": [
+        "ADJACENT_CHANNEL_INTERFERENCE",
+        "APPLICATION_CONNECTIVITY",
+        "CLASSIC_STICKY_FACTOR",
+        "CONGESTION",
+        "CONNECTIVITY",
+        "COVERAGE",
+        "CO_CHANNEL_INTERFERENCE",
+        "EXPERIENCE_SCORE",
+        "INTERFERENCE",
+        "NETWORK_CONNECTIVITY",
+        "OVERALL_BEST_NEIGHBOR_SIGNAL_STRENGTH",
+        "RF_PROBLEM",
+        "ROAMING"
+      ]
+    }
+  },
+  "MetricsNumericFilter": {
+    "name": "metrics",
+    "in": "query",
+    "description": "Filter by metrics to be applied to the data.",
+    "required": true,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "ADJACENT_CHANNEL_INTERFERENCE",
+          "APPLICATION_CONNECTIVITY",
+          "BATTERY_PERCENTAGE",
+          "BEST_NEIGHBOR_SIGNAL_STRENGTH",
+          "BEST_NEIGHBOR_SIGNAL_STRENGTH_PREFERRED_BAND",
+          "CHANNEL_UTILIZATION",
+          "CLASSIC_STICKY_FACTOR",
+          "CLIENT_COUNT",
+          "CONGESTION",
+          "CONNECTIVITY",
+          "COVERAGE",
+          "CO_CHANNEL_INTERFERENCE",
+          "CPU_AVERAGE",
+          "CPU_MAXIMUM",
+          "CPU_MINIMUM",
+          "EXPERIENCE_SCORE",
+          "GATEWAY_PING_CONNECTIVITY",
+          "GATEWAY_PING_LATENCY",
+          "IDLE_TIME",
+          "INTERFERENCE",
+          "MOS_UPLOAD",
+          "MOS_UPLOAD_JITTER",
+          "MOS_UPLOAD_PACKET_LOSS",
+          "NETWORK_CONNECTIVITY",
+          "NOISE",
+          "NUMBER_OF_ADJACENT_OVERLAPPING_BSSIDS",
+          "NUMBER_OF_CLOSER_ACCESS_POINTS",
+          "NUMBER_OF_CLOSER_ACCESS_POINTS_PREFERRED_BAND",
+          "NUMBER_OF_CO_CHANNEL_OVERLAPPING_BSSIDS",
+          "OVERALL_BEST_NEIGHBOR_SIGNAL_STRENGTH",
+          "PING_CONNECTIVITY",
+          "PING_LATENCY",
+          "PLATFORM_AVAILABLE_MEMORY",
+          "PLATFORM_MAX_MEMORY",
+          "PLATFORM_TOTAL_MEMORY",
+          "PLATFORM_USED_MEMORY",
+          "RF_PROBLEM",
+          "ROAMING",
+          "SIGNAL_STRENGTH",
+          "STICKY_FACTOR",
+          "STICKY_FACTOR_PREFERRED_BAND",
+          "TEST_DURATION",
+          "THROUGHPUT_DOWNLOAD",
+          "THROUGHPUT_DOWNLOAD_SIZE",
+          "THROUGHPUT_UPLOAD",
+          "THROUGHPUT_UPLOAD_SIZE",
+          "WEB_CONNECTIVITY",
+          "WEB_DURATION",
+          "WEB_THROUGHPUT"
+        ]
+      }
+    }
+  },
+  "DeviceIdsFilter": {
+    "name": "deviceIds",
+    "in": "query",
+    "description": "Filter data returned by one or more device ids",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "BssidsFilter": {
+    "name": "bssids",
+    "in": "query",
+    "description": "Filter data returned by one or more bssids",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "LocationsFilter": {
+    "name": "locations",
+    "in": "query",
+    "description": "Filter data returned by one or more locations",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "NetworksFilter": {
+    "name": "networks",
+    "in": "query",
+    "description": "Filter data returned by one or more networks",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "BandsFilter": {
+    "name": "bands",
+    "in": "query",
+    "description": "Filter data returned by one or more bands",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "TargetsFilter": {
+    "name": "targets",
+    "in": "query",
+    "description": "Filter data returned by one or more targets",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "PlatformsFilter": {
+    "name": "platforms",
+    "in": "query",
+    "description": "Filter data returned by one or more platforms",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "PlatformVersionsFilter": {
+    "name": "platformVersions",
+    "in": "query",
+    "description": "Filter data returned by one or more platform versions",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "MakesFilter": {
+    "name": "makes",
+    "in": "query",
+    "description": "Filter data returned by one or more makes",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "ModelsFilter": {
+    "name": "models",
+    "in": "query",
+    "description": "Filter data returned by one or more models",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "DriverProvidersFilter": {
+    "name": "driverProviders",
+    "in": "query",
+    "description": "Filter data returned by one or more driver providers",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "DriverVersionsFilter": {
+    "name": "driverVersions",
+    "in": "query",
+    "description": "Filter data returned by one or more driver versions",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "SensorMetricsKPIFilter": {
+    "name": "metrics",
+    "in": "query",
+    "description": "Filter by metrics to be applied to the data. Common examples include HC005, HC006, HC007, HC008, AV008, AC001, RA103, AC002, DN002, QURT007, QUAP008, QUAP009, QURT004, QUAP005, QUAP006, QURS004, QURS007, QURS002, TR062, DR013, DR014, DR015, DR016, DR017, DR018. For the full list of KPI codes, see the [Time Series Sensors Metric Types endpoint](/swagger-ui/index.html#/TimeSeries/time-series-sensors-metric-types).",
+    "required": true,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "SensorLocationIdsFilter": {
+    "name": "locations",
+    "in": "query",
+    "description": "Filter data returned by one or more sensor location IDs",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    }
+  },
+  "SensorServiceAreaIdsFilter": {
+    "name": "serviceAreas",
+    "in": "query",
+    "description": "Filter data returned by one or more sensor service areas IDs",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    }
+  },
+  "SensorAccessPointIdsFilter": {
+    "name": "accessPoints",
+    "in": "query",
+    "description": "Filter data returned by one or more sensor access point IDs (required when groupByDimension is 'accessPoint' or 'clientap')",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    }
+  },
+  "SensorIdsFilter": {
+    "name": "sensorIds",
+    "in": "query",
+    "description": "Filter data returned by one or more Sensor IDs",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    }
+  },
+  "SensorNetworkIdsFilter": {
+    "name": "networks",
+    "in": "query",
+    "description": "Filter data returned by one or more sensor network IDs",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      }
+    }
+  },
+  "SensorBandFilter": {
+    "name": "band",
+    "in": "query",
+    "description": "Filter data returned by a band",
+    "required": false,
+    "schema": {
+      "type": "string",
+      "enum": [
+        "2.4",
+        "5",
+        "6"
+      ]
+    }
+  },
+  "SensorClientMacsFilter": {
+    "name": "clients",
+    "in": "query",
+    "description": "Filter data returned by one or more client MAC addresses (required when groupByDimension is 'client' or 'clientap')",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "SensorVendorsFilter": {
+    "name": "vendors",
+    "in": "query",
+    "description": "Filter clients by one or more vendor/OUI names (only applicable when groupByDimension is 'client' or 'clientap')",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "SensorsTimeSeriesOrganizationRequestParam": {
+    "name": "organization",
+    "in": "query",
+    "description": "Fetch a specific organization by it's group name. By default, the group associated with your JWT token will be used.",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "GetSensorsTimeSeriesNumericResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/SensorTimeSeriesNumeric"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetSensorsTimeSeriesNumericGroupByResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/SensorTimeSeriesNumericGroupBy"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "SensorTimeSeriesNumeric": {
+    "type": "object",
+    "properties": {
+      "metricAggregates": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/MetricNumericAggregatesType"
+        }
+      }
+    }
+  },
+  "SensorTimeSeriesNumericGroupBy": {
+    "type": "object",
+    "properties": {
+      "accessPointId": {
+        "type": "number"
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the grouped access point. Present when grouping by accessPoint.",
+        "example": "TENNANTS_5GHz"
+      },
+      "network": {
+        "type": "string",
+        "description": "Network name. When grouping by accessPoint this is the ESSID the access point broadcasts; when grouping by networkband it is the configured name of the wireless network. The two are not guaranteed to be identical.",
+        "example": "TENNANTS"
+      },
+      "bssid": {
+        "type": "string",
+        "description": "MAC address of the grouped access point. Present when grouping by accessPoint.",
+        "example": "8C:30:66:A0:75:69"
+      },
+      "sensorId": {
+        "type": "number"
+      },
+      "locationId": {
+        "type": "number"
+      },
+      "organization": {
+        "type": "string"
+      },
+      "serviceAreaId": {
+        "type": "number"
+      },
+      "networkId": {
+        "type": "number"
+      },
+      "band": {
+        "type": "string",
+        "example": "5 GHz"
+      },
+      "channel": {
+        "type": "number",
+        "description": "Channel number of the grouped access point. Present when grouping by accessPoint and the access point has a defined channel.",
+        "example": 36
+      },
+      "clientMac": {
+        "type": "string"
+      },
+      "vendor": {
+        "type": "string"
+      },
+      "metricAggregates": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/MetricNumericAggregatesType"
+        }
+      }
+    }
+  },
+  "GetSensorTimeSeriesNumericSummaryResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/SensorTimeSeriesNumericSummary"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "SensorTimeSeriesNumericSummary": {
+    "type": "object",
+    "properties": {
+      "accessPointId": {
+        "type": "number"
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the grouped access point. Present when grouping by accessPoint.",
+        "example": "TENNANTS_5GHz"
+      },
+      "network": {
+        "type": "string",
+        "description": "Network name. When grouping by accessPoint this is the ESSID the access point broadcasts; when grouping by networkband it is the configured name of the wireless network. The two are not guaranteed to be identical.",
+        "example": "TENNANTS"
+      },
+      "bssid": {
+        "type": "string",
+        "description": "MAC address of the grouped access point. Present when grouping by accessPoint.",
+        "example": "8C:30:66:A0:75:69"
+      },
+      "sensorId": {
+        "type": "number"
+      },
+      "locationId": {
+        "type": "number"
+      },
+      "organization": {
+        "type": "string"
+      },
+      "serviceAreaId": {
+        "type": "number"
+      },
+      "networkId": {
+        "type": "number"
+      },
+      "band": {
+        "type": "string",
+        "example": "5 GHz"
+      },
+      "channel": {
+        "type": "number",
+        "description": "Channel number of the grouped access point. Present when grouping by accessPoint and the access point has a defined channel.",
+        "example": 36
+      },
+      "clientMac": {
+        "type": "string"
+      },
+      "vendor": {
+        "type": "string"
+      },
+      "metric": {
+        "type": "string"
+      },
+      "min": {
+        "type": "number"
+      },
+      "max": {
+        "type": "number"
+      },
+      "avg": {
+        "type": "number"
+      },
+      "sum": {
+        "type": "number"
+      },
+      "count": {
+        "type": "number"
+      },
+      "threshold": {
+        "type": "number"
+      }
+    }
+  },
+  "GetSensorTimeSeriesOverallNumericSummaryResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/SensorTimeSeriesOverallNumericSummary"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "SensorTimeSeriesOverallNumericSummary": {
+    "type": "object",
+    "properties": {
+      "metric": {
+        "type": "string"
+      },
+      "min": {
+        "type": "number"
+      },
+      "max": {
+        "type": "number"
+      },
+      "avg": {
+        "type": "number"
+      },
+      "sum": {
+        "type": "number"
+      },
+      "count": {
+        "type": "number"
+      },
+      "threshold": {
+        "type": "number"
+      }
+    }
+  },
+  "GetAgentTimeSeriesDiscreteResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentTimeSeriesDiscrete"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetAgentTimeSeriesDiscreteGroupByResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentTimeSeriesDiscreteGroupBy"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "AgentTimeSeriesDiscrete": {
+    "type": "object",
+    "properties": {
+      "metricAggregates": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/MetricDiscreteAggregatesType"
+        }
+      }
+    }
+  },
+  "AgentTimeSeriesDiscreteGroupBy": {
+    "type": "object",
+    "properties": {
+      "deviceId": {
+        "type": "string"
+      },
+      "locationId": {
+        "type": "string"
+      },
+      "network": {
+        "type": "string"
+      },
+      "band": {
+        "type": "string"
+      },
+      "bssid": {
+        "type": "string"
+      },
+      "target": {
+        "type": "string"
+      },
+      "platform": {
+        "type": "string"
+      },
+      "platformVersion": {
+        "type": "string"
+      },
+      "make": {
+        "type": "string"
+      },
+      "model": {
+        "type": "string"
+      },
+      "driver": {
+        "type": "object",
+        "$ref": "#/AgentDriverType"
+      },
+      "metricAggregates": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/MetricDiscreteAggregatesType"
+        }
+      }
+    }
+  },
+  "AgentDriverType": {
+    "type": "object",
+    "properties": {
+      "provider": {
+        "type": "string"
+      },
+      "version": {
+        "type": "string"
+      }
+    }
+  },
+  "MetricDiscreteAggregatesType": {
+    "type": "object",
+    "properties": {
+      "metric": {
+        "type": "string"
+      },
+      "timeSeries": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/TimeSeriesDiscreteType"
+        }
+      }
+    }
+  },
+  "TimeSeriesDiscreteType": {
+    "type": "object",
+    "properties": {
+      "ts": {
+        "type": "number"
+      },
+      "value": {
+        "type": "string"
+      },
+      "count": {
+        "type": "number"
+      }
+    }
+  },
+  "GetAgentTimeSeriesHistogramResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentTimeSeriesHistogram"
+        }
+      }
+    }
+  },
+  "AgentTimeSeriesHistogram": {
+    "type": "object",
+    "properties": {
+      "timestamp": {
+        "type": "number"
+      },
+      "bins": {
+        "type": "object",
+        "$ref": "#/AgentBinsType"
+      }
+    }
+  },
+  "AgentBinsType": {
+    "type": "object",
+    "properties": {
+      "additionalProp1": {
+        "type": "number"
+      },
+      "additionalProp2": {
+        "type": "number"
+      },
+      "additionalProp3": {
+        "type": "number"
+      }
+    }
+  },
+  "GetAgentTimeSeriesNumericSummaryResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentTimeSeriesNumericSummary"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "AgentTimeSeriesNumericSummary": {
+    "type": "object",
+    "properties": {
+      "deviceId": {
+        "type": "string"
+      },
+      "locationId": {
+        "type": "string"
+      },
+      "network": {
+        "type": "string"
+      },
+      "band": {
+        "type": "string"
+      },
+      "bssid": {
+        "type": "string"
+      },
+      "target": {
+        "type": "string"
+      },
+      "platform": {
+        "type": "string"
+      },
+      "platformVersion": {
+        "type": "string"
+      },
+      "make": {
+        "type": "string"
+      },
+      "model": {
+        "type": "string"
+      },
+      "driver": {
+        "type": "object",
+        "$ref": "#/AgentDriverType"
+      },
+      "metric": {
+        "type": "string",
+        "enum": [
+          "ADJACENT_CHANNEL_INTERFERENCE",
+          "APPLICATION_CONNECTIVITY",
+          "BATTERY_PERCENTAGE",
+          "BEST_NEIGHBOR_SIGNAL_STRENGTH",
+          "BEST_NEIGHBOR_SIGNAL_STRENGTH_PREFERRED_BAND",
+          "CHANNEL_UTILIZATION",
+          "CLASSIC_STICKY_FACTOR",
+          "CLIENT_COUNT",
+          "CONGESTION",
+          "CONNECTIVITY",
+          "COVERAGE",
+          "CO_CHANNEL_INTERFERENCE",
+          "CPU_AVERAGE",
+          "CPU_MAXIMUM",
+          "CPU_MINIMUM",
+          "EXPERIENCE_SCORE",
+          "GATEWAY_PING_CONNECTIVITY",
+          "GATEWAY_PING_LATENCY",
+          "IDLE_TIME",
+          "INTERFERENCE",
+          "MOS_UPLOAD",
+          "MOS_UPLOAD_JITTER",
+          "MOS_UPLOAD_PACKET_LOSS",
+          "NETWORK_CONNECTIVITY",
+          "NOISE",
+          "NUMBER_OF_ADJACENT_OVERLAPPING_BSSIDS",
+          "NUMBER_OF_CLOSER_ACCESS_POINTS",
+          "NUMBER_OF_CLOSER_ACCESS_POINTS_PREFERRED_BAND",
+          "NUMBER_OF_CO_CHANNEL_OVERLAPPING_BSSIDS",
+          "OVERALL_BEST_NEIGHBOR_SIGNAL_STRENGTH",
+          "PING_CONNECTIVITY",
+          "PING_LATENCY",
+          "PLATFORM_AVAILABLE_MEMORY",
+          "PLATFORM_MAX_MEMORY",
+          "PLATFORM_TOTAL_MEMORY",
+          "PLATFORM_USED_MEMORY",
+          "RF_PROBLEM",
+          "ROAMING",
+          "SIGNAL_STRENGTH",
+          "STICKY_FACTOR",
+          "STICKY_FACTOR_PREFERRED_BAND",
+          "TEST_DURATION",
+          "THROUGHPUT_DOWNLOAD",
+          "THROUGHPUT_DOWNLOAD_SIZE",
+          "THROUGHPUT_UPLOAD",
+          "THROUGHPUT_UPLOAD_SIZE",
+          "WEB_CONNECTIVITY",
+          "WEB_DURATION",
+          "WEB_THROUGHPUT"
+        ]
+      },
+      "min": {
+        "type": "number"
+      },
+      "max": {
+        "type": "number"
+      },
+      "avg": {
+        "type": "number"
+      },
+      "sum": {
+        "type": "number"
+      },
+      "count": {
+        "type": "number"
+      },
+      "threshold": {
+        "type": "number"
+      },
+      "grade": {
+        "type": "string",
+        "enum": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "F"
+        ]
+      },
+      "score": {
+        "type": "number"
+      }
+    }
+  },
+  "GetAgentTimeSeriesOverallNumericSummaryResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentTimeSeriesOverallNumericSummary"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "AgentTimeSeriesOverallNumericSummary": {
+    "type": "object",
+    "properties": {
+      "metric": {
+        "type": "string",
+        "enum": [
+          "ADJACENT_CHANNEL_INTERFERENCE",
+          "APPLICATION_CONNECTIVITY",
+          "BATTERY_PERCENTAGE",
+          "BEST_NEIGHBOR_SIGNAL_STRENGTH",
+          "BEST_NEIGHBOR_SIGNAL_STRENGTH_PREFERRED_BAND",
+          "CHANNEL_UTILIZATION",
+          "CLASSIC_STICKY_FACTOR",
+          "CLIENT_COUNT",
+          "CONGESTION",
+          "CONNECTIVITY",
+          "COVERAGE",
+          "CO_CHANNEL_INTERFERENCE",
+          "CPU_AVERAGE",
+          "CPU_MAXIMUM",
+          "CPU_MINIMUM",
+          "EXPERIENCE_SCORE",
+          "GATEWAY_PING_CONNECTIVITY",
+          "GATEWAY_PING_LATENCY",
+          "IDLE_TIME",
+          "INTERFERENCE",
+          "MOS_UPLOAD",
+          "MOS_UPLOAD_JITTER",
+          "MOS_UPLOAD_PACKET_LOSS",
+          "NETWORK_CONNECTIVITY",
+          "NOISE",
+          "NUMBER_OF_ADJACENT_OVERLAPPING_BSSIDS",
+          "NUMBER_OF_CLOSER_ACCESS_POINTS",
+          "NUMBER_OF_CLOSER_ACCESS_POINTS_PREFERRED_BAND",
+          "NUMBER_OF_CO_CHANNEL_OVERLAPPING_BSSIDS",
+          "OVERALL_BEST_NEIGHBOR_SIGNAL_STRENGTH",
+          "PING_CONNECTIVITY",
+          "PING_LATENCY",
+          "PLATFORM_AVAILABLE_MEMORY",
+          "PLATFORM_MAX_MEMORY",
+          "PLATFORM_TOTAL_MEMORY",
+          "PLATFORM_USED_MEMORY",
+          "RF_PROBLEM",
+          "ROAMING",
+          "SIGNAL_STRENGTH",
+          "STICKY_FACTOR",
+          "STICKY_FACTOR_PREFERRED_BAND",
+          "TEST_DURATION",
+          "THROUGHPUT_DOWNLOAD",
+          "THROUGHPUT_DOWNLOAD_SIZE",
+          "THROUGHPUT_UPLOAD",
+          "THROUGHPUT_UPLOAD_SIZE",
+          "WEB_CONNECTIVITY",
+          "WEB_DURATION",
+          "WEB_THROUGHPUT"
+        ]
+      },
+      "min": {
+        "type": "number"
+      },
+      "max": {
+        "type": "number"
+      },
+      "avg": {
+        "type": "number"
+      },
+      "sum": {
+        "type": "number"
+      },
+      "count": {
+        "type": "number"
+      },
+      "threshold": {
+        "type": "number"
+      },
+      "grade": {
+        "type": "string",
+        "enum": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "F"
+        ]
+      },
+      "score": {
+        "type": "number"
+      }
+    }
+  },
+  "GetAgentTimeSeriesNumericResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentTimeSeriesNumeric"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetAgentTimeSeriesNumericGroupByResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentTimeSeriesNumericGroupBy"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "AgentTimeSeriesNumeric": {
+    "type": "object",
+    "properties": {
+      "metricAggregates": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/MetricNumericAggregatesType"
+        }
+      }
+    }
+  },
+  "AgentTimeSeriesNumericGroupBy": {
+    "type": "object",
+    "properties": {
+      "deviceId": {
+        "type": "string"
+      },
+      "locationId": {
+        "type": "string"
+      },
+      "network": {
+        "type": "string"
+      },
+      "band": {
+        "type": "string"
+      },
+      "bssid": {
+        "type": "string"
+      },
+      "target": {
+        "type": "string"
+      },
+      "platform": {
+        "type": "string"
+      },
+      "platformVersion": {
+        "type": "string"
+      },
+      "make": {
+        "type": "string"
+      },
+      "model": {
+        "type": "string"
+      },
+      "driver": {
+        "type": "object",
+        "$ref": "#/AgentDriverType"
+      },
+      "metricAggregates": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/MetricNumericAggregatesType"
+        }
+      }
+    }
+  },
+  "MetricNumericAggregatesType": {
+    "type": "object",
+    "properties": {
+      "metric": {
+        "type": "string"
+      },
+      "min": {
+        "type": "number"
+      },
+      "max": {
+        "type": "number"
+      },
+      "avg": {
+        "type": "number"
+      },
+      "sum": {
+        "type": "number"
+      },
+      "count": {
+        "type": "number"
+      },
+      "threshold": {
+        "type": "number"
+      },
+      "unit": {
+        "type": "string"
+      },
+      "timeSeries": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/TimeSeriesNumericType"
+        }
+      },
+      "grade": {
+        "type": "string"
+      },
+      "score": {
+        "type": "number"
+      }
+    }
+  },
+  "TimeSeriesNumericType": {
+    "type": "object",
+    "properties": {
+      "ts": {
+        "type": "number"
+      },
+      "min": {
+        "type": "number"
+      },
+      "max": {
+        "type": "number"
+      },
+      "avg": {
+        "type": "number"
+      },
+      "sum": {
+        "type": "number"
+      },
+      "count": {
+        "type": "number"
+      },
+      "grade": {
+        "type": "string"
+      },
+      "score": {
+        "type": "number"
+      }
+    }
+  },
+  "AgentsMetricTypesFilter": {
+    "name": "metricTypes",
+    "in": "query",
+    "description": "Filter data returned by one or more metric types",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "ADAPTER_STATE",
+          "ADJACENT_CHANNEL_INTERFERENCE",
+          "APPLICATION_CONNECTIVITY",
+          "BAND",
+          "BATTERY_PERCENTAGE",
+          "BEST_NEIGHBOR_BSSID",
+          "BEST_NEIGHBOR_SIGNAL_STRENGTH",
+          "BEST_NEIGHBOR_SIGNAL_STRENGTH_PREFERRED_BAND",
+          "BSSID",
+          "CHANNEL",
+          "CHANNEL_UTILIZATION",
+          "CLASSIC_STICKY_FACTOR",
+          "CLIENT_COUNT",
+          "CONGESTION",
+          "CONNECTION_TYPE",
+          "CONNECTIVITY",
+          "COVERAGE",
+          "CO_CHANNEL_INTERFERENCE",
+          "CPU_AVERAGE",
+          "CPU_MAXIMUM",
+          "CPU_MINIMUM",
+          "MLD_BSSIDS",
+          "MLD_CHANNELS",
+          "MLD_MAC_ADDRESS",
+          "DOWNLOAD_MOS_SCORE",
+          "EXPERIENCE_SCORE",
+          "GATEWAY_PING_CONNECTIVITY",
+          "GATEWAY_PING_LATENCY",
+          "IDLE_TIME",
+          "INTERFERENCE",
+          "LOCATION",
+          "MOS_UPLOAD",
+          "MOS_UPLOAD_JITTER",
+          "MOS_UPLOAD_PACKET_LOSS",
+          "NETWORK",
+          "NETWORK_CONNECTIVITY",
+          "NOISE",
+          "NUMBER_OF_ADJACENT_OVERLAPPING_BSSIDS",
+          "NUMBER_OF_CLOSER_ACCESS_POINTS",
+          "NUMBER_OF_CLOSER_ACCESS_POINTS_PREFERRED_BAND",
+          "NUMBER_OF_CO_CHANNEL_OVERLAPPING_BSSIDS",
+          "OVERALL_BEST_NEIGHBOR_SIGNAL_STRENGTH",
+          "PING_CONNECTIVITY",
+          "PING_LATENCY",
+          "PLATFORM_AVAILABLE_MEMORY",
+          "PLATFORM_MAX_MEMORY",
+          "PLATFORM_TOTAL_MEMORY",
+          "PLATFORM_USED_MEMORY",
+          "RESTRICTED_NETWORK",
+          "RF_PROBLEM",
+          "ROAMING",
+          "SEVEN_MCS",
+          "SIGNAL_STRENGTH",
+          "STICKY_FACTOR",
+          "STICKY_FACTOR_PREFERRED_BAND",
+          "TEST_DURATION",
+          "THROUGHPUT_DOWNLOAD",
+          "THROUGHPUT_DOWNLOAD_SIZE",
+          "THROUGHPUT_UPLOAD",
+          "THROUGHPUT_UPLOAD_SIZE",
+          "TX_RATE",
+          "VPN_CONNECTION",
+          "WEB_CONNECTIVITY",
+          "WEB_DURATION",
+          "WEB_THROUGHPUT",
+          "WIFI_STANDARD"
+        ]
+      }
+    }
+  },
+  "GetAgentTimeSeriesMetricTypesResponse": {
+    "type": "object",
+    "description": "Map of metric identifiers to AgentMetricType objects",
+    "additionalProperties": {
+      "$ref": "#/AgentMetricType"
+    },
+    "example": {
+      "CPU_AVERAGE": {
+        "name": "Average CPU Usage",
+        "description": "The average CPU utilization on the system",
+        "unit": "%"
+      },
+      "CPU_MAXIMUM": {
+        "name": "Network Latency",
+        "description": "The maximum CPU utilization on the system",
+        "unit": "%"
+      }
+    }
+  },
+  "AgentMetricType": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "unit": {
+        "type": "string"
+      }
+    }
+  },
+  "GetSensorTimeSeriesMetricTypesResponse": {
+    "type": "object",
+    "description": "Map of metric identifiers to SensorMetricType objects",
+    "additionalProperties": {
+      "$ref": "#/SensorMetricType"
+    },
+    "example": {
+      "PING_SUCCESS_RATE": {
+        "kpiCode": "QURT007",
+        "name": "Ping success rate",
+        "description": "Number of successful pings divided by the total amount of ping attempts.",
+        "unit": "%",
+        "aggregation": "NO"
+      },
+      "BEACON_AVAILABILITY": {
+        "kpiCode": "AV008",
+        "name": "Beacon availability",
+        "description": "Measures beacon signal transmission from each monitored managed AP. The KPI is the relative amount of received and expected beacons. The test is called SCAN_MANAGED. Results from SCAN_RADIO-tests are ignored.",
+        "unit": "%",
+        "aggregation": "NO"
+      }
+    }
+  },
+  "SensorMetricType": {
+    "type": "object",
+    "properties": {
+      "kpiCode": {
+        "type": "string"
+      },
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "unit": {
+        "type": "string"
+      },
+      "aggregation": {
+        "type": "string"
+      }
+    }
+  }
+}

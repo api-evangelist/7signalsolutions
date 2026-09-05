@@ -1,0 +1,646 @@
+{
+  "PathServiceAreasAgents": {
+    "get": {
+      "summary": "List the Agent Service Areas",
+      "operationId": "agent-service-areas-get",
+      "description": "Page through all of the Agent Service Areas",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "serviceAreaIds",
+          "in": "query",
+          "description": "Filter by specific service area IDs. Provide a comma-separated list of service area UUIDs to return only those service areas.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "searchValue",
+          "in": "query",
+          "description": "Filter by service area name where the name contains this case insensitive value",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "scoreSortStart",
+          "in": "query",
+          "description": "Start time for score-based sorting (epoch milliseconds) - required when sorting by 'score'",
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "scoreSortEnd",
+          "in": "query",
+          "description": "End time for score-based sorting (epoch milliseconds) - required when sorting by 'score'",
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "sort",
+          "in": "query",
+          "description": "Sorting supports multiple properties: repeat 'sort' param e.g. sort=name,asc&sort=createdAt,desc. Special value 'score' sorts service areas by average Experience Score. It requires scoreSortStart & scoreSortEnd (epoch millis) and cannot be combined with other sorts. Examples: sort=score,desc",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentServiceAreasResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "ServiceAreas"
+      ]
+    },
+    "post": {
+      "summary": "Creates Agent Service Areas",
+      "operationId": "agent-service-areas-post",
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PostAgentServiceAreasRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentServiceAreasResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "ServiceAreas"
+      ]
+    },
+    "put": {
+      "summary": "Updates Agent Service Areas",
+      "operationId": "agent-service-areas-put",
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PutAgentServiceAreasRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentServiceAreasResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "ServiceAreas"
+      ]
+    },
+    "delete": {
+      "summary": "Deletes Agent Service Areas",
+      "operationId": "agent-service-areas-delete",
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/DeleteAgentServiceAreaIdList"
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "ServiceAreas"
+      ]
+    }
+  },
+  "PathServiceAreasAgent": {
+    "get": {
+      "summary": "Fetch the specified Agent Service Area",
+      "operationId": "agent-service-area-get",
+      "description": "Fetch the specified Agent Service Area",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/AgentServiceAreaId"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentServiceAreaResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "ServiceAreas"
+      ]
+    },
+    "put": {
+      "summary": "Update the specified Agent Service Area",
+      "operationId": "agent-service-area-put",
+      "description": "Update the specified Agent Service Area",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/AgentServiceAreaId"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/AgentSingleUpdateServiceAreaRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentServiceAreaResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "ServiceAreas"
+      ]
+    },
+    "delete": {
+      "summary": "Delete the specified Agent Service Area",
+      "operationId": "agent-service-area-delete",
+      "description": "Delete the specified Agent Service Area",
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/AgentServiceAreaId"
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "ServiceAreas"
+      ]
+    }
+  },
+  "PathServiceAreasSensors": {
+    "get": {
+      "summary": "List the Sensor Service Areas",
+      "operationId": "sensor-service-areas",
+      "description": "Page through all of the Sensor Service Areas",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "locationId",
+          "in": "query",
+          "description": "Filter the specific service area by its location id",
+          "required": false,
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "excludeDefaultServiceArea",
+          "in": "query",
+          "description": "Exclude the default service area from the results",
+          "required": false,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorServiceAreasResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "ServiceAreas"
+      ]
+    },
+    "post": {
+      "summary": "Creates a Sensor Service Area",
+      "operationId": "sensor-service-areas-post",
+      "description": "Returns the new service area, required fields: name, parentLocationId",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PostSensorServiceAreaRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorServiceAreaResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "tags": [
+        "ServiceAreas"
+      ]
+    }
+  },
+  "PathServiceAreasSensor": {
+    "get": {
+      "summary": "Fetch the specified Service Area",
+      "operationId": "sensor-service-area",
+      "description": "Fetch the specified Topology Service Area",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorServiceAreaId"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorServiceAreaResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "ServiceAreas"
+      ]
+    },
+    "put": {
+      "summary": "Update the specified Sensor Service Area",
+      "operationId": "sensor-service-area-put",
+      "description": "Returns the updated service area, required fields: name",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorServiceAreaId"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PutSensorServiceAreaRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorServiceAreaResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "ServiceAreas"
+      ]
+    },
+    "delete": {
+      "summary": "Delete the specified Sensor Service Area",
+      "operationId": "sensor-service-area-delete",
+      "description": "Recursively removes everything under this service area (Eyes, etc.)",
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorServiceAreaId"
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "ServiceAreas"
+      ]
+    }
+  },
+  "PathServiceAreasSensorEyes": {
+    "post": {
+      "summary": "Add Eyes to a service area",
+      "operationId": "sensor-service-area-add-eyes",
+      "description": "Moves the given Eyes into this service area from wherever they currently are. Returns the updated service area. There is no separate \"remove\" endpoint - an Eye always belongs to some service area, so removing it from one only makes sense as adding it to another, which this same endpoint does",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorServiceAreaId"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PostSensorServiceAreaSensorsRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorServiceAreaResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "ServiceAreas"
+      ]
+    }
+  },
+  "PathServiceAreasSensorNetwork": {
+    "post": {
+      "summary": "Bind a wireless network to a service area",
+      "operationId": "sensor-service-area-bind-network",
+      "description": "Returns the updated service area",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorServiceAreaId"
+        },
+        {
+          "$ref": "schema.json#/SensorNetworkId"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorServiceAreaResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "ServiceAreas"
+      ]
+    },
+    "delete": {
+      "summary": "Unbind a wireless network from a service area",
+      "operationId": "sensor-service-area-unbind-network",
+      "description": "Returns the updated service area",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorServiceAreaId"
+        },
+        {
+          "$ref": "schema.json#/SensorNetworkId"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorServiceAreaResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "ServiceAreas"
+      ]
+    }
+  }
+}

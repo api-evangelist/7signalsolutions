@@ -1,0 +1,34 @@
+generated: '2026-09-05'
+method: searched
+source: https://7signal.com/mobile-eye/pricing/
+plan_count: 0
+public_pricing: false
+model: annual subscription, usage-based, quoted per customer
+billing_terms:
+- 1 year
+- 2 years
+- 3 years
+plans: []
+note: >-
+  7SIGNAL publishes a pricing PAGE but no priced tiers. The page describes "flexible usage-based
+  pricing" customized per customer on an annual subscription with 1-3 year terms, states that there is
+  "no limit to the number of tests that can be performed or number of endpoints", and lists what a
+  subscription includes (live support, 24/7 on-demand access, engineer and management dashboards, free
+  maintenance and version upgrades, alerts and alarms, unlimited testing). Every call to action routes
+  to Contact Us or Schedule a Demo. There is no self-serve signup, no published list price, and no
+  per-API price. plan_count is an honest zero, not a gap in this pass.
+included_with_subscription:
+- Live support
+- 24/7 on-demand access
+- Engineer and management dashboards
+- Free maintenance and version upgrades
+- Alerts and alarms
+- Unlimited testing and unlimited monitored endpoints
+api_access_note: >-
+  API and MCP access are not sold or metered separately on any public page; they are presented as
+  platform capabilities of a 7SIGNAL subscription.
+evidence:
+- url: https://7signal.com/mobile-eye/pricing/
+  status: 200
+- url: https://7signal.com/schedule-a-demo/
+  status: 200

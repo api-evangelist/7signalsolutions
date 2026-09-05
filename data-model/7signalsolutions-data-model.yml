@@ -1,0 +1,1477 @@
+generated: '2026-09-05'
+method: derived
+source: openapi/7signalsolutions-openapi.json
+note: Entity-relationship graph derived from the 215-operation contract. Entities are the resource roots the gateway
+  exposes; relationships come from nested collection paths (parent/{id}/child) and from the id-reference fields
+  that appear across the schema set. 7SIGNAL identifies every resource with a bare UUID — there are no typed id
+  prefixes to key on, so a caller cannot tell a locationId from a serviceAreaId by inspection.
+id_convention:
+  format: UUID v4
+  prefixed: false
+  example: 3f2b9c1e-58a4-4d2f-9b71-2c0e5a7d1f34
+  note: No Stripe-style typed prefixes. Ids are organization-scoped; a wrong-scope id returns 404, not 403.
+core_split:
+  agents: Mobile Eye software agents installed on endpoints (paths ending /agents)
+  sensors: Sapphire Eye hardware sensors (paths ending /sensors)
+  note: Most resource families are mirrored across an /agents and a /sensors variant with different fields; treat
+    them as two parallel object graphs over a shared location hierarchy.
+entities:
+- name: /oauth2/token
+  tags:
+  - Authentication
+  identifiers: []
+  operation_count: 1
+  operations:
+  - method: POST
+    path: /oauth2/token
+    operationId: oauth2-token-endpoint
+    summary: OAuth2 Token Endpoint
+- name: /access/summary
+  tags:
+  - Access
+  identifiers:
+  - userId
+  operation_count: 1
+  operations:
+  - method: GET
+    path: /access/{userId}/summary
+    operationId: access-summary-get-a1b2
+    summary: List the access summary for the given user
+- name: /access-points/agents
+  tags:
+  - AccessPoints
+  identifiers:
+  - accessPointId
+  operation_count: 6
+  operations:
+  - method: GET
+    path: /access-points/agents
+    operationId: agent-access-points
+    summary: List the Agent Access Points
+  - method: POST
+    path: /access-points/agents
+    operationId: PathAccessPointsAgents-post-n7p8
+    summary: Creates one or many Agent Access Points
+  - method: DELETE
+    path: /access-points/agents/{accessPointId}
+    operationId: PathAccessPointsAgent-delete-u3v4
+    summary: Delete the Access Point specified by the UUID
+  - method: GET
+    path: /access-points/agents/{accessPointId}
+    operationId: agent-access-point
+    summary: Fetch the specified Access Point
+  - method: PATCH
+    path: /access-points/agents/{accessPointId}
+    operationId: PathAccessPointsAgent-patch-s1t2
+    summary: Update the specified Access Point with the details in the payload, name being required
+  - method: PUT
+    path: /access-points/agents/{accessPointId}
+    operationId: PathAccessPointsAgent-put-q9r0
+    summary: Replace the specified Access Point with the details in the payload
+- name: /access-points/sensors
+  tags:
+  - AccessPoints
+  identifiers:
+  - accessPointId
+  operation_count: 4
+  operations:
+  - method: GET
+    path: /access-points/sensors
+    operationId: sensor-access-points
+    summary: List the Sensor Access Points
+  - method: DELETE
+    path: /access-points/sensors/{accessPointId}
+    operationId: PathAccessPointsSensor-delete-y7z8
+    summary: Unbind the specified access point from its managing sensor
+  - method: GET
+    path: /access-points/sensors/{accessPointId}
+    operationId: sensor-access-point
+    summary: Fetch the specified Sensor Access Point
+  - method: PATCH
+    path: /access-points/sensors/{accessPointId}
+    operationId: PathAccessPointsSensor-patch-w5x6
+    summary: Update the alias of the specified Access Point
+- name: /adapter-driver-report
+  tags:
+  - Adapter Driver Report
+  identifiers: []
+  operation_count: 1
+  operations:
+  - method: GET
+    path: /adapter-driver-report
+    operationId: adapter-driver-report-list
+    summary: Retrieve Adapter/Driver Report
+- name: /adapter-driver-report/summary
+  tags:
+  - Adapter Driver Report
+  identifiers: []
+  operation_count: 1
+  operations:
+  - method: GET
+    path: /adapter-driver-report/summary
+    operationId: adapter-driver-report-summary
+    summary: Retrieve Adapter/Driver Report Summary
+- name: /adapter-driver-report/org
+  tags:
+  - Adapter Driver Report
+  identifiers: []
+  operation_count: 2
+  operations:
+  - method: GET
+    path: /adapter-driver-report/org
+    operationId: adapter-driver-report-org-list
+    summary: Retrieve Adapter/Driver Report by Organization
+  - method: GET
+    path: /adapter-driver-report/org/summary
+    operationId: adapter-driver-report-org-summary
+    summary: Retrieve Adapter/Driver Report Summary by Organization
+- name: /apikeys
+  tags:
+  - API Keys
+  identifiers:
+  - apikeyId
+  operation_count: 4
+  operations:
+  - method: GET
+    path: /apikeys
+    operationId: apikeys-get-e5f6
+    summary: List all accessible ApiKeys, optionally filtered by permissions, ids, createdBys and organizationsIds
+  - method: POST
+    path: /apikeys
+    operationId: apikeys-post-g7h8
+    summary: Create an ApiKey and make it available for usage
+  - method: DELETE
+    path: /apikeys/{apikeyId}
+    operationId: apikeys-with-id-delete-k1l2
+    summary: Delete the ApiKey specified by the UUID
+  - method: GET
+    path: /apikeys/{apikeyId}
+    operationId: apikeys-with-id-get-i9j0
+    summary: List the specific ApiKey identified by its UUID, and its associated Permissions
+- name: /audit/agents
+  tags:
+  - Audit
+  identifiers: []
+  operation_count: 1
+  operations:
+  - method: GET
+    path: /audit/agents
+    operationId: agent-audits
+    summary: Agent Audit Entries
+- name: /change-events/sensors
+  tags:
+  - ChangeEvents
+  identifiers: []
+  operation_count: 1
+  operations:
+  - method: GET
+    path: /change-events/sensors
+    operationId: sensor-change-events
+    summary: List the change events for the specified element
+- name: /clients/sensors
+  tags:
+  - Clients
+  identifiers: []
+  operation_count: 1
+  operations:
+  - method: GET
+    path: /clients/sensors
+    operationId: sensor-clients
+    summary: List the Sensor Clients
+- name: /default-configurations/sensors
+  tags:
+  - DefaultConfigurations
+  identifiers:
+  - configurationId
+  operation_count: 2
+  operations:
+  - method: GET
+    path: /default-configurations/sensors
+    operationId: default-configurations-sensors
+    summary: List the Sensor Default Configurations
+  - method: GET
+    path: /default-configurations/sensors/{configurationId}
+    operationId: default-configuration-sensor
+    summary: Fetch the specified Sensor Default Configuration
+- name: /eyeris/analysis
+  tags:
+  - Eyeris
+  identifiers: []
+  operation_count: 1
+  operations:
+  - method: POST
+    path: /eyeris/analysis/stream
+    operationId: eyeris-stream-qp5E
+    summary: Request Eyeris Analysis with Streaming Response
+- name: /eyeris/agents
+  tags:
+  - Eyeris
+  identifiers:
+  - requestId
+  operation_count: 2
+  operations:
+  - method: POST
+    path: /eyeris/agents/client-analysis
+    operationId: eyeris-client-analysis-post-y7z8
+    summary: Request Eyeris Analysis
+  - method: GET
+    path: /eyeris/agents/client-analysis/{requestId}
+    operationId: eyeris-client-analysis-with-id-get-a9b0
+    summary: Request Eyeris Analysis Results
+- name: /eyes
+  tags:
+  - Eyes
+  identifiers: []
+  operation_count: 1
+  operations:
+  - method: GET
+    path: /eyes
+    operationId: eyes-summary
+    summary: Summary of Eyes
+- name: /eyes/agents
+  tags:
+  - Eyes
+  identifiers:
+  - agentId
+  operation_count: 6
+  operations:
+  - method: GET
+    path: /eyes/agents
+    operationId: eyes-agents
+    summary: List the Agent Eyes available
+  - method: PATCH
+    path: /eyes/agents
+    operationId: patch-eyes-agents
+    summary: Patch multiple Eye Agents
+  - method: GET
+    path: /eyes/agents/search
+    operationId: eyes-agents-search
+    summary: Search for Agent Eyes
+  - method: DELETE
+    path: /eyes/agents/{agentId}
+    operationId: delete-eyes-agent
+    summary: Delete an Eyes Agent
+  - method: GET
+    path: /eyes/agents/{agentId}
+    operationId: eyes-agent
+    summary: Fetch the specified Eyes Agent
+  - method: PATCH
+    path: /eyes/agents/{agentId}
+    operationId: patch-eyes-agent
+    summary: Patch the specified Eyes Agent
+- name: /eyes/sensors
+  tags:
+  - Eyes
+  identifiers:
+  - sensorId
+  - testKey
+  operation_count: 9
+  operations:
+  - method: GET
+    path: /eyes/sensors
+    operationId: eyes-sensors
+    summary: List the Sensor Eyes available
+  - method: GET
+    path: /eyes/sensors/packet-captures
+    operationId: get-eyes-packet-captures-global
+    summary: List packet capture tests across all sensors
+  - method: POST
+    path: /eyes/sensors/registration
+    operationId: register-eyes-sensor
+    summary: Register a new Eye Sensor
+  - method: GET
+    path: /eyes/sensors/{sensorId}
+    operationId: eyes-sensor
+    summary: Fetch the specified Eyes Sensor
+  - method: PATCH
+    path: /eyes/sensors/{sensorId}
+    operationId: patch-eyes-sensor
+    summary: Patch the specified Eyes Sensor
+  - method: GET
+    path: /eyes/sensors/{sensorId}/automated-testing
+    operationId: get-eyes-sensor-automated-testing
+    summary: Get the status of automated test on Sensor
+  - method: POST
+    path: /eyes/sensors/{sensorId}/automated-testing
+    operationId: post-eyes-sensor-automated-testing
+    summary: Start or stopping automated test on Sensor
+  - method: GET
+    path: /eyes/sensors/{sensorId}/packet-captures
+    operationId: get-eyes-sensor-pcaps
+    summary: List packet capture tests for sensor
+  - method: GET
+    path: /eyes/sensors/{sensorId}/packet-captures/{testKey}/download
+    operationId: get-eyes-sensor-pcap-download
+    summary: Download packet capture file
+- name: /groups
+  tags:
+  - Groups
+  identifiers:
+  - groupId
+  operation_count: 2
+  operations:
+  - method: GET
+    path: /groups
+    operationId: groups-get-m3n4
+    summary: List all accessible Groups
+  - method: GET
+    path: /groups/{groupId}
+    operationId: groups-with-id-get-o5p6
+    summary: Get a specific Group by UUID
+- name: /impact/agents
+  tags:
+  - Impact
+  identifiers: []
+  operation_count: 4
+  operations:
+  - method: GET
+    path: /impact/agents
+    operationId: impact-agents
+    summary: Retrieve Agent Impact
+  - method: GET
+    path: /impact/agents/by-status
+    operationId: impact-agents-by-status
+    summary: Retrieve Agent Impact by Status
+  - method: GET
+    path: /impact/agents/summary
+    operationId: impact-agents-summary
+    summary: Retrieve Agent Impact Summary
+  - method: GET
+    path: /impact/agents/time-series
+    operationId: impact-agents-time-series
+    summary: Retrieve Agent Impact Time Series
+- name: /impact/locations
+  tags:
+  - Impact
+  identifiers: []
+  operation_count: 1
+  operations:
+  - method: GET
+    path: /impact/locations
+    operationId: impact-locations
+    summary: Retrieve Location Impact
+- name: /incidents/agents
+  tags:
+  - Incidents
+  identifiers:
+  - incidentId
+  operation_count: 2
+  operations:
+  - method: GET
+    path: /incidents/agents
+    operationId: agent-incidents
+    summary: List the Agent Incidents
+  - method: GET
+    path: /incidents/agents/{incidentId}
+    operationId: agent-incident
+    summary: Fetch the specified Agent Incident
+- name: /alerting/alert-rules
+  tags:
+  - Alert Rules
+  identifiers:
+  - id
+  operation_count: 7
+  operations:
+  - method: GET
+    path: /alerting/alert-rules
+    operationId: list-alert-rules
+    summary: List alert rules
+  - method: POST
+    path: /alerting/alert-rules
+    operationId: create-alert-rule
+    summary: Create an alert rule
+  - method: GET
+    path: /alerting/alert-rules/summary
+    operationId: alert-rules-summary
+    summary: Get an alert rules summary
+  - method: DELETE
+    path: /alerting/alert-rules/{id}
+    operationId: delete-alert-rule
+    summary: Delete an alert rule
+  - method: GET
+    path: /alerting/alert-rules/{id}
+    operationId: get-alert-rule
+    summary: Fetch the specified alert rule
+  - method: PUT
+    path: /alerting/alert-rules/{id}
+    operationId: update-alert-rule
+    summary: Replace an alert rule
+  - method: PATCH
+    path: /alerting/alert-rules/{id}/enabled
+    operationId: patch-alert-rule-enabled
+    summary: Enable or disable an alert rule
+- name: /alerting/incidents
+  tags:
+  - Incidents (Alerting)
+  identifiers:
+  - id
+  operation_count: 5
+  operations:
+  - method: GET
+    path: /alerting/incidents
+    operationId: list-alerting-incidents
+    summary: List incidents
+  - method: GET
+    path: /alerting/incidents/by-rule
+    operationId: list-alerting-incidents-by-rule
+    summary: List incidents aggregated by rule
+  - method: GET
+    path: /alerting/incidents/summary
+    operationId: alerting-incidents-summary
+    summary: Get an incidents summary
+  - method: GET
+    path: /alerting/incidents/{id}
+    operationId: get-alerting-incident
+    summary: Fetch the specified incident
+  - method: POST
+    path: /alerting/incidents/{id}/resolve
+    operationId: resolve-alerting-incident
+    summary: Resolve an incident
+- name: /kpis/agents
+  tags:
+  - KPIs
+  identifiers: []
+  operation_count: 5
+  operations:
+  - method: GET
+    path: /kpis/agents
+    operationId: agent-kpis-all
+    summary: Retrieve KPI data for all agents
+    deprecated: true
+  - method: GET
+    path: /kpis/agents/access-points
+    operationId: agent-kpis-by-access-point
+    summary: Retrieve KPI data for all agents by access point
+    deprecated: true
+  - method: GET
+    path: /kpis/agents/adapter-drivers
+    operationId: agent-kpis-by-adapter-drivers
+    summary: Retrieve KPI data for all agents by adapter and driver
+    deprecated: true
+  - method: GET
+    path: /kpis/agents/client-capabilities
+    operationId: agent-kpis-by-client-capability
+    summary: Retrieve KPI data for all agents by client capabilities
+    deprecated: true
+  - method: GET
+    path: /kpis/agents/locations
+    operationId: agent-kpis-by-location
+    summary: Retrieve KPI data for all agents by location
+    deprecated: true
+- name: /kpis/sensors
+  tags:
+  - KPIs
+  identifiers:
+  - accessPointId
+  - locationId
+  - sensorId
+  - serviceAreaId
+  - targetId
+  operation_count: 6
+  operations:
+  - method: GET
+    path: /kpis/sensors/access-points/{accessPointId}
+    operationId: sensor-kpis-by-access-point
+    summary: Retrieve KPI data for all sensors by access point
+    deprecated: true
+  - method: GET
+    path: /kpis/sensors/dest-nw-band-loc/{targetId}
+    operationId: sensor-kpis-by-destination-network-band-location
+    summary: Retrieve KPI data for all sensors by destination, network, band, and location
+    deprecated: true
+  - method: GET
+    path: /kpis/sensors/eyes/{sensorId}
+    operationId: sensor-kpis-by-eye
+    summary: Retrieve KPI data for a specific sensor
+    deprecated: true
+  - method: GET
+    path: /kpis/sensors/locations/{locationId}
+    operationId: sensor-kpis-by-location
+    summary: Retrieve KPI data for all sensors by location
+    deprecated: true
+  - method: GET
+    path: /kpis/sensors/organizations
+    operationId: sensor-kpis-by-organization
+    summary: Retrieve KPI data for all sensors by organization
+    deprecated: true
+  - method: GET
+    path: /kpis/sensors/service-areas/{serviceAreaId}
+    operationId: sensor-kpis-by-service-area
+    summary: Retrieve KPI data for all sensors by service area
+    deprecated: true
+- name: /integrations/meraki
+  tags:
+  - Integration Configs
+  identifiers:
+  - id
+  operation_count: 5
+  operations:
+  - method: GET
+    path: /integrations/meraki/configs
+    operationId: meraki-integration-config-get
+    summary: List all accessible meraki integration configurations
+  - method: POST
+    path: /integrations/meraki/configs
+    operationId: meraki-integration-config-post
+    summary: Create a meraki integration configuration
+  - method: DELETE
+    path: /integrations/meraki/configs/{id}
+    operationId: meraki-integration-config-with-id-delete
+    summary: Delete the meraki integration configuration specified by the UUID
+  - method: GET
+    path: /integrations/meraki/configs/{id}
+    operationId: meraki-integration-config-with-id-get
+    summary: List the specific meraki integration configuration identified by its UUID
+  - method: PUT
+    path: /integrations/meraki/configs/{id}
+    operationId: meraki-integration-config-with-id-put
+    summary: Replace the configurable parameters of a meraki integration configuration specified by its UUID
+- name: /locations/agents
+  tags:
+  - Locations
+  identifiers:
+  - locationId
+  operation_count: 5
+  operations:
+  - method: GET
+    path: /locations/agents
+    operationId: agent-locations-get
+    summary: List the Agent Locations
+  - method: POST
+    path: /locations/agents
+    operationId: agent-locations-post
+    summary: Creates an Agent Location
+  - method: DELETE
+    path: /locations/agents/{locationId}
+    operationId: agent-location-delete
+    summary: Delete the Agent Location specified by the UUID
+  - method: GET
+    path: /locations/agents/{locationId}
+    operationId: agent-location-get
+    summary: Fetch the specified Agent Location
+  - method: PUT
+    path: /locations/agents/{locationId}
+    operationId: agent-location-put
+    summary: Replace the specified Agent Location with the details in the payload
+- name: /locations/sensors
+  tags:
+  - Locations
+  identifiers:
+  - locationId
+  operation_count: 7
+  operations:
+  - method: DELETE
+    path: /locations/sensors
+    operationId: sensor-locations-delete
+    summary: Deletes Sensor Locations
+  - method: GET
+    path: /locations/sensors
+    operationId: sensor-locations-get
+    summary: List the Sensor Locations
+  - method: POST
+    path: /locations/sensors
+    operationId: sensor-locations-post
+    summary: Creates Sensor Locations
+  - method: PUT
+    path: /locations/sensors
+    operationId: sensor-locations-put
+    summary: Updates Sensor Locations
+  - method: DELETE
+    path: /locations/sensors/{locationId}
+    operationId: sensor-location-delete
+    summary: Delete the specified Sensor Location
+  - method: GET
+    path: /locations/sensors/{locationId}
+    operationId: sensor-location
+    summary: Fetch the specified Sensor Location
+  - method: PUT
+    path: /locations/sensors/{locationId}
+    operationId: sensor-location-put
+    summary: Update the specified Sensor Location
+- name: /network-keys/sensors
+  tags:
+  - Network Keys
+  identifiers:
+  - networkKeyId
+  operation_count: 6
+  operations:
+  - method: GET
+    path: /network-keys/sensors
+    operationId: sensor-network-keys
+    summary: List the Sensor Network Keys
+  - method: POST
+    path: /network-keys/sensors
+    operationId: PathNetworkKeysSensors-post-nk1s2
+    summary: Creates a Sensor Network Key
+  - method: GET
+    path: /network-keys/sensors/templates
+    operationId: sensor-network-key-templates
+    summary: List the Sensor Network Key templates
+  - method: DELETE
+    path: /network-keys/sensors/{networkKeyId}
+    operationId: PathNetworkKeysSensor-delete-nk5s6
+    summary: Delete the Sensor Network Key specified by the id
+  - method: GET
+    path: /network-keys/sensors/{networkKeyId}
+    operationId: sensor-network-key
+    summary: Fetch the specified Sensor Network Key
+  - method: PUT
+    path: /network-keys/sensors/{networkKeyId}
+    operationId: PathNetworkKeysSensor-put-nk3s4
+    summary: Replace the specified Sensor Network Key with the details in the payload
+- name: /networks/agents
+  tags:
+  - Networks
+  identifiers:
+  - networkId
+  operation_count: 5
+  operations:
+  - method: GET
+    path: /networks/agents
+    operationId: agent-networks
+    summary: List the Agent Networks
+  - method: POST
+    path: /networks/agents
+    operationId: PathNetworksAgents-post-c1d2
+    summary: Creates one or many Agent Networks
+  - method: DELETE
+    path: /networks/agents/{networkId}
+    operationId: PathNetworksAgent-delete-g5h6
+    summary: Delete the Network specified by the UUID
+  - method: GET
+    path: /networks/agents/{networkId}
+    operationId: agent-network
+    summary: Fetch the specified Network
+  - method: PUT
+    path: /networks/agents/{networkId}
+    operationId: PathNetworksAgent-put-e3f4
+    summary: Replace the specified Network with the details in the payload
+- name: /networks/sensors
+  tags:
+  - Networks
+  identifiers:
+  - networkId
+  operation_count: 5
+  operations:
+  - method: GET
+    path: /networks/sensors
+    operationId: sensor-networks
+    summary: List the Sensor Networks
+  - method: POST
+    path: /networks/sensors
+    operationId: PathNetworksSensors-post-n1s2
+    summary: Creates a Sensor Network
+  - method: DELETE
+    path: /networks/sensors/{networkId}
+    operationId: PathNetworksSensor-delete-n5s6
+    summary: Delete the Sensor Network specified by the id
+  - method: GET
+    path: /networks/sensors/{networkId}
+    operationId: sensor-network
+    summary: Fetch the specified Sensor Network
+  - method: PUT
+    path: /networks/sensors/{networkId}
+    operationId: PathNetworksSensor-put-n3s4
+    summary: Replace the specified Sensor Network with the details in the payload
+- name: /on-demand-tests/sensors
+  tags:
+  - OnDemandTests
+  identifiers:
+  - sensorId
+  - testId
+  operation_count: 31
+  operations:
+  - method: GET
+    path: /on-demand-tests/sensors/active-tests
+    operationId: on-demand-tests-active-tests-list
+    summary: List active on-demand tests
+  - method: GET
+    path: /on-demand-tests/sensors/packet-capture
+    operationId: on-demand-tests-pcap-list
+    summary: List packet capture tests
+  - method: POST
+    path: /on-demand-tests/sensors/{sensorId}/http-download
+    operationId: on-demand-tests-http-download
+    summary: Trigger http download test
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/http-download/{testId}
+    operationId: on-demand-tests-http-download-status
+    summary: Get Http download status and results
+  - method: POST
+    path: /on-demand-tests/sensors/{sensorId}/http-upload
+    operationId: on-demand-tests-http-upload
+    summary: Trigger http upload test
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/http-upload/{testId}
+    operationId: on-demand-tests-http-upload-status
+    summary: Get Http upload status and results
+  - method: POST
+    path: /on-demand-tests/sensors/{sensorId}/iperf3
+    operationId: on-demand-tests-iperf3
+    summary: Trigger iperf3 test
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/iperf3/{testId}
+    operationId: on-demand-tests-iperf3-status
+    summary: Get Iperf3 status and results
+  - method: POST
+    path: /on-demand-tests/sensors/{sensorId}/mos
+    operationId: on-demand-tests-mos
+    summary: Trigger Mos/VoIP test
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/mos/{testId}
+    operationId: on-demand-tests-mos-status
+    summary: Get Mos/VoIP test status and results
+  - method: POST
+    path: /on-demand-tests/sensors/{sensorId}/packet-capture
+    operationId: on-demand-tests-pcap
+    summary: Trigger packet capture test
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/packet-capture/{testId}
+    operationId: on-demand-tests-pcap-status
+    summary: Get packet capture status
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/packet-capture/{testId}/download
+    operationId: on-demand-tests-pcap-file
+    summary: Get packet capture file
+  - method: POST
+    path: /on-demand-tests/sensors/{sensorId}/ping
+    operationId: on-demand-tests-ping
+    summary: Trigger ping test
+  - method: POST
+    path: /on-demand-tests/sensors/{sensorId}/ping-gateway
+    operationId: on-demand-tests-ping-gateway
+    summary: Trigger ping default gateway test
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/ping-gateway/{testId}
+    operationId: on-demand-tests-ping-gateway-status
+    summary: Get ping default gateway status
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/ping/{testId}
+    operationId: on-demand-tests-ping-status
+    summary: Get ping status
+  - method: POST
+    path: /on-demand-tests/sensors/{sensorId}/speedtest
+    operationId: on-demand-tests-speedtest
+    summary: Trigger speedtest
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/speedtest/{testId}
+    operationId: on-demand-tests-speedtest-status
+    summary: Get speedtest status and results
+  - method: POST
+    path: /on-demand-tests/sensors/{sensorId}/tcp-download
+    operationId: on-demand-tests-tcp-download
+    summary: Trigger tcp download test
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/tcp-download/{testId}
+    operationId: on-demand-tests-tcp-download-status
+    summary: Get Tcp download status and results
+  - method: POST
+    path: /on-demand-tests/sensors/{sensorId}/tcp-upload
+    operationId: on-demand-tests-tcp-upload
+    summary: Trigger tcp upload test
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/tcp-upload/{testId}
+    operationId: on-demand-tests-tcp-upload-status
+    summary: Get Tcp upload status and results
+  - method: POST
+    path: /on-demand-tests/sensors/{sensorId}/traceroute
+    operationId: on-demand-tests-traceroute
+    summary: Trigger Traceroute test
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/traceroute/{testId}
+    operationId: on-demand-tests-traceroute-status
+    summary: Get traceroute test status and results
+  - method: POST
+    path: /on-demand-tests/sensors/{sensorId}/udp-download
+    operationId: on-demand-tests-udp-download
+    summary: Trigger udp download test
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/udp-download/{testId}
+    operationId: on-demand-tests-udp-download-status
+    summary: Get Udp download status and results
+  - method: POST
+    path: /on-demand-tests/sensors/{sensorId}/udp-upload
+    operationId: on-demand-tests-udp-upload
+    summary: Trigger udp upload test
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/udp-upload/{testId}
+    operationId: on-demand-tests-udp-upload-status
+    summary: Get Udp upload status and results
+  - method: POST
+    path: /on-demand-tests/sensors/{sensorId}/web-download
+    operationId: on-demand-tests-web-download
+    summary: Trigger web download test
+  - method: GET
+    path: /on-demand-tests/sensors/{sensorId}/web-download/{testId}
+    operationId: on-demand-tests-web-download-status
+    summary: Get Web download status and results
+- name: /organizations
+  tags:
+  - Organizations
+  identifiers:
+  - organizationId
+  operation_count: 2
+  operations:
+  - method: GET
+    path: /organizations
+    operationId: organizations-get-q7r8
+    summary: List all accessible Organizations
+  - method: GET
+    path: /organizations/{organizationId}
+    operationId: organizations-with-id-get-s9t0
+    summary: List the specific Organization identified by its UUID
+- name: /organizations/features
+  tags:
+  - Organizations
+  identifiers:
+  - organizationId
+  operation_count: 1
+  operations:
+  - method: GET
+    path: /organizations/{organizationId}/features
+    operationId: organizations-with-id-get-features-get-u1v2
+    summary: List all the features mapped to the Organization specified by the UUID
+- name: /permissions
+  tags:
+  - Permissions
+  identifiers:
+  - permissionId
+  operation_count: 2
+  operations:
+  - method: GET
+    path: /permissions
+    operationId: permissions-get-w3x4
+    summary: List all accessible Permissions
+  - method: GET
+    path: /permissions/{permissionId}
+    operationId: permissions-with-id-get-y5z6
+    summary: List the specific Permission identified by its UUID
+- name: /roles
+  tags:
+  - Roles
+  identifiers:
+  - roleId
+  operation_count: 2
+  operations:
+  - method: GET
+    path: /roles
+    operationId: roles-get-a7b8
+    summary: List all accessible Roles
+  - method: GET
+    path: /roles/{roleId}
+    operationId: roles-with-id-get-c9d0
+    summary: List the specific Role identified by its UUID
+- name: /scans/agents
+  tags:
+  - Scans
+  identifiers: []
+  operation_count: 1
+  operations:
+  - method: GET
+    path: /scans/agents
+    operationId: scans-agents
+    summary: Retrieve scan data for an agent
+- name: /scans/sensors
+  tags:
+  - Scans
+  identifiers: []
+  operation_count: 1
+  operations:
+  - method: GET
+    path: /scans/sensors
+    operationId: scans-sensors
+    summary: Retrieve scan data for a sensor
+- name: /service-areas/agents
+  tags:
+  - ServiceAreas
+  identifiers:
+  - serviceAreaId
+  operation_count: 7
+  operations:
+  - method: DELETE
+    path: /service-areas/agents
+    operationId: agent-service-areas-delete
+    summary: Deletes Agent Service Areas
+  - method: GET
+    path: /service-areas/agents
+    operationId: agent-service-areas-get
+    summary: List the Agent Service Areas
+  - method: POST
+    path: /service-areas/agents
+    operationId: agent-service-areas-post
+    summary: Creates Agent Service Areas
+  - method: PUT
+    path: /service-areas/agents
+    operationId: agent-service-areas-put
+    summary: Updates Agent Service Areas
+  - method: DELETE
+    path: /service-areas/agents/{serviceAreaId}
+    operationId: agent-service-area-delete
+    summary: Delete the specified Agent Service Area
+  - method: GET
+    path: /service-areas/agents/{serviceAreaId}
+    operationId: agent-service-area-get
+    summary: Fetch the specified Agent Service Area
+  - method: PUT
+    path: /service-areas/agents/{serviceAreaId}
+    operationId: agent-service-area-put
+    summary: Update the specified Agent Service Area
+- name: /service-areas/sensors
+  tags:
+  - ServiceAreas
+  identifiers:
+  - networkId
+  - serviceAreaId
+  operation_count: 8
+  operations:
+  - method: GET
+    path: /service-areas/sensors
+    operationId: sensor-service-areas
+    summary: List the Sensor Service Areas
+  - method: POST
+    path: /service-areas/sensors
+    operationId: sensor-service-areas-post
+    summary: Creates a Sensor Service Area
+  - method: DELETE
+    path: /service-areas/sensors/{serviceAreaId}
+    operationId: sensor-service-area-delete
+    summary: Delete the specified Sensor Service Area
+  - method: GET
+    path: /service-areas/sensors/{serviceAreaId}
+    operationId: sensor-service-area
+    summary: Fetch the specified Service Area
+  - method: PUT
+    path: /service-areas/sensors/{serviceAreaId}
+    operationId: sensor-service-area-put
+    summary: Update the specified Sensor Service Area
+  - method: POST
+    path: /service-areas/sensors/{serviceAreaId}/eyes
+    operationId: sensor-service-area-add-eyes
+    summary: Add Eyes to a service area
+  - method: DELETE
+    path: /service-areas/sensors/{serviceAreaId}/networks/{networkId}
+    operationId: sensor-service-area-unbind-network
+    summary: Unbind a wireless network from a service area
+  - method: POST
+    path: /service-areas/sensors/{serviceAreaId}/networks/{networkId}
+    operationId: sensor-service-area-bind-network
+    summary: Bind a wireless network to a service area
+- name: /integrations/servicenow
+  tags:
+  - Integration Configs
+  identifiers:
+  - id
+  operation_count: 6
+  operations:
+  - method: GET
+    path: /integrations/servicenow/configs
+    operationId: servicenow-integration-config-get
+    summary: List all accessible ServiceNow integration configurations
+  - method: POST
+    path: /integrations/servicenow/configs
+    operationId: servicenow-integration-config-post
+    summary: Create a ServiceNow integration configuration
+  - method: DELETE
+    path: /integrations/servicenow/configs/{id}
+    operationId: servicenow-integration-config-with-id-delete
+    summary: Delete the ServiceNow integration configuration specified by the UUID
+  - method: GET
+    path: /integrations/servicenow/configs/{id}
+    operationId: servicenow-integration-config-with-id-get
+    summary: List the specific ServiceNow integration configuration identified by its UUID
+  - method: PATCH
+    path: /integrations/servicenow/configs/{id}
+    operationId: servicenow-integration-config-with-id-patch
+    summary: Patch the configurable parameters of a ServiceNow integration configuration specified by its UUID
+  - method: PUT
+    path: /integrations/servicenow/configs/{id}
+    operationId: servicenow-integration-config-with-id-put
+    summary: Replace the configurable parameters of a ServiceNow integration configuration specified by its UUID
+- name: /summaries/users
+  tags:
+  - Summaries
+  identifiers: []
+  operation_count: 1
+  operations:
+  - method: GET
+    path: /summaries/users
+    operationId: users-summary-get-i7j8
+    summary: Gets the summary of the logged in user for the given organization or the primary organization if not
+      specified.
+- name: /targets/sensors
+  tags:
+  - Targets
+  identifiers:
+  - targetId
+  operation_count: 5
+  operations:
+  - method: GET
+    path: /targets/sensors
+    operationId: sensor-targets
+    summary: List the Sensor Targets
+  - method: POST
+    path: /targets/sensors
+    operationId: sensor-targets-create
+    summary: Creates a Sensor Target
+  - method: DELETE
+    path: /targets/sensors/{targetId}
+    operationId: sensor-target-delete
+    summary: Delete the specified Sensor Target
+  - method: GET
+    path: /targets/sensors/{targetId}
+    operationId: sensor-target
+    summary: Fetch the specified Sensor Target
+  - method: PUT
+    path: /targets/sensors/{targetId}
+    operationId: sensor-target-update
+    summary: Update the specified Sensor Target
+- name: /time-series/agents
+  tags:
+  - TimeSeries
+  identifiers:
+  - groupByDimension
+  operation_count: 8
+  operations:
+  - method: GET
+    path: /time-series/agents/discrete
+    operationId: time-series-agents-discrete
+    summary: Retrieve Time Series with discrete aggregation for agents
+  - method: GET
+    path: /time-series/agents/discrete/{groupByDimension}
+    operationId: time-series-agents-discrete-group-by
+    summary: Retrieve Time Series with discrete aggregation for agents
+  - method: GET
+    path: /time-series/agents/histogram/{groupByDimension}
+    operationId: time-series-agents-histogram
+    summary: Retrieve Time Series Histogram for agents
+  - method: GET
+    path: /time-series/agents/metric-types
+    operationId: time-series-agents-metric-types
+    summary: Retrieve details of all or a subset of the Metric Types
+  - method: GET
+    path: /time-series/agents/numeric
+    operationId: time-series-agents-numeric
+    summary: Retrieve Time Series with numeric aggregation for agents
+  - method: GET
+    path: /time-series/agents/numeric-summary
+    operationId: time-series-agents-overall-numeric-summary
+    summary: Retrieve Time Series with overall numeric summary aggregation for agents
+  - method: GET
+    path: /time-series/agents/numeric-summary/{groupByDimension}
+    operationId: time-series-agents-numeric-summary
+    summary: Retrieve Time Series with numeric summary aggregation for agents
+  - method: GET
+    path: /time-series/agents/numeric/{groupByDimension}
+    operationId: time-series-agents-numeric-group-by
+    summary: Retrieve Time Series with numeric aggregation for agents
+- name: /time-series/sensors
+  tags:
+  - TimeSeries
+  identifiers:
+  - groupByDimension
+  operation_count: 5
+  operations:
+  - method: GET
+    path: /time-series/sensors/metric-types
+    operationId: time-series-sensors-metric-types
+    summary: Retrieve details of all or a subset of the Metric Types
+  - method: GET
+    path: /time-series/sensors/numeric
+    operationId: time-series-sensors-overall-numeric
+    summary: Retrieve Time Series with numeric aggregation for sensors by organization
+  - method: GET
+    path: /time-series/sensors/numeric-summary
+    operationId: time-series-sensors-overall-numeric-summary
+    summary: Retrieve Time Series with overall numeric summary aggregation for sensors
+  - method: GET
+    path: /time-series/sensors/numeric-summary/{groupByDimension}
+    operationId: time-series-sensors-numeric-summary
+    summary: Retrieve Time Series with numeric summary aggregation for sensors
+  - method: GET
+    path: /time-series/sensors/numeric/{groupByDimension}
+    operationId: time-series-sensors-numeric
+    summary: Retrieve Time Series with numeric aggregation for sensors by the given grouping
+- name: /topologies/agents
+  tags:
+  - Topologies
+  identifiers:
+  - locationId
+  operation_count: 2
+  operations:
+  - method: GET
+    path: /topologies/agents/locations
+    operationId: agent-topology-locations
+    summary: List the Agent Topology Locations
+    deprecated: true
+  - method: GET
+    path: /topologies/agents/locations/{locationId}
+    operationId: agent-topology-location
+    summary: Fetch the specified Topology Location
+    deprecated: true
+- name: /topologies/sensors
+  tags:
+  - Topologies
+  identifiers:
+  - accessPointId
+  - locationId
+  - serviceAreaId
+  operation_count: 6
+  operations:
+  - method: GET
+    path: /topologies/sensors/accessPoints
+    operationId: sensor-topology-access-points
+    summary: List the Sensor Topology Access Points
+    deprecated: true
+  - method: GET
+    path: /topologies/sensors/accessPoints/{accessPointId}
+    operationId: sensor-topology-access-point
+    summary: List the Sensor Topology Access Point
+    deprecated: true
+  - method: GET
+    path: /topologies/sensors/locations
+    operationId: sensor-topology-locations
+    summary: List the Sensor Topology Locations
+    deprecated: true
+  - method: GET
+    path: /topologies/sensors/locations/{locationId}
+    operationId: sensor-topology-location
+    summary: Fetch the specified Topology Location
+    deprecated: true
+  - method: GET
+    path: /topologies/sensors/serviceAreas
+    operationId: sensor-topology-service-areas
+    summary: List the Sensor Topology Service Areas
+    deprecated: true
+  - method: GET
+    path: /topologies/sensors/serviceAreas/{serviceAreaId}
+    operationId: sensor-topology-service-area
+    summary: Fetch the specified Topology Service Area
+    deprecated: true
+- name: /users
+  tags:
+  - Users
+  identifiers:
+  - userId
+  operation_count: 4
+  operations:
+  - method: GET
+    path: /users
+    operationId: users-get-e1f2
+    summary: List all accessible Users
+  - method: POST
+    path: /users
+    operationId: users-post-g3h4
+    summary: 'Create a User in Metadata service and mark it as ''invited''.
+
+      User info will be synchronized when the user logs into Auth0'
+  - method: DELETE
+    path: /users/{userId}
+    operationId: users-with-id-delete-k7l8
+    summary: Delete the User specified by the UUID
+  - method: GET
+    path: /users/{userId}
+    operationId: users-with-id-get-i5j6
+    summary: List the specific User identified by its UUID
+- name: /users/groups
+  tags:
+  - Users
+  identifiers:
+  - groupId
+  - userId
+  operation_count: 4
+  operations:
+  - method: GET
+    path: /users/{userId}/groups
+    operationId: users-with-id-get-groups-get-c5d6
+    summary: List all the groups mapped to the User specified by the UUID
+  - method: POST
+    path: /users/{userId}/groups
+    operationId: users-with-id-get-groups-post-g9h0
+    summary: Map User to one or more Groups
+  - method: PUT
+    path: /users/{userId}/groups
+    operationId: users-with-id-get-groups-put-e7f8
+    summary: Replace User mapping with one or more Groups in the given payload
+  - method: DELETE
+    path: /users/{userId}/groups/{groupId}
+    operationId: users-with-id-get-groups-with-id-delete-m5n6
+    summary: Unmap Group from the User
+- name: /users/organizations
+  tags:
+  - Users
+  identifiers:
+  - userId
+  operation_count: 3
+  operations:
+  - method: GET
+    path: /users/{userId}/organizations
+    operationId: users-with-id-get-organizations-get-w9x0
+    summary: List all the organizations mapped to the User specified by the UUID
+  - method: POST
+    path: /users/{userId}/organizations
+    operationId: users-with-id-get-organizations-post-a3b4
+    summary: Map User to one or more Organizations
+  - method: PUT
+    path: /users/{userId}/organizations
+    operationId: users-with-id-get-organizations-put-y1z2
+    summary: Replace User mapping with one or more Organizations in the given payload
+- name: /users/organization
+  tags:
+  - Users
+  identifiers:
+  - organizationId
+  - userId
+  operation_count: 1
+  operations:
+  - method: DELETE
+    path: /users/{userId}/organization/{organizationId}
+    operationId: users-with-id-get-organizations-with-id-delete-k3l4
+    summary: Unmap organization from the User
+- name: /users/permissions
+  tags:
+  - Users
+  identifiers:
+  - userId
+  operation_count: 3
+  operations:
+  - method: GET
+    path: /users/{userId}/permissions
+    operationId: users-with-id-get-permissions-get-q3r4
+    summary: List all the permissions(assigned via the role and directly) mapped to the User specified by the UUID
+  - method: POST
+    path: /users/{userId}/permissions
+    operationId: users-with-id-get-permissions-post-u7v8
+    summary: Map User to one or more Permissions
+  - method: PUT
+    path: /users/{userId}/permissions
+    operationId: users-with-id-get-permissions-put-s5t6
+    summary: Replace User mapping with one or more Permissions in the given payload
+- name: /users/permission
+  tags:
+  - Users
+  identifiers:
+  - permissionId
+  - userId
+  operation_count: 1
+  operations:
+  - method: DELETE
+    path: /users/{userId}/permission/{permissionId}
+    operationId: users-with-id-get-permissions-with-id-delete-i1j2
+    summary: Unmap Permission from the User
+- name: /users/role
+  tags:
+  - Users
+  identifiers:
+  - userId
+  operation_count: 2
+  operations:
+  - method: DELETE
+    path: /users/{userId}/role
+    operationId: users-with-id-get-role-delete-o1p2
+    summary: Remove user's Role and Synchronize in Auth0
+  - method: PUT
+    path: /users/{userId}/role
+    operationId: users-with-id-get-role-put-m9n0
+    summary: Update user's Role and Synchronize in Auth0
+relationships:
+- from: /access
+  to: summary
+  kind: has_many
+  via: userId
+  evidence: /access/{userId}/summary
+- from: /eyes/sensors
+  to: automated-testing
+  kind: has_many
+  via: sensorId
+  evidence: /eyes/sensors/{sensorId}/automated-testing
+- from: /eyes/sensors
+  to: packet-captures
+  kind: has_many
+  via: sensorId
+  evidence: /eyes/sensors/{sensorId}/packet-captures
+- from: /eyes/sensors/packet-captures
+  to: download
+  kind: has_many
+  via: testKey
+  evidence: /eyes/sensors/{sensorId}/packet-captures/{testKey}/download
+- from: /alerting/alert-rules
+  to: enabled
+  kind: has_many
+  via: id
+  evidence: /alerting/alert-rules/{id}/enabled
+- from: /alerting/incidents
+  to: resolve
+  kind: has_many
+  via: id
+  evidence: /alerting/incidents/{id}/resolve
+- from: /on-demand-tests/sensors
+  to: packet-capture
+  kind: has_many
+  via: sensorId
+  evidence: /on-demand-tests/sensors/{sensorId}/packet-capture
+- from: /on-demand-tests/sensors/packet-capture
+  to: download
+  kind: has_many
+  via: testId
+  evidence: /on-demand-tests/sensors/{sensorId}/packet-capture/{testId}/download
+- from: /on-demand-tests/sensors
+  to: ping
+  kind: has_many
+  via: sensorId
+  evidence: /on-demand-tests/sensors/{sensorId}/ping
+- from: /on-demand-tests/sensors
+  to: ping-gateway
+  kind: has_many
+  via: sensorId
+  evidence: /on-demand-tests/sensors/{sensorId}/ping-gateway
+- from: /on-demand-tests/sensors
+  to: http-download
+  kind: has_many
+  via: sensorId
+  evidence: /on-demand-tests/sensors/{sensorId}/http-download
+- from: /on-demand-tests/sensors
+  to: http-upload
+  kind: has_many
+  via: sensorId
+  evidence: /on-demand-tests/sensors/{sensorId}/http-upload
+- from: /on-demand-tests/sensors
+  to: iperf3
+  kind: has_many
+  via: sensorId
+  evidence: /on-demand-tests/sensors/{sensorId}/iperf3
+- from: /on-demand-tests/sensors
+  to: speedtest
+  kind: has_many
+  via: sensorId
+  evidence: /on-demand-tests/sensors/{sensorId}/speedtest
+- from: /on-demand-tests/sensors
+  to: traceroute
+  kind: has_many
+  via: sensorId
+  evidence: /on-demand-tests/sensors/{sensorId}/traceroute
+- from: /on-demand-tests/sensors
+  to: mos
+  kind: has_many
+  via: sensorId
+  evidence: /on-demand-tests/sensors/{sensorId}/mos
+- from: /on-demand-tests/sensors
+  to: udp-download
+  kind: has_many
+  via: sensorId
+  evidence: /on-demand-tests/sensors/{sensorId}/udp-download
+- from: /on-demand-tests/sensors
+  to: udp-upload
+  kind: has_many
+  via: sensorId
+  evidence: /on-demand-tests/sensors/{sensorId}/udp-upload
+- from: /on-demand-tests/sensors
+  to: tcp-download
+  kind: has_many
+  via: sensorId
+  evidence: /on-demand-tests/sensors/{sensorId}/tcp-download
+- from: /on-demand-tests/sensors
+  to: tcp-upload
+  kind: has_many
+  via: sensorId
+  evidence: /on-demand-tests/sensors/{sensorId}/tcp-upload
+- from: /on-demand-tests/sensors
+  to: web-download
+  kind: has_many
+  via: sensorId
+  evidence: /on-demand-tests/sensors/{sensorId}/web-download
+- from: /organizations
+  to: features
+  kind: has_many
+  via: organizationId
+  evidence: /organizations/{organizationId}/features
+- from: /service-areas/sensors
+  to: eyes
+  kind: has_many
+  via: serviceAreaId
+  evidence: /service-areas/sensors/{serviceAreaId}/eyes
+- from: /service-areas/sensors
+  to: networks
+  kind: has_many
+  via: serviceAreaId
+  evidence: /service-areas/sensors/{serviceAreaId}/networks/{networkId}
+- from: /users
+  to: groups
+  kind: has_many
+  via: userId
+  evidence: /users/{userId}/groups
+- from: /users
+  to: organizations
+  kind: has_many
+  via: userId
+  evidence: /users/{userId}/organizations
+- from: /users
+  to: organization
+  kind: has_many
+  via: userId
+  evidence: /users/{userId}/organization/{organizationId}
+- from: /users
+  to: permissions
+  kind: has_many
+  via: userId
+  evidence: /users/{userId}/permissions
+- from: /users
+  to: permission
+  kind: has_many
+  via: userId
+  evidence: /users/{userId}/permission/{permissionId}
+- from: /users
+  to: role
+  kind: has_many
+  via: userId
+  evidence: /users/{userId}/role
+common_reference_fields:
+- field: locationId
+  schemas: 9
+- field: organizationId
+  schemas: 5
+- field: parentLocationId
+  schemas: 5
+- field: testId
+  schemas: 5
+- field: oauth2ClientId
+  schemas: 5
+- field: serviceAreaId
+  schemas: 4
+- field: apId
+  schemas: 4
+- field: deviceId
+  schemas: 4
+- field: accessPointId
+  schemas: 4
+- field: auth0Id
+  schemas: 4
+- field: requestId
+  schemas: 3
+- field: roleId
+  schemas: 3
+- field: networkKeyId
+  schemas: 3
+- field: sensorId
+  schemas: 3
+- field: connectionId
+  schemas: 2
+- field: sapphireGroupId
+  schemas: 2
+- field: sonarId
+  schemas: 2
+- field: agentId
+  schemas: 2
+- field: responseId
+  schemas: 2
+- field: eyeId
+  schemas: 2
+- field: ruleId
+  schemas: 2
+- field: parentId
+  schemas: 2
+- field: parentOrganizationId
+  schemas: 2
+- field: subKeyId
+  schemas: 2
+- field: defaultConfigurationId
+  schemas: 2

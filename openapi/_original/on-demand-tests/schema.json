@@ -1,0 +1,2070 @@
+{
+  "SensorIdFilterForRunTest": {
+    "name": "sensorId",
+    "in": "path",
+    "description": "Trigger test for the sensor referenced by its id.",
+    "required": true,
+    "schema": {
+      "type": "integer"
+    }
+  },
+  "SensorIdFilter": {
+    "name": "sensorId",
+    "in": "path",
+    "description": "Get test status for the sensor referenced by its ID",
+    "required": true,
+    "schema": {
+      "type": "integer"
+    }
+  },
+  "TestIdFilter": {
+    "name": "testId",
+    "in": "path",
+    "description": "Get test status for the test referenced by its ID",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "EyeIdFilter": {
+    "name": "eye_id",
+    "in": "query",
+    "description": "Filter by sensor/eye ID",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "ChannelFilter": {
+    "name": "channel",
+    "in": "query",
+    "description": "Filter by WiFi channel number",
+    "required": false,
+    "schema": {
+      "type": "integer"
+    }
+  },
+  "ApIdFilter": {
+    "name": "ap_id",
+    "in": "query",
+    "description": "Filter by access point ID",
+    "required": false,
+    "schema": {
+      "type": "integer"
+    }
+  },
+  "BandFilter": {
+    "name": "band",
+    "in": "query",
+    "description": "Filter by frequency band (2.4, 5, or 6 GHz)",
+    "required": false,
+    "schema": {
+      "type": "string",
+      "enum": [
+        "2.4",
+        "5",
+        "6",
+        "all"
+      ]
+    }
+  },
+  "StartFilter": {
+    "name": "start",
+    "in": "query",
+    "description": "Filter by start timestamp (milliseconds since epoch)",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "EndFilter": {
+    "name": "end",
+    "in": "query",
+    "description": "Filter by end timestamp (milliseconds since epoch)",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "PageFilter": {
+    "name": "page",
+    "in": "query",
+    "description": "Page number for pagination (0-indexed)",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "default": 0
+    }
+  },
+  "SizeFilter": {
+    "name": "size",
+    "in": "query",
+    "description": "Number of items per page",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "default": 20
+    }
+  },
+  "OnDemandTestResponse": {
+    "type": "object",
+    "properties": {
+      "testId": {
+        "type": "string"
+      },
+      "status": {
+        "type": "string",
+        "example": "REQUESTED"
+      }
+    }
+  },
+  "OnDemandTestStatusBase": {
+    "type": "object",
+    "required": [
+      "testId",
+      "runStatus"
+    ],
+    "properties": {
+      "testId": {
+        "type": "string",
+        "description": "The test ID which was used to trigger the test."
+      },
+      "runStatus": {
+        "type": "string",
+        "description": "The overall status of the test which was triggered earlier",
+        "enum": [
+          "IN_PROGRESS",
+          "COMPLETE",
+          "ERROR"
+        ]
+      },
+      "errorMessage": {
+        "type": "string",
+        "description": "The error message if any that occurred during test."
+      },
+      "errorCode": {
+        "type": "string",
+        "description": "The error code if any that occurred during test."
+      },
+      "testStatus": {
+        "type": "string",
+        "description": "Additional indicator in case of test failures."
+      }
+    }
+  },
+  "NetworkAttachResultsBase": {
+    "type": "object",
+    "properties": {
+      "attachTimeMilliseconds": {
+        "type": "number",
+        "description": "Attach time in milliseconds."
+      },
+      "ipRetrievalTimeMilliseconds": {
+        "type": "number",
+        "description": "IP retrieval time in milliseconds."
+      },
+      "ipAddress": {
+        "type": "string",
+        "description": "IP address used for the test."
+      },
+      "gatewayAddress": {
+        "type": "string",
+        "description": "Gateway address used for the test."
+      }
+    }
+  },
+  "IpAddressSettings": {
+    "type": "object",
+    "required": [
+      "ipProtocol"
+    ],
+    "description": "IP addressing configuration used during the test",
+    "properties": {
+      "ipProtocol": {
+        "type": "string",
+        "default": "IPV4",
+        "enum": [
+          "IPV4",
+          "IPV6"
+        ]
+      },
+      "useDhcp": {
+        "type": "boolean",
+        "default": true,
+        "description": "Whether DHCP should be used for IP assignment"
+      },
+      "localIpv4Address": {
+        "type": "string",
+        "example": "0.0.0.0",
+        "description": "Static IPv4 address (when DHCP is disabled)"
+      },
+      "localNetworkMask": {
+        "type": "string",
+        "example": "0.0.0.0",
+        "description": "IPv4 network mask (when DHCP is disabled)"
+      },
+      "gatewayIpv4Address": {
+        "type": "string",
+        "example": "0.0.0.0",
+        "description": "IPv4 gateway address (when DHCP is disabled)"
+      },
+      "ipv6Mode": {
+        "type": "string",
+        "default": "Automatic",
+        "enum": [
+          "Disabled",
+          "Automatic",
+          "Automatic with Stable Privacy",
+          "Automatic with Privacy Extensions (prefer public address)",
+          "Automatic with Privacy Extensions (prefer temporary address)",
+          "DHCPv6",
+          "Stateless DHCPv6",
+          "Manual"
+        ],
+        "description": "IPv6 configuration mode"
+      },
+      "localIpv6Address": {
+        "type": "string",
+        "example": "::",
+        "description": "Static IPv6 address"
+      },
+      "localIpv6Prefix": {
+        "type": "string",
+        "example": "::",
+        "description": "IPv6 prefix"
+      },
+      "gatewayIpv6Address": {
+        "type": "string",
+        "example": "::",
+        "description": "IPv6 gateway address"
+      }
+    }
+  },
+  "IpAddressSettingsWithDns": {
+    "allOf": [
+      {
+        "$ref": "#/IpAddressSettings"
+      },
+      {
+        "type": "object",
+        "description": "IP addressing configuration with optional DNS server overrides",
+        "properties": {
+          "dnsIpv4Server": {
+            "type": "string",
+            "example": "0.0.0.0",
+            "description": "DNS IPv4 server address to be used during the test"
+          },
+          "dnsIpv6Server": {
+            "type": "string",
+            "example": "::",
+            "description": "DNS IPv6 server address to be used during the test"
+          }
+        }
+      }
+    ]
+  },
+  "TestEndpointSettings": {
+    "type": "object",
+    "description": "Base endpoint configuration for active tests",
+    "properties": {
+      "testHost": {
+        "type": "string",
+        "description": "Hostname or IP address of the test endpoint"
+      },
+      "testPort": {
+        "type": "integer",
+        "description": "Port used for the test endpoint (ignored for ping tests)"
+      },
+      "sonarId": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Sonar ID of the endpoint"
+      },
+      "resolveDNSOnSensor": {
+        "type": "boolean",
+        "description": "Whether DNS resolution should occur on the sensor"
+      }
+    }
+  },
+  "QosCategoryInRequest": {
+    "type": "object",
+    "description": "QoS configuration for the test traffic",
+    "properties": {
+      "qosCategory": {
+        "type": "string",
+        "default": "BEST_EFFORT_0",
+        "enum": ["BEST_EFFORT_0", "BACKGROUND_1", "VIDEO_5", "VOICE_6"],
+        "description": "QoS category index used for the test (Best Effort, Background, Video, Voice)"
+      }
+    }
+  },
+  "PingTestEndpointSettings": {
+    "allOf": [
+      {
+        "$ref": "#/TestEndpointSettings"
+      },
+      {
+        "type": "object",
+        "required": [
+          "pingEndpointId"
+        ],
+        "properties": {
+          "pingEndpointId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Identifier of the ping endpoint configuration"
+          }
+        }
+      }
+    ],
+    "description": "Ping-specific endpoint settings (testPort is not externally configurable)"
+  },
+  "ActiveTestRequestBase": {
+    "type": "object",
+    "required": [
+      "accessPointId",
+      "ipAddress"
+    ],
+    "properties": {
+      "testType": {
+        "type": "string",
+        "description": "Network interface used for the test",
+        "default": "WLAN",
+        "enum": [
+          "WLAN",
+          "Ethernet"
+        ]
+      },
+      "accessPointId": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Access point ID on which the test is executed"
+      },
+      "maxAttachTimeoutMilliseconds": {
+        "type": "integer",
+        "default": 20000,
+        "description": "Maximum time to wait for network attach"
+      },
+      "maxIpAddressWaitTimeMilliseconds": {
+        "type": "integer",
+        "default": 60000,
+        "description": "Maximum time to wait for IP address assignment"
+      },
+      "customMacAddress": {
+        "type": "string",
+        "default": "00:00:00:00:00:00",
+        "description": "Optional custom MAC address"
+      }
+    }
+  },
+  "ActiveTestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/ActiveTestRequestBase"
+      },
+      {
+        "type": "object",
+        "required": ["ipAddress"],
+        "properties": {
+          "ipAddress": {
+            "$ref": "#/IpAddressSettings"
+          }
+        }
+      }
+    ]
+  },
+  "ActiveTestRequestWithDns": {
+    "allOf": [
+      {
+        "$ref": "#/ActiveTestRequestBase"
+      },
+      {
+        "type": "object",
+        "required": ["ipAddress"],
+        "properties": {
+          "ipAddress": {
+            "$ref": "#/IpAddressSettingsWithDns"
+          }
+        }
+      }
+    ]
+  },
+  "PacketCaptureTestRequest": {
+    "type": "object",
+    "required": [
+      "mode",
+      "captureTimeSeconds"
+    ],
+    "properties": {
+      "mode": {
+        "type": "string",
+        "enum": [
+          "CHANNEL",
+          "ACCESS_POINT"
+        ]
+      },
+      "accessPointId": {
+        "type": "integer"
+      },
+      "captureTimeSeconds": {
+        "type": "integer"
+      },
+      "captureFilter": {
+        "type": "string"
+      },
+      "band": {
+        "type": "number",
+        "enum": [
+          2.40,
+          5.00,
+          6.00
+        ]
+      },
+      "channel": {
+        "type": "integer"
+      }
+    }
+  },
+  "PacketCaptureTestStatusResponse": {
+    "allOf": [
+      {
+        "$ref": "#/OnDemandTestStatusBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "captureStatus": {
+            "type": "string",
+            "description": "Additional indicator in case of packet capture failures.",
+            "enum": [
+              "SUCCESS",
+              "CAPTURE_ERROR",
+              "FILE_SIZE_EXCEEDED",
+              "CHANNEL_SET_ERROR",
+              "UNDEFINED"
+            ]
+          }
+        }
+      }
+    ]
+  },
+  "PingTestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/ActiveTestRequest"
+      },
+      {
+        "type": "object",
+        "required": [
+          "testEndpoint"
+        ],
+        "properties": {
+          "testEndpoint": {
+            "$ref": "#/PingTestEndpointSettings"
+          },
+          "payloadSizeBytes": {
+            "type": "integer",
+            "default": 32,
+            "enum": [
+              32,
+              150,
+              1450,
+              9600,
+              64000
+            ],
+            "description": "Ping payload size in bytes"
+          },
+          "intervalMilliseconds": {
+            "type": "integer",
+            "default": 1000,
+            "description": "Interval between ping packets"
+          },
+          "timeoutMilliseconds": {
+            "type": "integer",
+            "default": 1000,
+            "description": "Timeout for each ping request"
+          },
+          "testCount": {
+            "type": "integer",
+            "default": 10,
+            "description": "Number of ping requests to send"
+          },
+          "qosCategory": {
+            "$ref": "#/QosCategoryInRequest"
+          }
+        }
+      }
+    ]
+  },
+  "PingGatewayTestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/ActiveTestRequest"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "payloadSizeBytes": {
+            "type": "integer",
+            "default": 32,
+            "enum": [
+              32,
+              150,
+              1450,
+              9600,
+              64000
+            ],
+            "description": "Ping payload size in bytes"
+          },
+          "intervalMilliseconds": {
+            "type": "integer",
+            "default": 1000,
+            "description": "Interval between ping packets"
+          },
+          "timeoutMilliseconds": {
+            "type": "integer",
+            "default": 1000,
+            "description": "Timeout for each ping request"
+          },
+          "testCount": {
+            "type": "integer",
+            "default": 10,
+            "description": "Number of ping requests to send"
+          },
+          "qosCategory": {
+            "$ref": "#/QosCategoryInRequest"
+          }
+        }
+      }
+    ]
+  },
+  "HttpTestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/ActiveTestRequest"
+      },
+      {
+        "type": "object",
+        "required": [
+          "testEndpoint"
+        ],
+        "properties": {
+          "testEndpoint": {
+            "$ref": "#/TestEndpointSettings"
+          },
+          "durationSeconds": {
+            "type": "integer",
+            "default": 2,
+            "description": "Duration of the http download test in seconds"
+          },
+          "testCount": {
+            "type": "integer",
+            "default": 1,
+            "description": "Number of download tests to perform"
+          },
+          "qosCategory": {
+            "$ref": "#/QosCategoryInRequest"
+          },
+          "sonarDSCP": {
+            "type": "integer",
+            "default": 0,
+            "description": "DSCP value for Sonar traffic"
+          }
+        }
+      }
+    ]
+  },
+  "PingTestStatusResponse": {
+    "allOf": [
+      {
+        "$ref": "#/OnDemandTestStatusBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "results": {
+            "$ref": "#/PingTestResults"
+          }
+        }
+      }
+    ]
+  },
+  "PingTestResults": {
+    "allOf": [
+      {
+        "$ref": "#/NetworkAttachResultsBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "pingResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/PingResultsEntry"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "PingResultsEntry": {
+    "type": "object",
+    "properties": {
+      "testNumber": {
+        "type": "number",
+        "description": "The test number."
+      },
+      "timeMilliseconds": {
+        "type": "number",
+        "description": "The time taken for the test in milliseconds."
+      },
+      "qosCategory": {
+        "type": "number",
+        "description": "The QoS category for the test."
+      }
+    }
+  },
+  "HttpDownloadTestStatusResponse": {
+    "allOf": [
+      {
+        "$ref": "#/OnDemandTestStatusBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "results": {
+            "$ref": "#/HttpDownloadTestResults"
+          }
+        }
+      }
+    ]
+  },
+  "HttpDownloadTestResults": {
+    "allOf": [
+      {
+        "$ref": "#/NetworkAttachResultsBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "httpDownloadResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/HttpResultsEntry"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "HttpUploadTestStatusResponse": {
+    "allOf": [
+      {
+        "$ref": "#/OnDemandTestStatusBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "results": {
+            "$ref": "#/HttpUploadTestResults"
+          }
+        }
+      }
+    ]
+  },
+  "HttpUploadTestResults": {
+    "allOf": [
+      {
+        "$ref": "#/NetworkAttachResultsBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "httpUploadResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/HttpResultsEntry"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "HttpResultsEntry": {
+    "type": "object",
+    "properties": {
+      "testNumber": {
+        "type": "number",
+        "description": "The test number."
+      },
+      "throughputMbps": {
+        "type": "number",
+        "description": "The throughput achieved during the test in Mbps."
+      },
+      "qosCategory": {
+        "type": "number",
+        "description": "The QoS category for the test."
+      }
+    }
+  },
+  "Iperf3TestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/ActiveTestRequest"
+      },
+      {
+        "type": "object",
+        "required": [
+          "testEndpoint"
+        ],
+        "properties": {
+          "testEndpoint": {
+            "type": "string",
+            "description": "Hostname or IP address of the iperf3 server"
+          },
+          "testEndpointPort": {
+            "type": "integer",
+            "example": 5201,
+            "description": "Port of the iperf3 server"
+          },
+          "testIntervalSeconds": {
+            "type": "integer",
+            "example": 1,
+            "description": "Interval between periodic bandwidth reports"
+          },
+          "testConnectTimeoutMilliseconds": {
+            "type": "integer",
+            "example": 2000,
+            "description": "Connection timeout in milliseconds"
+          },
+          "targetBitRateBps": {
+            "type": "integer",
+            "example": 1000,
+            "description": "Target bitrate in bits per second"
+          },
+          "pacingTimerMicroseconds": {
+            "type": "integer",
+            "example": 1000,
+            "description": "Pacing timer in microseconds"
+          },
+          "fairQueueRateBps": {
+            "type": "integer",
+            "example": 1,
+            "description": "Fair queue rate in bits per second"
+          },
+          "sendTimeSeconds": {
+            "type": "integer",
+            "example": 10,
+            "description": "Duration of the test in seconds"
+          },
+          "sendBytes": {
+            "type": "integer",
+            "example": 100,
+            "description": "Total bytes to send"
+          },
+          "sendBlocks": {
+            "type": "integer",
+            "example": 100,
+            "description": "Number of blocks to send"
+          },
+          "bufferLengthBytes": {
+            "type": "integer",
+            "example": 128000,
+            "description": "Length of the buffer in bytes"
+          },
+          "windowSizeBytes": {
+            "type": "integer",
+            "example": 1000,
+            "description": "TCP window size in bytes"
+          },
+          "congestionControl": {
+            "type": "string",
+            "example": "reno",
+            "description": "TCP congestion control algorithm"
+          },
+          "maxSegmentSizeBytes": {
+            "type": "integer",
+            "description": "Maximum TCP segment size in bytes"
+          },
+          "ipTos": {
+            "type": "integer",
+            "example": 0,
+            "description": "IP Type of Service (TOS). Mutually exclusive with dscp."
+          },
+          "dscp": {
+            "type": "string",
+            "example": "10",
+            "description": "Differentiated Services Code Point (DSCP). Mutually exclusive with ipTos."
+          },
+          "omitSeconds": {
+            "type": "integer",
+            "example": 2,
+            "description": "Seconds to omit from the start of the test"
+          },
+          "useUDP": {
+            "type": "boolean",
+            "default": false,
+            "description": "Run the test using UDP instead of TCP"
+          },
+          "reverseDirection": {
+            "type": "boolean",
+            "default": false,
+            "description": "Reverse the direction of the test"
+          },
+          "bidirectional": {
+            "type": "boolean",
+            "default": false,
+            "description": "Run bidirectional test"
+          },
+          "dontFragment": {
+            "type": "boolean",
+            "default": false,
+            "description": "Set the IP don't-fragment flag"
+          },
+          "noDelay": {
+            "type": "boolean",
+            "default": false,
+            "description": "Disable Nagle's algorithm"
+          },
+          "zeroCopy": {
+            "type": "boolean",
+            "default": false,
+            "description": "Use zero-copy mode"
+          }
+        }
+      }
+    ]
+  },
+  "Iperf3TestStatusResponse": {
+    "allOf": [
+      {
+        "$ref": "#/OnDemandTestStatusBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "results": {
+            "$ref": "#/Iperf3TestResults"
+          }
+        }
+      }
+    ]
+  },
+  "Iperf3TestResults": {
+    "type": "object",
+    "properties": {
+      "transferredBytes": {
+        "type": "integer",
+        "format": "int64",
+        "description": "Total number of bytes transferred during the test"
+      },
+      "throughputMbps": {
+        "type": "number",
+        "format": "double",
+        "description": "Measured throughput in megabits per second"
+      },
+      "rawIperf3Output": {
+        "type": "object",
+        "description": "Raw iperf3 JSON output (raw large payload)"
+      }
+    }
+  },
+  "SpeedtestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/ActiveTestRequest"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "testServerId": {
+            "type": "integer",
+            "description": "Specific Ookla speedtest server ID to use"
+          },
+          "downloadConnectionRangeMin": {
+            "type": "integer",
+            "example": 0,
+            "description": "Minimum number of parallel connections for download test"
+          },
+          "downloadConnectionRangeMax": {
+            "type": "integer",
+            "example": 0,
+            "description": "Maximum number of parallel connections for download test"
+          },
+          "uploadConnectionRangeMin": {
+            "type": "integer",
+            "example": 0,
+            "description": "Minimum number of parallel connections for upload test"
+          },
+          "uploadConnectionRangeMax": {
+            "type": "integer",
+            "example": 0,
+            "description": "Maximum number of parallel connections for upload test"
+          }
+        }
+      }
+    ]
+  },
+  "SpeedtestStatusResponse": {
+    "allOf": [
+      {
+        "$ref": "#/OnDemandTestStatusBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "results": {
+            "$ref": "#/SpeedtestResults"
+          }
+        }
+      }
+    ]
+  },
+  "SpeedtestResults": {
+    "type": "object",
+    "properties": {
+      "attribution": {
+        "$ref": "#/SpeedtestAttribution"
+      },
+      "download": {
+        "$ref": "#/SpeedtestTransfer"
+      },
+      "upload": {
+        "$ref": "#/SpeedtestTransfer"
+      },
+      "ping": {
+        "$ref": "#/SpeedtestPing"
+      },
+      "interface": {
+        "$ref": "#/SpeedtestInterface"
+      },
+      "selectedServer": {
+        "$ref": "#/SpeedtestServerCandidate"
+      },
+      "serverCandidates": {
+        "type": "array",
+        "items": {
+          "$ref": "#/SpeedtestServerCandidate"
+        }
+      }
+    }
+  },
+  "SpeedtestAttribution": {
+    "type": "object",
+    "properties": {
+      "poweredBy": {
+        "type": "string",
+        "example": "Speedtest.net - http://speedtest.net"
+      }
+    }
+  },
+  "SpeedtestTransfer": {
+    "type": "object",
+    "properties": {
+      "throughputMbps": {
+        "type": "number",
+        "format": "double"
+      },
+      "bytes": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "elapsedMilliseconds": {
+        "type": "integer"
+      },
+      "latencyMilliseconds": {
+        "type": "number",
+        "format": "double"
+      },
+      "latencyLowMilliseconds": {
+        "type": "number",
+        "format": "double"
+      },
+      "latencyHighMilliseconds": {
+        "type": "number",
+        "format": "double"
+      },
+      "jitterMilliseconds": {
+        "type": "number",
+        "format": "double"
+      },
+      "startTime": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "endTime": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "SpeedtestPing": {
+    "type": "object",
+    "properties": {
+      "latencyMilliseconds": {
+        "type": "number",
+        "format": "double"
+      },
+      "latencyLowMilliseconds": {
+        "type": "number",
+        "format": "double"
+      },
+      "latencyHighMilliseconds": {
+        "type": "number",
+        "format": "double"
+      },
+      "jitterMilliseconds": {
+        "type": "number",
+        "format": "double"
+      },
+      "elapsedMilliseconds": {
+        "type": "integer"
+      },
+      "startTime": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "endTime": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "SpeedtestInterface": {
+    "type": "object",
+    "properties": {
+      "internalIp": {
+        "type": "string"
+      },
+      "interfaceName": {
+        "type": "string"
+      },
+      "macAddress": {
+        "type": "string"
+      },
+      "isVPN": {
+        "type": "boolean"
+      },
+      "externalIp": {
+        "type": "string"
+      }
+    }
+  },
+  "SpeedtestServerCandidate": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "latency": {
+        "type": "number",
+        "format": "double"
+      },
+      "name": {
+        "type": "string"
+      },
+      "host": {
+        "type": "string"
+      },
+      "port": {
+        "type": "integer"
+      },
+      "location": {
+        "type": "string"
+      },
+      "country": {
+        "type": "string"
+      }
+    }
+  },
+  "TracerouteTestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/ActiveTestRequest"
+      },
+      {
+        "type": "object",
+        "required": [
+          "testEndpoint"
+        ],
+        "properties": {
+          "testEndpoint": {
+            "$ref": "#/TestEndpointSettings"
+          },
+          "minimumTtl": {
+            "type": "integer",
+            "default": 1,
+            "description": "Minimum TTL (hop count) to start the traceroute"
+          },
+          "maximumTtl": {
+            "type": "integer",
+            "default": 255,
+            "description": "Maximum TTL (hop count) for the traceroute"
+          },
+          "queriesPerHop": {
+            "type": "integer",
+            "default": 5,
+            "description": "Number of probe packets sent per hop"
+          },
+          "timeoutMilliseconds": {
+            "type": "integer",
+            "default": 2000,
+            "description": "Timeout in milliseconds for each probe"
+          },
+          "testTimeoutSeconds": {
+            "type": "integer",
+            "default": 20,
+            "description": "Overall timeout for the traceroute test"
+          },
+          "qosCategory": {
+            "$ref": "#/QosCategoryInRequest"
+          }
+        }
+      }
+    ]
+  },
+  "TracerouteTestStatusResponse": {
+    "allOf": [
+      {
+        "$ref": "#/OnDemandTestStatusBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "results": {
+            "$ref": "#/TracerouteTestResults"
+          }
+        }
+      }
+    ]
+  },
+  "TracerouteTestResults": {
+    "allOf": [
+      {
+        "$ref": "#/NetworkAttachResultsBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "traceRouteResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/TraceRouteResultsEntry"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "TraceRouteResultsEntry": {
+    "type": "object",
+    "properties": {
+      "hop": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "Hop number"
+      },
+      "ipAddress": {
+        "type": "string",
+        "description": "IP address of the responding hop"
+      },
+      "timeMilliseconds": {
+        "type": "array",
+        "description": "Round-trip times in milliseconds for each probe attempt",
+        "items": {
+          "type": "integer"
+        }
+      },
+      "ttl": {
+        "type": "array",
+        "description": "TTL values used for each probe attempt",
+        "items": {
+          "type": "integer"
+        }
+      }
+    }
+  },
+  "MosTestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/TestEndpointSettings"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "direction": {
+            "type": "string",
+            "default": "DOWNLINK",
+            "enum": ["UPLINK", "DOWNLINK"],
+            "description": "Direction of the MOS test"
+          },
+          "codec": {
+            "type": "string",
+            "default": "PCM_LINEAR_16",
+            "enum": ["PCM_LINEAR_16", "GSM"],
+            "description": "VOIP codec. Packet size defaults to 188 bytes for PCM_LINEAR_16 and 48 bytes for GSM."
+          },
+          "fec": {
+            "type": "string",
+            "default": "NO_FEC",
+            "enum" : [ "NO_FEC", "GSM_PIGGYBACK_OFFSET_1", "GSM_PIGGYBACK_OFFSET_2", "GSM_PIGGYBACK_OFFSET_3" ],
+            "description": "Forward error correction mode for the MOS stream"
+          },
+          "qosCategory": {
+            "$ref": "#/QosCategoryInRequest"
+          },
+          "sonarDSCP": {
+            "type": "integer",
+            "default": 0,
+            "description": "DSCP value for Sonar traffic"
+          },
+          "sender": {
+            "$ref": "#/MosTestSender"
+          },
+          "receiver": {
+            "$ref": "#/MosTestReceiver"
+          }
+        }
+      }
+    ]
+  },
+  "MosTestSender": {
+    "type": "object",
+    "description": "Sender configuration (no IP or port exposure)",
+    "properties": {
+      "packetSizeBytes": {
+        "type": "integer",
+        "default": 188,
+        "description": "Packet size in bytes"
+      },
+      "sendTimeSeconds": {
+        "type": "integer",
+        "default": 30,
+        "description": "Total send time in seconds"
+      },
+      "streamIntervalMilliseconds": {
+        "type": "integer",
+        "default": 20,
+        "description": "Stream interval in milliseconds"
+      },
+      "samplingIntervalSeconds": {
+        "type": "integer",
+        "default": 5,
+        "description": "Sampling interval in seconds"
+      }
+    }
+  },
+  "MosTestReceiver": {
+    "type": "object",
+    "description": "Receiver configuration",
+    "properties": {
+      "port": {
+        "type": "integer",
+        "default": 0,
+        "description": "Inbound UDP port on sensor (advanced use only). Defaults to sensor default if omitted."
+      },
+      "windowSizeSeconds": {
+        "type": "integer",
+        "default": 10,
+        "description": "Receiver window size in seconds"
+      },
+      "samplingIntervalSeconds": {
+        "type": "integer",
+        "default": 1,
+        "description": "Sampling interval in seconds"
+      },
+      "dejitteringBufferMilliseconds": {
+        "type": "integer",
+        "default": 120,
+        "description": "Dejitter buffer size in milliseconds"
+      },
+      "timeoutSeconds": {
+        "type": "integer",
+        "default": 30,
+        "description": "Receiver timeout in seconds"
+      }
+    }
+  },
+  "MosTestStatusResponse": {
+    "allOf": [
+      {
+        "$ref": "#/OnDemandTestStatusBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "results": {
+            "$ref": "#/MosTestResults"
+          }
+        }
+      }
+    ]
+  },
+  "MosTestResults": {
+    "allOf": [
+      {
+        "$ref": "#/NetworkAttachResultsBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "voipResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/MosResultsEntry"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "MosResultsEntry": {
+    "type": "object",
+    "description": "MOS measurement results for a sampling interval",
+    "properties": {
+      "mos": {
+        "type": "number",
+        "description": "Mean Opinion Score value"
+      },
+      "elapsedSeconds": {
+        "type": "number",
+        "description": "Elapsed time since start of the test in seconds"
+      },
+      "estimatedPacketCount": {
+        "type": "integer",
+        "description": "Estimated number of packets processed"
+      },
+      "lossRatePercentage": {
+        "type": "number",
+        "description": "Packet loss rate as a percentage"
+      },
+      "averageBurstSize": {
+        "type": "number",
+        "description": "Average burst size of lost packets"
+      },
+      "averageJitterMilliseconds": {
+        "type": "number",
+        "description": "Average jitter in milliseconds"
+      }
+    }
+  },
+  "UdpTestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/ActiveTestRequest"
+      },
+      {
+        "type": "object",
+        "required": [
+          "testEndpoint"
+        ],
+        "properties": {
+          "testEndpoint": {
+            "$ref": "#/TestEndpointSettings"
+          },
+          "packetSize": {
+            "type": "string",
+            "enum": [
+              "SMALL_PACKET_SIZE",
+              "MEDIUM_PACKET_SIZE",
+              "LARGE_PACKET_SIZE"
+            ],
+            "default": "SMALL_PACKET_SIZE",
+            "description": "UDP payload size:\n- SMALL_PACKET_SIZE = 256 bytes\n- MEDIUM_PACKET_SIZE = 1024 bytes\n- LARGE_PACKET_SIZE = 32768 bytes"
+          },
+          "testCount": {
+            "type": "integer",
+            "default": 1,
+            "minimum": 1,
+            "description": "Number of UDP throughput tests to perform"
+          },
+          "senderPort": {
+            "type": "integer",
+            "default": 0,
+            "description": "UDP sender port (0 = auto-assign)"
+          },
+          "receiverPort": {
+            "type": "integer",
+            "default": 0,
+            "description": "UDP receiver port (0 = auto-assign)"
+          },
+          "qosCategory": {
+            "$ref": "#/QosCategoryInRequest"
+          },
+          "sonarDSCP": {
+            "type": "integer",
+            "default": 0,
+            "description": "DSCP value for Sonar traffic"
+          }
+        }
+      }
+    ]
+  },
+  "UdpDownloadTestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/UdpTestRequest"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "downloadMegabytes": {
+            "type": "string",
+            "default": "FOUR",
+            "enum": [
+              "ONE",
+              "FOUR",
+              "TEN",
+              "HUNDRED",
+              "TWOHUNDRED",
+              "FIVEHUNDRED"
+            ],
+            "description": "Download payload size in megabytes"
+          }
+        }
+      }
+    ]
+  },
+  "UdpUploadTestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/UdpTestRequest"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "uploadMegabytes": {
+            "type": "string",
+            "default": "FOUR",
+            "enum": [
+              "ONE",
+              "FOUR",
+              "TEN",
+              "HUNDRED",
+              "TWOHUNDRED",
+              "FIVEHUNDRED"
+            ],
+            "description": "Upload payload size in megabytes"
+          }
+        }
+      }
+    ]
+  },
+  "UdpDownloadTestStatusResponse": {
+    "allOf": [
+      {
+        "$ref": "#/OnDemandTestStatusBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "results": {
+            "$ref": "#/UdpDownloadTestResults"
+          }
+        }
+      }
+    ]
+  },
+  "UdpDownloadTestResults": {
+    "allOf": [
+      {
+        "$ref": "#/NetworkAttachResultsBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "udpDownloadResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/UdpResultsEntry"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "UdpUploadTestStatusResponse": {
+    "allOf": [
+      {
+        "$ref": "#/OnDemandTestStatusBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "results": {
+            "$ref": "#/UdpUploadTestResults"
+          }
+        }
+      }
+    ]
+  },
+  "UdpUploadTestResults": {
+    "allOf": [
+      {
+        "$ref": "#/NetworkAttachResultsBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "udpUploadResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/UdpResultsEntry"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "UdpResultsEntry": {
+    "type": "object",
+    "properties": {
+      "testNumber": {
+        "type": "number",
+        "description": "The test number."
+      },
+      "packetLoss": {
+        "type": "integer",
+        "description": "Number of packets lost during the test"
+      },
+      "timeMilliseconds": {
+        "type": "integer",
+        "format": "int64",
+        "description": "Duration of the test in milliseconds"
+      },
+      "throughputMbps": {
+        "type": "number",
+        "description": "The throughput achieved during the test in Mbps."
+      },
+      "qosCategory": {
+        "type": "number",
+        "description": "The QoS category for the test."
+      }
+    }
+  },
+  "TcpTestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/ActiveTestRequest"
+      },
+      {
+        "type": "object",
+        "required": [
+          "testEndpoint"
+        ],
+        "properties": {
+          "testEndpoint": {
+            "$ref": "#/TestEndpointSettings"
+          },
+          "testCount": {
+            "type": "integer",
+            "default": 1,
+            "minimum": 1,
+            "description": "Number of TCP throughput tests to perform"
+          },
+          "qosCategory": {
+            "$ref": "#/QosCategoryInRequest"
+          },
+          "sonarDSCP": {
+            "type": "integer",
+            "default": 0,
+            "description": "DSCP value for Sonar traffic"
+          }
+        }
+      }
+    ]
+  },
+  "TcpDownloadTestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/TcpTestRequest"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "downloadMegabytes": {
+            "type": "string",
+            "default": "FOUR",
+            "enum": [
+              "ONE",
+              "FOUR",
+              "TEN",
+              "HUNDRED",
+              "TWOHUNDRED",
+              "FIVEHUNDRED"
+            ],
+            "description": "Download payload size in megabytes"
+          }
+        }
+      }
+    ]
+  },
+  "TcpUploadTestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/TcpTestRequest"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "uploadMegabytes": {
+            "type": "string",
+            "default": "FOUR",
+            "enum": [
+              "ONE",
+              "FOUR",
+              "TEN",
+              "HUNDRED",
+              "TWOHUNDRED",
+              "FIVEHUNDRED"
+            ],
+            "description": "Upload payload size in megabytes"
+          }
+        }
+      }
+    ]
+  },
+  "TcpDownloadTestStatusResponse": {
+    "allOf": [
+      {
+        "$ref": "#/OnDemandTestStatusBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "results": {
+            "$ref": "#/TcpDownloadTestResults"
+          }
+        }
+      }
+    ]
+  },
+  "TcpDownloadTestResults": {
+    "allOf": [
+      {
+        "$ref": "#/NetworkAttachResultsBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "tcpDownloadResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/TcpResultsEntry"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "TcpUploadTestStatusResponse": {
+    "allOf": [
+      {
+        "$ref": "#/OnDemandTestStatusBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "results": {
+            "$ref": "#/TcpUploadTestResults"
+          }
+        }
+      }
+    ]
+  },
+  "TcpUploadTestResults": {
+    "allOf": [
+      {
+        "$ref": "#/NetworkAttachResultsBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "udpUploadResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/TcpResultsEntry"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "TcpResultsEntry": {
+    "type": "object",
+    "properties": {
+      "testNumber": {
+        "type": "number",
+        "description": "The test number."
+      },
+      "timeMilliseconds": {
+        "type": "integer",
+        "format": "int64",
+        "description": "Duration of the test in milliseconds"
+      },
+      "throughputMbps": {
+        "type": "number",
+        "description": "The throughput achieved during the test in Mbps."
+      },
+      "qosCategory": {
+        "type": "number",
+        "description": "The QoS category for the test."
+      }
+    }
+  },
+  "WebDownloadTestRequest": {
+    "allOf": [
+      {
+        "$ref": "#/ActiveTestRequestWithDns"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "proxyServerUrl": {
+            "type": "string",
+            "description": "Optional proxy server URL used for the web download test",
+            "example": "http://proxy.example.com:8080"
+          },
+          "timeoutSeconds": {
+            "type": "integer",
+            "default": 60,
+            "description": "Maximum duration of the web download test in seconds"
+          },
+          "webServerId": {
+            "type": "integer",
+            "description": "Optional predefined web server identifier"
+          },
+          "testHosts": {
+            "type": "array",
+            "description": "List of URLs or hostnames to be tested",
+            "items": {
+              "type": "string",
+              "example": "www.google.com"
+            }
+          },
+          "resolveDNSOnSensor": {
+            "type": "boolean",
+            "default": false,
+            "description": "Whether DNS resolution should occur on the sensor"
+          }
+        }
+      }
+    ]
+  },
+  "WebDownloadTestStatusResponse": {
+    "allOf": [
+      {
+        "$ref": "#/OnDemandTestStatusBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "results": {
+            "$ref": "#/WebDownloadTestResults"
+          }
+        }
+      }
+    ]
+  },
+  "WebDownloadTestResults": {
+    "allOf": [
+      {
+        "$ref": "#/NetworkAttachResultsBase"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "sentPackets": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Total number of packets sent during the test."
+          },
+          "receivedPackets": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Total number of packets received during the test."
+          },
+          "sentPacketRetransmissionCount": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Number of retransmitted packets on send."
+          },
+          "receivedPacketRetransmissionCount": {
+            "type": "integer",
+            "format": "int64",
+            "description": "Number of retransmitted packets on receive."
+          },
+          "averageFrameSize": {
+            "type": "integer",
+            "description": "Average frame size in bytes."
+          },
+          "minimumFrameSize": {
+            "type": "integer",
+            "description": "Minimum frame size in bytes."
+          },
+          "maximumFrameSize": {
+            "type": "integer",
+            "description": "Maximum frame size in bytes."
+          },
+          "webDownloadResults": {
+            "type": "array",
+            "items": {
+              "$ref": "#/WebDownloadResultsEntry"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "WebDownloadResultsEntry": {
+    "type": "object",
+    "properties": {
+      "url": {
+        "type": "string",
+        "description": "The URL that was tested."
+      },
+      "status": {
+        "type": "string",
+        "enum": [
+          "successful",
+          "unsuccessful"
+        ],
+        "description": "Result status for the URL."
+      },
+      "timeMilliseconds": {
+        "type": "integer",
+        "format": "int64",
+        "description": "Time taken to download the URL in milliseconds."
+      }
+    }
+  },
+  "ActiveTestsListResponse": {
+    "type": "object",
+    "properties": {
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/ZeroBasedPagination"
+      },
+      "items": {
+        "type": "array",
+        "description": "List of active on-demand test metadata",
+        "items": {
+          "$ref": "#/ActiveTestsItem"
+        }
+      }
+    }
+  },
+  "ActiveTestsItem": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "description": "Unique identifier for the test"
+      },
+      "testKey": {
+        "type": "string",
+        "description": "UUID key for the test"
+      },
+      "testId": {
+        "type": "integer",
+        "format": "int64",
+        "description": "Numeric test ID"
+      },
+      "testType": {
+        "type": "string",
+        "description": "Type of the test"
+      },
+      "sensorId": {
+        "type": "integer",
+        "description": "ID of the sensor that performed the test"
+      },
+      "sensorUuid": {
+        "type": "string",
+        "format": "uuid",
+        "description": "UUID of the sensor"
+      },
+      "sensorName": {
+        "type": "string",
+        "description": "Name of the sensor"
+      },
+      "orgUuid": {
+        "type": "string",
+        "format": "uuid",
+        "description": "UUID of the organization"
+      },
+      "apId": {
+        "type": "integer",
+        "description": "Access point ID"
+      },
+      "band": {
+        "type": "string",
+        "enum": ["2.4", "5", "6", "N/A"],
+        "description": "Frequency band"
+      },
+      "channel": {
+        "type": "integer",
+        "description": "WiFi channel number"
+      },
+      "gid": {
+        "type": "integer",
+        "description": "Group ID"
+      },
+      "resultsFileS3Key": {
+        "type": "string",
+        "description": "S3 key for the results file"
+      },
+      "runStatus": {
+        "type": "string",
+        "enum": ["IN_PROGRESS", "COMPLETE", "ERROR"],
+        "description": "Overall run status of the test"
+      },
+      "errorCode": {
+        "type": "integer",
+        "format": "int64",
+        "description": "Error code if the test failed (0 means no error)"
+      },
+      "errorMessage": {
+        "type": "string",
+        "description": "Human-readable error message if the test failed"
+      },
+      "testStatus": {
+        "type": "string",
+        "description": "Additional indicator in case of test failures"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Test creation timestamp (UTC)"
+      },
+      "hostname": {
+        "type": "string",
+        "description": "Hostname of the sensor"
+      }
+    }
+  },
+  "PacketCaptureListResponse": {
+    "type": "object",
+    "properties": {
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/ZeroBasedPagination"
+      },
+      "items": {
+        "type": "array",
+        "description": "List of packet capture test metadata",
+        "items": {
+          "$ref": "#/PacketCaptureItem"
+        }
+      }
+    }
+  },
+  "PacketCaptureItem": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid",
+        "description": "Unique identifier for the test"
+      },
+      "testKey": {
+        "type": "string",
+        "format": "uuid",
+        "description": "UUID key for the test"
+      },
+      "testId": {
+        "type": "integer",
+        "format": "int64",
+        "description": "Numeric test ID"
+      },
+      "testType": {
+        "type": "string",
+        "enum": ["PacketCapture", "AccessPointTraffic"],
+        "description": "Type of packet capture test"
+      },
+      "eyeId": {
+        "type": "integer",
+        "format": "int64",
+        "description": "ID of the sensor (eye) that performed the test"
+      },
+      "eyeUuid": {
+        "type": "string",
+        "format": "uuid",
+        "description": "UUID of the sensor"
+      },
+      "eyeName": {
+        "type": "string",
+        "description": "Name of the sensor"
+      },
+      "orgUuid": {
+        "type": "string",
+        "format": "uuid",
+        "description": "UUID of the organization"
+      },
+      "apId": {
+        "type": "integer",
+        "description": "Access point ID"
+      },
+      "ssid": {
+        "type": "string",
+        "description": "SSID of the access point"
+      },
+      "bssid": {
+        "type": "string",
+        "description": "BSSID (MAC address) of the access point"
+      },
+      "band": {
+        "type": "string",
+        "enum": ["2.4", "5", "6", "N/A"],
+        "description": "Frequency band"
+      },
+      "channel": {
+        "type": "integer",
+        "description": "WiFi channel number"
+      },
+      "gid": {
+        "type": "integer",
+        "description": "Group ID"
+      },
+      "resultsFileS3Key": {
+        "type": "string",
+        "description": "S3 key for the PCAP file"
+      },
+      "runStatus": {
+        "type": "string",
+        "enum": ["IN_PROGRESS", "COMPLETE", "ERROR"],
+        "description": "Overall run status of the test"
+      },
+      "errorCode": {
+        "type": "integer",
+        "format": "int64",
+        "description": "Error code if the test failed (0 means no error)"
+      },
+      "errorMessage": {
+        "type": "string",
+        "description": "Human-readable error message if the test failed"
+      },
+      "testStatus": {
+        "type": "string",
+        "description": "Additional indicator in case of test failures"
+      },
+      "captureStatus": {
+        "type": "string",
+        "description": "Packet capture specific status indicator"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time",
+        "description": "Test creation timestamp (UTC)"
+      },
+      "hostname": {
+        "type": "string",
+        "description": "Hostname of the sensor"
+      }
+    }
+  }
+}

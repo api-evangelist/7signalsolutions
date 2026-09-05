@@ -1,0 +1,476 @@
+{
+  "MetricFilterParam": {
+    "name": "metric",
+    "in": "query",
+    "description": "Filter the alert rules by metric name",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "EnabledFilterParam": {
+    "name": "enabled",
+    "in": "query",
+    "description": "Filter the alert rules by their enabled state",
+    "required": false,
+    "schema": {
+      "type": "boolean"
+    }
+  },
+  "NameFilterParam": {
+    "name": "name",
+    "in": "query",
+    "description": "Filter the alert rules by name using a case-insensitive partial match",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "Dimension": {
+    "type": "string",
+    "description": "A dimension the metric can be grouped/keyed by",
+    "enum": [
+      "device_id",
+      "bssid",
+      "network",
+      "band",
+      "location_id",
+      "target"
+    ]
+  },
+  "AggregationFunction": {
+    "type": "string",
+    "description": "How matching samples are aggregated before the threshold comparison",
+    "enum": [
+      "avg",
+      "min",
+      "max"
+    ]
+  },
+  "ThresholdOperator": {
+    "type": "string",
+    "description": "The comparison operator applied between the aggregated value and the threshold",
+    "enum": [
+      "<",
+      "<=",
+      ">",
+      ">="
+    ]
+  },
+  "MissingDataPolicy": {
+    "type": "string",
+    "description": "How missing data is treated while evaluating the rule",
+    "enum": [
+      "ignore",
+      "good",
+      "bad"
+    ]
+  },
+  "WebhookFormat": {
+    "type": "string",
+    "description": "Per-destination payload shape for a webhook delivery. Defaults to generic when omitted.",
+    "enum": [
+      "generic",
+      "slack"
+    ]
+  },
+  "WebhookAuth": {
+    "type": "object",
+    "description": "Authentication mode for a webhook delivery, discriminated by `type`. Credentials are referenced by Secrets Manager ARN; the secret value is never stored here.",
+    "required": [
+      "type"
+    ],
+    "discriminator": {
+      "propertyName": "type"
+    },
+    "oneOf": [
+      {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "NONE"
+            ]
+          }
+        }
+      },
+      {
+        "type": "object",
+        "required": [
+          "type",
+          "username",
+          "passwordSecretArn"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "BASIC"
+            ]
+          },
+          "username": {
+            "type": "string"
+          },
+          "passwordSecretArn": {
+            "type": "string",
+            "description": "Secrets Manager ARN holding the password",
+            "pattern": "^arn:aws:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:.+"
+          }
+        }
+      },
+      {
+        "type": "object",
+        "required": [
+          "type",
+          "tokenSecretArn"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "TOKEN"
+            ]
+          },
+          "tokenSecretArn": {
+            "type": "string",
+            "description": "Secrets Manager ARN holding the token",
+            "pattern": "^arn:aws:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:.+"
+          }
+        }
+      }
+    ]
+  },
+  "Delivery": {
+    "type": "object",
+    "description": "A single notification target, discriminated by `kind`",
+    "required": [
+      "kind"
+    ],
+    "discriminator": {
+      "propertyName": "kind"
+    },
+    "oneOf": [
+      {
+        "type": "object",
+        "required": [
+          "kind",
+          "url",
+          "auth"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "webhook"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "description": "http or https URL with no spaces",
+            "pattern": "^https?://\\S+$"
+          },
+          "auth": {
+            "$ref": "#/WebhookAuth"
+          },
+          "format": {
+            "$ref": "#/WebhookFormat"
+          }
+        }
+      },
+      {
+        "type": "object",
+        "required": [
+          "kind",
+          "address"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "email"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "address": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
+      {
+        "type": "object",
+        "required": [
+          "kind",
+          "mdsConfigId",
+          "organizationName"
+        ],
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": [
+              "servicenow"
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "mdsConfigId": {
+            "type": "string"
+          },
+          "organizationName": {
+            "type": "string"
+          }
+        }
+      }
+    ]
+  },
+  "NotificationConfig": {
+    "type": "object",
+    "required": [
+      "deliveries"
+    ],
+    "properties": {
+      "deliveries": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Delivery"
+        }
+      }
+    }
+  },
+  "AlertRuleRequest": {
+    "type": "object",
+    "description": "Body for creating (POST) or replacing (PUT) an alert rule. Enum fields use their wire values exactly as listed (e.g. \">\", \"avg\", \"ignore\" in lowercase), not the uppercase names.",
+    "required": [
+      "metric",
+      "dimensionSet",
+      "aggregationFunction",
+      "thresholdValue",
+      "thresholdOperator"
+    ],
+    "properties": {
+      "name": {
+        "type": "string",
+        "description": "Optional human-readable name for the rule."
+      },
+      "metric": {
+        "type": "string",
+        "minLength": 1,
+        "description": "Required. Non-blank metric name to evaluate."
+      },
+      "dimensionSet": {
+        "type": "array",
+        "minItems": 1,
+        "uniqueItems": true,
+        "description": "Required. At least one dimension the metric is grouped/keyed by.",
+        "items": {
+          "$ref": "#/Dimension"
+        }
+      },
+      "dimensionFilters": {
+        "type": "object",
+        "nullable": true,
+        "additionalProperties": true,
+        "description": "Optional free-form JSON object narrowing which series the rule applies to."
+      },
+      "aggregationFunction": {
+        "allOf": [
+          {
+            "$ref": "#/AggregationFunction"
+          }
+        ],
+        "description": "Required. How matching samples are aggregated before the threshold comparison."
+      },
+      "thresholdValue": {
+        "type": "number",
+        "format": "double",
+        "description": "Required. Value the aggregated metric is compared against."
+      },
+      "thresholdOperator": {
+        "allOf": [
+          {
+            "$ref": "#/ThresholdOperator"
+          }
+        ],
+        "description": "Required. Comparison operator applied between the aggregated value and thresholdValue."
+      },
+      "pendingPeriodSeconds": {
+        "type": "integer",
+        "minimum": 1,
+        "default": 300,
+        "description": "Optional. How long (seconds) the condition must hold before an incident is raised. Minimum 1; defaults to 300."
+      },
+      "missingDataPolicy": {
+        "allOf": [
+          {
+            "$ref": "#/MissingDataPolicy"
+          }
+        ],
+        "default": "ignore",
+        "description": "Optional. How missing data is treated during evaluation. Defaults to ignore."
+      },
+      "notificationConfig": {
+        "allOf": [
+          {
+            "$ref": "#/NotificationConfig"
+          }
+        ],
+        "description": "Optional. Notification targets fired when the rule breaches."
+      },
+      "locationSelection": {
+        "type": "object",
+        "nullable": true,
+        "additionalProperties": true,
+        "description": "Optional free-form JSON describing which locations the rule applies to."
+      },
+      "enabled": {
+        "type": "boolean",
+        "default": true,
+        "description": "Optional. Whether the rule is active. Defaults to true."
+      }
+    },
+    "example": {
+      "name": "Low client health on guest network",
+      "metric": "client_health_score",
+      "dimensionSet": [
+        "network",
+        "band"
+      ],
+      "aggregationFunction": "avg",
+      "thresholdValue": 70.0,
+      "thresholdOperator": "<",
+      "pendingPeriodSeconds": 600,
+      "missingDataPolicy": "ignore",
+      "enabled": true,
+      "notificationConfig": {
+        "deliveries": [
+          {
+            "kind": "email",
+            "address": "neteng@example.com"
+          },
+          {
+            "kind": "servicenow",
+            "mdsConfigId": "abc-123",
+            "organizationName": "globalcorp"
+          }
+        ]
+      }
+    }
+  },
+  "AlertRuleResponse": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string"
+      },
+      "metric": {
+        "type": "string"
+      },
+      "dimensionSet": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Dimension"
+        }
+      },
+      "dimensionFilters": {
+        "type": "object",
+        "nullable": true,
+        "additionalProperties": true
+      },
+      "aggregationFunction": {
+        "$ref": "#/AggregationFunction"
+      },
+      "thresholdValue": {
+        "type": "number",
+        "format": "double"
+      },
+      "thresholdOperator": {
+        "$ref": "#/ThresholdOperator"
+      },
+      "pendingPeriodSeconds": {
+        "type": "integer"
+      },
+      "missingDataPolicy": {
+        "$ref": "#/MissingDataPolicy"
+      },
+      "notificationConfig": {
+        "$ref": "#/NotificationConfig"
+      },
+      "enabled": {
+        "type": "boolean"
+      },
+      "locationSelection": {
+        "type": "object",
+        "nullable": true,
+        "additionalProperties": true
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "updatedAt": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "EnabledRequest": {
+    "type": "object",
+    "required": [
+      "enabled"
+    ],
+    "properties": {
+      "enabled": {
+        "type": "boolean"
+      }
+    }
+  },
+  "AlertRulesSummary": {
+    "type": "object",
+    "properties": {
+      "totalCount": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "activeCount": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "disabledCount": {
+        "type": "integer",
+        "format": "int64"
+      }
+    }
+  },
+  "GetAlertRulesResponse": {
+    "type": "object",
+    "required": [
+      "results",
+      "pagination"
+    ],
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/AlertRuleResponse"
+        }
+      },
+      "pagination": {
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  }
+}

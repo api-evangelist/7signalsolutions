@@ -1,0 +1,499 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "7SIGNAL API",
+    "description": "This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform",
+    "version": "2.21.1",
+    "contact": {
+      "email": "info@7signal.com"
+    },
+    "license": {
+      "name": "All Rights Reserved",
+      "url": "https://www.7signal.com/contact"
+    }
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "API Gateway"
+    }
+  ],
+  "paths": {
+    "/oauth2/token": {
+      "$ref": "oauth2/methods.json#/TokenPost"
+    },
+    "/access/{userId}/summary": {
+      "$ref": "metadata/methods.json#/access-summary"
+    },
+    "/access-points/agents": {
+      "$ref": "access-points/methods.json#/PathAccessPointsAgents"
+    },
+    "/access-points/agents/{accessPointId}": {
+      "$ref": "access-points/methods.json#/PathAccessPointsAgent"
+    },
+    "/access-points/sensors": {
+      "$ref": "access-points/methods.json#/PathAccessPointsSensors"
+    },
+    "/access-points/sensors/{accessPointId}": {
+      "$ref": "access-points/methods.json#/PathAccessPointsSensor"
+    },
+    "/adapter-driver-report": {
+      "$ref": "adapter-driver-report/methods.json#/PathAdapterDriverReportList"
+    },
+    "/adapter-driver-report/summary": {
+      "$ref": "adapter-driver-report/methods.json#/PathAdapterDriverReportSummary"
+    },
+    "/adapter-driver-report/org": {
+      "$ref": "adapter-driver-report/methods.json#/PathAdapterDriverReportOrgList"
+    },
+    "/adapter-driver-report/org/summary": {
+      "$ref": "adapter-driver-report/methods.json#/PathAdapterDriverReportOrgSummary"
+    },
+    "/apikeys": {
+      "$ref": "metadata/methods.json#/apikeys"
+    },
+    "/apikeys/{apikeyId}": {
+      "$ref": "metadata/methods.json#/apikeys-with-id"
+    },
+    "/audit/agents": {
+      "$ref": "audits/methods.json#/PathAuditsAgents"
+    },
+    "/change-events/sensors": {
+      "$ref": "change-events/methods.json#/PathChangeEventsSensors"
+    },
+    "/clients/sensors": {
+      "$ref": "clients/methods.json#/PathClientsSensors"
+    },
+    "/default-configurations/sensors": {
+      "$ref": "default-configurations/methods.json#/PathDefaultConfigurationsSensors"
+    },
+    "/default-configurations/sensors/{configurationId}": {
+      "$ref": "default-configurations/methods.json#/PathDefaultConfigurationsSensor"
+    },
+    "/eyeris/analysis/stream": {
+      "$ref": "eyeris/methods.json#/eyeris-stream"
+    },
+    "/eyeris/agents/client-analysis": {
+      "$ref": "eyeris/methods.json#/eyeris-client-analysis"
+    },
+    "/eyeris/agents/client-analysis/{requestId}": {
+      "$ref": "eyeris/methods.json#/eyeris-client-analysis-with-id"
+    },
+    "/eyes": {
+      "$ref": "eyes/methods.json#/PathEyesSummary"
+    },
+    "/eyes/agents": {
+      "$ref": "eyes/methods.json#/PathEyesAgents"
+    },
+    "/eyes/agents/search": {
+      "$ref": "eyes/methods.json#/PathEyesAgentsSearch"
+    },
+    "/eyes/agents/{agentId}": {
+      "$ref": "eyes/methods.json#/PathEyesAgent"
+    },
+    "/eyes/sensors": {
+      "$ref": "eyes/methods.json#/PathEyesSensors"
+    },
+    "/eyes/sensors/{sensorId}": {
+      "$ref": "eyes/methods.json#/PathEyesSensor"
+    },
+    "/eyes/sensors/{sensorId}/automated-testing": {
+      "$ref": "eyes/methods.json#/PathEyesSensorAutomatedTesting"
+    },
+    "/eyes/sensors/{sensorId}/packet-captures": {
+      "$ref": "eyes/methods.json#/PathEyesSensorPcaps"
+    },
+    "/eyes/sensors/{sensorId}/packet-captures/{testKey}/download": {
+      "$ref": "eyes/methods.json#/PathEyesSensorPcapDownload"
+    },
+    "/eyes/sensors/packet-captures": {
+      "$ref": "eyes/methods.json#/PathEyesSensorPacketCaptureGlobal"
+    },
+    "/eyes/sensors/registration": {
+      "$ref": "eyes/methods.json#/PathEyesRegistration"
+    },
+    "/groups": {
+      "$ref": "metadata/methods.json#/groups"
+    },
+    "/groups/{groupId}": {
+      "$ref": "metadata/methods.json#/groups-with-id"
+    },
+    "/impact/agents": {
+      "$ref": "impact/methods.json#/PathImpactAgents"
+    },
+    "/impact/agents/by-status": {
+      "$ref": "impact/methods.json#/PathImpactAgentsByStatus"
+    },
+    "/impact/agents/summary": {
+      "$ref": "impact/methods.json#/PathImpactAgentsSummary"
+    },
+    "/impact/agents/time-series": {
+      "$ref": "impact/methods.json#/PathImpactAgentsTimeSeries"
+    },
+    "/impact/locations": {
+      "$ref": "impact/methods.json#/PathImpactLocations"
+    },
+    "/incidents/agents": {
+      "$ref": "incidents/methods.json#/PathIncidents"
+    },
+    "/incidents/agents/{incidentId}": {
+      "$ref": "incidents/methods.json#/PathIncident"
+    },
+    "/alerting/alert-rules": {
+      "$ref": "alert-rules/methods.json#/PathAlertRules"
+    },
+    "/alerting/alert-rules/summary": {
+      "$ref": "alert-rules/methods.json#/PathAlertRulesSummary"
+    },
+    "/alerting/alert-rules/{id}": {
+      "$ref": "alert-rules/methods.json#/PathAlertRule"
+    },
+    "/alerting/alert-rules/{id}/enabled": {
+      "$ref": "alert-rules/methods.json#/PathAlertRuleEnabled"
+    },
+    "/alerting/incidents": {
+      "$ref": "alert-incidents/methods.json#/PathIncidents"
+    },
+    "/alerting/incidents/by-rule": {
+      "$ref": "alert-incidents/methods.json#/PathIncidentsByRule"
+    },
+    "/alerting/incidents/summary": {
+      "$ref": "alert-incidents/methods.json#/PathIncidentsSummary"
+    },
+    "/alerting/incidents/{id}": {
+      "$ref": "alert-incidents/methods.json#/PathIncident"
+    },
+    "/alerting/incidents/{id}/resolve": {
+      "$ref": "alert-incidents/methods.json#/PathIncidentResolve"
+    },
+    "/kpis/agents": {
+      "$ref": "kpis/methods.json#/PathKPIsAgentsGlobal"
+    },
+    "/kpis/agents/access-points": {
+      "$ref": "kpis/methods.json#/PathKPIsAgentsAccessPoints"
+    },
+    "/kpis/agents/adapter-drivers": {
+      "$ref": "kpis/methods.json#/PathKPIsAgentsAdapterDrivers"
+    },
+    "/kpis/agents/locations": {
+      "$ref": "kpis/methods.json#/PathKPIsAgentsLocations"
+    },
+    "/kpis/agents/client-capabilities": {
+      "$ref": "kpis/methods.json#/PathKPIsAgentsClientCapabilities"
+    },
+    "/kpis/sensors/organizations": {
+      "$ref": "kpis/methods.json#/PathKPIsSensorsOrganizations"
+    },
+    "/kpis/sensors/access-points/{accessPointId}": {
+      "$ref": "kpis/methods.json#/PathKPIsSensorsAccessPoints"
+    },
+    "/kpis/sensors/dest-nw-band-loc/{targetId}": {
+      "$ref": "kpis/methods.json#/PathKPIsSensorsDestinationNetworkBandLocation"
+    },
+    "/kpis/sensors/locations/{locationId}": {
+      "$ref": "kpis/methods.json#/PathKPIsSensorsLocations"
+    },
+    "/kpis/sensors/eyes/{sensorId}": {
+      "$ref": "kpis/methods.json#/PathKPIsSensorsEyes"
+    },
+    "/kpis/sensors/service-areas/{serviceAreaId}": {
+      "$ref": "kpis/methods.json#/PathKPIsSensorsServiceAreas"
+    },
+    "/integrations/meraki/configs": {
+      "$ref": "metadata/methods.json#/meraki-integration-config"
+    },
+    "/integrations/meraki/configs/{id}": {
+      "$ref": "metadata/methods.json#/meraki-integration-config-id"
+    },
+    "/locations/agents": {
+      "$ref": "locations/methods.json#/PathLocationsAgents"
+    },
+    "/locations/agents/{locationId}": {
+      "$ref": "locations/methods.json#/PathLocationsAgent"
+    },
+    "/locations/sensors": {
+      "$ref": "locations/methods.json#/PathLocationsSensors"
+    },
+    "/locations/sensors/{locationId}": {
+      "$ref": "locations/methods.json#/PathLocationsSensor"
+    },
+    "/network-keys/sensors": {
+      "$ref": "network-keys/methods.json#/PathNetworkKeysSensors"
+    },
+    "/network-keys/sensors/templates": {
+      "$ref": "network-keys/methods.json#/PathNetworkKeysSensorsTemplates"
+    },
+    "/network-keys/sensors/{networkKeyId}": {
+      "$ref": "network-keys/methods.json#/PathNetworkKeysSensor"
+    },
+    "/networks/agents": {
+      "$ref": "networks/methods.json#/PathNetworksAgents"
+    },
+    "/networks/agents/{networkId}": {
+      "$ref": "networks/methods.json#/PathNetworksAgent"
+    },
+    "/networks/sensors": {
+      "$ref": "networks/methods.json#/PathNetworksSensors"
+    },
+    "/networks/sensors/{networkId}": {
+      "$ref": "networks/methods.json#/PathNetworksSensor"
+    },
+    "/on-demand-tests/sensors/active-tests": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsActiveTests"
+    },
+    "/on-demand-tests/sensors/packet-capture": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsPacketCaptureList"
+    },
+    "/on-demand-tests/sensors/{sensorId}/packet-capture": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsPacketCapture"
+    },
+    "/on-demand-tests/sensors/{sensorId}/packet-capture/{testId}": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsPacketCaptureStatus"
+    },
+    "/on-demand-tests/sensors/{sensorId}/packet-capture/{testId}/download": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsPacketCaptureFile"
+    },
+    "/on-demand-tests/sensors/{sensorId}/ping": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsPing"
+    },
+    "/on-demand-tests/sensors/{sensorId}/ping/{testId}": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsPingStatus"
+    },
+    "/on-demand-tests/sensors/{sensorId}/ping-gateway": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsPingGateway"
+    },
+    "/on-demand-tests/sensors/{sensorId}/ping-gateway/{testId}": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsPingGatewayStatus"
+    },
+    "/on-demand-tests/sensors/{sensorId}/http-download": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsHttpDownload"
+    },
+    "/on-demand-tests/sensors/{sensorId}/http-download/{testId}": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsHttpDownloadStatus"
+    },
+    "/on-demand-tests/sensors/{sensorId}/http-upload": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsHttpUpload"
+    },
+    "/on-demand-tests/sensors/{sensorId}/http-upload/{testId}": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsHttpUploadStatus"
+    },
+    "/on-demand-tests/sensors/{sensorId}/iperf3": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsIperf3"
+    },
+    "/on-demand-tests/sensors/{sensorId}/iperf3/{testId}": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsIperf3Status"
+    },
+    "/on-demand-tests/sensors/{sensorId}/speedtest": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsSpeedtest"
+    },
+    "/on-demand-tests/sensors/{sensorId}/speedtest/{testId}": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsSpeedtestStatus"
+    },
+    "/on-demand-tests/sensors/{sensorId}/traceroute": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsTraceroute"
+    },
+    "/on-demand-tests/sensors/{sensorId}/traceroute/{testId}": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsTracerouteStatus"
+    },
+    "/on-demand-tests/sensors/{sensorId}/mos": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsMos"
+    },
+    "/on-demand-tests/sensors/{sensorId}/mos/{testId}": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsMosStatus"
+    },
+    "/on-demand-tests/sensors/{sensorId}/udp-download": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsUdpDownload"
+    },
+    "/on-demand-tests/sensors/{sensorId}/udp-download/{testId}": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsUdpDownloadStatus"
+    },
+    "/on-demand-tests/sensors/{sensorId}/udp-upload": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsUdpUpload"
+    },
+    "/on-demand-tests/sensors/{sensorId}/udp-upload/{testId}": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsUdpUploadStatus"
+    },
+    "/on-demand-tests/sensors/{sensorId}/tcp-download": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsTcpDownload"
+    },
+    "/on-demand-tests/sensors/{sensorId}/tcp-download/{testId}": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsTcpDownloadStatus"
+    },
+    "/on-demand-tests/sensors/{sensorId}/tcp-upload": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsTcpUpload"
+    },
+    "/on-demand-tests/sensors/{sensorId}/tcp-upload/{testId}": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsTcpUploadStatus"
+    },
+    "/on-demand-tests/sensors/{sensorId}/web-download": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsWebDownload"
+    },
+    "/on-demand-tests/sensors/{sensorId}/web-download/{testId}": {
+      "$ref": "on-demand-tests/methods.json#/PathOnDemandTestsWebDownloadStatus"
+    },
+    "/organizations": {
+      "$ref": "metadata/methods.json#/organizations"
+    },
+    "/organizations/{organizationId}": {
+      "$ref": "metadata/methods.json#/organizations-with-id"
+    },
+    "/organizations/{organizationId}/features": {
+      "$ref": "metadata/methods.json#/organizations-with-id-get-features"
+    },
+    "/permissions": {
+      "$ref": "metadata/methods.json#/permissions"
+    },
+    "/permissions/{permissionId}": {
+      "$ref": "metadata/methods.json#/permissions-with-id"
+    },
+    "/roles": {
+      "$ref": "metadata/methods.json#/roles"
+    },
+    "/roles/{roleId}": {
+      "$ref": "metadata/methods.json#/roles-with-id"
+    },
+    "/scans/agents": {
+      "$ref": "scans/methods.json#/PathScansAgents"
+    },
+    "/scans/sensors": {
+      "$ref": "scans/methods.json#/PathScansSensors"
+    },
+    "/service-areas/agents": {
+      "$ref": "service-areas/methods.json#/PathServiceAreasAgents"
+    },
+    "/service-areas/agents/{serviceAreaId}": {
+      "$ref": "service-areas/methods.json#/PathServiceAreasAgent"
+    },
+    "/service-areas/sensors": {
+      "$ref": "service-areas/methods.json#/PathServiceAreasSensors"
+    },
+    "/service-areas/sensors/{serviceAreaId}": {
+      "$ref": "service-areas/methods.json#/PathServiceAreasSensor"
+    },
+    "/service-areas/sensors/{serviceAreaId}/eyes": {
+      "$ref": "service-areas/methods.json#/PathServiceAreasSensorEyes"
+    },
+    "/service-areas/sensors/{serviceAreaId}/networks/{networkId}": {
+      "$ref": "service-areas/methods.json#/PathServiceAreasSensorNetwork"
+    },
+    "/integrations/servicenow/configs": {
+      "$ref": "metadata/methods.json#/servicenow-integration-config"
+    },
+    "/integrations/servicenow/configs/{id}": {
+      "$ref": "metadata/methods.json#/servicenow-integration-config-id"
+    },
+    "/summaries/users": {
+      "$ref": "summaries/methods.json#/users-summary"
+    },
+    "/targets/sensors": {
+      "$ref": "targets/methods.json#/PathTargetsSensors"
+    },
+    "/targets/sensors/{targetId}": {
+      "$ref": "targets/methods.json#/PathTargetsSensor"
+    },
+    "/time-series/agents/discrete": {
+      "$ref": "time-series/methods.json#/PathTimeSeriesAgentsDiscrete"
+    },
+    "/time-series/agents/discrete/{groupByDimension}": {
+      "$ref": "time-series/methods.json#/PathTimeSeriesAgentsDiscreteGroupBy"
+    },
+    "/time-series/agents/histogram/{groupByDimension}": {
+      "$ref": "time-series/methods.json#/PathTimeSeriesAgentsHistogram"
+    },
+    "/time-series/agents/numeric-summary/{groupByDimension}": {
+      "$ref": "time-series/methods.json#/PathTimeSeriesAgentsNumericSummary"
+    },
+    "/time-series/agents/numeric-summary": {
+      "$ref": "time-series/methods.json#/PathTimeSeriesAgentsOverallNumericSummary"
+    },
+    "/time-series/agents/numeric": {
+      "$ref": "time-series/methods.json#/PathTimeSeriesAgentsNumeric"
+    },
+    "/time-series/agents/numeric/{groupByDimension}": {
+      "$ref": "time-series/methods.json#/PathTimeSeriesAgentsNumericGroupBy"
+    },
+    "/time-series/agents/metric-types": {
+      "$ref": "time-series/methods.json#/PathTimeSeriesAgentsMetricTypes"
+    },
+    "/time-series/sensors/numeric-summary": {
+      "$ref": "time-series/methods.json#/PathTimeSeriesSensorsOverallNumericSummary"
+    },
+    "/time-series/sensors/numeric-summary/{groupByDimension}": {
+      "$ref": "time-series/methods.json#/PathTimeSeriesSensorsNumericSummary"
+    },
+    "/time-series/sensors/numeric": {
+      "$ref": "time-series/methods.json#/PathTimeSeriesSensorsOverallNumeric"
+    },
+    "/time-series/sensors/numeric/{groupByDimension}": {
+      "$ref": "time-series/methods.json#/PathTimeSeriesSensorsNumeric"
+    },
+    "/time-series/sensors/metric-types": {
+      "$ref": "time-series/methods.json#/PathTimeSeriesSensorsMetricTypes"
+    },
+    "/topologies/agents/locations": {
+      "$ref": "topologies/methods.json#/PathTopologiesAgentsLocations"
+    },
+    "/topologies/agents/locations/{locationId}": {
+      "$ref": "topologies/methods.json#/PathTopologiesAgentsLocation"
+    },
+    "/topologies/sensors/locations": {
+      "$ref": "topologies/methods.json#/PathTopologiesSensorsLocations"
+    },
+    "/topologies/sensors/locations/{locationId}": {
+      "$ref": "topologies/methods.json#/PathTopologiesSensorsLocation"
+    },
+    "/topologies/sensors/serviceAreas": {
+      "$ref": "topologies/methods.json#/PathTopologiesSensorsServiceAreas"
+    },
+    "/topologies/sensors/serviceAreas/{serviceAreaId}": {
+      "$ref": "topologies/methods.json#/PathTopologiesSensorsServiceArea"
+    },
+    "/topologies/sensors/accessPoints": {
+      "$ref": "topologies/methods.json#/PathTopologiesSensorsAccessPoints"
+    },
+    "/topologies/sensors/accessPoints/{accessPointId}": {
+      "$ref": "topologies/methods.json#/PathTopologiesSensorsAccessPoint"
+    },
+    "/users": {
+      "$ref": "metadata/methods.json#/users"
+    },
+    "/users/{userId}": {
+      "$ref": "metadata/methods.json#/users-with-id"
+    },
+    "/users/{userId}/groups": {
+      "$ref": "metadata/methods.json#/users-with-id-get-groups"
+    },
+    "/users/{userId}/groups/{groupId}": {
+      "$ref": "metadata/methods.json#/users-with-id-get-groups-with-id"
+    },
+    "/users/{userId}/organizations": {
+      "$ref": "metadata/methods.json#/users-with-id-get-organizations"
+    },
+    "/users/{userId}/organization/{organizationId}": {
+      "$ref": "metadata/methods.json#/users-with-id-get-organizations-with-id"
+    },
+    "/users/{userId}/permissions": {
+      "$ref": "metadata/methods.json#/users-with-id-get-permissions"
+    },
+    "/users/{userId}/permission/{permissionId}": {
+      "$ref": "metadata/methods.json#/users-with-id-get-permissions-with-id"
+    },
+    "/users/{userId}/role": {
+      "$ref": "metadata/methods.json#/users-with-id-get-role"
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {
+      "oauth2": {
+        "type": "oauth2",
+        "flows": {
+          "clientCredentials": {
+            "tokenUrl": "/oauth2/token",
+            "scopes": {}
+          }
+        }
+      }
+    }
+  }
+}

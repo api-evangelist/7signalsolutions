@@ -1,0 +1,594 @@
+{
+  "GetAgentKPIsGlobalResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentKPIGlobal"
+        }
+      },
+      "range": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Range"
+      }
+    }
+  },
+  "AgentKPIGlobal": {
+    "type": "object",
+    "properties": {
+      "clientCount": {
+        "type": "number"
+      },
+      "types": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentKPIType"
+        }
+      }
+    }
+  },
+  "GetAgentKPIsLocationsResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentKPILocation"
+        }
+      },
+      "range": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Range"
+      }
+    }
+  },
+  "AgentKPILocation": {
+    "type": "object",
+    "properties": {
+      "location": {
+        "type": "string"
+      },
+      "locationName": {
+        "type": "string"
+      },
+      "clientCount": {
+        "type": "number"
+      },
+      "types": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentKPIType"
+        }
+      }
+    }
+  },
+  "GetAgentKPIsAccessPointsResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentKPIAccessPoint"
+        }
+      },
+      "range": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Range"
+      }
+    }
+  },
+  "AgentKPIAccessPoint": {
+    "type": "object",
+    "properties": {
+      "bssid": {
+        "type": "string"
+      },
+      "clientCount": {
+        "type": "number"
+      },
+      "types": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentKPIType"
+        }
+      }
+    }
+  },
+  "GetAgentKPIsAdapterDriversResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentKPIAdapterDriver"
+        }
+      },
+      "range": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Range"
+      }
+    }
+  },
+  "AgentKPIAdapterDriver": {
+    "type": "object",
+    "properties": {
+      "driverProvider": {
+        "type": "string"
+      },
+      "driverVersion": {
+        "type": "string"
+      },
+      "clientCount": {
+        "type": "number"
+      },
+      "types": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentKPIType"
+        }
+      }
+    }
+  },
+  "AgentKPIType": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "string"
+      },
+      "criticalSum": {
+        "type": "number"
+      },
+      "warningSum": {
+        "type": "number"
+      },
+      "goodSum": {
+        "type": "number"
+      }
+    }
+  },
+  "GetAgentKPIsClientCapabilitiesResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentKPIClientCapability"
+        }
+      },
+      "range": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Range"
+      }
+    }
+  },
+  "AgentKPIClientCapability": {
+    "type": "object",
+    "properties": {
+      "clientCount30Days": {
+        "type": "number"
+      },
+      "clientCount90Days": {
+        "type": "number"
+      },
+      "clientPercent30Days": {
+        "type": "number"
+      },
+      "clientPercent90Days": {
+        "type": "number"
+      },
+      "licensedClientCount30Days": {
+        "type": "number"
+      },
+      "licensedClientCount90Days": {
+        "type": "number"
+      },
+      "licensedClientPercent30Days": {
+        "type": "number"
+      },
+      "licensedClientPercent90Days": {
+        "type": "number"
+      }
+    }
+  },
+  "GetSensorsKPIsTopologiesResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/KPITopology"
+        }
+      },
+      "range": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Range"
+      }
+    }
+  },
+  "KPITopology": {
+    "type": "object",
+    "properties": {
+      "kpiCode": {
+        "type": "string",
+        "description": "The KPI code for this result"
+      },
+      "name": {
+        "type": "string",
+        "description": "The name of the report"
+      },
+      "description": {
+        "type": "string",
+        "description": "The description of the report"
+      },
+      "measurements24GHz": {
+        "type": "array",
+        "description": "The list of measurements for the 2.4GHz band",
+        "items": {
+          "type": "object",
+          "properties": {
+            "kpiValue": {
+              "type": "number"
+            },
+            "status": {
+              "type": "string"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "datetime"
+            }
+          }
+        }
+      },
+      "measurements5GHz": {
+        "type": "array",
+        "description": "The list of measurements for the 5GHz band",
+        "items": {
+          "type": "object",
+          "properties": {
+            "kpiValue": {
+              "type": "number"
+            },
+            "status": {
+              "type": "string"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "datetime"
+            }
+          }
+        }
+      },
+      "measurements6GHz": {
+        "type": "array",
+        "description": "The list of measurements for the 5GHz band",
+        "items": {
+          "type": "object",
+          "properties": {
+            "kpiValue": {
+              "type": "number"
+            },
+            "status": {
+              "type": "string"
+            },
+            "created_at": {
+              "type": "string",
+              "format": "datetime"
+            }
+          }
+        }
+      },
+      "units": {
+        "type": "string",
+        "description": "The units of the KPI"
+      },
+      "slaTargetValue": {
+        "type": "number",
+        "description": "The SLA target value for the KPI"
+      },
+      "topologyObject": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "topologyType": {
+            "type": "string"
+          },
+          "parentLocationId": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          }
+        }
+      },
+      "reportedWirelessNetwork": {
+        "type": "object",
+        "description": "The reported wireless network for the KPI"
+      },
+      "status": {
+        "type": "number",
+        "description": "The SLA target value for the KPI"
+      },
+      "slaParameters": {
+        "type": "object",
+        "description": "The SLA parameters for the KPI"
+      }
+    }
+  },
+  "ToRequestParam": {
+    "name": "to",
+    "in": "query",
+    "description": "The time in milliseconds from the epoch up to which events are fetched (the upper bound). Defaults to the present now.",
+    "required": false,
+    "schema": {
+      "type": "number",
+      "format": "datetime"
+    }
+  },
+  "FromRequestParam": {
+    "name": "from",
+    "in": "query",
+    "description": "The time in milliseconds from the epoch after which incidents are fetched (the lower bound). Defaults to the previous 24 hours.",
+    "required": false,
+    "schema": {
+      "type": "number",
+      "format": "datetime"
+    }
+  },
+  "EventTypeFilter": {
+    "name": "type",
+    "in": "query",
+    "description": "Filter data returned by one or more event type",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "DOWNLOAD_MOS_SCORE",
+          "DOWNLOAD_THROUGHPUT",
+          "GATEWAY_PING_RTT",
+          "GATEWAY_PING_SUCCESS_RATE",
+          "PING_RTT",
+          "PING_SUCCESS_RATE",
+          "ROAMING",
+          "SIGNAL_STRENGTH",
+          "UPLOAD_MOS_SCORE",
+          "UPLOAD_THROUGHPUT",
+          "WEB_DOWNLOAD_DURATION",
+          "WEB_DOWNLOAD_SUCCESS_RATE",
+          "ADJACENT_CHANNEL_INTERFERENCE",
+          "CO_CHANNEL_INTERFERENCE",
+          "RF_PROBLEM",
+          "CONGESTION",
+          "COVERAGE",
+          "SEVEN_MCS"
+        ],
+        "default": "SEVEN_MCS"
+      }
+    }
+  },
+  "ClientCapabilityType": {
+    "name": "type",
+    "in": "query",
+    "description": "Filter data returned by one or more type",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "enum": [
+        "CONNECTION",
+        "BAND"
+      ]
+    }
+  },
+  "SSIDFilter": {
+    "name": "ssid",
+    "in": "query",
+    "description": "Filter data returned by one or more SSIDs",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "LocationFilter": {
+    "name": "location",
+    "in": "query",
+    "description": "Filter data returned by one or more location ids",
+    "required": false,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "LocationId": {
+    "name": "locationId",
+    "in": "path",
+    "description": "Fetch KPIs for a specific location.",
+    "required": true,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "SensorId": {
+    "name": "sensorId",
+    "in": "path",
+    "description": "Fetch KPIs for a specific sensor.",
+    "required": true,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "ServiceAreaId": {
+    "name": "serviceAreaId",
+    "in": "path",
+    "description": "Fetch KPIs for a specific service area.",
+    "required": true,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "AccessPointId": {
+    "name": "accessPointId",
+    "in": "path",
+    "description": "Fetch KPIs for a specific access point.",
+    "required": true,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "TargetId": {
+    "name": "targetId",
+    "in": "path",
+    "description": "Fetch KPIs for a specific target.",
+    "required": true,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "KpiCodes": {
+    "name": "kpiCodes",
+    "in": "query",
+    "description": "Return data for one or more KPI codes. Common examples include HC005, HC006, HC007, HC008, AV008, AC001, RA103, AC002, DN002, QURT007, QUAP008, QUAP009, QURT004, QUAP005, QUAP006, QURS004, QURS007, QURS002, TR062, DR013, DR014, DR015, DR016, DR017, DR018. For the full list of KPI codes, see the [Time Series Sensors Metric Types endpoint](/swagger-ui/index.html#/TimeSeries/time-series-sensors-metric-types).",
+    "required": true,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "APKpiCodes": {
+    "name": "kpiCodes",
+    "in": "query",
+    "description": "Return data for one or more KPI codes. Common examples include HC005, HC006, HC007, HC008, AV008, AC001, RA103, AC002, DN002, QURT007, QUAP008, QUAP009, QURT004, QUAP005, QUAP006, QURS004, QURS007, QURS002, TR062, DR001, DR002, DR003, DR004, DR005, DR006, DR007, DR008, DR009, DR010, DR011, DR012, DR013, DR014, DR015, DR016, DR017, DR018. For the full list of KPI codes, see the [Time Series Sensors Metric Types endpoint](/swagger-ui/index.html#/TimeSeries/time-series-sensors-metric-types).",
+    "required": true,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "OrgKpiCodes": {
+    "name": "kpiCodes",
+    "in": "query",
+    "description": "Return data for one or more KPI codes. Common examples include HC005, HC006, HC007, HC008. For the full list of KPI codes, see the [Time Series Sensors Metric Types endpoint](/swagger-ui/index.html#/TimeSeries/time-series-sensors-metric-types).",
+    "required": true,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "LocationIdFilter": {
+    "name": "locationId",
+    "in": "query",
+    "description": "Filter data returned by a location ID",
+    "required": false,
+    "schema": {
+      "type": "number"
+    }
+  },
+  "NetworkIdFilter": {
+    "name": "networkId",
+    "in": "query",
+    "description": "Filter data returned by a network ID",
+    "required": false,
+    "schema": {
+      "type": "number"
+    }
+  },
+  "ClientMac": {
+    "name": "clientMac",
+    "in": "query",
+    "description": "Fetch KPIs for a specific client.",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "BandFilter": {
+    "name": "band",
+    "in": "query",
+    "description": "Filter data returned by a band.",
+    "required": false,
+    "schema": {
+      "type": "string",
+      "enum": [
+        "2.4",
+        "5",
+        "6"
+      ]
+    }
+  },
+  "IncludeClientCount": {
+    "name": "includeClientCount",
+    "in": "query",
+    "description": "Deprecated: Client count will always be returned going forward.",
+    "required": false,
+    "schema": {
+      "type": "boolean",
+      "default": true
+    },
+    "deprecated": true
+  },
+  "Averaging": {
+    "name": "averaging",
+    "in": "query",
+    "description": "Filter data returned by a network IDs",
+    "required": false,
+    "schema": {
+      "type": "string",
+      "default": "HOUR",
+      "enum": [
+        "RAW",
+        "ONEMIN",
+        "TENMIN",
+        "HOUR",
+        "DAY",
+        "MONTH",
+        "ALL",
+        "NONE"
+      ]
+    }
+  },
+  "TimeLimit": {
+    "name": "timelimit",
+    "in": "query",
+    "required": false,
+    "schema": {
+      "type": "string",
+      "enum": [
+        "TENMINUTES",
+        "ONEHOUR",
+        "TWELVEHOURS",
+        "ONEDAY",
+        "ONEWEEK",
+        "ONEMONTH",
+        "THREEMONTHS"
+      ]
+    }
+  }
+}

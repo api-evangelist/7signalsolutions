@@ -1,0 +1,83 @@
+{
+  "SearchValueParam": {
+    "name": "searchValue",
+    "in": "query",
+    "description": "Filter results to adapter/driver pairs matching this search value.",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "PageRequestParam": {
+    "name": "page",
+    "in": "query",
+    "description": "Page number to fetch (0-based). Defaults to 0.",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "minimum": 0,
+      "default": 0
+    }
+  },
+  "AdapterDriverEntry": {
+    "type": "object",
+    "properties": {
+      "driverProvider": {
+        "type": "string"
+      },
+      "driverVersion": {
+        "type": "string"
+      },
+      "totalRoamingSamples": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "goodRoamingSamples": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "goodRoamingPct": {
+        "type": "number"
+      },
+      "vintageDate": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "deviceCount": {
+        "type": "integer",
+        "format": "int64"
+      }
+    }
+  },
+  "AdapterDriverReportListResponse": {
+    "type": "object",
+    "properties": {
+      "data": {
+        "type": "array",
+        "items": {
+          "$ref": "#/AdapterDriverEntry"
+        }
+      },
+      "pagination": {
+        "$ref": "../common/schema.json#/ZeroBasedPagination"
+      }
+    }
+  },
+  "AdapterDriverReportSummary": {
+    "type": "object",
+    "properties": {
+      "totalSamples": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "uniquePairs": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "deviceCount": {
+        "type": "integer",
+        "format": "int64"
+      }
+    }
+  }
+}

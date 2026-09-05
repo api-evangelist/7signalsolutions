@@ -1,0 +1,304 @@
+{
+  "StatusFilterParam": {
+    "name": "status",
+    "in": "query",
+    "description": "Filter incidents by their status",
+    "required": false,
+    "schema": {
+      "type": "string",
+      "enum": [
+        "active",
+        "resolved"
+      ]
+    }
+  },
+  "MetricFilterParam": {
+    "name": "metric",
+    "in": "query",
+    "description": "Filter incidents by metric name",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "DimensionKeyFilterParam": {
+    "name": "dimensionKey",
+    "in": "query",
+    "description": "Filter incidents by dimension key",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "RuleIdFilterParam": {
+    "name": "ruleId",
+    "in": "query",
+    "description": "Filter incidents by the alert rule that produced them",
+    "required": false,
+    "schema": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "StartedAfterParam": {
+    "name": "startedAfter",
+    "in": "query",
+    "description": "Only include incidents started at or after this epoch-millis timestamp",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "StartedBeforeParam": {
+    "name": "startedBefore",
+    "in": "query",
+    "description": "Only include incidents started at or before this epoch-millis timestamp",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "ResolvedAfterParam": {
+    "name": "resolvedAfter",
+    "in": "query",
+    "description": "Only include incidents resolved at or after this epoch-millis timestamp",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "ResolvedBeforeParam": {
+    "name": "resolvedBefore",
+    "in": "query",
+    "description": "Only include incidents resolved at or before this epoch-millis timestamp",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "FromParam": {
+    "name": "from",
+    "in": "query",
+    "description": "Start of the window (epoch millis) for the by-rule aggregation",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "ToParam": {
+    "name": "to",
+    "in": "query",
+    "description": "End of the window (epoch millis) for the by-rule aggregation",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "Dimension": {
+    "type": "string",
+    "description": "A dimension the metric is grouped/keyed by",
+    "enum": [
+      "device_id",
+      "bssid",
+      "network",
+      "band",
+      "location_id",
+      "target"
+    ]
+  },
+  "AggregationFunction": {
+    "type": "string",
+    "enum": [
+      "avg",
+      "min",
+      "max"
+    ]
+  },
+  "ThresholdOperator": {
+    "type": "string",
+    "enum": [
+      "<",
+      "<=",
+      ">",
+      ">="
+    ]
+  },
+  "ResolutionReason": {
+    "type": "string",
+    "description": "Why an incident was resolved",
+    "enum": [
+      "cleared",
+      "cleared_by_user",
+      "rule_deleted",
+      "rule_config_changed",
+      "insufficient_data",
+      "location_deleted",
+      "rule_disabled"
+    ]
+  },
+  "IncidentSnapshot": {
+    "type": "object",
+    "description": "The rule configuration captured at the time the incident was raised",
+    "properties": {
+      "thresholdValue": {
+        "type": "number",
+        "format": "double"
+      },
+      "thresholdOperator": {
+        "$ref": "#/ThresholdOperator"
+      },
+      "aggregationFunction": {
+        "$ref": "#/AggregationFunction"
+      },
+      "pendingPeriodSeconds": {
+        "type": "integer"
+      },
+      "dimensionFilters": {
+        "type": "object",
+        "nullable": true,
+        "additionalProperties": true
+      }
+    }
+  },
+  "IncidentResponse": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "ticketId": {
+        "type": "string"
+      },
+      "ruleId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "metric": {
+        "type": "string"
+      },
+      "dimensionSet": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Dimension"
+        }
+      },
+      "dimensionKey": {
+        "type": "string"
+      },
+      "startedAt": {
+        "type": "integer",
+        "format": "int64",
+        "description": "Epoch millis"
+      },
+      "resolvedAt": {
+        "type": "integer",
+        "format": "int64",
+        "nullable": true,
+        "description": "Epoch millis"
+      },
+      "resolutionReason": {
+        "allOf": [
+          {
+            "$ref": "#/ResolutionReason"
+          }
+        ],
+        "nullable": true
+      },
+      "triggerValue": {
+        "type": "number",
+        "format": "double",
+        "nullable": true
+      },
+      "resolveValue": {
+        "type": "number",
+        "format": "double",
+        "nullable": true
+      },
+      "snapshot": {
+        "$ref": "#/IncidentSnapshot"
+      }
+    }
+  },
+  "IncidentByRuleResponse": {
+    "type": "object",
+    "properties": {
+      "ruleId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "rule": {
+        "type": "object",
+        "properties": {
+          "metric": {
+            "type": "string"
+          },
+          "dimensionSet": {
+            "type": "array",
+            "items": {
+              "$ref": "#/Dimension"
+            }
+          },
+          "thresholdValue": {
+            "type": "number",
+            "format": "double"
+          },
+          "thresholdOperator": {
+            "$ref": "#/ThresholdOperator"
+          }
+        }
+      },
+      "incidentCount": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "activeCount": {
+        "type": "integer",
+        "format": "int64"
+      }
+    }
+  },
+  "IncidentsSummary": {
+    "type": "object",
+    "properties": {
+      "totalCount": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "activeCount": {
+        "type": "integer",
+        "format": "int64"
+      }
+    }
+  },
+  "GetIncidentsResponse": {
+    "type": "object",
+    "required": [
+      "results",
+      "pagination"
+    ],
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/IncidentResponse"
+        }
+      },
+      "pagination": {
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetIncidentsByRuleResponse": {
+    "type": "array",
+    "items": {
+      "$ref": "#/IncidentByRuleResponse"
+    }
+  }
+}

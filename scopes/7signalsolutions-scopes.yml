@@ -1,0 +1,80 @@
+generated: '2026-09-05'
+method: searched
+source: https://mcp-v2.7signal.com/.well-known/oauth-protected-resource
+docs: https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
+note: >-
+  The REST gateway's OpenAPI declares an oauth2 clientCredentials scheme whose scopes map is empty; only
+  three of the 215 operations carry an explicit `read` scope requirement, and the remaining 211 declare
+  `oauth2: []`. The published scope vocabulary lives on the MCP surface instead, in the RFC 9728
+  protected-resource document. 7SIGNAL's auth docs show a token response carrying
+  `"scope": "read:resources write:resources"` as an illustrative example, not an enumerated reference,
+  so those two strings are NOT recorded here as real scopes.
+schemes:
+- name: oauth2
+  surface: 7SIGNAL Platform API (Gateway v2)
+  source: openapi/7signalsolutions-openapi.json
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api-v2.7signal.com/oauth2/token
+- name: mcp_oauth
+  surface: 7SIGNAL MCP Server
+  source: https://mcp-v2.7signal.com/.well-known/oauth-authorization-server
+  flows:
+  - flow: authorization_code
+    authorizationUrl: https://mcp-v2.7signal.com/authorize
+    tokenUrl: https://mcp-v2.7signal.com/token
+scopes:
+- scope: read
+  surface: 7SIGNAL Platform API (Gateway v2)
+  description: >-
+    The only scope named in the OpenAPI security requirements. Applied to exactly three operations:
+    sensor-clients (GET /clients/sensors), sensor-kpis-by-organization (GET /kpis/sensors/organizations)
+    and sensor-kpis-by-access-point (GET /kpis/sensors/access-points/{accessPointId}). The other 212
+    operations declare `oauth2: []` with no scope named.
+  sources:
+  - openapi/7signalsolutions-openapi.json
+- scope: openid
+  surface: 7SIGNAL MCP Server
+  description: OpenID Connect authentication of the agent's human operator.
+  sources:
+  - https://mcp-v2.7signal.com/.well-known/oauth-protected-resource
+- scope: profile
+  surface: 7SIGNAL MCP Server
+  description: Basic profile claims for the authenticated user.
+  sources:
+  - https://mcp-v2.7signal.com/.well-known/oauth-protected-resource
+- scope: email
+  surface: 7SIGNAL MCP Server
+  description: Email claim for the authenticated user.
+  sources:
+  - https://mcp-v2.7signal.com/.well-known/oauth-protected-resource
+- scope: offline_access
+  surface: 7SIGNAL MCP Server
+  description: Issue a refresh token so the agent session survives access-token expiry.
+  sources:
+  - https://mcp-v2.7signal.com/.well-known/oauth-protected-resource
+- scope: https://login.7signal.com/scopes/user.read
+  surface: 7SIGNAL MCP Server
+  description: Read the authenticated 7SIGNAL user record.
+  sources:
+  - https://mcp-v2.7signal.com/.well-known/oauth-protected-resource
+- scope: https://login.7signal.com/scopes/organization.admin
+  surface: 7SIGNAL MCP Server
+  description: Administrative access to the user's 7SIGNAL organization.
+  sources:
+  - https://mcp-v2.7signal.com/.well-known/oauth-protected-resource
+- scope: sap:user.read
+  surface: 7SIGNAL MCP Server
+  description: Read access to Sapphire (sensor platform) user data.
+  sources:
+  - https://mcp-v2.7signal.com/.well-known/oauth-protected-resource
+- scope: sap:user.config
+  surface: 7SIGNAL MCP Server
+  description: Sapphire user configuration access.
+  sources:
+  - https://mcp-v2.7signal.com/.well-known/oauth-protected-resource
+- scope: mds:organizations.read
+  surface: 7SIGNAL MCP Server
+  description: Read organizations from the MDS (managed data services) layer.
+  sources:
+  - https://mcp-v2.7signal.com/.well-known/oauth-protected-resource

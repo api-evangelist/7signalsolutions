@@ -1,0 +1,405 @@
+{
+  "PathTopologiesAgentsLocations": {
+    "get": {
+      "deprecated": true,
+      "summary": "List the Agent Topology Locations",
+      "operationId": "agent-topology-locations",
+      "description": "Page through all of the Agent Topology Locations. **Important:** When sorting by score and paging through results, you must retain a consistent scoreSortStart and scoreSortEnd time range from one call to the next, or results from paging will be unstable.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "locationIds",
+          "in": "query",
+          "description": "Filter by specific location IDs. Provide a comma-separated list of location UUIDs to return only those locations.",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "searchValue",
+          "in": "query",
+          "description": "Filter by location name where the name contains this case insensitive value",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "scoreSortStart",
+          "in": "query",
+          "description": "Start time for score-based sorting (epoch milliseconds) - required when sorting by 'score'",
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "scoreSortEnd",
+          "in": "query",
+          "description": "End time for score-based sorting (epoch milliseconds) - required when sorting by 'score'",
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "sort",
+          "in": "query",
+          "description": "Sorting supports multiple properties: repeat 'sort' param e.g. sort=name,asc&sort=createdAt,desc. Special value 'score' sorts locations by average Experience Score. It requires scoreSortStart & scoreSortEnd (epoch millis) and cannot be combined with other sorts. Examples: sort=score,desc",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentTopologyLocationsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Topologies"
+      ]
+    }
+  },
+  "PathTopologiesAgentsLocation": {
+    "get": {
+      "deprecated": true,
+      "summary": "Fetch the specified Topology Location",
+      "operationId": "agent-topology-location",
+      "description": "Fetch the specified Topology Location",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "locationId",
+          "in": "path",
+          "description": "Fetch the specific topology location by its id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentTopologyLocationResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Topologies"
+      ]
+    }
+  },
+  "PathTopologiesSensorsLocations": {
+    "get": {
+      "deprecated": true,
+      "summary": "List the Sensor Topology Locations",
+      "operationId": "sensor-topology-locations",
+      "description": "Page through all of the Sensor Topology Locations",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "locationId",
+          "in": "query",
+          "description": "Filter the specific topology location by its parent location id",
+          "required": false,
+          "schema": {
+            "type": "number"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorTopologyLocationsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Topologies"
+      ]
+    }
+  },
+  "PathTopologiesSensorsLocation": {
+    "get": {
+      "deprecated": true,
+      "summary": "Fetch the specified Topology Location",
+      "operationId": "sensor-topology-location",
+      "description": "Fetch the specified Topology Location",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "locationId",
+          "in": "path",
+          "description": "Fetch the specific topology location by its id",
+          "required": true,
+          "schema": {
+            "type": "number"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorTopologyLocationResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Topologies"
+      ]
+    }
+  },
+  "PathTopologiesSensorsServiceAreas": {
+    "get": {
+      "deprecated": true,
+      "summary": "List the Sensor Topology Service Areas",
+      "operationId": "sensor-topology-service-areas",
+      "description": "Page through all of the Sensor Topology Service Areas",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "locationId",
+          "in": "query",
+          "description": "Filter the specific topology service area by its location id",
+          "required": false,
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "excludeDefaultServiceArea",
+          "in": "query",
+          "description": "Exclude the default service area from the results",
+          "required": false,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorTopologyServiceAreasResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Topologies"
+      ]
+    }
+  },
+  "PathTopologiesSensorsServiceArea": {
+    "get": {
+      "deprecated": true,
+      "summary": "Fetch the specified Topology Service Area",
+      "operationId": "sensor-topology-service-area",
+      "description": "Fetch the specified Topology Service Area",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "serviceAreaId",
+          "in": "path",
+          "description": "Fetch the specific topology service area by its id",
+          "required": true,
+          "schema": {
+            "type": "number"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorTopologyServiceAreaResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Topologies"
+      ]
+    }
+  },
+  "PathTopologiesSensorsAccessPoints": {
+    "get": {
+      "deprecated": true,
+      "summary": "List the Sensor Topology Access Points",
+      "operationId": "sensor-topology-access-points",
+      "description": "Page through all of the Sensor Topology Access Points",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorTopologyLocationsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Topologies"
+      ]
+    }
+  },
+  "PathTopologiesSensorsAccessPoint": {
+    "get": {
+      "deprecated": true,
+      "summary": "List the Sensor Topology Access Point",
+      "operationId": "sensor-topology-access-point",
+      "description": "Fetch the specified Topology Access Point",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "accessPointId",
+          "in": "path",
+          "description": "Fetch the specific topology access point by its id",
+          "required": true,
+          "schema": {
+            "type": "number"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorTopologyLocationResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Topologies"
+      ]
+    }
+  }
+}

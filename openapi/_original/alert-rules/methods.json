@@ -1,0 +1,422 @@
+{
+  "PathAlertRules": {
+    "get": {
+      "summary": "List alert rules",
+      "operationId": "list-alert-rules",
+      "description": "Page through the alert rules for an organization, optionally filtering by metric, enabled state, and name",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/MetricFilterParam"
+        },
+        {
+          "$ref": "schema.json#/EnabledFilterParam"
+        },
+        {
+          "$ref": "schema.json#/NameFilterParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAlertRulesResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        }
+      },
+      "tags": [
+        "Alert Rules"
+      ]
+    },
+    "post": {
+      "summary": "Create an alert rule",
+      "operationId": "create-alert-rule",
+      "description": "Create a new alert rule for an organization",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/AlertRuleRequest"
+            },
+            "examples": {
+              "minimal": {
+                "summary": "Minimal — required fields only",
+                "value": {
+                  "metric": "client_health_score",
+                  "dimensionSet": ["network", "band"],
+                  "aggregationFunction": "avg",
+                  "thresholdValue": 70.0,
+                  "thresholdOperator": "<"
+                }
+              },
+              "full": {
+                "summary": "Full — with overrides and notifications",
+                "value": {
+                  "name": "Low client health on guest network",
+                  "metric": "client_health_score",
+                  "dimensionSet": ["network", "band"],
+                  "aggregationFunction": "avg",
+                  "thresholdValue": 70.0,
+                  "thresholdOperator": "<",
+                  "pendingPeriodSeconds": 600,
+                  "missingDataPolicy": "ignore",
+                  "enabled": true,
+                  "notificationConfig": {
+                    "deliveries": [
+                      {"kind": "email", "address": "neteng@example.com"},
+                      {"kind": "servicenow", "mdsConfigId": "abc-123", "organizationName": "globalcorp"}
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AlertRuleResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        }
+      },
+      "tags": [
+        "Alert Rules"
+      ]
+    }
+  },
+  "PathAlertRulesSummary": {
+    "get": {
+      "summary": "Get an alert rules summary",
+      "operationId": "alert-rules-summary",
+      "description": "Fetch aggregate counts of the alert rules for an organization",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AlertRulesSummary"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        }
+      },
+      "tags": [
+        "Alert Rules"
+      ]
+    }
+  },
+  "PathAlertRule": {
+    "get": {
+      "summary": "Fetch the specified alert rule",
+      "operationId": "get-alert-rule",
+      "description": "Fetch a single alert rule by its id",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The alert rule id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AlertRuleResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Alert Rules"
+      ]
+    },
+    "put": {
+      "summary": "Replace an alert rule",
+      "operationId": "update-alert-rule",
+      "description": "Fully replace an existing alert rule",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The alert rule id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/AlertRuleRequest"
+            },
+            "examples": {
+              "minimal": {
+                "summary": "Minimal — required fields only",
+                "value": {
+                  "metric": "client_health_score",
+                  "dimensionSet": ["network", "band"],
+                  "aggregationFunction": "avg",
+                  "thresholdValue": 70.0,
+                  "thresholdOperator": "<"
+                }
+              },
+              "full": {
+                "summary": "Full — with overrides and notifications",
+                "value": {
+                  "name": "Low client health on guest network",
+                  "metric": "client_health_score",
+                  "dimensionSet": ["network", "band"],
+                  "aggregationFunction": "avg",
+                  "thresholdValue": 70.0,
+                  "thresholdOperator": "<",
+                  "pendingPeriodSeconds": 600,
+                  "missingDataPolicy": "ignore",
+                  "enabled": true,
+                  "notificationConfig": {
+                    "deliveries": [
+                      {"kind": "email", "address": "neteng@example.com"},
+                      {"kind": "servicenow", "mdsConfigId": "abc-123", "organizationName": "globalcorp"}
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AlertRuleResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Alert Rules"
+      ]
+    },
+    "delete": {
+      "summary": "Delete an alert rule",
+      "operationId": "delete-alert-rule",
+      "description": "Delete an existing alert rule",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The alert rule id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Alert Rules"
+      ]
+    }
+  },
+  "PathAlertRuleEnabled": {
+    "patch": {
+      "summary": "Enable or disable an alert rule",
+      "operationId": "patch-alert-rule-enabled",
+      "description": "Toggle the enabled state of an alert rule",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The alert rule id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/EnabledRequest"
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AlertRuleResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Alert Rules"
+      ]
+    }
+  }
+}

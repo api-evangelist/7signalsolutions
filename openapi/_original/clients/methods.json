@@ -1,0 +1,51 @@
+{
+  "PathClientsSensors": {
+     "get": {
+      "summary": "List the Sensor Clients",
+      "operationId": "sensor-clients",
+      "description": "Page through all of the Sensor Clients",
+      "security": [
+        {
+          "oauth2": [
+            "read"
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/MacRequestParam"
+        },
+        {
+          "$ref": "schema.json#/VendorRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorClientsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Clients"
+      ]
+    }
+  }
+}

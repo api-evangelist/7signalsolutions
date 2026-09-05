@@ -1,0 +1,204 @@
+{
+  "GetAgentNetworksResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentNetwork"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetAgentNetworkResponse": {
+    "type": "object",
+    "$ref": "#/AgentNetwork"
+  },
+  "AgentNetwork": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string"
+      },
+      "isEnabled": {
+        "type": "boolean"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "updatedAt": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "PostAgentNetworksRequest": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "$ref": "#/AgentNetworkRequest"
+    }
+  },
+  "AgentNetworkRequest": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "isEnabled": {
+        "type": "boolean"
+      }
+    }
+  },
+  "GetSensorNetworksResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/SensorNetwork"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetSensorNetworkResponse": {
+    "type": "object",
+    "$ref": "#/SensorNetwork"
+  },
+  "SensorNetwork": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "displayName": {
+        "type": "string"
+      },
+      "networkKeyId": {
+        "type": "integer"
+      },
+      "contactPerson": {
+        "type": "string"
+      },
+      "allowAutomaticMacFix": {
+        "type": "boolean"
+      },
+      "randomMacs": {
+        "type": "boolean"
+      },
+      "autoUpdateApNames": {
+        "type": "boolean"
+      },
+      "ssidHidden": {
+        "type": "boolean"
+      },
+      "pmfSupportEnabled": {
+        "type": "boolean"
+      },
+      "ieee80211rClientSupportEnabled2400MHz": {
+        "type": "boolean"
+      },
+      "ieee80211rClientSupportEnabled5000MHz": {
+        "type": "boolean"
+      },
+      "ieee80211rClientSupportEnabled6000MHz": {
+        "type": "boolean"
+      }
+    }
+  },
+  "PostSensorNetworkRequest": {
+    "type": "object",
+    "required": [
+      "name",
+      "networkKeyId"
+    ],
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "displayName": {
+        "type": "string"
+      },
+      "networkKeyId": {
+        "type": "integer"
+      }
+    }
+  },
+  "PutSensorNetworkRequest": {
+    "type": "object",
+    "required": [
+      "name",
+      "networkKeyId",
+      "allowAutomaticMacFix",
+      "randomMacs",
+      "autoUpdateApNames",
+      "ssidHidden",
+      "pmfSupportEnabled",
+      "ieee80211rClientSupportEnabled2400MHz",
+      "ieee80211rClientSupportEnabled5000MHz",
+      "ieee80211rClientSupportEnabled6000MHz"
+    ],
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "displayName": {
+        "type": "string"
+      },
+      "networkKeyId": {
+        "type": "integer"
+      },
+      "description": {
+        "type": "string"
+      },
+      "contactPerson": {
+        "type": "string"
+      },
+      "allowAutomaticMacFix": {
+        "type": "boolean"
+      },
+      "randomMacs": {
+        "type": "boolean"
+      },
+      "autoUpdateApNames": {
+        "type": "boolean"
+      },
+      "ssidHidden": {
+        "type": "boolean"
+      },
+      "pmfSupportEnabled": {
+        "type": "boolean"
+      },
+      "ieee80211rClientSupportEnabled2400MHz": {
+        "type": "boolean"
+      },
+      "ieee80211rClientSupportEnabled5000MHz": {
+        "type": "boolean"
+      },
+      "ieee80211rClientSupportEnabled6000MHz": {
+        "type": "boolean"
+      }
+    }
+  }
+}

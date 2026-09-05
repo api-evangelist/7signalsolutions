@@ -1,0 +1,258 @@
+{
+  "PathImpactAgentsSummary": {
+    "get": {
+      "summary": "Retrieve Agent Impact Summary",
+      "operationId": "impact-agents-summary",
+      "description": "Retrieve a summary of agent impact metrics within a time range.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentSummaryResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Impact"
+      ]
+    }
+  },
+  "PathImpactAgents": {
+    "get": {
+      "summary": "Retrieve Agent Impact",
+      "operationId": "impact-agents",
+      "description": "Retrieve per-agent impact metrics within a time range.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentImpactResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Impact"
+      ]
+    }
+  },
+  "PathImpactAgentsByStatus": {
+    "get": {
+      "summary": "Retrieve Agent Impact by Status",
+      "operationId": "impact-agents-by-status",
+      "description": "Retrieve an aggregated summary of agent impact metrics grouped by impacted-minutes status.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/MinImpactedMinutesParam"
+        },
+        {
+          "$ref": "schema.json#/MaxImpactedMinutesParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AgentSummary"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Impact"
+      ]
+    }
+  },
+  "PathImpactLocations": {
+    "get": {
+      "summary": "Retrieve Location Impact",
+      "operationId": "impact-locations",
+      "description": "Retrieve per-location impact metrics within a time range.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetLocationImpactResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Impact"
+      ]
+    }
+  },
+  "PathImpactAgentsTimeSeries": {
+    "get": {
+      "summary": "Retrieve Agent Impact Time Series",
+      "operationId": "impact-agents-time-series",
+      "description": "Retrieve a time series of agent impact metrics with configurable granularity.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/TimezoneParam"
+        },
+        {
+          "$ref": "schema.json#/GranularityParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentTimeSeriesResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Impact"
+      ]
+    }
+  }
+}

@@ -1,0 +1,277 @@
+{
+  "FromRequestParam": {
+    "name": "from",
+    "in": "query",
+    "description": "Start time in milliseconds from the epoch.",
+    "required": true,
+    "schema": {
+      "type": "integer"
+    }
+  },
+  "ToRequestParam": {
+    "name": "to",
+    "in": "query",
+    "description": "End time in milliseconds from the epoch.",
+    "required": true,
+    "schema": {
+      "type": "integer"
+    }
+  },
+  "TimezoneParam": {
+    "name": "timezone",
+    "in": "query",
+    "description": "Timezone for time-series bucketing (e.g. 'America/New_York').",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "GranularityParam": {
+    "name": "granularity",
+    "in": "query",
+    "description": "Time-series granularity.",
+    "required": false,
+    "schema": {
+      "type": "string",
+      "enum": [
+        "HOUR",
+        "DAY",
+        "MONTH"
+      ]
+    }
+  },
+  "AgentSummary": {
+    "type": "object",
+    "properties": {
+      "minutesImpactedExperienceScore": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedRoaming": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedCoverage": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedCongestion": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedInterference": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedConnectivity": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesMonitored": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "deviceCount": {
+        "type": "integer",
+        "format": "int64"
+      }
+    }
+  },
+  "AgentTimeSeriesRow": {
+    "type": "object",
+    "properties": {
+      "timestamp": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedExperienceScore": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedRoaming": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedCoverage": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedCongestion": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedInterference": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedConnectivity": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesMonitored": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "deviceCount": {
+        "type": "integer",
+        "format": "int64"
+      }
+    }
+  },
+  "GetAgentSummaryResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/AgentSummary"
+        }
+      },
+      "pagination": {
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetAgentTimeSeriesResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/AgentTimeSeriesRow"
+        }
+      },
+      "pagination": {
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "MinImpactedMinutesParam": {
+    "name": "minImpactedMinutes",
+    "in": "query",
+    "description": "Filter agents with at least this many impacted minutes.",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "MaxImpactedMinutesParam": {
+    "name": "maxImpactedMinutes",
+    "in": "query",
+    "description": "Filter agents with at most this many impacted minutes.",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "AgentImpactRow": {
+    "type": "object",
+    "properties": {
+      "deviceId": {
+        "type": "string"
+      },
+      "deviceName": {
+        "type": "string",
+        "nullable": true
+      },
+      "minutesImpactedExperienceScore": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedRoaming": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedCoverage": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedCongestion": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedInterference": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedConnectivity": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesMonitored": {
+        "type": "integer",
+        "format": "int64"
+      }
+    }
+  },
+  "LocationImpactRow": {
+    "type": "object",
+    "properties": {
+      "locationId": {
+        "type": "string"
+      },
+      "locationName": {
+        "type": "string",
+        "nullable": true
+      },
+      "minutesImpactedExperienceScore": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedRoaming": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedCoverage": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedCongestion": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedInterference": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesImpactedConnectivity": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "minutesMonitored": {
+        "type": "integer",
+        "format": "int64"
+      }
+    }
+  },
+  "GetAgentImpactResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/AgentImpactRow"
+        }
+      },
+      "pagination": {
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetLocationImpactResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/LocationImpactRow"
+        }
+      },
+      "pagination": {
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  }
+}

@@ -1,0 +1,1141 @@
+{
+  "PathTimeSeriesAgentsDiscrete": {
+    "get": {
+      "summary": "Retrieve Time Series with discrete aggregation for agents",
+      "operationId": "time-series-agents-discrete",
+      "description": "Page through Time Series with discrete aggregation for agents",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/TimeBucketFilter"
+        },
+        {
+          "$ref": "schema.json#/AggregateFunctionsDiscreteFilter"
+        },
+        {
+          "$ref": "schema.json#/MetricsDiscreteFilter"
+        },
+        {
+          "$ref": "schema.json#/DeviceIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/BssidsFilter"
+        },
+        {
+          "$ref": "schema.json#/LocationsFilter"
+        },
+        {
+          "$ref": "schema.json#/NetworksFilter"
+        },
+        {
+          "$ref": "schema.json#/BandsFilter"
+        },
+        {
+          "$ref": "schema.json#/TargetsFilter"
+        },
+        {
+          "$ref": "schema.json#/PlatformsFilter"
+        },
+        {
+          "$ref": "schema.json#/PlatformVersionsFilter"
+        },
+        {
+          "$ref": "schema.json#/MakesFilter"
+        },
+        {
+          "$ref": "schema.json#/ModelsFilter"
+        },
+        {
+          "$ref": "schema.json#/DriverProvidersFilter"
+        },
+        {
+          "$ref": "schema.json#/DriverVersionsFilter"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentTimeSeriesDiscreteResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "TimeSeries"
+      ]
+    }
+  },
+  "PathTimeSeriesAgentsDiscreteGroupBy": {
+    "get": {
+      "summary": "Retrieve Time Series with discrete aggregation for agents",
+      "operationId": "time-series-agents-discrete-group-by",
+      "description": "Page through Time Series with discrete aggregation for agents",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/AgentsGroupByDimensionFilter"
+        },
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/TimeBucketFilter"
+        },
+        {
+          "$ref": "schema.json#/AggregateFunctionsDiscreteFilter"
+        },
+        {
+          "$ref": "schema.json#/MetricsDiscreteFilter"
+        },
+        {
+          "$ref": "schema.json#/DeviceIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/BssidsFilter"
+        },
+        {
+          "$ref": "schema.json#/LocationsFilter"
+        },
+        {
+          "$ref": "schema.json#/NetworksFilter"
+        },
+        {
+          "$ref": "schema.json#/BandsFilter"
+        },
+        {
+          "$ref": "schema.json#/TargetsFilter"
+        },
+        {
+          "$ref": "schema.json#/PlatformsFilter"
+        },
+        {
+          "$ref": "schema.json#/PlatformVersionsFilter"
+        },
+        {
+          "$ref": "schema.json#/MakesFilter"
+        },
+        {
+          "$ref": "schema.json#/ModelsFilter"
+        },
+        {
+          "$ref": "schema.json#/DriverProvidersFilter"
+        },
+        {
+          "$ref": "schema.json#/DriverVersionsFilter"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentTimeSeriesDiscreteGroupByResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "TimeSeries"
+      ]
+    }
+  },
+  "PathTimeSeriesAgentsHistogram": {
+    "get": {
+      "summary": "Retrieve Time Series Histogram for agents",
+      "operationId": "time-series-agents-histogram",
+      "description": "Page through Time Series histogram for agents",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/AgentsGroupByDimensionFilter"
+        },
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/TimeBucketFilter"
+        },
+        {
+          "$ref": "schema.json#/MetricHistogramFilter"
+        },
+        {
+          "$ref": "schema.json#/DeviceIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/BssidsFilter"
+        },
+        {
+          "$ref": "schema.json#/LocationsFilter"
+        },
+        {
+          "$ref": "schema.json#/NetworksFilter"
+        },
+        {
+          "$ref": "schema.json#/BandsFilter"
+        },
+        {
+          "$ref": "schema.json#/TargetsFilter"
+        },
+        {
+          "$ref": "schema.json#/PlatformsFilter"
+        },
+        {
+          "$ref": "schema.json#/PlatformVersionsFilter"
+        },
+        {
+          "$ref": "schema.json#/MakesFilter"
+        },
+        {
+          "$ref": "schema.json#/ModelsFilter"
+        },
+        {
+          "$ref": "schema.json#/DriverProvidersFilter"
+        },
+        {
+          "$ref": "schema.json#/DriverVersionsFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentTimeSeriesHistogramResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "TimeSeries"
+      ]
+    }
+  },
+  "PathTimeSeriesAgentsNumericSummary": {
+    "get": {
+      "summary": "Retrieve Time Series with numeric summary aggregation for agents",
+      "operationId": "time-series-agents-numeric-summary",
+      "description": "Page through Time Series with numeric summary aggregation for agents",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/AgentsGroupByDimensionFilter"
+        },
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/AgentsAggregateFunctionsNumericFilter"
+        },
+        {
+          "$ref": "schema.json#/MetricsNumericFilter"
+        },
+        {
+          "$ref": "schema.json#/DeviceIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/BssidsFilter"
+        },
+        {
+          "$ref": "schema.json#/LocationsFilter"
+        },
+        {
+          "$ref": "schema.json#/NetworksFilter"
+        },
+        {
+          "$ref": "schema.json#/BandsFilter"
+        },
+        {
+          "$ref": "schema.json#/TargetsFilter"
+        },
+        {
+          "$ref": "schema.json#/PlatformsFilter"
+        },
+        {
+          "$ref": "schema.json#/PlatformVersionsFilter"
+        },
+        {
+          "$ref": "schema.json#/MakesFilter"
+        },
+        {
+          "$ref": "schema.json#/ModelsFilter"
+        },
+        {
+          "$ref": "schema.json#/DriverProvidersFilter"
+        },
+        {
+          "$ref": "schema.json#/DriverVersionsFilter"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentTimeSeriesNumericSummaryResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "TimeSeries"
+      ]
+    }
+  },
+  "PathTimeSeriesAgentsOverallNumericSummary": {
+    "get": {
+      "summary": "Retrieve Time Series with overall numeric summary aggregation for agents",
+      "operationId": "time-series-agents-overall-numeric-summary",
+      "description": "Page through Time Series with overall numeric summary aggregation for agents",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/AgentsAggregateFunctionsNumericFilter"
+        },
+        {
+          "$ref": "schema.json#/MetricsNumericFilter"
+        },
+        {
+          "$ref": "schema.json#/DeviceIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/BssidsFilter"
+        },
+        {
+          "$ref": "schema.json#/LocationsFilter"
+        },
+        {
+          "$ref": "schema.json#/NetworksFilter"
+        },
+        {
+          "$ref": "schema.json#/BandsFilter"
+        },
+        {
+          "$ref": "schema.json#/TargetsFilter"
+        },
+        {
+          "$ref": "schema.json#/PlatformsFilter"
+        },
+        {
+          "$ref": "schema.json#/PlatformVersionsFilter"
+        },
+        {
+          "$ref": "schema.json#/MakesFilter"
+        },
+        {
+          "$ref": "schema.json#/ModelsFilter"
+        },
+        {
+          "$ref": "schema.json#/DriverProvidersFilter"
+        },
+        {
+          "$ref": "schema.json#/DriverVersionsFilter"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentTimeSeriesOverallNumericSummaryResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "TimeSeries"
+      ]
+    }
+  },
+  "PathTimeSeriesAgentsNumeric": {
+    "get": {
+      "summary": "Retrieve Time Series with numeric aggregation for agents",
+      "operationId": "time-series-agents-numeric",
+      "description": "Page through Time Series with numeric aggregation for agents",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/TimeBucketFilter"
+        },
+        {
+          "$ref": "schema.json#/AgentsAggregateFunctionsNumericFilter"
+        },
+        {
+          "$ref": "schema.json#/MetricsNumericFilter"
+        },
+        {
+          "$ref": "schema.json#/DeviceIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/BssidsFilter"
+        },
+        {
+          "$ref": "schema.json#/LocationsFilter"
+        },
+        {
+          "$ref": "schema.json#/NetworksFilter"
+        },
+        {
+          "$ref": "schema.json#/BandsFilter"
+        },
+        {
+          "$ref": "schema.json#/TargetsFilter"
+        },
+        {
+          "$ref": "schema.json#/PlatformsFilter"
+        },
+        {
+          "$ref": "schema.json#/PlatformVersionsFilter"
+        },
+        {
+          "$ref": "schema.json#/MakesFilter"
+        },
+        {
+          "$ref": "schema.json#/ModelsFilter"
+        },
+        {
+          "$ref": "schema.json#/DriverProvidersFilter"
+        },
+        {
+          "$ref": "schema.json#/DriverVersionsFilter"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentTimeSeriesNumericResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "TimeSeries"
+      ]
+    }
+  },
+  "PathTimeSeriesAgentsNumericGroupBy": {
+    "get": {
+      "summary": "Retrieve Time Series with numeric aggregation for agents",
+      "operationId": "time-series-agents-numeric-group-by",
+      "description": "Page through Time Series with numeric aggregation for agents",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/AgentsGroupByDimensionFilter"
+        },
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/TimeBucketFilter"
+        },
+        {
+          "$ref": "schema.json#/AgentsAggregateFunctionsNumericFilter"
+        },
+        {
+          "$ref": "schema.json#/MetricsNumericFilter"
+        },
+        {
+          "$ref": "schema.json#/DeviceIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/BssidsFilter"
+        },
+        {
+          "$ref": "schema.json#/LocationsFilter"
+        },
+        {
+          "$ref": "schema.json#/NetworksFilter"
+        },
+        {
+          "$ref": "schema.json#/BandsFilter"
+        },
+        {
+          "$ref": "schema.json#/TargetsFilter"
+        },
+        {
+          "$ref": "schema.json#/PlatformsFilter"
+        },
+        {
+          "$ref": "schema.json#/PlatformVersionsFilter"
+        },
+        {
+          "$ref": "schema.json#/MakesFilter"
+        },
+        {
+          "$ref": "schema.json#/ModelsFilter"
+        },
+        {
+          "$ref": "schema.json#/DriverProvidersFilter"
+        },
+        {
+          "$ref": "schema.json#/DriverVersionsFilter"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentTimeSeriesNumericGroupByResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "TimeSeries"
+      ]
+    }
+  },
+  "PathTimeSeriesAgentsMetricTypes": {
+    "get": {
+      "summary": "Retrieve details of all or a subset of the Metric Types",
+      "operationId": "time-series-agents-metric-types",
+      "description": "Page through Metric Types for agents",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/AgentsMetricTypesFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentTimeSeriesMetricTypesResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "TimeSeries"
+      ]
+    }
+  },
+  "PathTimeSeriesSensorsNumericSummary": {
+    "get": {
+      "summary": "Retrieve Time Series with numeric summary aggregation for sensors",
+      "operationId": "time-series-sensors-numeric-summary",
+      "description": "Page through Time Series with numeric summary aggregation for sensors",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorsGroupByDimensionFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorsTimeSeriesOrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/SensorsAggregateFunctionsNumericFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorMetricsKPIFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorLocationIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorServiceAreaIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorAccessPointIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorNetworkIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorBandFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorClientMacsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorVendorsFilter"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorTimeSeriesNumericSummaryResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "TimeSeries"
+      ]
+    }
+  },
+  "PathTimeSeriesSensorsOverallNumericSummary": {
+    "get": {
+      "summary": "Retrieve Time Series with overall numeric summary aggregation for sensors",
+      "operationId": "time-series-sensors-overall-numeric-summary",
+      "description": "Page through Time Series with overall numeric summary aggregation for sensors",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorsTimeSeriesOrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/SensorsAggregateFunctionsNumericFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorMetricsKPIFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorLocationIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorServiceAreaIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorAccessPointIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorNetworkIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorBandFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorClientMacsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorVendorsFilter"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorTimeSeriesOverallNumericSummaryResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "TimeSeries"
+      ]
+    }
+  },
+  "PathTimeSeriesSensorsOverallNumeric": {
+    "get": {
+      "summary": "Retrieve Time Series with numeric aggregation for sensors by organization",
+      "operationId": "time-series-sensors-overall-numeric",
+      "description": "Page through Time Series with numeric aggregation for sensors by organization",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorsTimeSeriesOrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/SensorTimeBucketFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorsAggregateFunctionsNumericFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorMetricsKPIFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorLocationIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorServiceAreaIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorAccessPointIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorNetworkIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorBandFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorClientMacsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorVendorsFilter"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorsTimeSeriesNumericResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "TimeSeries"
+      ]
+    }
+  },
+  "PathTimeSeriesSensorsNumeric": {
+    "get": {
+      "summary": "Retrieve Time Series with numeric aggregation for sensors by the given grouping",
+      "operationId": "time-series-sensors-numeric",
+      "description": "Page through Time Series with numeric aggregation for sensors by the given grouping",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorsGroupByDimensionFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorsTimeSeriesOrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/SensorTimeBucketFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorsAggregateFunctionsNumericFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorMetricsKPIFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorLocationIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorServiceAreaIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorAccessPointIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorNetworkIdsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorBandFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorClientMacsFilter"
+        },
+        {
+          "$ref": "schema.json#/SensorVendorsFilter"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorsTimeSeriesNumericGroupByResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "TimeSeries"
+      ]
+    }
+  },
+  "PathTimeSeriesSensorsMetricTypes": {
+    "get": {
+      "summary": "Retrieve details of all or a subset of the Metric Types",
+      "operationId": "time-series-sensors-metric-types",
+      "description": "Page through Metric Types for sensors",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "metricTypes",
+          "in": "query",
+          "description": "Filter data returned by one or more metric types",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorTimeSeriesMetricTypesResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "TimeSeries"
+      ]
+    }
+  }
+}

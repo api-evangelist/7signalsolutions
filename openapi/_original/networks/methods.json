@@ -1,0 +1,429 @@
+{
+  "PathNetworksAgents": {
+    "get": {
+      "summary": "List the Agent Networks",
+      "operationId": "agent-networks",
+      "description": "Page through all of the Agent Networks",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "networkName",
+          "in": "query",
+          "description": "Fetch the list of networks filtered by network name",
+          "required": false,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentNetworksResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Networks"
+      ]
+    },
+    "post": {
+      "operationId": "PathNetworksAgents-post-c1d2",
+      "summary": "Creates one or many Agent Networks",
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PostAgentNetworksRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentNetworksResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Networks"
+      ]
+    }
+  },
+  "PathNetworksAgent": {
+    "get": {
+      "summary": "Fetch the specified Network",
+      "operationId": "agent-network",
+      "description": "Fetch the specified Network",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "networkId",
+          "in": "path",
+          "description": "Fetch the specific network referenced by its id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentNetworkResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Networks"
+      ]
+    },
+    "put": {
+      "operationId": "PathNetworksAgent-put-e3f4",
+      "summary": "Replace the specified Network with the details in the payload",
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "networkId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/AgentNetworkRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Networks"
+      ]
+    },
+    "delete": {
+      "operationId": "PathNetworksAgent-delete-g5h6",
+      "summary": "Delete the Network specified by the UUID",
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "networkId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Networks"
+      ]
+    }
+  },
+  "PathNetworksSensors": {
+    "get": {
+      "summary": "List the Sensor Networks",
+      "operationId": "sensor-networks",
+      "description": "Page through all of the Sensor Networks",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "includeUnbound",
+          "in": "query",
+          "description": "List every network regardless of Service Area binding",
+          "required": false,
+          "schema": {
+            "type": "boolean",
+            "default": false
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorNetworksResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Networks"
+      ]
+    },
+    "post": {
+      "operationId": "PathNetworksSensors-post-n1s2",
+      "summary": "Creates a Sensor Network",
+      "description": "Creates a new Sensor Network. Required fields: name, networkKeyId",
+      "parameters": [],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PostSensorNetworkRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorNetworkResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Networks"
+      ]
+    }
+  },
+  "PathNetworksSensor": {
+    "get": {
+      "summary": "Fetch the specified Sensor Network",
+      "operationId": "sensor-network",
+      "description": "Fetch the specified Sensor Network",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "networkId",
+          "in": "path",
+          "description": "Fetch the specific network referenced by its id",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorNetworkResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Networks"
+      ]
+    },
+    "put": {
+      "operationId": "PathNetworksSensor-put-n3s4",
+      "summary": "Replace the specified Sensor Network with the details in the payload",
+      "description": "Full replace, not a patch - provide the complete desired state on every call.",
+      "parameters": [
+        {
+          "name": "networkId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PutSensorNetworkRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorNetworkResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Networks"
+      ]
+    },
+    "delete": {
+      "operationId": "PathNetworksSensor-delete-n5s6",
+      "summary": "Delete the Sensor Network specified by the id",
+      "parameters": [
+        {
+          "name": "networkId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Networks"
+      ]
+    }
+  }
+}

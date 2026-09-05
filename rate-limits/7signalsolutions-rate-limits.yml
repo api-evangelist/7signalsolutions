@@ -1,0 +1,52 @@
+generated: '2026-09-05'
+method: searched
+source: https://github.com/7Signal/API-Examples/blob/develop/docs/02-rate-limiting.md
+docs: https://github.com/7Signal/API-Examples/blob/develop/docs/02-rate-limiting.md
+limit_count: 1
+algorithm: token bucket
+enforcement: automatic, no opt-in or configuration
+rate_limits:
+- scope: per-api-key
+  algorithm: token bucket
+  window: continuous replenishment (per second)
+  limit: null
+  burst: null
+  limit_note: >-
+    7SIGNAL documents the MECHANISM and the runtime headers but does not publish the numeric bucket
+    size or replenish rate — those are set per account type/plan and are only observable from the
+    response headers. The worked example in the docs shows burst-capacity 15 and replenish-rate 5/s,
+    but the docs present it as an illustration, not a published entitlement, so it is not recorded as
+    the limit. "Rate limits can vary depending on your account type" and "Not by default" is the
+    published answer on raising them.
+  varies_by:
+  - account type
+  - plan
+  - api key
+  status_on_exhaustion: 429
+  headers:
+  - name: ratelimit-remaining
+    meaning: tokens left in the bucket before the limit is hit
+  - name: ratelimit-burst-capacity
+    meaning: maximum tokens that can be accumulated at once
+  - name: ratelimit-replenish-rate
+    meaning: tokens added back per second
+  - name: ratelimit-requested-tokens
+    meaning: tokens consumed by this specific request
+  header_note: >-
+    The reference chapter documents these header names unprefixed (`ratelimit-*`); the repository's own
+    DEVELOPER_GUIDE.md and examples/rate_limiting/rate_limit.py read them with an `x-` prefix
+    (`x-ratelimit-remaining`, etc.). The two 7SIGNAL sources disagree, so a client should read both
+    spellings. Neither is RFC 9238/draft-ietf-httpapi-ratelimit-headers shaped (no `RateLimit-Limit`,
+    `RateLimit-Reset` or `Retry-After` is documented).
+  retry_after: not documented
+  guidance:
+  - Wait a few seconds before retrying, then back off further if the 429 persists
+  - Watch ratelimit-remaining to monitor headroom
+  - Cache responses and avoid unnecessary calls
+  notification_before_limit: none — the only signal is the ratelimit-remaining header
+  reference_implementation: https://github.com/7Signal/API-Examples/blob/develop/examples/rate_limiting/rate_limit.py
+observed:
+  probed: false
+  note: >-
+    Rate-limit headers were not observed on a live response because every gateway path except
+    /api/gateway-v2.json and the static /swagger-ui/ tree returns 401 without a token.

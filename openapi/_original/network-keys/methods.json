@@ -1,0 +1,1018 @@
+{
+  "PathNetworkKeysSensors": {
+    "get": {
+      "summary": "List the Sensor Network Keys",
+      "operationId": "sensor-network-keys",
+      "description": "Page through all of the Sensor Network Keys",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetNetworkKeysResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Network Keys"
+      ]
+    },
+    "post": {
+      "operationId": "PathNetworkKeysSensors-post-nk1s2",
+      "summary": "Creates a Sensor Network Key",
+      "description": "Creates a new Sensor Network Key. Request shape is resolved from 'type' - see the request examples.",
+      "parameters": [],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PostNetworkKeyRequest"
+            },
+            "examples": {
+              "wpa1-passphrase": {
+                "summary": "WPA1 with a passphrase",
+                "value": {
+                  "type": "WPA1",
+                  "name": "corp-wifi-legacy",
+                  "usePassphrase": true,
+                  "passphraseOrPsk": "SuperSecret123",
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa2-passphrase": {
+                "summary": "WPA2 with a passphrase",
+                "value": {
+                  "type": "WPA2",
+                  "name": "corp-wifi",
+                  "usePassphrase": true,
+                  "passphraseOrPsk": "SuperSecret123",
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa3-mixed": {
+                "summary": "WPA3 in Mixed WPA3/WPA2-PSK mode",
+                "value": {
+                  "type": "WPA3",
+                  "name": "corp-wifi-wpa3-mixed",
+                  "passphraseOrPsk": "SuperSecret123",
+                  "pure": false,
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa3-pure": {
+                "summary": "WPA3 in WPA3-only mode",
+                "value": {
+                  "type": "WPA3",
+                  "name": "corp-wifi-wpa3-only",
+                  "passphraseOrPsk": "SuperSecret123",
+                  "pure": true,
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa3-owe": {
+                "summary": "WPA3 OWE (Opportunistic Wireless Encryption)",
+                "value": {
+                  "type": "WPA3_OWE",
+                  "name": "guest-wifi-owe",
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-tls": {
+                "summary": "WPA_EAP with EAP-TLS",
+                "value": {
+                  "type": "WPA_EAP",
+                  "eapMethod": "EAP_TLS",
+                  "name": "corp-wifi-eap-tls",
+                  "wpaVersion": "WPA2",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "eapolVersion": "EAPOL_VERSION_2",
+                  "subKeyId": 5,
+                  "certificateProperties": {
+                    "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                    "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                    "privateKey": { "fileName": "key.pem", "certificateBytes": "a2V5LWJ5dGVz" },
+                    "privateKeyPassword": "keySecret123"
+                  },
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-peap": {
+                "summary": "WPA_EAP with EAP-PEAP (inner authentication: TLS)",
+                "value": {
+                  "type": "WPA_EAP",
+                  "eapMethod": "EAP_PEAP",
+                  "name": "corp-wifi-eap-peap",
+                  "wpaVersion": "WPA2",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "eapolVersion": "EAPOL_VERSION_2",
+                  "password": "SuperSecret123",
+                  "peapLabel": "CLIENT_EAP_ENCRYPTION",
+                  "peapVersion": "V0",
+                  "subKeyId": 5,
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "innerAuthentication": {
+                    "method": "TLS",
+                    "caCertificate": { "fileName": "inner-ca.pem", "certificateBytes": "aW5uZXItY2EtYnl0ZXM=" },
+                    "clientCertificate": { "fileName": "inner-client.pem", "certificateBytes": "aW5uZXItY2xpZW50LWJ5dGVz" },
+                    "privateKey": { "fileName": "inner-key.pem", "certificateBytes": "aW5uZXIta2V5LWJ5dGVz" },
+                    "privateKeyPassword": "innerKeySecret"
+                  },
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-ttls": {
+                "summary": "WPA_EAP with EAP-TTLS (inner authentication: EAP-TLS)",
+                "value": {
+                  "type": "WPA_EAP",
+                  "eapMethod": "EAP_TTLS",
+                  "name": "corp-wifi-eap-ttls",
+                  "wpaVersion": "WPA2",
+                  "identity": "user@corp.example",
+                  "anonymousIdentity": "anon@corp.example",
+                  "allowAny": false,
+                  "eapolVersion": "EAPOL_VERSION_2",
+                  "password": "SuperSecret123",
+                  "subKeyId": 5,
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                  "innerAuthentication": {
+                    "method": "EAP_TLS",
+                    "caCertificate": { "fileName": "inner-ca.pem", "certificateBytes": "aW5uZXItY2EtYnl0ZXM=" },
+                    "clientCertificate": { "fileName": "inner-client.pem", "certificateBytes": "aW5uZXItY2xpZW50LWJ5dGVz" },
+                    "privateKey": { "fileName": "inner-key.pem", "certificateBytes": "aW5uZXIta2V5LWJ5dGVz" },
+                    "privateKeyPassword": "innerKeySecret"
+                  },
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-psk": {
+                "summary": "WPA_EAP with EAP-PSK",
+                "value": {
+                  "type": "WPA_EAP",
+                  "eapMethod": "EAP_PSK",
+                  "name": "corp-wifi-eap-psk",
+                  "wpaVersion": "WPA2",
+                  "identity": "user@corp.example",
+                  "nai": "user@corp.example",
+                  "allowAny": false,
+                  "eapolVersion": "EAPOL_VERSION_2",
+                  "preSharedKey": "0123456789ABCDEF0123456789ABCDEF",
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-fast": {
+                "summary": "WPA_EAP with EAP-FAST",
+                "value": {
+                  "type": "WPA_EAP",
+                  "eapMethod": "EAP_FAST",
+                  "name": "corp-wifi-eap-fast",
+                  "wpaVersion": "WPA2",
+                  "identity": "user@corp.example",
+                  "anonymousIdentity": "anon@corp.example",
+                  "allowAny": false,
+                  "eapolVersion": "EAPOL_VERSION_2",
+                  "password": "SuperSecret123",
+                  "tlsVersion": "TLS_1_2",
+                  "pacFile": { "fileName": "pac.bin", "certificateBytes": "cGFjLWJ5dGVz" },
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-leap": {
+                "summary": "WPA_EAP with LEAP",
+                "value": {
+                  "type": "WPA_EAP",
+                  "eapMethod": "LEAP",
+                  "name": "corp-wifi-leap",
+                  "wpaVersion": "WPA1",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "eapolVersion": "EAPOL_VERSION_1",
+                  "password": "SuperSecret123",
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-mschapv2": {
+                "summary": "WPA_EAP with EAP-MSCHAPv2",
+                "value": {
+                  "type": "WPA_EAP",
+                  "eapMethod": "EAP_MSCHAP_V2",
+                  "name": "corp-wifi-mschapv2",
+                  "wpaVersion": "WPA2",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "eapolVersion": "EAPOL_VERSION_2",
+                  "password": "SuperSecret123",
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-scep": {
+                "summary": "WPA_EAP_SCEP",
+                "value": {
+                  "type": "WPA_EAP_SCEP",
+                  "name": "corp-wifi-scep",
+                  "wpaVersion": "WPA2",
+                  "scepUrl": "https://scep.corp.example/pkiclient.exe",
+                  "challengePassword": "SuperSecret123",
+                  "caFingerprint": "AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD",
+                  "subjectName": "CN=eye-{serial},O=Corp Inc",
+                  "subjectAltName": "eye-{serial}.corp.example",
+                  "keySize": "RSA_2048",
+                  "renewalThresholdPercent": 33,
+                  "eapolVersion": "EAPOL_VERSION_2",
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "subKeyId": 5
+                }
+              },
+              "ieee8021x-eap-tls": {
+                "summary": "IEEE_802_1X with EAP-TLS",
+                "value": {
+                  "type": "IEEE_802_1X",
+                  "eapMethod": "EAP_TLS",
+                  "name": "ieee-eap-tls",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "certificateProperties": {
+                    "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                    "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                    "privateKey": { "fileName": "key.pem", "certificateBytes": "a2V5LWJ5dGVz" },
+                    "privateKeyPassword": "keySecret123"
+                  },
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "ieee8021x-eap-peap": {
+                "summary": "IEEE_802_1X with EAP-PEAP (inner authentication: TLS)",
+                "value": {
+                  "type": "IEEE_802_1X",
+                  "eapMethod": "EAP_PEAP",
+                  "name": "ieee-eap-peap",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "password": "SuperSecret123",
+                  "peapLabel": "CLIENT_EAP_ENCRYPTION",
+                  "peapVersion": "V0",
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "innerAuthentication": {
+                    "method": "TLS",
+                    "caCertificate": { "fileName": "inner-ca.pem", "certificateBytes": "aW5uZXItY2EtYnl0ZXM=" },
+                    "clientCertificate": { "fileName": "inner-client.pem", "certificateBytes": "aW5uZXItY2xpZW50LWJ5dGVz" },
+                    "privateKey": { "fileName": "inner-key.pem", "certificateBytes": "aW5uZXIta2V5LWJ5dGVz" },
+                    "privateKeyPassword": "innerKeySecret"
+                  },
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "ieee8021x-eap-ttls": {
+                "summary": "IEEE_802_1X with EAP-TTLS (inner authentication: EAP-TLS) - clientCertificate is required for this template's EAP_TTLS, unlike WPA_EAP's",
+                "value": {
+                  "type": "IEEE_802_1X",
+                  "eapMethod": "EAP_TTLS",
+                  "name": "ieee-eap-ttls",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "anonymousIdentity": "anon@corp.example",
+                  "password": "SuperSecret123",
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                  "innerAuthentication": {
+                    "method": "EAP_TLS",
+                    "caCertificate": { "fileName": "inner-ca.pem", "certificateBytes": "aW5uZXItY2EtYnl0ZXM=" },
+                    "clientCertificate": { "fileName": "inner-client.pem", "certificateBytes": "aW5uZXItY2xpZW50LWJ5dGVz" },
+                    "privateKey": { "fileName": "inner-key.pem", "certificateBytes": "aW5uZXIta2V5LWJ5dGVz" },
+                    "privateKeyPassword": "innerKeySecret"
+                  },
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "ieee8021x-leap": {
+                "summary": "IEEE_802_1X with LEAP",
+                "value": {
+                  "type": "IEEE_802_1X",
+                  "eapMethod": "LEAP",
+                  "name": "ieee-leap",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "password": "SuperSecret123",
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "ieee8021x-eap-mschapv2": {
+                "summary": "IEEE_802_1X with EAP-MSCHAPv2",
+                "value": {
+                  "type": "IEEE_802_1X",
+                  "eapMethod": "EAP_MSCHAP_V2",
+                  "name": "ieee-mschapv2",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "password": "SuperSecret123",
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "open-http": {
+                "summary": "OPEN_HTTP",
+                "value": {
+                  "type": "OPEN_HTTP",
+                  "name": "corp-open-http",
+                  "authenticationUrl": "https://auth.corp.example/login",
+                  "requireServerCertificateCheck": true,
+                  "postData": "username=${username}&password=${password}",
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                  "clientCertificateFileType": "PEM",
+                  "privateKey": { "fileName": "key.pem", "certificateBytes": "a2V5LWJ5dGVz" },
+                  "privateKeyFileType": "DER"
+                }
+              },
+              "http-authentication": {
+                "summary": "HTTP_AUTHENTICATION",
+                "value": {
+                  "type": "HTTP_AUTHENTICATION",
+                  "name": "corp-http-auth",
+                  "targetUrl": "https://portal.corp.example/login",
+                  "requireServerCertificateCheck": true,
+                  "contentOnTargetUrlPage": "Please sign in",
+                  "contentOnLoginPage": "Enter your credentials",
+                  "contentOnSuccessfulLogin": "Login successful",
+                  "contentOnUnSuccessfulLogin": "Login failed",
+                  "secureProtocol": "TLSv1_2",
+                  "userAgent": "CUSTOM_USER_AGENT",
+                  "customUserAgent": "SevenSignalEye/1.0",
+                  "loginPages": [
+                    {
+                      "fields": [
+                        { "name": "username", "value": "guest" },
+                        { "name": "password", "value": "guest" }
+                      ]
+                    }
+                  ],
+                  "logoutPages": [
+                    {
+                      "fields": [
+                        { "name": "action", "value": "logout" }
+                      ]
+                    }
+                  ],
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                  "clientCertificateFileType": "PEM",
+                  "privateKey": { "fileName": "key.pem", "certificateBytes": "a2V5LWJ5dGVz" },
+                  "privateKeyFileType": "DER"
+                }
+              },
+              "raw": {
+                "summary": "RAW",
+                "value": {
+                  "type": "RAW",
+                  "name": "corp-raw-supplicant",
+                  "subKeyId": 5,
+                  "keyFileContent": "ap_scan=1\nctrl_interface=/tmp/wpactrl\nfast_reauth=1\nnetwork={\n    ssid=__SSID__\n    bssid=__BSSID__\n    scan_freq=2412\n    key_mgmt=WPA-PSK WPA-PSK-SHA256 FT-PSK\n    psk=\"7signallab\"\n    proto=RSN\n    scan_ssid=1\n    ieee80211w=2\n}"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetNetworkKeyResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Network Keys"
+      ]
+    }
+  },
+  "PathNetworkKeysSensorsTemplates": {
+    "get": {
+      "summary": "List the Sensor Network Key templates",
+      "operationId": "sensor-network-key-templates",
+      "description": "Lists the pre-built network key templates. These can be used for creating HTTP_AUTHENTICATION network keys.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetNetworkKeysResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Network Keys"
+      ]
+    }
+  },
+  "PathNetworkKeysSensor": {
+    "get": {
+      "summary": "Fetch the specified Sensor Network Key",
+      "operationId": "sensor-network-key",
+      "description": "Fetch the specified Sensor Network Key",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "networkKeyId",
+          "in": "path",
+          "description": "Fetch the specific network key referenced by its id",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetNetworkKeyResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Network Keys"
+      ]
+    },
+    "put": {
+      "operationId": "PathNetworkKeysSensor-put-nk3s4",
+      "summary": "Replace the specified Sensor Network Key with the details in the payload",
+      "description": "Full replace, not a patch - provide the complete desired state on every call.",
+      "parameters": [
+        {
+          "name": "networkKeyId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PutNetworkKeyRequest"
+            },
+            "examples": {
+              "wpa1-passphrase": {
+                "summary": "WPA1 with a passphrase",
+                "value": {
+                  "type": "WPA1",
+                  "name": "corp-wifi-legacy",
+                  "usePassphrase": true,
+                  "passphraseOrPsk": "SuperSecret123",
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa2-passphrase": {
+                "summary": "WPA2 with a passphrase",
+                "value": {
+                  "type": "WPA2",
+                  "name": "corp-wifi",
+                  "usePassphrase": true,
+                  "passphraseOrPsk": "SuperSecret123",
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa3-mixed": {
+                "summary": "WPA3 in Mixed WPA3/WPA2-PSK mode",
+                "value": {
+                  "type": "WPA3",
+                  "name": "corp-wifi-wpa3-mixed",
+                  "passphraseOrPsk": "SuperSecret123",
+                  "pure": false,
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa3-pure": {
+                "summary": "WPA3 in WPA3-only mode",
+                "value": {
+                  "type": "WPA3",
+                  "name": "corp-wifi-wpa3-only",
+                  "passphraseOrPsk": "SuperSecret123",
+                  "pure": true,
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa3-owe": {
+                "summary": "WPA3 OWE (Opportunistic Wireless Encryption)",
+                "value": {
+                  "type": "WPA3_OWE",
+                  "name": "guest-wifi-owe",
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-tls": {
+                "summary": "WPA_EAP with EAP-TLS",
+                "value": {
+                  "type": "WPA_EAP",
+                  "eapMethod": "EAP_TLS",
+                  "name": "corp-wifi-eap-tls",
+                  "wpaVersion": "WPA2",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "eapolVersion": "EAPOL_VERSION_2",
+                  "subKeyId": 5,
+                  "certificateProperties": {
+                    "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                    "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                    "privateKey": { "fileName": "key.pem", "certificateBytes": "a2V5LWJ5dGVz" },
+                    "privateKeyPassword": "keySecret123"
+                  },
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-peap": {
+                "summary": "WPA_EAP with EAP-PEAP (inner authentication: TLS)",
+                "value": {
+                  "type": "WPA_EAP",
+                  "eapMethod": "EAP_PEAP",
+                  "name": "corp-wifi-eap-peap",
+                  "wpaVersion": "WPA2",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "eapolVersion": "EAPOL_VERSION_2",
+                  "password": "SuperSecret123",
+                  "peapLabel": "CLIENT_EAP_ENCRYPTION",
+                  "peapVersion": "V0",
+                  "subKeyId": 5,
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "innerAuthentication": {
+                    "method": "TLS",
+                    "caCertificate": { "fileName": "inner-ca.pem", "certificateBytes": "aW5uZXItY2EtYnl0ZXM=" },
+                    "clientCertificate": { "fileName": "inner-client.pem", "certificateBytes": "aW5uZXItY2xpZW50LWJ5dGVz" },
+                    "privateKey": { "fileName": "inner-key.pem", "certificateBytes": "aW5uZXIta2V5LWJ5dGVz" },
+                    "privateKeyPassword": "innerKeySecret"
+                  },
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-ttls": {
+                "summary": "WPA_EAP with EAP-TTLS (inner authentication: EAP-TLS)",
+                "value": {
+                  "type": "WPA_EAP",
+                  "eapMethod": "EAP_TTLS",
+                  "name": "corp-wifi-eap-ttls",
+                  "wpaVersion": "WPA2",
+                  "identity": "user@corp.example",
+                  "anonymousIdentity": "anon@corp.example",
+                  "allowAny": false,
+                  "eapolVersion": "EAPOL_VERSION_2",
+                  "password": "SuperSecret123",
+                  "subKeyId": 5,
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                  "innerAuthentication": {
+                    "method": "EAP_TLS",
+                    "caCertificate": { "fileName": "inner-ca.pem", "certificateBytes": "aW5uZXItY2EtYnl0ZXM=" },
+                    "clientCertificate": { "fileName": "inner-client.pem", "certificateBytes": "aW5uZXItY2xpZW50LWJ5dGVz" },
+                    "privateKey": { "fileName": "inner-key.pem", "certificateBytes": "aW5uZXIta2V5LWJ5dGVz" },
+                    "privateKeyPassword": "innerKeySecret"
+                  },
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-psk": {
+                "summary": "WPA_EAP with EAP-PSK",
+                "value": {
+                  "type": "WPA_EAP",
+                  "eapMethod": "EAP_PSK",
+                  "name": "corp-wifi-eap-psk",
+                  "wpaVersion": "WPA2",
+                  "identity": "user@corp.example",
+                  "nai": "user@corp.example",
+                  "allowAny": false,
+                  "eapolVersion": "EAPOL_VERSION_2",
+                  "preSharedKey": "0123456789ABCDEF0123456789ABCDEF",
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-fast": {
+                "summary": "WPA_EAP with EAP-FAST",
+                "value": {
+                  "type": "WPA_EAP",
+                  "eapMethod": "EAP_FAST",
+                  "name": "corp-wifi-eap-fast",
+                  "wpaVersion": "WPA2",
+                  "identity": "user@corp.example",
+                  "anonymousIdentity": "anon@corp.example",
+                  "allowAny": false,
+                  "eapolVersion": "EAPOL_VERSION_2",
+                  "password": "SuperSecret123",
+                  "tlsVersion": "TLS_1_2",
+                  "pacFile": { "fileName": "pac.bin", "certificateBytes": "cGFjLWJ5dGVz" },
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-leap": {
+                "summary": "WPA_EAP with LEAP",
+                "value": {
+                  "type": "WPA_EAP",
+                  "eapMethod": "LEAP",
+                  "name": "corp-wifi-leap",
+                  "wpaVersion": "WPA1",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "eapolVersion": "EAPOL_VERSION_1",
+                  "password": "SuperSecret123",
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-mschapv2": {
+                "summary": "WPA_EAP with EAP-MSCHAPv2",
+                "value": {
+                  "type": "WPA_EAP",
+                  "eapMethod": "EAP_MSCHAP_V2",
+                  "name": "corp-wifi-mschapv2",
+                  "wpaVersion": "WPA2",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "eapolVersion": "EAPOL_VERSION_2",
+                  "password": "SuperSecret123",
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                  "subKeyId": 5,
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "wpa-eap-scep": {
+                "summary": "WPA_EAP_SCEP",
+                "value": {
+                  "type": "WPA_EAP_SCEP",
+                  "name": "corp-wifi-scep",
+                  "wpaVersion": "WPA2",
+                  "scepUrl": "https://scep.corp.example/pkiclient.exe",
+                  "challengePassword": "SuperSecret123",
+                  "caFingerprint": "AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD",
+                  "subjectName": "CN=eye-{serial},O=Corp Inc",
+                  "subjectAltName": "eye-{serial}.corp.example",
+                  "keySize": "RSA_2048",
+                  "renewalThresholdPercent": 33,
+                  "eapolVersion": "EAPOL_VERSION_2",
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "subKeyId": 5
+                }
+              },
+              "ieee8021x-eap-tls": {
+                "summary": "IEEE_802_1X with EAP-TLS",
+                "value": {
+                  "type": "IEEE_802_1X",
+                  "eapMethod": "EAP_TLS",
+                  "name": "ieee-eap-tls",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "certificateProperties": {
+                    "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                    "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                    "privateKey": { "fileName": "key.pem", "certificateBytes": "a2V5LWJ5dGVz" },
+                    "privateKeyPassword": "keySecret123"
+                  },
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "ieee8021x-eap-peap": {
+                "summary": "IEEE_802_1X with EAP-PEAP (inner authentication: TLS)",
+                "value": {
+                  "type": "IEEE_802_1X",
+                  "eapMethod": "EAP_PEAP",
+                  "name": "ieee-eap-peap",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "password": "SuperSecret123",
+                  "peapLabel": "CLIENT_EAP_ENCRYPTION",
+                  "peapVersion": "V0",
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "innerAuthentication": {
+                    "method": "TLS",
+                    "caCertificate": { "fileName": "inner-ca.pem", "certificateBytes": "aW5uZXItY2EtYnl0ZXM=" },
+                    "clientCertificate": { "fileName": "inner-client.pem", "certificateBytes": "aW5uZXItY2xpZW50LWJ5dGVz" },
+                    "privateKey": { "fileName": "inner-key.pem", "certificateBytes": "aW5uZXIta2V5LWJ5dGVz" },
+                    "privateKeyPassword": "innerKeySecret"
+                  },
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "ieee8021x-eap-ttls": {
+                "summary": "IEEE_802_1X with EAP-TTLS (inner authentication: EAP-TLS) - clientCertificate is required for this template's EAP_TTLS, unlike WPA_EAP's",
+                "value": {
+                  "type": "IEEE_802_1X",
+                  "eapMethod": "EAP_TTLS",
+                  "name": "ieee-eap-ttls",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "anonymousIdentity": "anon@corp.example",
+                  "password": "SuperSecret123",
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                  "innerAuthentication": {
+                    "method": "EAP_TLS",
+                    "caCertificate": { "fileName": "inner-ca.pem", "certificateBytes": "aW5uZXItY2EtYnl0ZXM=" },
+                    "clientCertificate": { "fileName": "inner-client.pem", "certificateBytes": "aW5uZXItY2xpZW50LWJ5dGVz" },
+                    "privateKey": { "fileName": "inner-key.pem", "certificateBytes": "aW5uZXIta2V5LWJ5dGVz" },
+                    "privateKeyPassword": "innerKeySecret"
+                  },
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "ieee8021x-leap": {
+                "summary": "IEEE_802_1X with LEAP",
+                "value": {
+                  "type": "IEEE_802_1X",
+                  "eapMethod": "LEAP",
+                  "name": "ieee-leap",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "password": "SuperSecret123",
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "ieee8021x-eap-mschapv2": {
+                "summary": "IEEE_802_1X with EAP-MSCHAPv2",
+                "value": {
+                  "type": "IEEE_802_1X",
+                  "eapMethod": "EAP_MSCHAP_V2",
+                  "name": "ieee-mschapv2",
+                  "identity": "user@corp.example",
+                  "allowAny": false,
+                  "password": "SuperSecret123",
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                  "customFields": [
+                    { "scope": "GLOBAL", "name": "site", "value": "hq" }
+                  ]
+                }
+              },
+              "open-http": {
+                "summary": "OPEN_HTTP",
+                "value": {
+                  "type": "OPEN_HTTP",
+                  "name": "corp-open-http",
+                  "authenticationUrl": "https://auth.corp.example/login",
+                  "requireServerCertificateCheck": true,
+                  "postData": "username=${username}&password=${password}",
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                  "clientCertificateFileType": "PEM",
+                  "privateKey": { "fileName": "key.pem", "certificateBytes": "a2V5LWJ5dGVz" },
+                  "privateKeyFileType": "DER"
+                }
+              },
+              "http-authentication": {
+                "summary": "HTTP_AUTHENTICATION",
+                "value": {
+                  "type": "HTTP_AUTHENTICATION",
+                  "name": "corp-http-auth",
+                  "targetUrl": "https://portal.corp.example/login",
+                  "requireServerCertificateCheck": true,
+                  "contentOnTargetUrlPage": "Please sign in",
+                  "contentOnLoginPage": "Enter your credentials",
+                  "contentOnSuccessfulLogin": "Login successful",
+                  "contentOnUnSuccessfulLogin": "Login failed",
+                  "secureProtocol": "TLSv1_2",
+                  "userAgent": "CUSTOM_USER_AGENT",
+                  "customUserAgent": "SevenSignalEye/1.0",
+                  "loginPages": [
+                    {
+                      "fields": [
+                        { "name": "username", "value": "guest" },
+                        { "name": "password", "value": "guest" }
+                      ]
+                    }
+                  ],
+                  "logoutPages": [
+                    {
+                      "fields": [
+                        { "name": "action", "value": "logout" }
+                      ]
+                    }
+                  ],
+                  "caCertificate": { "fileName": "ca.pem", "certificateBytes": "Y2EtYnl0ZXM=" },
+                  "clientCertificate": { "fileName": "client.pem", "certificateBytes": "Y2xpZW50LWJ5dGVz" },
+                  "clientCertificateFileType": "PEM",
+                  "privateKey": { "fileName": "key.pem", "certificateBytes": "a2V5LWJ5dGVz" },
+                  "privateKeyFileType": "DER"
+                }
+              },
+              "raw": {
+                "summary": "RAW",
+                "value": {
+                  "type": "RAW",
+                  "name": "corp-raw-supplicant",
+                  "subKeyId": 5,
+                  "keyFileContent": "ap_scan=1\nctrl_interface=/tmp/wpactrl\nfast_reauth=1\nnetwork={\n    ssid=__SSID__\n    bssid=__BSSID__\n    scan_freq=2412\n    key_mgmt=WPA-PSK WPA-PSK-SHA256 FT-PSK\n    psk=\"7signallab\"\n    proto=RSN\n    scan_ssid=1\n    ieee80211w=2\n}"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetNetworkKeyResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Network Keys"
+      ]
+    },
+    "delete": {
+      "operationId": "PathNetworkKeysSensor-delete-nk5s6",
+      "summary": "Delete the Sensor Network Key specified by the id",
+      "description": "Fails with a conflict if the key is still bound to a wireless network or a sensor.",
+      "parameters": [
+        {
+          "name": "networkKeyId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        },
+        "409": {
+          "description": "Conflict - the network key is still in use by a wireless network or a sensor"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Network Keys"
+      ]
+    }
+  }
+}

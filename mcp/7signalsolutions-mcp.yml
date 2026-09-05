@@ -1,0 +1,81 @@
+generated: '2026-09-05'
+method: probed
+source: https://mcp-v2.7signal.com/mcp
+name: 7SIGNAL MCP Server
+status: published
+deployment:
+  mode: remote
+  endpoint: https://mcp-v2.7signal.com/mcp
+  auth: oauth
+  verified: probed
+discovery:
+  probe:
+    request: 'POST https://mcp-v2.7signal.com/mcp {"jsonrpc":"2.0","id":1,"method":"tools/list"}'
+    accept: application/json, text/event-stream
+    http_status: 401
+    body: '{"error": "invalid_token", "error_description": "Authentication required"}'
+    www_authenticate: >-
+      Bearer error="invalid_token", error_description="Authentication required",
+      resource_metadata="https://mcp-v2.7signal.com/.well-known/oauth-protected-resource"
+    verdict: >-
+      The endpoint is live and speaks MCP over HTTP, and it answers an anonymous tools/list with a
+      spec-correct RFC 9728 OAuth challenge rather than a 404. Presence is therefore PROBED, not
+      inferred; the tool list itself is auth-gated and was NOT enumerated in this pass.
+  negative_controls:
+  - url: https://mcp-v2.7signal.com/
+    status: 404
+  - url: https://mcp-v2.7signal.com/sse
+    status: 404
+  - url: https://mcp-v2.7signal.com/api/mcp
+    status: 404
+  - url: https://mcp.7signal.com/
+    status: null
+    note: does not resolve in DNS
+authorization:
+  protected_resource: https://mcp-v2.7signal.com/.well-known/oauth-protected-resource
+  authorization_server: https://mcp-v2.7signal.com/
+  authorization_endpoint: https://mcp-v2.7signal.com/authorize
+  token_endpoint: https://mcp-v2.7signal.com/token
+  registration_endpoint: https://mcp-v2.7signal.com/register
+  dynamic_client_registration: true
+  grant_types:
+  - authorization_code
+  - refresh_token
+  code_challenge_methods:
+  - S256
+  token_endpoint_auth_methods:
+  - client_secret_post
+  bearer_methods:
+  - header
+  scopes:
+  - offline_access
+  - openid
+  - email
+  - profile
+  - https://login.7signal.com/scopes/user.read
+  - https://login.7signal.com/scopes/organization.admin
+  - sap:user.read
+  - sap:user.config
+  - mds:organizations.read
+  saved:
+  - well-known/7signalsolutions-mcp-oauth-authorization-server.json
+  - well-known/7signalsolutions-mcp-oauth-protected-resource.json
+tools:
+  enumerated: false
+  count: null
+  reason: >-
+    tools/list requires an authenticated OAuth session. No tool names, descriptions or inputSchemas are
+    recorded here because none were observed. Enumerating them needs an authorized introspection run.
+clients_documented:
+- Claude
+- ChatGPT
+- Microsoft Copilot
+capabilities_claimed:
+- Plain-language questions about Wi-Fi and network performance
+- On-demand report generation grounded in live 7SIGNAL telemetry
+- Early anomaly warnings surfaced from Eyeris AI continuous monitoring
+capabilities_source: https://7signal.com/platform/mcp-wi-fi-monitoring/
+references:
+- https://7signal.com/platform/mcp-wi-fi-monitoring/
+- https://7signal.com/webinars/7signal-ai-mcp-demonstration/
+- https://7signal.com/webinars/7signal-jira-slack-claude-working-together-with-mcp/

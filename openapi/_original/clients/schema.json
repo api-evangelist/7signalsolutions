@@ -1,0 +1,79 @@
+{
+  "GetSensorClientsResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/SensorClient"
+        }
+      },
+      "range": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Range"
+      }
+    }
+  },
+  "SensorClient": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "integer"
+      },
+      "name": {
+        "type": "string"
+      },
+      "macAddress": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "user": {
+        "type": "string"
+      },
+      "vendor": {
+        "type": "string"
+      }
+    }
+  },
+  "ToRequestParam": {
+    "name": "to",
+    "in": "query",
+    "description": "The time in milliseconds from the epoch up to which sensor clients are fetched (the upper bound). Defaults to the present now.",
+    "required": false,
+    "schema": {
+      "type": "number",
+      "format": "datetime"
+    }
+  },
+  "FromRequestParam": {
+    "name": "from",
+    "in": "query",
+    "description": "The time in milliseconds from the epoch after which sensor clients are fetched (the lower bound). Defaults to the previous 30 days. The difference between `from` and `to` is not allowed be greater than 90 days.",
+    "required": false,
+    "schema": {
+      "type": "number",
+      "format": "datetime"
+    }
+  },
+  "MacRequestParam": {
+    "name": "mac",
+    "in": "query",
+    "description": "Filter clients by partial MAC address (case-insensitive).",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "VendorRequestParam": {
+    "name": "vendor",
+    "in": "query",
+    "description": "Filter clients by partial vendor/OUI name (case-insensitive).",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  }
+}

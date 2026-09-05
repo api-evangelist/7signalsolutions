@@ -1,0 +1,2086 @@
+{
+  "PathOnDemandTestsActiveTests": {
+    "get": {
+      "summary": "List active on-demand tests",
+      "operationId": "on-demand-tests-active-tests-list",
+      "description": "Retrieve a paginated list of active on-demand test metadata with filtering options",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "sensorId",
+          "in": "query",
+          "required": true,
+          "description": "Filter by sensor ID",
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        {
+          "name": "testType",
+          "in": "query",
+          "required": true,
+          "description": "Filter by test type",
+          "schema": {
+            "type": "string",
+            "enum": [
+              "PING",
+              "HTTP_DOWNLOAD",
+              "HTTP_UPLOAD",
+              "IPERF3",
+              "SPEEDTEST",
+              "TRACEROUTE",
+              "MOS",
+              "UDP_DOWNLOAD",
+              "UDP_UPLOAD",
+              "TCP_DOWNLOAD",
+              "TCP_UPLOAD",
+              "WEB_DOWNLOAD"
+            ]
+          }
+        },
+        {
+          "name": "channel",
+          "in": "query",
+          "required": false,
+          "description": "Filter by WiFi channel number",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "apId",
+          "in": "query",
+          "required": false,
+          "description": "Filter by access point ID",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "band",
+          "in": "query",
+          "required": false,
+          "description": "Filter by frequency band (2.4, 5, or 6 GHz)",
+          "schema": {
+            "type": "string",
+            "enum": [
+              "2.4",
+              "5",
+              "6",
+              "all"
+            ]
+          }
+        },
+        {
+          "name": "start",
+          "in": "query",
+          "required": false,
+          "description": "Start time for filtering (epoch milliseconds)",
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        {
+          "name": "end",
+          "in": "query",
+          "required": false,
+          "description": "End time for filtering (epoch milliseconds)",
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        {
+          "name": "page",
+          "in": "query",
+          "required": false,
+          "description": "Page number (zero-based)",
+          "schema": {
+            "type": "integer",
+            "default": 0
+          }
+        },
+        {
+          "name": "size",
+          "in": "query",
+          "required": false,
+          "description": "Page size",
+          "schema": {
+            "type": "integer",
+            "default": 20
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/ActiveTestsListResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsPacketCaptureList": {
+    "get": {
+      "summary": "List packet capture tests",
+      "operationId": "on-demand-tests-pcap-list",
+      "description": "Retrieve a paginated list of packet capture test metadata with filtering options",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "sensorId",
+          "in": "query",
+          "required": false,
+          "description": "Filter by sensor (eye) ID",
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        {
+          "name": "channel",
+          "in": "query",
+          "required": false,
+          "description": "Filter by channel number",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "apId",
+          "in": "query",
+          "required": false,
+          "description": "Filter by access point ID",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "name": "band",
+          "in": "query",
+          "required": false,
+          "description": "Filter by frequency band (2.4, 5, or 6 GHz)",
+          "schema": {
+            "type": "string",
+            "enum": [
+              "2.4",
+              "5",
+              "6",
+              "all"
+            ]
+          }
+        },
+        {
+          "name": "start",
+          "in": "query",
+          "required": false,
+          "description": "Start time for filtering (epoch milliseconds)",
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        {
+          "name": "end",
+          "in": "query",
+          "required": false,
+          "description": "End time for filtering (epoch milliseconds)",
+          "schema": {
+            "type": "integer",
+            "format": "int64"
+          }
+        },
+        {
+          "name": "page",
+          "in": "query",
+          "required": false,
+          "description": "Page number (zero-based)",
+          "schema": {
+            "type": "integer",
+            "default": 0
+          }
+        },
+        {
+          "name": "size",
+          "in": "query",
+          "required": false,
+          "description": "Page size",
+          "schema": {
+            "type": "integer",
+            "default": 20
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PacketCaptureListResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsPacketCapture": {
+    "post": {
+      "summary": "Trigger packet capture test",
+      "operationId": "on-demand-tests-pcap",
+      "description": "Triggers a Packet Capture test for a given sensor and returns a Test ID for fetching results later. The capture duration must be 3600 seconds or less.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilterForRunTest"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PacketCaptureTestRequest"
+            },
+            "examples": {
+              "packet-capture-channel-mode": {
+                "summary": "Channel Mode",
+                "value": {
+                  "mode": "CHANNEL",
+                  "accessPointId": 5,
+                  "captureTimeSeconds": 10,
+                  "captureFilter": "",
+                  "band": 5,
+                  "channel": 36
+                }
+              },
+              "packet-capture-access-point-mode": {
+                "summary": "Access Point Mode",
+                "value": {
+                  "mode": "ACCESS_POINT",
+                  "accessPointId": 123,
+                  "captureTimeSeconds": 10,
+                  "captureFilter": "",
+                  "band": 2.4,
+                  "channel": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OnDemandTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsPacketCaptureStatus": {
+    "get": {
+      "summary": "Get packet capture status",
+      "operationId": "on-demand-tests-pcap-status",
+      "description": "Get packet capture status for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PacketCaptureTestStatusResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsPacketCaptureFile": {
+    "get": {
+      "summary": "Get packet capture file",
+      "operationId": "on-demand-tests-pcap-file",
+      "description": "Get packet capture file for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "pcap file returned",
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "application/vnd.tcpdump.pcap": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsPing": {
+    "post": {
+      "summary": "Trigger ping test",
+      "operationId": "on-demand-tests-ping",
+      "description": "Triggers a Ping test for a given sensor and returns a Test ID for fetching results later.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilterForRunTest"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PingTestRequest"
+            },
+            "examples": {
+              "ping-test-with-sonar": {
+                "summary": "Ping test using Sonar endpoint (change accessPointId and sonarId as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 101,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": null,
+                  "testEndpoint": {
+                    "testHost": null,
+                    "sonarId": 1001,
+                    "resolveDNSOnSensor": true,
+                    "pingEndpointId": null
+                  },
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "payloadSizeBytes": 32,
+                  "intervalMilliseconds": 1000,
+                  "timeoutMilliseconds": 1000,
+                  "testCount": 10,
+                  "qosCategory": 0
+                }
+              },
+              "ping-test-with-test-host": {
+                "summary": "Ping test using explicit test host (change accessPointId and testHost as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 102,
+                  "testEndpoint": {
+                    "testHost": "8.8.8.8",
+                    "sonarId": null,
+                    "resolveDNSOnSensor": false,
+                    "pingEndpointId": null
+                  },
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "payloadSizeBytes": 32,
+                  "intervalMilliseconds": 1000,
+                  "timeoutMilliseconds": 1000,
+                  "testCount": 10,
+                  "qosCategory": 0
+                }
+              },
+              "ping-test-with-ping-endpoint": {
+                "summary": "Ping test using predefined ping endpoint (change accessPointId and pingEndpointId as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 103,
+                  "testEndpoint": {
+                    "testHost": null,
+                    "sonarId": null,
+                    "resolveDNSOnSensor": true,
+                    "pingEndpointId": 55
+                  },
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "payloadSizeBytes": 150,
+                  "intervalMilliseconds": 1000,
+                  "timeoutMilliseconds": 1000,
+                  "testCount": 10,
+                  "qosCategory": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OnDemandTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsPingStatus": {
+    "get": {
+      "summary": "Get ping status",
+      "operationId": "on-demand-tests-ping-status",
+      "description": "Get ping status for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PingTestStatusResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsPingGateway": {
+    "post": {
+      "summary": "Trigger ping default gateway test",
+      "operationId": "on-demand-tests-ping-gateway",
+      "description": "Triggers a Ping default gateway test for a given sensor and returns a Test ID for fetching results later.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilterForRunTest"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PingGatewayTestRequest"
+            },
+            "examples": {
+              "ping-gateway-test": {
+                "summary": "Ping default gateway test (change accessPointId as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230959,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "payloadSizeBytes": "32",
+                  "intervalMilliseconds": 1000,
+                  "timeoutMilliseconds": 1000,
+                  "testCount": 10,
+                  "qosCategory": "BEST_EFFORT_0"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OnDemandTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsPingGatewayStatus": {
+    "get": {
+      "summary": "Get ping default gateway status",
+      "operationId": "on-demand-tests-ping-gateway-status",
+      "description": "Get ping default gateway status for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PingTestStatusResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsHttpDownload": {
+    "post": {
+      "summary": "Trigger http download test",
+      "operationId": "on-demand-tests-http-download",
+      "description": "Triggers a Http download test for a given sensor and returns a Test ID for fetching results later.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilterForRunTest"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/HttpTestRequest"
+            },
+            "examples": {
+              "http-download-test-with-sonar": {
+                "summary": "Http download test using Sonar endpoint (change accessPointId and sonarId as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 101,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": null,
+                  "testEndpoint": {
+                    "testHost": null,
+                    "sonarId": 1001,
+                    "resolveDNSOnSensor": true
+                  },
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "durationSeconds": "2",
+                  "testCount": 1,
+                  "qosCategory": "BEST_EFFORT_0",
+                  "sonarDSCP": 0
+                }
+              },
+              "http-download-test-with-test-host": {
+                "summary": "Http download test using explicit test host (change accessPointId and testHost/testPort as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 102,
+                  "testEndpoint": {
+                    "testHost": "8.8.8.8",
+                    "testPort": "80",
+                    "sonarId": null,
+                    "resolveDNSOnSensor": false
+                  },
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "durationSeconds": "2",
+                  "testCount": 1,
+                  "qosCategory": "BEST_EFFORT_0",
+                  "sonarDSCP": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OnDemandTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsHttpDownloadStatus": {
+    "get": {
+      "summary": "Get Http download status and results",
+      "operationId": "on-demand-tests-http-download-status",
+      "description": "Get Http download status for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/HttpDownloadTestStatusResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsHttpUpload": {
+    "post": {
+      "summary": "Trigger http upload test",
+      "operationId": "on-demand-tests-http-upload",
+      "description": "Triggers a Http upload test for a given sensor and returns a Test ID for fetching results later.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilterForRunTest"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/HttpTestRequest"
+            },
+            "examples": {
+              "http-upload-test-with-sonar": {
+                "summary": "Http upload test using Sonar endpoint (change accessPointId and sonarId as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 101,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": null,
+                  "testEndpoint": {
+                    "testHost": null,
+                    "sonarId": 1001,
+                    "resolveDNSOnSensor": true
+                  },
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "durationSeconds": "2",
+                  "testCount": 1,
+                  "qosCategory": "BEST_EFFORT_0",
+                  "sonarDSCP": 0
+                }
+              },
+              "http-upload-test-with-test-host": {
+                "summary": "Http upload test using explicit test host (change accessPointId and testHost/testPort as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 102,
+                  "testEndpoint": {
+                    "testHost": "8.8.8.8",
+                    "testPort": "80",
+                    "sonarId": null,
+                    "resolveDNSOnSensor": false
+                  },
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "durationSeconds": "2",
+                  "testCount": 1,
+                  "qosCategory": "BEST_EFFORT_0",
+                  "sonarDSCP": 0
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OnDemandTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsHttpUploadStatus": {
+    "get": {
+      "summary": "Get Http upload status and results",
+      "operationId": "on-demand-tests-http-upload-status",
+      "description": "Get Http upload status for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/HttpUploadTestStatusResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsIperf3": {
+    "post": {
+      "summary": "Trigger iperf3 test",
+      "operationId": "on-demand-tests-iperf3",
+      "description": "Triggers an Internet performance test for a given sensor and returns a Test ID for fetching results later.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilterForRunTest"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/Iperf3TestRequest"
+            },
+            "examples": {
+              "iperf3-test-with-default-options": {
+                "summary": "iperf3 test with default options (change accessPointId and testEndpoint as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230960,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "testEndpoint": "192.168.1.157"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OnDemandTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsIperf3Status": {
+    "get": {
+      "summary": "Get Iperf3 status and results",
+      "operationId": "on-demand-tests-iperf3-status",
+      "description": "Get Iperf3 status for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/Iperf3TestStatusResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsSpeedtest": {
+    "post": {
+      "summary": "Trigger speedtest",
+      "operationId": "on-demand-tests-speedtest",
+      "description": "Triggers a speedtest for a given sensor and returns a Test ID for fetching results later.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilterForRunTest"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/SpeedtestRequest"
+            },
+            "examples": {
+              "speedtest-with-default-options": {
+                "summary": "speedtest with default options (change accessPointId as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230960,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OnDemandTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsSpeedtestStatus": {
+    "get": {
+      "summary": "Get speedtest status and results",
+      "operationId": "on-demand-tests-speedtest-status",
+      "description": "Get speedtest status for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/SpeedtestStatusResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsTraceroute": {
+    "post": {
+      "summary": "Trigger Traceroute test",
+      "operationId": "on-demand-tests-traceroute",
+      "description": "Triggers a traceroute test for a given sensor and returns a Test ID for fetching results later.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilterForRunTest"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/TracerouteTestRequest"
+            },
+            "examples": {
+              "traceroute-test-with-sonar": {
+                "summary": "traceroute test with default options (change accessPointId and sonarId as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230960,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "testEndpoint": {
+                    "sonarId": 2147481002,
+                    "resolveDNSOnSensor": true
+                  },
+                  "minimumTtl": 1,
+                  "maximumTtl": 255,
+                  "queriesPerHop": 5,
+                  "timeoutMilliseconds": 2000,
+                  "testTimeoutSeconds": 20,
+                  "qosCategory": "BEST_EFFORT_0"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OnDemandTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsTracerouteStatus": {
+    "get": {
+      "summary": "Get traceroute test status and results",
+      "operationId": "on-demand-tests-traceroute-status",
+      "description": "Get traceroute test status for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/TracerouteTestStatusResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsMos": {
+    "post": {
+      "summary": "Trigger Mos/VoIP test",
+      "operationId": "on-demand-tests-mos",
+      "description": "Triggers a Mos/VoIP test for a given sensor and returns a Test ID for fetching results later.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilterForRunTest"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/MosTestRequest"
+            },
+            "examples": {
+              "mos-test-with-sonar": {
+                "summary": "Mos/VoIP test with default options (change accessPointId and sonarId as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230960,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "testEndpoint": {
+                    "sonarId": 2147481002,
+                    "resolveDNSOnSensor": true
+                  },
+                  "direction": "DOWNLINK",
+                  "codec": "PCM_LINEAR_16",
+                  "fec": "NO_FEC",
+                  "qosCategory": "BEST_EFFORT_0",
+                  "sonarDSCP": 0,
+                  "sender": {
+                    "packetSizeBytes": 188,
+                    "sendTimeSeconds": 30,
+                    "streamIntervalMilliseconds": 20,
+                    "samplingIntervalSeconds": 5
+                  },
+                  "receiver": {
+                    "port": 0,
+                    "windowSizeSeconds": 10,
+                    "samplingIntervalSeconds": 1,
+                    "dejitteringBufferMilliseconds": 120,
+                    "timeoutSeconds": 30
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OnDemandTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsMosStatus": {
+    "get": {
+      "summary": "Get Mos/VoIP test status and results",
+      "operationId": "on-demand-tests-mos-status",
+      "description": "Get Mos/VoIP test status for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/MosTestStatusResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsUdpDownload": {
+    "post": {
+      "summary": "Trigger udp download test",
+      "operationId": "on-demand-tests-udp-download",
+      "description": "Triggers a Udp download test for a given sensor and returns a Test ID for fetching results later.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilterForRunTest"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/UdpDownloadTestRequest"
+            },
+            "examples": {
+              "udp-download-test-with-sonar": {
+                "summary": "Udp download test using Sonar endpoint (change accessPointId and sonarId as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230959,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "testEndpoint": {
+                    "sonarId": 2147481002,
+                    "resolveDNSOnSensor": true
+                  },
+                  "packetSize": "SMALL_PACKET_SIZE",
+                  "testCount": 1,
+                  "senderPort": 0,
+                  "receiverPort": 0,
+                  "qosCategory": "BEST_EFFORT_0",
+                  "sonarDSCP": 0,
+                  "downloadMegabytes": "4"
+                }
+              },
+              "udp-download-test-with-test-host": {
+                "summary": "Udp download test using explicit test host (change accessPointId and testHost/testPort as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230959,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "testEndpoint": {
+                    "testHost": "192.168.1.157",
+                    "testPort": 80
+                  },
+                  "packetSize": "SMALL_PACKET_SIZE",
+                  "testCount": 1,
+                  "senderPort": 0,
+                  "receiverPort": 0,
+                  "qosCategory": "BEST_EFFORT_0",
+                  "sonarDSCP": 0,
+                  "downloadMegabytes": "4"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OnDemandTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsUdpDownloadStatus": {
+    "get": {
+      "summary": "Get Udp download status and results",
+      "operationId": "on-demand-tests-udp-download-status",
+      "description": "Get Udp download status for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/UdpDownloadTestStatusResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsUdpUpload": {
+    "post": {
+      "summary": "Trigger udp upload test",
+      "operationId": "on-demand-tests-udp-upload",
+      "description": "Triggers a Udp upload test for a given sensor and returns a Test ID for fetching results later.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilterForRunTest"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/UdpUploadTestRequest"
+            },
+            "examples": {
+              "udp-upload-test-with-sonar": {
+                "summary": "Udp upload test using Sonar endpoint (change accessPointId and sonarId as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230959,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "testEndpoint": {
+                    "sonarId": 2147481002,
+                    "resolveDNSOnSensor": true
+                  },
+                  "packetSize": "SMALL_PACKET_SIZE",
+                  "testCount": 1,
+                  "senderPort": 0,
+                  "receiverPort": 0,
+                  "qosCategory": "BEST_EFFORT_0",
+                  "sonarDSCP": 0,
+                  "uploadMegabytes": "4"
+                }
+              },
+              "udp-upload-test-with-test-host": {
+                "summary": "Udp upload test using explicit test host (change accessPointId and testHost/testPort as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230959,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "testEndpoint": {
+                    "testHost": "192.168.1.157",
+                    "testPort": 80
+                  },
+                  "packetSize": "SMALL_PACKET_SIZE",
+                  "testCount": 1,
+                  "senderPort": 0,
+                  "receiverPort": 0,
+                  "qosCategory": "BEST_EFFORT_0",
+                  "sonarDSCP": 0,
+                  "uploadMegabytes": "4"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OnDemandTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsUdpUploadStatus": {
+    "get": {
+      "summary": "Get Udp upload status and results",
+      "operationId": "on-demand-tests-udp-upload-status",
+      "description": "Get Udp upload status for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/UdpUploadTestStatusResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsTcpDownload": {
+    "post": {
+      "summary": "Trigger tcp download test",
+      "operationId": "on-demand-tests-tcp-download",
+      "description": "Triggers a Tcp download test for a given sensor and returns a Test ID for fetching results later.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilterForRunTest"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/TcpDownloadTestRequest"
+            },
+            "examples": {
+              "tcp-download-test-with-sonar": {
+                "summary": "Tcp download test using Sonar endpoint (change accessPointId and sonarId as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230959,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "testEndpoint": {
+                    "sonarId": 2147481002,
+                    "resolveDNSOnSensor": true
+                  },
+                  "testCount": 1,
+                  "qosCategory": "BEST_EFFORT_0",
+                  "sonarDSCP": 0,
+                  "downloadMegabytes": "4"
+                }
+              },
+              "tcp-download-test-with-test-host": {
+                "summary": "Tcp download test using explicit test host (change accessPointId and testHost/testPort as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230959,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "testEndpoint": {
+                    "testHost": "192.168.1.157",
+                    "testPort": 80
+                  },
+                  "testCount": 1,
+                  "qosCategory": "BEST_EFFORT_0",
+                  "sonarDSCP": 0,
+                  "downloadMegabytes": "4"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OnDemandTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsTcpDownloadStatus": {
+    "get": {
+      "summary": "Get Tcp download status and results",
+      "operationId": "on-demand-tests-tcp-download-status",
+      "description": "Get Tcp download status for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/TcpDownloadTestStatusResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsTcpUpload": {
+    "post": {
+      "summary": "Trigger tcp upload test",
+      "operationId": "on-demand-tests-tcp-upload",
+      "description": "Triggers a Tcp upload test for a given sensor and returns a Test ID for fetching results later.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilterForRunTest"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/TcpUploadTestRequest"
+            },
+            "examples": {
+              "tcp-upload-test-with-sonar": {
+                "summary": "Tcp upload test using Sonar endpoint (change accessPointId and sonarId as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230959,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "testEndpoint": {
+                    "sonarId": 2147481002,
+                    "resolveDNSOnSensor": true
+                  },
+                  "testCount": 1,
+                  "qosCategory": "BEST_EFFORT_0",
+                  "sonarDSCP": 0,
+                  "uploadMegabytes": "4"
+                }
+              },
+              "tcp-upload-test-with-test-host": {
+                "summary": "Tcp upload test using explicit test host (change accessPointId and testHost/testPort as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230959,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "testEndpoint": {
+                    "testHost": "192.168.1.157",
+                    "testPort": 80
+                  },
+                  "testCount": 1,
+                  "qosCategory": "BEST_EFFORT_0",
+                  "sonarDSCP": 0,
+                  "uploadMegabytes": "4"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OnDemandTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsTcpUploadStatus": {
+    "get": {
+      "summary": "Get Tcp upload status and results",
+      "operationId": "on-demand-tests-tcp-upload-status",
+      "description": "Get Tcp upload status for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/TcpUploadTestStatusResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsWebDownload": {
+    "post": {
+      "summary": "Trigger web download test",
+      "operationId": "on-demand-tests-web-download",
+      "description": "Triggers a Web download test for a given sensor and returns a Test ID for fetching results later.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilterForRunTest"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/WebDownloadTestRequest"
+            },
+            "examples": {
+              "web-download-test-with-webserver": {
+                "summary": "Web download test using Web server endpoint (change accessPointId and webServerId as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230959,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "proxyServerUrl": "string",
+                  "timeoutSeconds": 60,
+                  "webServerId": 2147481002,
+                  "resolveDNSOnSensor": false
+                }
+              },
+              "web-download-test-with-test-hosts": {
+                "summary": "Web download test using explicit test hosts (change accessPointId and testHosts as needed)",
+                "value": {
+                  "testType": "WLAN",
+                  "accessPointId": 230959,
+                  "maxAttachTimeoutMilliseconds": 20000,
+                  "maxIpAddressWaitTimeMilliseconds": 60000,
+                  "customMacAddress": "00:00:00:00:00:00",
+                  "ipAddress": {
+                    "ipProtocol": "IPV4",
+                    "useDhcp": true
+                  },
+                  "proxyServerUrl": "string",
+                  "timeoutSeconds": 60,
+                  "testHosts": [
+                    "www.google.com",
+                    "www.yahoo.com"
+                  ],
+                  "resolveDNSOnSensor": false
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OnDemandTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  },
+  "PathOnDemandTestsWebDownloadStatus": {
+    "get": {
+      "summary": "Get Web download status and results",
+      "operationId": "on-demand-tests-web-download-status",
+      "description": "Get Web download status for the specified sensor and test ID",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdFilter"
+        },
+        {
+          "$ref": "schema.json#/TestIdFilter"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/WebDownloadTestStatusResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "OnDemandTests"
+      ]
+    }
+  }
+}

@@ -1,0 +1,100 @@
+generated: '2026-09-05'
+method: searched
+source: https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
+docs: https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
+summary:
+  types:
+  - oauth2
+  oauth2_flows:
+  - clientCredentials
+  - authorization_code
+  surfaces: 2
+  note: >-
+    Two distinct OAuth 2.0 surfaces. The REST gateway (api-v2.7signal.com) uses the client-credentials
+    grant with a 7SIGNAL "API Key" and "API Secret" as client_id / client_secret. The remote MCP server
+    (mcp-v2.7signal.com) uses an authorization-code + PKCE flow with dynamic client registration,
+    advertised via RFC 8414 / RFC 9728 discovery documents.
+schemes:
+- name: oauth2
+  type: oauth2
+  surface: 7SIGNAL Platform API (Gateway v2)
+  flows:
+  - flow: clientCredentials
+    tokenUrl: https://api-v2.7signal.com/oauth2/token
+    scopes: 1
+    scope_names:
+    - read
+  credential_terms:
+    client_id: API Key
+    client_secret: API Secret
+    note: >-
+      7SIGNAL's docs state plainly: "our API Key and Secret are just Client ID and Secret. We are using
+      the same concept with simpler naming terms." Keys are created in the platform dashboard at
+      https://start.7signal.com under Users -> API Keys, scoped to an Organization, Role and Sapphire Group.
+  token:
+    format: JWT bearer
+    lifetime_seconds: 86400
+    lifetime_human: 24 hours
+    fixed: true
+    refreshable: false
+    response_fields:
+    - access_token
+    - scope
+    - expires_in
+    - token_type
+    reuse_guidance: >-
+      "Tokens are only valid for 24 hours. This amount of time is fixed and cannot be changed. Once you
+      acquire a token, reuse it for the duration of its validity." Do not request a new token per call.
+  request_header: 'Authorization: Bearer <access_token>'
+  failure_modes:
+  - status: 401
+    meaning: token missing, expired or invalid
+  - status: 403
+    meaning: token valid but lacks the required permission
+  - error: invalid_grant
+    meaning: grant_type missing or not client_credentials
+  sources:
+  - https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
+  - https://github.com/7Signal/API-Examples/blob/develop/docs/04-api-keys.md
+  - openapi/7signalsolutions-openapi.json
+- name: mcp_oauth
+  type: oauth2
+  surface: 7SIGNAL MCP Server
+  flows:
+  - flow: authorization_code
+    authorizationUrl: https://mcp-v2.7signal.com/authorize
+    tokenUrl: https://mcp-v2.7signal.com/token
+    registrationUrl: https://mcp-v2.7signal.com/register
+    pkce: S256
+    scopes: 9
+  grant_types_supported:
+  - authorization_code
+  - refresh_token
+  token_endpoint_auth_methods_supported:
+  - client_secret_post
+  bearer_methods_supported:
+  - header
+  discovery:
+  - path: /.well-known/oauth-authorization-server
+    rfc: RFC 8414
+    status: 200
+    file: well-known/7signalsolutions-mcp-oauth-authorization-server.json
+  - path: /.well-known/oauth-protected-resource
+    rfc: RFC 9728
+    status: 200
+    file: well-known/7signalsolutions-mcp-oauth-protected-resource.json
+  sources:
+  - https://mcp-v2.7signal.com/.well-known/oauth-authorization-server
+  - https://mcp-v2.7signal.com/.well-known/oauth-protected-resource
+api_key_management:
+  create_path: https://start.7signal.com -> Users -> API Keys -> Add
+  scoped_by:
+  - Organization
+  - Role
+  - Sapphire Group
+  api_operations:
+  - apikeys-get-e5f6
+  - apikeys-post-g7h8
+  - apikeys-with-id-get-i9j0
+  - apikeys-with-id-delete-k1l2
+  source: https://github.com/7Signal/API-Examples/blob/develop/README.md

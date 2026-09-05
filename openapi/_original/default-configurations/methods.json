@@ -1,0 +1,70 @@
+{
+  "PathDefaultConfigurationsSensors": {
+    "get": {
+      "summary": "List the Sensor Default Configurations",
+      "operationId": "default-configurations-sensors",
+      "description": "Lists the configuration bundles that can be referenced by a Service Area or Organization's defaultConfigurationId",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorDefaultConfigurationsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "tags": [
+        "DefaultConfigurations"
+      ]
+    }
+  },
+  "PathDefaultConfigurationsSensor": {
+    "get": {
+      "summary": "Fetch the specified Sensor Default Configuration",
+      "operationId": "default-configuration-sensor",
+      "description": "Fetch details about a single default configuration",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorDefaultConfigurationId"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorDefaultConfigurationResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "DefaultConfigurations"
+      ]
+    }
+  }
+}

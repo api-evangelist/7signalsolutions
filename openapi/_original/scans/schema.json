@@ -1,0 +1,272 @@
+{
+  "AgentIdRequestParam": {
+    "name": "agentId",
+    "in": "query",
+    "description": "The UUID of the agent",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "SensorIdRequestParam": {
+    "name": "sensorId",
+    "in": "query",
+    "description": "The ID of the sensor (eye)",
+    "required": true,
+    "schema": {
+      "type": "integer"
+    }
+  },
+  "PageRequestParam": {
+    "name": "page",
+    "in": "query",
+    "description": "Page number for pagination (0-based)",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "default": 0,
+      "minimum": 0
+    }
+  },
+  "SizeRequestParam": {
+    "name": "size",
+    "in": "query",
+    "description": "Number of records per page",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "default": 20,
+      "minimum": 1,
+      "maximum": 1000
+    }
+  },
+  "StartTimeRequestParam": {
+    "name": "start",
+    "in": "query",
+    "description": "Start time for scan data in epoch milliseconds (UTC)",
+    "required": true,
+    "schema": {
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "EndTimeRequestParam": {
+    "name": "end",
+    "in": "query",
+    "description": "End time for scan data in epoch milliseconds (UTC)",
+    "required": true,
+    "schema": {
+      "type": "integer",
+      "format": "int64"
+    }
+  },
+  "AgentsScanDataResponse": {
+    "type": "object",
+    "properties": {
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/ZeroBasedPagination"
+      },
+      "scans": {
+        "type": "array",
+        "description": "Array of agent scan records grouped by timestamp",
+        "items": {
+          "$ref": "#/AgentScanTimestamp"
+        }
+      }
+    }
+  },
+  "SensorsScanDataResponse": {
+    "type": "object",
+    "properties": {
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/ZeroBasedPagination"
+      },
+      "scans": {
+        "type": "array",
+        "description": "Array of sensor scan records grouped by timestamp",
+        "items": {
+          "$ref": "#/SensorScanTimestamp"
+        }
+      }
+    }
+  },
+  "AgentScanTimestamp": {
+    "type": "object",
+    "properties": {
+      "timestamp": {
+        "type": "integer",
+        "format": "int64",
+        "description": "Scan timestamp in epoch milliseconds (UTC)"
+      },
+      "agentId": {
+        "type": "string",
+        "description": "UUID of the agent that performed the scan"
+      },
+      "agentConnectedBssid": {
+        "type": "string",
+        "description": "BSSID of the access point the agent was connected to during the scan",
+        "nullable": true
+      },
+      "agentConnectedSsid": {
+        "type": "string",
+        "description": "SSID of the access point the agent was connected to during the scan",
+        "nullable": true
+      },
+      "data": {
+        "type": "array",
+        "description": "Access points detected in this scan",
+        "items": {
+          "$ref": "#/AgentScanAp"
+        }
+      }
+    }
+  },
+  "SensorScanTimestamp": {
+    "type": "object",
+    "properties": {
+      "timestamp": {
+        "type": "integer",
+        "format": "int64",
+        "description": "Scan timestamp in epoch milliseconds (UTC)"
+      },
+      "data": {
+        "type": "array",
+        "description": "Access points detected in this scan",
+        "items": {
+          "$ref": "#/SensorScanAp"
+        }
+      }
+    }
+  },
+  "AgentScanAp": {
+    "type": "object",
+    "properties": {
+      "bssid": {
+        "type": "string",
+        "description": "MAC address (BSSID) of the access point"
+      },
+      "ssid": {
+        "type": "string",
+        "description": "SSID (network name) of the access point"
+      },
+      "signalStrength": {
+        "type": "integer",
+        "description": "Signal strength in dBm"
+      },
+      "channel": {
+        "type": "string",
+        "description": "WiFi channel number"
+      },
+      "channelWidth": {
+        "type": "integer",
+        "description": "Channel width in MHz (e.g., 20, 40, 80, 160)",
+        "nullable": true
+      },
+      "band": {
+        "type": "number",
+        "format": "float",
+        "description": "WiFi band frequency in GHz (2.4, 5, or 6)"
+      },
+      "channelUtilization": {
+        "type": "integer",
+        "description": "Channel utilization percentage (0-100)",
+        "nullable": true
+      },
+      "stationCount": {
+        "type": "integer",
+        "description": "Number of stations/clients connected to the access point",
+        "nullable": true
+      },
+      "apName": {
+        "type": "string",
+        "description": "Access point name or identifier",
+        "nullable": true
+      },
+      "beaconInterval": {
+        "type": "integer",
+        "description": "Beacon interval in Time Units (TU), typically 100 TU = 102.4ms",
+        "nullable": true
+      },
+      "centerChannel": {
+        "type": "integer",
+        "description": "Center channel number for wide channels",
+        "nullable": true
+      },
+      "frequency": {
+        "type": "integer",
+        "description": "Operating frequency in MHz",
+        "nullable": true
+      },
+      "bssidSupportedStandards": {
+        "type": "string",
+        "description": "WiFi standards supported by the AP (e.g., 802.11n, 802.11ac, 802.11ax)",
+        "nullable": true
+      },
+      "lowestSupportedDataRate": {
+        "type": "number",
+        "format": "float",
+        "description": "Lowest supported data rate in Mbps",
+        "nullable": true
+      },
+      "mldMacAddress": {
+        "type": "string",
+        "description": "Multi-Link Device MAC address (WiFi 7/802.11be)",
+        "nullable": true
+      },
+      "splitChannel": {
+        "type": "integer",
+        "description": "Split channel information for advanced channel configurations",
+        "nullable": true
+      }
+    }
+  },
+  "SensorScanAp": {
+    "type": "object",
+    "properties": {
+      "bssid": {
+        "type": "string",
+        "description": "MAC address (BSSID) of the access point"
+      },
+      "ssid": {
+        "type": "string",
+        "description": "SSID (network name) of the access point"
+      },
+      "signalStrength": {
+        "type": "integer",
+        "description": "Signal strength in dBm"
+      },
+      "noise": {
+        "type": "integer",
+        "description": "Noise level in dBm",
+        "nullable": true
+      },
+      "channel": {
+        "type": "string",
+        "description": "WiFi channel number"
+      },
+      "channelWidth": {
+        "type": "integer",
+        "description": "Channel width in MHz (e.g., 20, 40, 80, 160)",
+        "nullable": true
+      },
+      "band": {
+        "type": "number",
+        "format": "float",
+        "description": "WiFi band frequency in GHz (2.4, 5, or 6)"
+      },
+      "channelUtilization": {
+        "type": "integer",
+        "description": "Channel utilization percentage (0-100)",
+        "nullable": true
+      },
+      "stationCount": {
+        "type": "integer",
+        "description": "Number of stations/clients connected to the access point",
+        "nullable": true
+      }
+    }
+  }
+}

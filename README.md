@@ -64,5 +64,28 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-7SIGNAL is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://equityzen.com/company/7signalsolutions
+7SIGNAL is an enterprise wireless and wired network experience monitoring platform, headquartered in
+Independence, Ohio, that measures Wi-Fi and network performance from the client's point of view using
+vendor-agnostic Sapphire Eye hardware sensors and Mobile Eye software agents installed on endpoints.
+
+## What this profile holds
+
+| Surface | Detail |
+| --- | --- |
+| REST API | OpenAPI 3.0.3, `info.version` 2.21.1, **215 operations** across 32 tags, base `https://api-v2.7signal.com` |
+| Contract source | `https://api-v2.7signal.com/api/gateway-v2.json` — assembled from 51 separately served JSON fragments |
+| Interactive reference | `https://api-v2.7signal.com/swagger-ui/index.html` |
+| Auth | OAuth 2.0 client credentials; API Key/Secret are client_id/client_secret; 24-hour JWT |
+| MCP | Remote server at `https://mcp-v2.7signal.com/mcp`, OAuth 2.1 + PKCE, RFC 8414 and RFC 9728 discovery |
+| Events | Webhook / email / ServiceNow notifications configured per alert rule; Eyeris SSE stream |
+| Docs | 22 reference chapters in the public `7Signal/API-Examples` repository |
+| Deprecations | 19 operations flagged `deprecated: true` across the `/kpis` and `/topologies` families |
+
+## Sources
+
+- <https://7signal.com/>
+- <https://api-v2.7signal.com/swagger-ui/index.html>
+- <https://github.com/7Signal/API-Examples>
+- <https://7signal.com/platform/mcp-wi-fi-monitoring/>
+- <https://www.7signal.com/integrations-api>
+- <https://equityzen.com/company/7signalsolutions> (original harvest source)

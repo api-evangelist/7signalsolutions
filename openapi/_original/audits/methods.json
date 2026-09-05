@@ -1,0 +1,73 @@
+{
+  "PathAuditsAgents": {
+    "get": {
+      "summary": "Agent Audit Entries",
+      "operationId": "agent-audits",
+      "description": "Fetch Agent Audit record entries",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/StartTimeRangeParam"
+        },
+        {
+          "$ref": "schema.json#/EndTimeRangeParam"
+        },
+        {
+          "$ref": "schema.json#/ActorParam"
+        },
+        {
+          "$ref": "schema.json#/ActionParam"
+        },
+        {
+          "$ref": "schema.json#/SourceParam"
+        },
+        {
+          "$ref": "schema.json#/InitiatedParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AuditsAgentsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        }
+      },
+      "tags": [
+        "Audit"
+      ]
+    }
+  }
+}

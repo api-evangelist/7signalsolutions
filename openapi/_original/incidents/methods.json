@@ -1,0 +1,107 @@
+{
+  "PathIncidents": {
+    "get": {
+      "summary": "List the Agent Incidents",
+      "operationId": "agent-incidents",
+      "description": "Page through all of the Agent Incidents for the given time period",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "name": "location_id",
+          "in": "query",
+          "description": "location id",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetIncidentsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Incidents"
+      ]
+    }
+  },
+  "PathIncident": {
+    "get": {
+      "summary": "Fetch the specified Agent Incident",
+      "operationId": "agent-incident",
+      "description": "Fetch the specified Agent Incident",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "incidentId",
+          "in": "path",
+          "description": "Fetch the specific incident referenced by its id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetIncidentResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Incidents"
+      ]
+    }
+  }
+}

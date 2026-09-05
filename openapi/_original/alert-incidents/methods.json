@@ -1,0 +1,276 @@
+{
+  "PathIncidents": {
+    "get": {
+      "summary": "List incidents",
+      "operationId": "list-alerting-incidents",
+      "description": "Page through alert-rule incidents for an organization, with optional filtering",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/StatusFilterParam"
+        },
+        {
+          "$ref": "schema.json#/MetricFilterParam"
+        },
+        {
+          "$ref": "schema.json#/DimensionKeyFilterParam"
+        },
+        {
+          "$ref": "schema.json#/RuleIdFilterParam"
+        },
+        {
+          "$ref": "schema.json#/StartedAfterParam"
+        },
+        {
+          "$ref": "schema.json#/StartedBeforeParam"
+        },
+        {
+          "$ref": "schema.json#/ResolvedAfterParam"
+        },
+        {
+          "$ref": "schema.json#/ResolvedBeforeParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetIncidentsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        }
+      },
+      "tags": [
+        "Incidents (Alerting)"
+      ]
+    }
+  },
+  "PathIncidentsSummary": {
+    "get": {
+      "summary": "Get an incidents summary",
+      "operationId": "alerting-incidents-summary",
+      "description": "Fetch aggregate counts of the alert-rule incidents for an organization",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/IncidentsSummary"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        }
+      },
+      "tags": [
+        "Incidents (Alerting)"
+      ]
+    }
+  },
+  "PathIncidentsByRule": {
+    "get": {
+      "summary": "List incidents aggregated by rule",
+      "operationId": "list-alerting-incidents-by-rule",
+      "description": "Fetch incident counts grouped by the alert rule that produced them",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromParam"
+        },
+        {
+          "$ref": "schema.json#/ToParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetIncidentsByRuleResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        }
+      },
+      "tags": [
+        "Incidents (Alerting)"
+      ]
+    }
+  },
+  "PathIncident": {
+    "get": {
+      "summary": "Fetch the specified incident",
+      "operationId": "get-alerting-incident",
+      "description": "Fetch a single incident by its id",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The incident id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/IncidentResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Incidents (Alerting)"
+      ]
+    }
+  },
+  "PathIncidentResolve": {
+    "post": {
+      "summary": "Resolve an incident",
+      "operationId": "resolve-alerting-incident",
+      "description": "Manually resolve an active incident",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "id",
+          "in": "path",
+          "description": "The incident id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/IncidentResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        },
+        "409": {
+          "description": "Conflict - the incident is already resolved",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../common/schema.json#/ResponseStatusException"
+              }
+            }
+          }
+        }
+      },
+      "tags": [
+        "Incidents (Alerting)"
+      ]
+    }
+  }
+}

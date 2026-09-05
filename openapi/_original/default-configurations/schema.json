@@ -1,0 +1,70 @@
+{
+  "GetSensorDefaultConfigurationsResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/SensorDefaultConfiguration"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetSensorDefaultConfigurationResponse": {
+    "type": "object",
+    "$ref": "#/SensorDefaultConfiguration"
+  },
+  "SensorDefaultConfiguration": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "number"
+      },
+      "name": {
+        "type": "string"
+      },
+      "testProfileTemplateId": {
+        "type": "number",
+        "description": "id of the Test Profile Template applied by this configuration, if any"
+      },
+      "otaConfigurationId": {
+        "type": "number",
+        "description": "id of the OTA (over-the-air) configuration applied by this configuration, if any"
+      },
+      "alarmGroupId": {
+        "type": "number",
+        "description": "id of the alarm group applied by this configuration, if any"
+      },
+      "sonarId": {
+        "type": "number",
+        "description": "id of the Sonar configuration applied by this configuration, if any"
+      },
+      "pingEndPointId": {
+        "type": "number",
+        "description": "id of the ping endpoint applied by this configuration, if any"
+      },
+      "webServerId": {
+        "type": "number",
+        "description": "id of the web server test target applied by this configuration, if any"
+      },
+      "slaGroupId": {
+        "type": "number",
+        "description": "id of the SLA group applied by this configuration, if any"
+      }
+    }
+  },
+  "SensorDefaultConfigurationId": {
+    "name": "configurationId",
+    "in": "path",
+    "description": "Sensor Default Configuration Id",
+    "required": true,
+    "schema": {
+      "type": "number"
+    }
+  }
+}

@@ -1,0 +1,657 @@
+{
+  "PathKPIsAgentsGlobal": {
+    "get": {
+      "deprecated": true,
+      "summary": "Retrieve KPI data for all agents",
+      "operationId": "agent-kpis-all",
+      "description": "Page through KPI data for all agents by location",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/EventTypeFilter"
+        },
+        {
+          "$ref": "schema.json#/SSIDFilter"
+        },
+        {
+          "$ref": "schema.json#/BandFilter"
+        },
+        {
+          "$ref": "schema.json#/IncludeClientCount"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentKPIsGlobalResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "KPIs"
+      ]
+    }
+  },
+  "PathKPIsAgentsLocations": {
+    "get": {
+      "deprecated": true,
+      "summary": "Retrieve KPI data for all agents by location",
+      "operationId": "agent-kpis-by-location",
+      "description": "Page through KPI data for all agents by location",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/EventTypeFilter"
+        },
+        {
+          "$ref": "schema.json#/SSIDFilter"
+        },
+        {
+          "$ref": "schema.json#/LocationFilter"
+        },
+        {
+          "$ref": "schema.json#/BandFilter"
+        },
+        {
+          "$ref": "schema.json#/IncludeClientCount"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentKPIsLocationsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "KPIs"
+      ]
+    }
+  },
+  "PathKPIsAgentsAccessPoints": {
+    "get": {
+      "deprecated": true,
+      "summary": "Retrieve KPI data for all agents by access point",
+      "operationId": "agent-kpis-by-access-point",
+      "description": "Page through KPI data for all agents by access point",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/EventTypeFilter"
+        },
+        {
+          "$ref": "schema.json#/SSIDFilter"
+        },
+        {
+          "$ref": "schema.json#/LocationFilter"
+        },
+        {
+          "$ref": "schema.json#/BandFilter"
+        },
+        {
+          "$ref": "schema.json#/IncludeClientCount"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentKPIsAccessPointsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "KPIs"
+      ]
+    }
+  },
+  "PathKPIsAgentsAdapterDrivers": {
+    "get": {
+      "deprecated": true,
+      "summary": "Retrieve KPI data for all agents by adapter and driver",
+      "operationId": "agent-kpis-by-adapter-drivers",
+      "description": "Page through KPI data for all agents by adapter and driver",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/EventTypeFilter"
+        },
+        {
+          "$ref": "schema.json#/SSIDFilter"
+        },
+        {
+          "$ref": "schema.json#/LocationFilter"
+        },
+        {
+          "$ref": "schema.json#/BandFilter"
+        },
+        {
+          "$ref": "schema.json#/IncludeClientCount"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentKPIsAdapterDriversResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "KPIs"
+      ]
+    }
+  },
+  "PathKPIsAgentsClientCapabilities": {
+    "get": {
+      "deprecated": true,
+      "summary": "Retrieve KPI data for all agents by client capabilities",
+      "operationId": "agent-kpis-by-client-capability",
+      "description": "Page through KPI data for all agents by client capability",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ClientCapabilityType"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentKPIsClientCapabilitiesResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "KPIs"
+      ]
+    }
+  },
+  "PathKPIsSensorsAccessPoints": {
+    "get": {
+      "deprecated": true,
+      "summary": "Retrieve KPI data for all sensors by access point",
+      "operationId": "sensor-kpis-by-access-point",
+      "description": "Page through KPI data for all sensors by access point",
+      "security": [
+        {
+          "oauth2": [
+            "read"
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/AccessPointId"
+        },
+        {
+          "$ref": "schema.json#/APKpiCodes"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/NetworkIdFilter"
+        },
+        {
+          "$ref": "schema.json#/ClientMac"
+        },
+        {
+          "$ref": "schema.json#/BandFilter"
+        },
+        {
+          "$ref": "schema.json#/Averaging"
+        },
+        {
+          "$ref": "schema.json#/TimeLimit"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorsKPIsTopologiesResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "KPIs"
+      ]
+    }
+  },
+  "PathKPIsSensorsDestinationNetworkBandLocation": {
+    "get": {
+      "deprecated": true,
+      "summary": "Retrieve KPI data for all sensors by destination, network, band, and location",
+      "operationId": "sensor-kpis-by-destination-network-band-location",
+      "description": "Page through KPI data for all sensors by destination network, band, and location",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/TargetId"
+        },
+        {
+          "$ref": "schema.json#/LocationIdFilter"
+        },
+        {
+          "$ref": "schema.json#/NetworkIdFilter"
+        },
+        {
+          "$ref": "schema.json#/KpiCodes"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/Averaging"
+        },
+        {
+          "$ref": "schema.json#/TimeLimit"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorsKPIsTopologiesResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "KPIs"
+      ]
+    }
+  },
+  "PathKPIsSensorsLocations": {
+    "get": {
+      "deprecated": true,
+      "summary": "Retrieve KPI data for all sensors by location",
+      "operationId": "sensor-kpis-by-location",
+      "description": "Page through KPI data for all sensors by location",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/LocationId"
+        },
+        {
+          "$ref": "schema.json#/KpiCodes"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/NetworkIdFilter"
+        },
+        {
+          "$ref": "schema.json#/ClientMac"
+        },
+        {
+          "$ref": "schema.json#/BandFilter"
+        },
+        {
+          "$ref": "schema.json#/Averaging"
+        },
+        {
+          "$ref": "schema.json#/TimeLimit"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorsKPIsTopologiesResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "KPIs"
+      ]
+    }
+  },
+  "PathKPIsSensorsServiceAreas": {
+    "get": {
+      "deprecated": true,
+      "summary": "Retrieve KPI data for all sensors by service area",
+      "operationId": "sensor-kpis-by-service-area",
+      "description": "Page through KPI data for all sensors by service area",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/ServiceAreaId"
+        },
+        {
+          "$ref": "schema.json#/KpiCodes"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/NetworkIdFilter"
+        },
+        {
+          "$ref": "schema.json#/ClientMac"
+        },
+        {
+          "$ref": "schema.json#/BandFilter"
+        },
+        {
+          "$ref": "schema.json#/Averaging"
+        },
+        {
+          "$ref": "schema.json#/TimeLimit"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorsKPIsTopologiesResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "KPIs"
+      ]
+    }
+  },
+  "PathKPIsSensorsEyes": {
+    "get": {
+      "deprecated": true,
+      "summary": "Retrieve KPI data for a specific sensor",
+      "operationId": "sensor-kpis-by-eye",
+      "description": "Page through KPI data for a specific sensor",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorId"
+        },
+        {
+          "$ref": "schema.json#/KpiCodes"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/NetworkIdFilter"
+        },
+        {
+          "$ref": "schema.json#/ClientMac"
+        },
+        {
+          "$ref": "schema.json#/BandFilter"
+        },
+        {
+          "$ref": "schema.json#/Averaging"
+        },
+        {
+          "$ref": "schema.json#/TimeLimit"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorsKPIsTopologiesResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "KPIs"
+      ]
+    }
+  },
+  "PathKPIsSensorsOrganizations": {
+    "get": {
+      "deprecated": true,
+      "summary": "Retrieve KPI data for all sensors by organization",
+      "operationId": "sensor-kpis-by-organization",
+      "description": "Page through KPI data for all sensors by organization",
+      "security": [
+        {
+          "oauth2": [
+            "read"
+          ]
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/OrgKpiCodes"
+        },
+        {
+          "$ref": "schema.json#/FromRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ToRequestParam"
+        },
+        {
+          "$ref": "schema.json#/NetworkIdFilter"
+        },
+        {
+          "$ref": "schema.json#/ClientMac"
+        },
+        {
+          "$ref": "schema.json#/BandFilter"
+        },
+        {
+          "$ref": "schema.json#/Averaging"
+        },
+        {
+          "$ref": "schema.json#/TimeLimit"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorsKPIsTopologiesResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "KPIs"
+      ]
+    }
+  }
+}

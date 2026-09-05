@@ -1,0 +1,97 @@
+{
+  "EyerisCreateStreamRequest": {
+    "type": "object",
+    "properties": {
+      "promptTypeKey": {
+        "type": "string"
+      },
+      "inputData": {
+        "type": "object"
+      }
+    }
+  },
+  "EyerisSseEmitter": {
+    "type": "array",
+    "items": {
+      "type": "string",
+      "description": "Chunk of the response message"
+    },
+    "example": [
+      "data:# Wi-Fi Network Analysis",
+      "data:",
+      "data:## SUMMARY",
+      "data:The device experienced a brief 2-minute connectivity problem",
+      "data:",
+      "data:## RECOMMENDATIONS",
+      "data:",
+      "data:No device-side changes are recommended. The brief disruption followed by sustained 100% SLA indicates normal operation was quickly established and maintained."
+    ]
+  },
+  "EyerisAnalysisRequest": {
+    "required": [
+      "agentId",
+      "type",
+      "from",
+      "to"
+    ],
+    "type": "object",
+    "properties": {
+      "agentId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "ROAMING",
+          "CONGESTION",
+          "COVERAGE",
+          "INTERFERENCE"
+        ]
+      },
+      "from": {
+        "description": "The time in milliseconds from the epoch from which the analysis should start",
+        "type": "string",
+        "format": "datetime"
+      },
+      "to": {
+        "description": "The time in milliseconds from the epoch till which the analysis should be done.",
+        "type": "string",
+        "format": "datetime"
+      }
+    }
+  },
+  "EyerisAnalysisResponse": {
+    "type": "object",
+    "properties": {
+      "requestId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "requestQueueId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "responseId": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "EyerisAnalysisRequestResponse": {
+    "type": "object",
+    "properties": {
+      "response": {
+        "type": "string"
+      },
+      "requestId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "responseId": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  }
+}

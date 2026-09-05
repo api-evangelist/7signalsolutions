@@ -1,0 +1,177 @@
+{
+  "PathAdapterDriverReportList": {
+    "get": {
+      "summary": "Retrieve Adapter/Driver Report",
+      "operationId": "adapter-driver-report-list",
+      "description": "Fetch a paginated report of adapter/driver pairs and their roaming performance, aggregated across all organizations.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SearchValueParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AdapterDriverReportListResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Adapter Driver Report"
+      ]
+    }
+  },
+  "PathAdapterDriverReportSummary": {
+    "get": {
+      "summary": "Retrieve Adapter/Driver Report Summary",
+      "operationId": "adapter-driver-report-summary",
+      "description": "Fetch summary statistics for the adapter/driver report, aggregated across all organizations.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AdapterDriverReportSummary"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Adapter Driver Report"
+      ]
+    }
+  },
+  "PathAdapterDriverReportOrgList": {
+    "get": {
+      "summary": "Retrieve Adapter/Driver Report by Organization",
+      "operationId": "adapter-driver-report-org-list",
+      "description": "Fetch a paginated report of adapter/driver pairs and their roaming performance for a single organization.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/SearchValueParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AdapterDriverReportListResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Adapter Driver Report"
+      ]
+    }
+  },
+  "PathAdapterDriverReportOrgSummary": {
+    "get": {
+      "summary": "Retrieve Adapter/Driver Report Summary by Organization",
+      "operationId": "adapter-driver-report-org-summary",
+      "description": "Fetch summary statistics for the adapter/driver report for a single organization.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AdapterDriverReportSummary"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Adapter Driver Report"
+      ]
+    }
+  }
+}

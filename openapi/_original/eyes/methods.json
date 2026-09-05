@@ -1,0 +1,926 @@
+{
+  "PathEyesSummary": {
+    "get": {
+      "summary": "Summary of Eyes",
+      "operationId": "eyes-summary",
+      "description": "Fetch a summary of all registered Eyes",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/OrganizationIdRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/EyesSummaryRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/SummaryResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    }
+  },
+  "PathEyesAgents": {
+    "get": {
+      "summary": "List the Agent Eyes available",
+      "operationId": "eyes-agents",
+      "description": "Page through all of the registered Eyes. **Important:** When sorting by score and paging through results, you must retain a consistent scoreSortStart and scoreSortEnd time range from one call to the next, or results from paging will be unstable.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/LicenseConstraintRequestParam"
+        },
+        {
+          "$ref": "schema.json#/ClientNameRequestParam"
+        },
+        {
+          "$ref": "schema.json#/NicknameRequestParam"
+        },
+        {
+          "$ref": "schema.json#/PlatformRequestParam"
+        },
+        {
+          "$ref": "schema.json#/LastSSIDRequestParam"
+        },
+        {
+          "$ref": "schema.json#/LastLocationRequestParam"
+        },
+        {
+          "name": "lastLocationId",
+          "in": "query",
+          "description": "Filter on the last location ID seen",
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "name": "scoreSortStart",
+          "in": "query",
+          "description": "Start time for score-based sorting (epoch milliseconds) - required when sorting by 'score'",
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "scoreSortEnd",
+          "in": "query",
+          "description": "End time for score-based sorting (epoch milliseconds) - required when sorting by 'score'",
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "$ref": "../common/schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetEyesAgentsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    },
+    "patch": {
+      "summary": "Patch multiple Eye Agents",
+      "operationId": "patch-eyes-agents",
+      "description": "Patch the specified Eye Agents",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        }
+      ],
+      "requestBody": {
+        "description": "A list of the agents and the data to update.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PatchBatchEyesAgentRequest"
+            },
+            "examples": {
+              "license-multiple": {
+                "summary": "License multiple devices",
+                "value": [
+                  {
+                    "agentId": "ebd0ffed-66ad-4a7b-a9d8-02245b3ede2c",
+                    "isLicensed": true
+                  },
+                  {
+                    "agentId": "99b76dd0-4d26-40c7-b292-a330ce19f188",
+                    "isLicensed": true
+                  }
+                ]
+              },
+              "unlicense-multiple": {
+                "summary": "Unlicense multiple device",
+                "value": [
+                  {
+                    "agentId": "ebd0ffed-66ad-4a7b-a9d8-02245b3ede2c",
+                    "isLicensed": false
+                  },
+                  {
+                    "agentId": "99b76dd0-4d26-40c7-b292-a330ce19f188",
+                    "isLicensed": false
+                  }
+                ]
+              },
+              "set-nicknames": {
+                "summary": "Update multiple nicknames",
+                "value": [
+                  {
+                    "agentId": "ebd0ffed-66ad-4a7b-a9d8-02245b3ede2c",
+                    "nickname": "Agent 007"
+                  },
+                  {
+                    "agentId": "99b76dd0-4d26-40c7-b292-a330ce19f188",
+                    "nickname": "Agent 002"
+                  }
+                ]
+              },
+              "delete-agents": {
+                "summary": "Delete multiple agents",
+                "value": [
+                  {
+                    "agentId": "ebd0ffed-66ad-4a7b-a9d8-02245b3ede2c",
+                    "autoUninstall": true,
+                    "pendingDelete": true
+                  },
+                  {
+                    "agentId": "99b76dd0-4d26-40c7-b292-a330ce19f188",
+                    "autoUninstall": false,
+                    "pendingDelete": true
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PatchEyesAgentResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    }
+  },
+  "PathEyesAgentsSearch": {
+    "get": {
+      "summary": "Search for Agent Eyes",
+      "operationId": "eyes-agents-search",
+      "description": "Search for registered Agent Eyes",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "q",
+          "in": "query",
+          "description": "One or more search terms. This will execute a fuzzy search with the given terms and can partial or full agent names, nicknames, MAC addresses, IDs, local IPs, and/or external IPs.",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "description": "The maximum number of search results to return.",
+          "required": false,
+          "schema": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 100,
+            "default": 25
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetEyesAgentsSearchResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    }
+  },
+  "PathEyesAgent": {
+    "get": {
+      "summary": "Fetch the specified Eyes Agent",
+      "operationId": "eyes-agent",
+      "description": "Fetch the registered Eyes Agent",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/RequiredAgentId"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetEyesAgentResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    },
+    "patch": {
+      "summary": "Patch the specified Eyes Agent",
+      "operationId": "patch-eyes-agent",
+      "description": "Patch the specified Eyes Agent",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/RequiredAgentId"
+        }
+      ],
+      "requestBody": {
+        "description": "Agent fields to update",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PatchEyesAgentRequest"
+            },
+            "examples": {
+              "license": {
+                "summary": "License a device",
+                "value": {
+                  "isLicensed": true
+                }
+              },
+              "unlicense": {
+                "summary": "Unlicense a device",
+                "value": {
+                  "isLicensed": false
+                }
+              },
+              "set-nickname": {
+                "summary": "Set a nickname",
+                "value": {
+                  "nickname": "Agent 007"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PatchEyesAgentResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    },
+    "delete": {
+      "summary": "Delete an Eyes Agent",
+      "operationId": "delete-eyes-agent",
+      "description": "Delete the specified Eyes Agent",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/DeleteAgentId"
+        },
+        {
+          "$ref": "schema.json#/AutoUninstall"
+        }
+      ],
+      "responses": {
+        "202": {
+          "description": "Accepted. Client to be deleted in the future."
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    }
+  },
+  "PathEyesSensors": {
+    "get": {
+      "summary": "List the Sensor Eyes available",
+      "operationId": "eyes-sensors",
+      "description": "Page through all of the registered Eyes",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "excludeDefaultServiceArea",
+          "in": "query",
+          "description": "Exclude the default service area from the results",
+          "required": false,
+          "schema": {
+            "type": "boolean"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetEyesSensorsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    }
+  },
+  "PathEyesSensor": {
+    "get": {
+      "summary": "Fetch the specified Eyes Sensor",
+      "operationId": "eyes-sensor",
+      "description": "Fetch the registered Eyes Sensor",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/RequiredSensorId"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetEyesSensorResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    },
+    "patch": {
+      "summary": "Patch the specified Eyes Sensor",
+      "operationId": "patch-eyes-sensor",
+      "description": "Patch the specified Eyes Sensor",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/RequiredSensorId"
+        }
+      ],
+      "requestBody": {
+        "description": "Sensor fields to update",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PatchEyesSensorRequest"
+            },
+            "examples": {
+              "normal-mode": {
+                "summary": "Led status to normal mode",
+                "value": {
+                  "ledStatus": "NORMAL_MODE"
+                }
+              },
+              "blinking": {
+                "summary": "Led status to blinking",
+                "value": {
+                  "ledStatus": "BLINKING"
+                }
+              },
+              "off": {
+                "summary": "Led status to off",
+                "value": {
+                  "ledStatus": "OFF"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetEyesSensorResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    }
+  },
+  "PathEyesSensorAutomatedTesting": {
+    "get": {
+      "summary": "Get the status of automated test on Sensor",
+      "operationId": "get-eyes-sensor-automated-testing",
+      "description": "Get the status of automated test on Sensor",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/RequiredSensorId"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/EyesSensorAutomatedTestStatus"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    },
+    "post": {
+      "summary": "Start or stopping automated test on Sensor",
+      "operationId": "post-eyes-sensor-automated-testing",
+      "description": "Start or stopping automated test on Sensor",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/RequiredSensorId"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/EyesSensorAutomatedTestRequest"
+            },
+            "examples": {
+              "START_AUTOMATED_TESTING": {
+                "summary": "Start automated testing",
+                "value": {
+                  "action": "START_AUTOMATED_TESTING"
+                }
+              },
+              "STOP_AUTOMATED_TESTING": {
+                "summary": "Stop automated testing",
+                "value": {
+                  "action": "STOP_AUTOMATED_TESTING"
+                }
+              }
+            }
+          }
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/EyesSensorAutomatedTestResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    }
+  },
+  "PathEyesSensorPcaps": {
+    "get": {
+      "summary": "List packet capture tests for sensor",
+      "operationId": "get-eyes-sensor-pcaps",
+      "description": "Retrieve a paginated list of packet capture and access point traffic test pcaps for a sensor",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/RequiredSensorId"
+        },
+        {
+          "$ref": "schema.json#/PcapChannelRequestParam"
+        },
+        {
+          "$ref": "schema.json#/PcapApIdRequestParam"
+        },
+        {
+          "$ref": "schema.json#/PcapBandRequestParam"
+        },
+        {
+          "$ref": "schema.json#/PcapStartRequestParam"
+        },
+        {
+          "$ref": "schema.json#/PcapEndRequestParam"
+        },
+        {
+          "$ref": "schema.json#/PcapPageRequestParam"
+        },
+        {
+          "$ref": "schema.json#/PcapSizeRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PacketCaptureListResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    }
+  },
+  "PathEyesSensorPcapDownload": {
+    "get": {
+      "summary": "Download packet capture file",
+      "operationId": "get-eyes-sensor-pcap-download",
+      "description": "Downloads the pcap file for the specified sensor and test key",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/RequiredSensorId"
+        },
+        {
+          "$ref": "schema.json#/RequiredTestKey"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "pcap file returned",
+          "content": {
+            "application/octet-stream": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            },
+            "application/vnd.tcpdump.pcap": {
+              "schema": {
+                "type": "string",
+                "format": "binary"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        },
+        "403": {
+          "$ref": "../common/schema.json#/403Forbidden"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    }
+  },
+  "PathEyesSensorPacketCaptureGlobal": {
+    "get": {
+      "summary": "List packet capture tests across all sensors",
+      "operationId": "get-eyes-packet-captures-global",
+      "description": "Retrieve a paginated, cross-sensor list of packet capture and access point traffic test pcaps. Omitting sensorId returns results across all sensors; providing it scopes to one sensor.",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "sensorId",
+          "in": "query",
+          "required": false,
+          "description": "Scope results to a single sensor. Omit for cross-sensor results.",
+          "schema": {
+            "type": "integer"
+          }
+        },
+        {
+          "$ref": "schema.json#/PcapChannelRequestParam"
+        },
+        {
+          "$ref": "schema.json#/PcapApIdRequestParam"
+        },
+        {
+          "$ref": "schema.json#/PcapBandRequestParam"
+        },
+        {
+          "$ref": "schema.json#/PcapStartRequestParam"
+        },
+        {
+          "$ref": "schema.json#/PcapEndRequestParam"
+        },
+        {
+          "name": "testType",
+          "in": "query",
+          "required": false,
+          "description": "Filter by test type",
+          "schema": {
+            "type": "string",
+            "enum": [
+              "PacketCapture",
+              "AccessPointTraffic"
+            ]
+          }
+        },
+        {
+          "name": "searchValue",
+          "in": "query",
+          "required": false,
+          "description": "Free-text search across sensor name, AP name, ESSID, and BSSID",
+          "schema": {
+            "type": "string"
+          }
+        },
+        {
+          "$ref": "schema.json#/PcapPageRequestParam"
+        },
+        {
+          "$ref": "schema.json#/PcapSizeRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PacketCaptureListResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    }
+  },
+  "PathEyesRegistration": {
+    "post": {
+      "summary": "Register a new Eye Sensor",
+      "operationId": "register-eyes-sensor",
+      "description": "Register a new Eye Sensor",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/RegistrationRequestBody"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/RegistrationResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "tags": [
+        "Eyes"
+      ]
+    }
+  }
+}

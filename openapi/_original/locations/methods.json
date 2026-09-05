@@ -1,0 +1,479 @@
+{
+  "PathLocationsAgents": {
+    "get": {
+      "summary": "List the Agent Locations",
+      "operationId": "agent-locations-get",
+      "description": "Page through all of the Agent Locations",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentLocationsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Locations"
+      ]
+    },
+    "post": {
+      "summary": "Creates an Agent Location",
+      "operationId": "agent-locations-post",
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/AgentLocationRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AgentLocationResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Locations"
+      ]
+    }
+  },
+  "PathLocationsAgent": {
+    "get": {
+      "summary": "Fetch the specified Agent Location",
+      "operationId": "agent-location-get",
+      "description": "Fetch the specified Agent Location",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "locationId",
+          "in": "path",
+          "description": "Fetch the specific Location referenced by its id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentLocationResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Locations"
+      ]
+    },
+    "put": {
+      "summary": "Replace the specified Agent Location with the details in the payload",
+      "operationId": "agent-location-put",
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "locationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/AgentLocationRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AgentLocationResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Locations"
+      ]
+    },
+    "delete": {
+      "summary": "Delete the Agent Location specified by the UUID",
+      "operationId": "agent-location-delete",
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "locationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Locations"
+      ]
+    }
+  },
+  "PathLocationsSensors": {
+    "get": {
+      "summary": "List the Sensor Locations",
+      "operationId": "sensor-locations-get",
+      "description": "Page through all of the Sensor Locations",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "locationId",
+          "in": "query",
+          "description": "Filter the specific location by its parent location id",
+          "required": false,
+          "schema": {
+            "type": "number"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorLocationsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Locations"
+      ]
+    },
+    "post": {
+      "summary": "Creates Sensor Locations",
+      "operationId": "sensor-locations-post",
+      "description": "Returns the new locations, required fields: name, and exactly one of parentOrganizationId/parentLocationId. The timeZone field accepts a timezone value like \"UTC\", \"EST\", or \"GMT\", or \"INHERIT\"/omit to leave it unset - \"INHERIT\" only resolves to a real ancestor's timezone when created with parentLocationId; under parentOrganizationId there's no parent Location to inherit from, so it falls back to the default timezone instead. The countryCode field accepts a CountryCode value - either its ISO 3166-1 alpha-2 code (e.g. \"US\") or its constant name (e.g. \"UNITED_STATES\"), case-insensitive",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PostSensorLocationsRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorLocationsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Locations"
+      ]
+    },
+    "put": {
+      "summary": "Updates Sensor Locations",
+      "operationId": "sensor-locations-put",
+      "description": "Returns the updated locations, required fields: name. The timeZone field accepts a timezone value like \"UTC\", \"EST\", or \"GMT\", or \"INHERIT\"/omit to leave it unset - \"INHERIT\" only resolves to a real ancestor's timezone when created with parentLocationId; a top-level location under an Organization has no parent Location to inherit from, so it falls back to the default timezone instead. The countryCode field accepts a CountryCode value - either its ISO 3166-1 alpha-2 code (e.g. \"US\") or its enum constant name (e.g. \"UNITED_STATES\"), case-insensitive",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PutSensorLocationsRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorLocationsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Locations"
+      ]
+    },
+    "delete": {
+      "summary": "Deletes Sensor Locations",
+      "operationId": "sensor-locations-delete",
+      "parameters": [
+        {
+          "$ref": "schema.json#/DeleteSensorLocationIds"
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Locations"
+      ]
+    }
+  },
+  "PathLocationsSensor": {
+    "get": {
+      "summary": "Fetch the specified Sensor Location",
+      "operationId": "sensor-location",
+      "description": "Fetch the specified Sensor Location",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "locationId",
+          "in": "path",
+          "description": "Fetch the specific location by its id",
+          "required": true,
+          "schema": {
+            "type": "number"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorLocationResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Locations"
+      ]
+    },
+    "put": {
+      "summary": "Update the specified Sensor Location",
+      "operationId": "sensor-location-put",
+      "description": "Returns the updated location, required fields: name. The timeZone field accepts a timezone value like \"UTC\", \"EST\", or \"GMT\", or \"INHERIT\"/omit to leave it unset - \"INHERIT\" only resolves to a real ancestor's timezone when created with parentLocationId; a top-level location under an Organization has no parent Location to inherit from, so it falls back to the default timezone instead. The countryCode field accepts a CountryCode value - either its ISO 3166-1 alpha-2 code (e.g. \"US\") or its enum constant name (e.g. \"UNITED_STATES\"), case-insensitive",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorLocationId"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/SensorSingleUpdateLocationRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorLocationResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Locations"
+      ]
+    },
+    "delete": {
+      "summary": "Delete the specified Sensor Location",
+      "operationId": "sensor-location-delete",
+      "description": "Delete the specified Sensor Location",
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorLocationId"
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "Locations"
+      ]
+    }
+  }
+}

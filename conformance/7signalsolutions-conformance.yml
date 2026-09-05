@@ -1,0 +1,152 @@
+generated: '2026-09-05'
+method: searched
+source: openapi/7signalsolutions-openapi.json + 7SIGNAL press releases + live /.well-known probes
+summary:
+  asserted: 6
+  refuted: 5
+  domain_standard: none
+conformance:
+- id: oauth2
+  conforms: true
+  detail: >-
+    RFC 6749 client-credentials grant on the REST gateway, and RFC 6749/OAuth 2.1 authorization-code
+    with PKCE on the MCP server. The token endpoint accepts application/x-www-form-urlencoded with
+    grant_type, client_id and client_secret and returns access_token / token_type / expires_in / scope.
+  evidence:
+  - https://api-v2.7signal.com/api/gateway-v2.json
+  - https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
+- id: rfc6749-error-response
+  conforms: true
+  detail: >-
+    The token endpoint returns the RFC 6749 section 5.2 error object with the standard code enum
+    (invalid_request, invalid_client, invalid_grant, unauthorized_client, unsupported_grant_type,
+    invalid_scope) plus error_description and error_uri, and links the RFC from the response description.
+  evidence:
+  - https://api-v2.7signal.com/api/oauth2/methods.json
+- id: rfc7636-pkce
+  conforms: true
+  detail: 'code_challenge_methods_supported: ["S256"] on the MCP authorization server.'
+  evidence:
+  - https://mcp-v2.7signal.com/.well-known/oauth-authorization-server
+- id: rfc8414-authorization-server-metadata
+  conforms: true
+  detail: >-
+    The MCP host publishes a complete OAuth 2.0 Authorization Server Metadata document at
+    /.well-known/oauth-authorization-server (issuer, authorization/token/registration endpoints,
+    grant and response types, auth methods, PKCE methods).
+  evidence:
+  - https://mcp-v2.7signal.com/.well-known/oauth-authorization-server
+- id: rfc9728-protected-resource-metadata
+  conforms: true
+  detail: >-
+    An anonymous MCP tools/list returns 401 with a WWW-Authenticate header carrying
+    resource_metadata="https://mcp-v2.7signal.com/.well-known/oauth-protected-resource", and that
+    document resolves with resource, authorization_servers, scopes_supported and bearer_methods_supported.
+    This is a textbook implementation of the MCP authorization spec.
+  evidence:
+  - https://mcp-v2.7signal.com/mcp
+  - https://mcp-v2.7signal.com/.well-known/oauth-protected-resource
+- id: oidc
+  conforms: true
+  scope: support portal only
+  detail: >-
+    info.7signal.com (the Salesforce Experience Cloud community portal hosting 7SIGNAL's support and API
+    articles) serves an OpenID Connect discovery document. This is the PORTAL's identity provider and
+    NOT the 7SIGNAL Platform API's authorization server; it is recorded here so the distinction is on
+    the record rather than credited to the API.
+  evidence:
+  - https://info.7signal.com/.well-known/openid-configuration
+- id: rfc9457-problem-details
+  conforms: false
+  detail: >-
+    Errors are a Spring Boot envelope (timestamp/status/error/message/path/requestId) served as
+    application/json. No application/problem+json, no type URI, no title.
+  evidence:
+  - errors/7signalsolutions-problem-types.yml
+- id: idempotency
+  conforms: false
+  detail: >-
+    No Idempotency-Key header and no replay-protection mechanism anywhere in the 215-operation contract
+    or the 22-chapter reference docs, across 62 write operations.
+  evidence:
+  - conventions/7signalsolutions-conventions.yml
+- id: rfc8594-sunset-header
+  conforms: false
+  detail: >-
+    19 operations carry `deprecated: true` and two migration guides exist, but no Sunset or Deprecation
+    response header is emitted and no removal date is committed.
+  evidence:
+  - lifecycle/7signalsolutions-lifecycle.yml
+- id: ratelimit-header-fields
+  conforms: false
+  detail: >-
+    Rate limiting is real and its headers are documented, but they are vendor-shaped
+    (ratelimit-remaining / ratelimit-burst-capacity / ratelimit-replenish-rate /
+    ratelimit-requested-tokens) rather than the IETF draft's RateLimit-Limit / RateLimit-Remaining /
+    RateLimit-Reset, and no Retry-After is documented on the 429.
+  evidence:
+  - https://github.com/7Signal/API-Examples/blob/develop/docs/02-rate-limiting.md
+- id: security-txt
+  conforms: false
+  detail: RFC 9116 security.txt was probed on 8 hosts and served by none.
+  evidence:
+  - well-known/7signalsolutions-well-known.yml
+- id: pagination
+  conforms: true
+  style: page-number
+  detail: >-
+    A consistent page/perPage request pair and a pagination{perPage,page,total,pages} + results
+    response envelope across list endpoints, documented and implemented.
+  evidence:
+  - conventions/7signalsolutions-conventions.yml
+domain_standard_conformance:
+  found: false
+  market: enterprise wireless / network performance monitoring
+  detail: >-
+    REWARD-ONLY, and honestly empty. The contract declares no domain standard for its market. It carries
+    no SCIM URN, no OData $metadata surface, no OpenTelemetry/OTLP or OpenMetrics export, no SNMP MIB or
+    IPFIX/NetFlow contract, no TM Forum Open API shape, no CAMARA pattern, and no IEEE/Wi-Fi Alliance
+    schema. Its vocabulary (KPI codes, dimension sets, experience score, Sapphire Eye, Mobile Eye,
+    Eyeris) is entirely proprietary. Wireless experience monitoring has no widely adopted contract
+    standard to conform to, so nothing is being penalised here — the slot is left empty rather than
+    filled with an invented conformance.
+  probed_for:
+  - SCIM schema URNs
+  - OData $metadata
+  - OTLP / OpenMetrics / Prometheus exposition
+  - RFC 9457 problem+json
+  - TM Forum Open API resource shapes
+compliance:
+  published: true
+  programs:
+  - name: SOC 2 Type II
+    status: attested
+    criteria:
+    - Security
+    - Availability
+    - Confidentiality
+    auditor: Insight Assurance
+    scope: 7SIGNAL's cloud platform and internal operations
+    announced: '2025-07-07'
+    evidence: https://7signal.com/press/7signal-expands-soc-2-type-ii-compliance/
+    note: >-
+      An expansion of an earlier SOC 2 Type 2 attestation. 7SIGNAL frames the expanded scope as relevant
+      to customers in healthcare, finance and education.
+  - name: SOC 2 Type 2 (initial)
+    status: attested
+    evidence: https://7signal.com/press/7signal-achieves-soc-2-type-2-compliance-elevating-its-commitment-to-data-security-and-privacy/
+  - name: GDPR
+    status: claimed
+    scope: all products
+    evidence: https://7signal.com/press/7signal-announces-gdpr-compliance-for-all-products/
+  not_found:
+  - ISO 27001
+  - HIPAA attestation
+  - PCI DSS
+  - FedRAMP
+  trust_center:
+    published: false
+    note: >-
+      Compliance is announced through press releases only. There is no trust center, no security portal,
+      no request-a-report form and no downloadable SOC 2 bridge letter on any public 7SIGNAL page —
+      which is why security/7signalsolutions-trust-center.yml was not written.

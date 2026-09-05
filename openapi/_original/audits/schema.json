@@ -1,0 +1,110 @@
+{
+  "StartTimeRangeParam": {
+    "name": "startTimeRange",
+    "in": "query",
+    "description": "The start time range of the events to fetch",
+    "required": false,
+    "schema": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "EndTimeRangeParam": {
+    "name": "endTimeRange",
+    "in": "query",
+    "description": "The end time range of the events to fetch",
+    "required": false,
+    "schema": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "ActorParam": {
+    "name": "actor",
+    "in": "query",
+    "description": "User or system component responsible for the events",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "ActionParam": {
+    "name": "action",
+    "in": "query",
+    "description": "The action taken",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "SourceParam": {
+    "name": "source",
+    "in": "query",
+    "description": "The area of the system from which the event originated",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "InitiatedParam": {
+    "name": "initiated",
+    "in": "query",
+    "description": "How the event was initiated",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "AuditsAgentsResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AuditAgentRecord"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "AuditAgentRecord": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "timestamp": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "organizationName": {
+        "type": "string"
+      },
+      "actor": {
+        "type": "string",
+        "description": "User or system component responsible for the record"
+      },
+      "action": {
+        "type": "string",
+        "description": "The action take. i.e. what happened"
+      },
+      "details": {
+        "type": "object",
+        "description": "Details about the event. This is a free form object that can vary based on the action and source"
+      },
+      "source": {
+        "type": "string",
+        "description": "The area of the system from which the event originated"
+      },
+      "initiated": {
+        "type": "string",
+        "description": "How this event was initiated"
+      }
+    }
+  }
+}

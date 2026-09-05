@@ -1,0 +1,125 @@
+generated: '2026-09-05'
+method: searched
+source: https://github.com/7Signal/API-Examples/blob/develop/docs/16-alerting.md
+docs:
+- https://github.com/7Signal/API-Examples/blob/develop/docs/16-alerting.md
+- https://github.com/7Signal/API-Examples/blob/develop/docs/17-eyeris-analysis.md
+- https://www.7signal.com/integrations-api
+asyncapi_spec: null
+asyncapi_note: >-
+  7SIGNAL publishes NO AsyncAPI document. Probed /asyncapi.yaml and /asyncapi.json on the API and docs
+  hosts and searched the GitHub organization — nothing. The event surface below is real and documented,
+  but only in prose and in the alert-rule request schema, so it is captured as a Webhooks catalog rather
+  than fabricated into an AsyncAPI.
+event_surface_exists: true
+delivery_model: >-
+  Outbound notifications are configured PER ALERT RULE rather than per account. There is no global
+  webhook-subscription endpoint, no event-type catalogue and no delivery-log endpoint; the notification
+  target is a field on the rule (notificationConfig.deliveries[]) and the "event" is always the same
+  thing — an alerting incident opening on that rule.
+configuration:
+  operations:
+  - operationId: create-alert-rule
+    rest: POST /alerting/alert-rules
+  - operationId: update-alert-rule
+    rest: PUT /alerting/alert-rules/{id}
+  - operationId: patch-alert-rule-enabled
+    rest: PATCH /alerting/alert-rules/{id}/enabled
+  field: notificationConfig.deliveries[]
+  discriminator: kind
+deliveries:
+- kind: webhook
+  required:
+  - url
+  - auth
+  optional:
+  - format
+  formats:
+  - generic
+  - slack
+  format_default: generic
+  auth_types:
+  - type: NONE
+  - type: BASIC
+    fields:
+    - username
+    - passwordSecretArn
+  - type: TOKEN
+    fields:
+    - tokenSecretArn
+  credential_handling: >-
+    Credentials for an authenticated webhook are referenced by AWS Secrets Manager ARN, never sent
+    inline. 7SIGNAL states the secret value is never stored on, nor returned by, the rule. This is a
+    notably strong posture and is worth recording as such — it also means a caller must already have a
+    secret in 7SIGNAL's AWS account boundary, which is an operational prerequisite the docs do not
+    explain how to satisfy.
+  example: '{ "kind": "webhook", "url": "https://hooks.example.com/7signal", "auth": { "type": "NONE" }, "format": "slack" }'
+- kind: email
+  required:
+  - address
+  example: '{ "kind": "email", "address": "neteng@example.com" }'
+- kind: servicenow
+  required:
+  - mdsConfigId
+  - organizationName
+  prerequisite: the ServiceNow integration must already be configured
+  see: https://github.com/7Signal/API-Examples/blob/develop/docs/12-integration-configs.md
+events:
+- name: alert.incident.raised
+  name_note: >-
+    NOT a published event name. 7SIGNAL names no event types; this label is the pipeline's description of
+    the single trigger, and an integrator must read the payload shape from the incident resource.
+  trigger: >-
+    A rule's condition holds continuously for its full pendingPeriodSeconds (default 300, minimum 1)
+    across one combination of the dimensions in its dimensionSet.
+  payload_source: the Incident resource returned by GET /alerting/incidents/{id}
+  payload_note: >-
+    Each incident stores a SNAPSHOT of the rule configuration as it was when the incident was raised, so
+    historical incidents still read correctly after the rule is edited or deleted.
+  read_back:
+  - operationId: list-alerting-incidents
+    rest: GET /alerting/incidents
+  - operationId: get-alerting-incident
+    rest: GET /alerting/incidents/{id}
+  - rest: GET /alerting/incidents/summary
+  - rest: GET /alerting/incidents/by-rule
+  resolution_reasons:
+  - cleared
+  - cleared_by_user
+  - rule_deleted
+  - rule_config_changed
+  - insufficient_data
+  - location_deleted
+  - rule_disabled
+  missing_data_policy:
+  - value: ignore
+    default: true
+    meaning: hold the current state and wait for the next window with data
+  - value: good
+    meaning: treat the gap as compliant; no incident is raised
+  - value: bad
+    meaning: treat the gap as a breach; devices that go offline legitimately will alert
+streaming:
+- name: Eyeris analysis stream
+  protocol: Server-Sent Events
+  rest: GET /eyeris/analysis/stream
+  media_type: text/event-stream
+  headers:
+  - Eyeris-Request-Id
+  - Eyeris-Request-Queue-Id
+  - Eyeris-Response-Id
+  companion_polling:
+  - rest: POST /eyeris/agents/client-analysis
+  - rest: GET /eyeris/agents/client-analysis/{requestId}
+  note: >-
+    The only push surface on the gateway itself. Eyeris AI analysis can be consumed either by SSE or by
+    submitting an analysis request and polling its requestId.
+not_found:
+- probe: webhook signing secret / signature header
+  result: not documented — no HMAC signature, no timestamp header, no replay window is published
+- probe: delivery retry policy
+  result: not documented
+- probe: delivery log / redelivery endpoint
+  result: not present in the contract
+- probe: global webhook subscription resource
+  result: not present — notification targets exist only inside an alert rule

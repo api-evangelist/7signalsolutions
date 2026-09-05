@@ -1,0 +1,122 @@
+{
+  "GetAgentTopologyLocationsResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/TopologyAgentLocation"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetAgentTopologyLocationResponse": {
+    "type": "object",
+    "$ref": "#/TopologyAgentLocation"
+  },
+  "TopologyAgentLocation": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "updatedAt": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "GetSensorTopologyLocationsResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/TopologySensorLocation"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetSensorTopologyLocationResponse": {
+    "type": "object",
+    "$ref": "#/TopologySensorLocation"
+  },
+  "TopologySensorLocation": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "number"
+      },
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "parentId": {
+        "type": "number"
+      }
+    }
+  },
+  "TopologySensorServiceArea": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "number"
+      },
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "parentLocationId": {
+        "type": "number"
+      },
+      "parentLocationName": {
+        "type": "string"
+      }
+    }
+  },
+  "GetSensorTopologyServiceAreasResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/TopologySensorServiceArea"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetSensorTopologyServiceAreaResponse": {
+    "type": "object",
+    "$ref": "#/TopologySensorServiceArea"
+  }
+}

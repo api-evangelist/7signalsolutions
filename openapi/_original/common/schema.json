@@ -1,0 +1,207 @@
+{
+  "ResponseStatusException": {
+    "type": "object",
+    "required": [
+      "timestamp",
+      "status",
+      "error",
+      "path",
+      "requestId"
+    ],
+    "properties": {
+      "timestamp": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "status": {
+        "type": "integer"
+      },
+      "error": {
+        "type": "string"
+      },
+      "message": {
+        "type": "string"
+      },
+      "path": {
+        "type": "string"
+      },
+      "requestId": {
+        "type": "string"
+      }
+    }
+  },
+  "OrganizationRequestParam": {
+    "name": "organization",
+    "in": "query",
+    "description": "Fetch a specific organization. By default, the organization associated with your JWT token will be used.",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "PageRequestParam": {
+    "name": "page",
+    "in": "query",
+    "description": "Fetch a particular page of data. The first page is 1.",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "minimum": 1
+    }
+  },
+  "PerPageRequestParam": {
+    "name": "perPage",
+    "in": "query",
+    "description": "Fetch a specific number of records per page",
+    "required": false,
+    "schema": {
+      "type": "integer"
+    }
+  },
+  "Pagination": {
+    "type": "object",
+    "required": [
+      "perPage",
+      "page",
+      "total",
+      "pages"
+    ],
+    "properties": {
+      "perPage": {
+        "type": "integer",
+        "example": 10
+      },
+      "page": {
+        "type": "integer",
+        "description": "The current page number. The first page is 1",
+        "minimum": 1,
+        "example": 2
+      },
+      "total": {
+        "type": "integer",
+        "example": 45
+      },
+      "pages": {
+        "type": "integer",
+        "example": 5
+      }
+    }
+  },
+  "ZeroBasedPagination": {
+    "type": "object",
+    "properties": {
+      "perPage": {
+        "type": "integer",
+        "description": "Number of records per page"
+      },
+      "page": {
+        "type": "integer",
+        "description": "Current page number (0-based)"
+      },
+      "total": {
+        "type": "integer",
+        "description": "Total number of records available"
+      },
+      "pages": {
+        "type": "integer",
+        "description": "Total number of pages"
+      }
+    }
+  },
+  "Range": {
+    "type": "object",
+    "required": [
+      "to",
+      "toAsDateString",
+      "from",
+      "fromAsDateString",
+      "total",
+      "duration",
+      "durationAsString"
+    ],
+    "properties": {
+      "to": {
+        "type": "integer",
+        "example": 1674055815825
+      },
+      "toAsDateString": {
+        "type": "string",
+        "format": "date-time",
+        "example": "2023-01-18T15:51:20.437Z[UTC]"
+      },
+      "from": {
+        "type": "integer",
+        "example": 1674055815825
+      },
+      "fromAsDateString": {
+        "type": "string",
+        "format": "date-time",
+        "example": "2023-01-17T15:51:20.438Z[UTC]"
+      },
+      "total": {
+        "type": "integer",
+        "example": 5
+      },
+      "duration": {
+        "type": "integer",
+        "example": 60000
+      },
+      "durationAsString": {
+        "type": "string",
+        "example": "60 seconds"
+      }
+    }
+  },
+  "SortOrderParam": {
+    "name": "order",
+    "in": "query",
+    "description": "Sort order",
+    "required": false,
+    "schema": {
+      "type": "string",
+      "enum": [
+        "asc",
+        "desc"
+      ]
+    }
+  },
+  "SortFieldParam": {
+    "name": "sortField",
+    "in": "query",
+    "description": "The field on which to sort the results",
+    "required": false,
+    "schema": {
+      "type": "string"
+    }
+  },
+  "400BadRequestResponse": {
+    "description": "Bad Request",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/ResponseStatusException"
+        }
+      }
+    }
+  },
+  "403Forbidden": {
+    "description": "Forbidden",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/ResponseStatusException"
+        }
+      }
+    }
+  },
+  "404NotFoundResponse": {
+    "description": "Resource Not Found",
+    "content": {
+      "application/json": {
+        "schema": {
+          "$ref": "#/ResponseStatusException"
+        }
+      }
+    }
+  }
+}

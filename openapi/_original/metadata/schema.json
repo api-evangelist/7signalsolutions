@@ -1,0 +1,1735 @@
+{
+  "UsersRoleRequest": {
+    "required": [
+      "roleId"
+    ],
+    "type": "object",
+    "properties": {
+      "roleId": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "UsersPermissionsRequest": {
+    "type": "object",
+    "properties": {
+      "permissionIds": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "permissionNames": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "OrganizationInfo": {
+    "required": [
+      "organizationId"
+    ],
+    "type": "object",
+    "properties": {
+      "organizationId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "isPrimary": {
+        "type": "boolean"
+      }
+    }
+  },
+  "OrganizationsUsersRequest": {
+    "required": [
+      "organizations"
+    ],
+    "type": "object",
+    "properties": {
+      "organizations": {
+        "type": "array",
+        "items": {
+          "$ref": "#/OrganizationInfo"
+        }
+      }
+    }
+  },
+  "UsersGroupsRequest": {
+    "required": [
+      "groupIds"
+    ],
+    "type": "object",
+    "properties": {
+      "groupIds": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    }
+  },
+  "RoleRequest": {
+    "required": [
+      "auth0Id",
+      "description",
+      "key"
+    ],
+    "type": "object",
+    "properties": {
+      "key": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "auth0Id": {
+        "type": "string"
+      },
+      "isPublic": {
+        "type": "boolean"
+      }
+    }
+  },
+  "Role": {
+    "required": [
+      "auth0Id"
+    ],
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "key": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "auth0Id": {
+        "type": "string"
+      },
+      "isPublic": {
+        "type": "boolean"
+      }
+    }
+  },
+  "PermissionRequest": {
+    "required": [
+      "description",
+      "key"
+    ],
+    "type": "object",
+    "properties": {
+      "key": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "isPublic": {
+        "type": "boolean"
+      }
+    }
+  },
+  "Permission": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "key": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "isPublic": {
+        "type": "boolean"
+      }
+    }
+  },
+  "OrganizationRequest": {
+    "required": [
+      "connectionId",
+      "name"
+    ],
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "connectionId": {
+        "type": "string"
+      },
+      "mobileEyeOrgCode": {
+        "type": "string"
+      }
+    }
+  },
+  "Organization": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string"
+      },
+      "connectionId": {
+        "type": "string"
+      },
+      "mobileEyeOrgCode": {
+        "type": "string"
+      }
+    }
+  },
+  "OrganizationsInstancesRequest": {
+    "required": [
+      "instanceIds"
+    ],
+    "type": "object",
+    "properties": {
+      "instanceIds": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      }
+    }
+  },
+  "InstanceRequest": {
+    "required": [
+      "url"
+    ],
+    "type": "object",
+    "properties": {
+      "url": {
+        "type": "string"
+      }
+    }
+  },
+  "Instance": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "url": {
+        "type": "string"
+      }
+    }
+  },
+  "GroupRequest": {
+    "required": [
+      "displayName",
+      "key"
+    ],
+    "type": "object",
+    "properties": {
+      "key": {
+        "type": "string"
+      },
+      "displayName": {
+        "type": "string"
+      },
+      "organizationId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "instanceId": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "AggregateReferenceInstanceUUID": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "AggregateReferenceOrganizationUUID": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "Group": {
+    "type": "object",
+    "properties": {
+      "organization": {
+        "$ref": "#/AggregateReferenceOrganizationUUID"
+      },
+      "instance": {
+        "$ref": "#/AggregateReferenceInstanceUUID"
+      },
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "key": {
+        "type": "string"
+      },
+      "displayName": {
+        "type": "string"
+      }
+    }
+  },
+  "Feature": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "feature": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      }
+    }
+  },
+  "PostLoginRequest": {
+    "required": [
+      "appClientId",
+      "appClientName",
+      "connectionId",
+      "requestedAudience",
+      "roles",
+      "tenantId",
+      "userCreatedAt",
+      "userUpdatedAt"
+    ],
+    "type": "object",
+    "properties": {
+      "roles": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "appClientId": {
+        "type": "string"
+      },
+      "appClientName": {
+        "type": "string"
+      },
+      "resourceServerIdentifier": {
+        "type": "string"
+      },
+      "tenantId": {
+        "type": "string"
+      },
+      "transactionId": {
+        "type": "string"
+      },
+      "requestedScopes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "userEmail": {
+        "type": "string"
+      },
+      "userCreatedAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "userUpdatedAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "userFamilyName": {
+        "type": "string"
+      },
+      "userGivenName": {
+        "type": "string"
+      },
+      "userNickname": {
+        "type": "string"
+      },
+      "userPicture": {
+        "type": "string",
+        "format": "uri"
+      },
+      "userId": {
+        "type": "string"
+      },
+      "username": {
+        "type": "string"
+      },
+      "connectionId": {
+        "type": "string"
+      },
+      "requestedAudience": {
+        "type": "string"
+      },
+      "sapphireInstance": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "sapphireGroup": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "mobileEyeOrgCode": {
+        "type": "string"
+      }
+    }
+  },
+  "PostLoginResponse": {
+    "type": "object",
+    "properties": {
+      "sapphireInstanceName": {
+        "type": "string"
+      },
+      "sapphireGroupName": {
+        "type": "string"
+      },
+      "mobileEyeOrgCode": {
+        "type": "string"
+      }
+    }
+  },
+  "CredentialsExchangeRequest": {
+    "required": [
+      "clientId",
+      "clientName",
+      "requestedScopes",
+      "resourceServer",
+      "scopesToBeIssued",
+      "tenantName"
+    ],
+    "type": "object",
+    "properties": {
+      "clientId": {
+        "type": "string"
+      },
+      "clientName": {
+        "type": "string"
+      },
+      "scopesToBeIssued": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "requestedScopes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "resourceServer": {
+        "type": "string"
+      },
+      "tenantName": {
+        "type": "string"
+      }
+    }
+  },
+  "CredentialsExchangeResponse": {
+    "type": "object",
+    "properties": {
+      "sapphireInstanceName": {
+        "type": "string"
+      },
+      "sapphireGroupName": {
+        "type": "string"
+      },
+      "mobileEyeOrgCode": {
+        "type": "string"
+      }
+    }
+  },
+  "UserRequest": {
+    "required": [
+      "email",
+      "organizationId"
+    ],
+    "type": "object",
+    "properties": {
+      "firstName": {
+        "type": "string"
+      },
+      "lastName": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string"
+      },
+      "roleId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "organizationId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "permissionIds": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "permissionNames": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "UserOrganization": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string"
+      },
+      "connectionId": {
+        "type": "string"
+      },
+      "isPrimary": {
+        "type": "boolean"
+      },
+      "mobileEyeOrgCode": {
+        "type": "string"
+      }
+    }
+  },
+  "UserResponse": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "firstName": {
+        "type": "string"
+      },
+      "lastName": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string"
+      },
+      "auth0Id": {
+        "type": "string"
+      },
+      "lastLogin": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "role": {
+        "$ref": "#/Role"
+      },
+      "permissions": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Permission"
+        }
+      },
+      "organizations": {
+        "type": "array",
+        "items": {
+          "$ref": "#/UserOrganization"
+        }
+      },
+      "groups": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Group"
+        }
+      }
+    }
+  },
+  "UserImportListRequest": {
+    "required": [
+      "users"
+    ],
+    "type": "object",
+    "properties": {
+      "users": {
+        "type": "array",
+        "items": {
+          "$ref": "#/UserImportRequest"
+        }
+      }
+    }
+  },
+  "UserImportRequest": {
+    "required": [
+      "email"
+    ],
+    "type": "object",
+    "properties": {
+      "firstName": {
+        "type": "string"
+      },
+      "lastName": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string"
+      },
+      "roleId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "permissionIds": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "permissionNames": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "ApiKeyRequest": {
+    "required": [
+      "organizationId"
+    ],
+    "type": "object",
+    "properties": {
+      "organizationId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "sapphireGroupId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "roleId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "permissionIds": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid"
+        }
+      },
+      "description": {
+        "type": "string"
+      }
+    }
+  },
+  "AggregateReferenceGroupUUID": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "ApiKeyResponse": {
+    "type": "object",
+    "properties": {
+      "organization": {
+        "$ref": "#/AggregateReferenceOrganizationUUID"
+      },
+      "group": {
+        "$ref": "#/AggregateReferenceGroupUUID"
+      },
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "apiKey": {
+        "type": "string"
+      },
+      "createdBy": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "isSystem": {
+        "type": "boolean"
+      },
+      "clientSecret": {
+        "type": "string"
+      },
+      "permissions": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Permission"
+        }
+      }
+    }
+  },
+  "AggregateReferenceRoleUUID": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "PageModelUser": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/User"
+        }
+      },
+      "pagination": {
+        "$ref": "#/Pagination"
+      }
+    }
+  },
+  "PageRequestParam": {
+    "name": "page",
+    "in": "query",
+    "description": "Fetch a particular page of data. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.",
+    "required": false,
+    "schema": {
+      "type": "integer",
+      "minimum": 0
+    }
+  },
+  "Pagination": {
+    "type": "object",
+    "properties": {
+      "perPage": {
+        "type": "integer",
+        "format": "int32"
+      },
+      "page": {
+        "type": "integer",
+        "format": "int32",
+        "minimum": 0,
+        "description": "The current page number. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release."
+      },
+      "total": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "pages": {
+        "type": "integer",
+        "format": "int32"
+      }
+    }
+  },
+  "User": {
+    "type": "object",
+    "properties": {
+      "role": {
+        "$ref": "#/AggregateReferenceRoleUUID"
+      },
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "firstName": {
+        "type": "string"
+      },
+      "lastName": {
+        "type": "string"
+      },
+      "email": {
+        "type": "string"
+      },
+      "auth0Id": {
+        "type": "string"
+      },
+      "lastLogin": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "PageModelPermission": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Permission"
+        }
+      },
+      "pagination": {
+        "$ref": "#/Pagination"
+      }
+    }
+  },
+  "PageModelUserOrganization": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/UserOrganization"
+        }
+      },
+      "pagination": {
+        "$ref": "#/Pagination"
+      }
+    }
+  },
+  "PageModelFeature": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Feature"
+        }
+      },
+      "pagination": {
+        "$ref": "#/Pagination"
+      }
+    }
+  },
+  "PageModelGroup": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Group"
+        }
+      },
+      "pagination": {
+        "$ref": "#/Pagination"
+      }
+    }
+  },
+  "PageModelRole": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Role"
+        }
+      },
+      "pagination": {
+        "$ref": "#/Pagination"
+      }
+    }
+  },
+  "RoleResponse": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "key": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "auth0Id": {
+        "type": "string"
+      },
+      "isPublic": {
+        "type": "boolean"
+      },
+      "permissions": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Permission"
+        }
+      }
+    }
+  },
+  "PageModelOrganization": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Organization"
+        }
+      },
+      "pagination": {
+        "$ref": "#/Pagination"
+      }
+    }
+  },
+  "PageModelInstance": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Instance"
+        }
+      },
+      "pagination": {
+        "$ref": "#/Pagination"
+      }
+    }
+  },
+  "ApiKey": {
+    "required": [
+      "organization"
+    ],
+    "type": "object",
+    "properties": {
+      "organization": {
+        "$ref": "#/AggregateReferenceOrganizationUUID"
+      },
+      "group": {
+        "$ref": "#/AggregateReferenceGroupUUID"
+      },
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "apiKey": {
+        "type": "string"
+      },
+      "createdBy": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "isSystem": {
+        "type": "boolean"
+      }
+    }
+  },
+  "PageModelApiKey": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/ApiKey"
+        }
+      },
+      "pagination": {
+        "$ref": "#/Pagination"
+      }
+    }
+  },
+  "AccessSummaryResponse": {
+    "type": "object",
+    "properties": {
+      "sapphireApplication": {
+        "$ref": "#/SapphireApplication"
+      },
+      "mobileEyeApplication": {
+        "$ref": "#/MobileEyeApplication"
+      },
+      "userManagementApplication": {
+        "$ref": "#/UserManagementApplication"
+      },
+      "sapphireReDirectorApplication": {
+        "$ref": "#/SapphireReDirectorApplication"
+      },
+      "userNotifications": {
+        "type": "array",
+        "items": {
+          "$ref": "#/UserNotifications"
+        }
+      }
+    }
+  },
+  "UserSummaryResponse": {
+    "type": "object",
+    "properties": {
+      "total": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "loginLast30Days": {
+        "type": "integer",
+        "format": "int64"
+      },
+      "loginLast90Days": {
+        "type": "integer",
+        "format": "int64"
+      }
+    }
+  },
+  "MobileEyeApplication": {
+    "type": "object",
+    "properties": {
+      "enabled": {
+        "type": "boolean"
+      },
+      "organizations": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Organization"
+        }
+      }
+    }
+  },
+  "SapphireApplication": {
+    "type": "object",
+    "properties": {
+      "enabled": {
+        "type": "boolean"
+      },
+      "instances": {
+        "type": "array",
+        "items": {
+          "$ref": "#/Instance"
+        }
+      }
+    }
+  },
+  "SapphireReDirectorApplication": {
+    "type": "object",
+    "properties": {
+      "enabled": {
+        "type": "boolean"
+      }
+    }
+  },
+  "UserManagementApplication": {
+    "type": "object",
+    "properties": {
+      "enabled": {
+        "type": "boolean"
+      }
+    }
+  },
+  "UserNotifications": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "text": {
+        "type": "string"
+      }
+    }
+  },
+  "ApplicationAccessResponse": {
+    "type": "object",
+    "properties": {
+      "access": {
+        "type": "string"
+      }
+    }
+  },
+  "PageModelMerakiIntegrationConfig": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/MerakiIntegrationConfig"
+        }
+      },
+      "pagination": {
+        "$ref": "#/Pagination"
+      }
+    }
+  },
+  "AggregateReferenceApiKeyUUID": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "MerakiIntegrationConfig": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "runOption": {
+        "type": "string"
+      },
+      "scheduledOption": {
+        "type": "string"
+      },
+      "agentsEnabled": {
+        "type": "boolean"
+      },
+      "agentsFullSynchronization": {
+        "type": "boolean"
+      },
+      "sensorsEnabled": {
+        "type": "boolean"
+      },
+      "createdBy": {
+        "type": "string"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "organization": {
+        "$ref": "#/AggregateReferenceOrganizationUUID"
+      },
+      "apiKeyId": {
+        "$ref": "#/AggregateReferenceApiKeyUUID"
+      },
+      "group": {
+        "$ref": "#/AggregateReferenceGroupUUID"
+      }
+    }
+  },
+  "MerakiIntegrationConfigRequest": {
+    "required": [
+      "apiKey",
+      "runOption",
+      "scheduledOption"
+    ],
+    "type": "object",
+    "properties": {
+      "apiKey": {
+        "type": "string"
+      },
+      "runOption": {
+        "type": "string",
+        "enum": [
+          "ONE_TIME",
+          "SCHEDULED"
+        ]
+      },
+      "scheduledOption": {
+        "type": "string",
+        "enum": [
+          "DISABLED",
+          "DAILY",
+          "WEEKLY",
+          "MONTHLY"
+        ]
+      },
+      "agentsEnabled": {
+        "type": "boolean"
+      },
+      "agentsFullSynchronization": {
+        "type": "boolean"
+      },
+      "sensorsEnabled": {
+        "type": "boolean"
+      },
+      "scheduledDayOfWeek": {
+        "type": "integer"
+      },
+      "scheduledWeekOfMonth": {
+        "type": "integer"
+      },
+      "organizationId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "sapphireGroupId": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "MerakiIntegrationConfigResponse": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "merakiApiKey": {
+        "type": "string"
+      },
+      "clientId": {
+        "type": "string"
+      },
+      "clientSecret": {
+        "type": "string"
+      },
+      "runOption": {
+        "type": "string"
+      },
+      "scheduledOption": {
+        "type": "string"
+      },
+      "agentsEnabled": {
+        "type": "boolean"
+      },
+      "agentsFullSynchronization": {
+        "type": "boolean"
+      },
+      "sensorsEnabled": {
+        "type": "boolean"
+      },
+      "scheduledDayOfWeek": {
+        "type": "integer"
+      },
+      "scheduledWeekOfMonth": {
+        "type": "integer"
+      },
+      "createdBy": {
+        "type": "string"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "organization": {
+        "$ref": "#/AggregateReferenceOrganizationUUID"
+      },
+      "apiKey": {
+        "$ref": "#/AggregateReferenceApiKeyUUID"
+      },
+      "group": {
+        "$ref": "#/AggregateReferenceGroupUUID"
+      }
+    }
+  },
+  "MerakiIntegrationConfigPutRequest": {
+    "required": [
+      "runOption",
+      "scheduledOption"
+    ],
+    "type": "object",
+    "properties": {
+      "runOption": {
+        "type": "string",
+        "enum": [
+          "ONE_TIME",
+          "SCHEDULED"
+        ]
+      },
+      "scheduledOption": {
+        "type": "string",
+        "enum": [
+          "DISABLED",
+          "DAILY",
+          "WEEKLY",
+          "MONTHLY"
+        ]
+      },
+      "agentsEnabled": {
+        "type": "boolean"
+      },
+      "agentsFullSynchronization": {
+        "type": "boolean"
+      },
+      "sensorsEnabled": {
+        "type": "boolean"
+      },
+      "scheduledDayOfWeek": {
+        "type": "integer"
+      },
+      "scheduledWeekOfMonth": {
+        "type": "integer"
+      }
+    }
+  },
+  "PageModelServiceNowIntegrationConfig": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/ServiceNowIntegrationConfig"
+        }
+      },
+      "pagination": {
+        "$ref": "#/Pagination"
+      }
+    }
+  },
+  "ServiceNowIntegrationConfig": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "serviceNowUrl": {
+        "type": "string"
+      },
+      "authTypeEnabled": {
+        "type": "string",
+        "enum": [
+          "BASIC_AUTH",
+          "OAUTH2",
+          "API_KEY",
+          "NONE"
+        ]
+      },
+      "basicAuthUsername": {
+        "type": "string"
+      },
+      "oauth2ClientId": {
+        "type": "string"
+      },
+      "apiKeyHeader": {
+        "type": "string"
+      },
+      "createdBy": {
+        "type": "string"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "organization": {
+        "$ref": "#/AggregateReferenceOrganization"
+      }
+    }
+  },
+  "ServiceNowIntegrationConfigWithOrgId": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "serviceNowUrl": {
+        "type": "string"
+      },
+      "authTypeEnabled": {
+        "type": "string",
+        "enum": [
+          "BASIC_AUTH",
+          "OAUTH2",
+          "API_KEY",
+          "NONE"
+        ]
+      },
+      "basicAuthUsername": {
+        "type": "string"
+      },
+      "oauth2ClientId": {
+        "type": "string"
+      },
+      "apiKeyHeader": {
+        "type": "string"
+      },
+      "createdBy": {
+        "type": "string"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "organization": {
+        "$ref": "#/AggregateReferenceOrganizationUUID"
+      }
+    }
+  },
+  "AggregateReferenceOrganization": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string"
+      }
+    }
+  },
+  "ServiceNowIntegrationConfigCreateRequest": {
+    "type": "object",
+    "required": [
+      "serviceNowUrl",
+      "authTypeEnabled",
+      "organizationId"
+    ],
+    "properties": {
+      "serviceNowUrl": {
+        "type": "string",
+        "minLength": 1
+      },
+      "authTypeEnabled": {
+        "type": "string",
+        "enum": [
+          "NONE",
+          "BASIC_AUTH",
+          "OAUTH2",
+          "API_KEY"
+        ]
+      },
+      "basicAuthUsername": {
+        "type": "string"
+      },
+      "basicAuthPassword": {
+        "type": "string"
+      },
+      "oauth2ClientId": {
+        "type": "string"
+      },
+      "oauth2ClientSecret": {
+        "type": "string"
+      },
+      "apiKeyHeader": {
+        "type": "string",
+        "description": "Defaults to 'x-sn-apikey' if blank or null"
+      },
+      "apiKeyKey": {
+        "type": "string"
+      },
+      "organizationId": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "ServiceNowIntegrationConfigUpdateRequest": {
+    "type": "object",
+    "required": [
+      "serviceNowUrl",
+      "authTypeEnabled"
+    ],
+    "properties": {
+      "serviceNowUrl": {
+        "type": "string",
+        "minLength": 1
+      },
+      "authTypeEnabled": {
+        "type": "string",
+        "enum": [
+          "NONE",
+          "BASIC_AUTH",
+          "OAUTH2",
+          "API_KEY"
+        ]
+      },
+      "basicAuthUsername": {
+        "type": "string"
+      },
+      "basicAuthPassword": {
+        "type": "string"
+      },
+      "oauth2ClientId": {
+        "type": "string"
+      },
+      "oauth2ClientSecret": {
+        "type": "string"
+      },
+      "apiKeyHeader": {
+        "type": "string"
+      },
+      "apiKeyKey": {
+        "type": "string"
+      }
+    }
+  },
+  "ServiceNowIntegrationConfigPatchRequest": {
+    "type": "object",
+    "properties": {
+      "serviceNowUrl": {
+        "type": "string",
+        "minLength": 1,
+        "nullable": true
+      },
+      "authTypeEnabled": {
+        "type": "string",
+        "enum": [
+          "NONE",
+          "BASIC_AUTH",
+          "OAUTH2",
+          "API_KEY"
+        ],
+        "nullable": true
+      },
+      "basicAuthUsername": {
+        "type": "string",
+        "nullable": true
+      },
+      "basicAuthPassword": {
+        "type": "string",
+        "nullable": true
+      },
+      "oauth2ClientId": {
+        "type": "string",
+        "nullable": true
+      },
+      "oauth2ClientSecret": {
+        "type": "string",
+        "nullable": true
+      },
+      "apiKeyHeader": {
+        "type": "string",
+        "nullable": true
+      },
+      "apiKeyKey": {
+        "type": "string",
+        "nullable": true
+      }
+    }
+  },
+  "SensorRegistration": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "mode": {
+        "type": "string",
+        "enum": ["MQTT", "LEGACY"]
+      },
+      "status": {
+        "type": "string"
+      },
+      "macAddress": {
+        "type": "string"
+      },
+      "serialNumber": {
+        "type": "string"
+      },
+      "organization": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "group": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "model": {
+        "type": "string"
+      },
+      "softwareVersion": {
+        "type": "string"
+      },
+      "lastConnected": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "lastTested": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "ipAddress": {
+        "type": "string"
+      },
+      "serviceAreaId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "updatedAt": {
+        "type": "string",
+        "format": "date-time"
+      }
+    }
+  },
+  "SensorRegistrationCreateRequest": {
+    "required": [
+      "macAddress"
+    ],
+    "type": "object",
+    "properties": {
+      "macAddress": {
+        "type": "string"
+      },
+      "serialNumber": {
+        "type": "string"
+      },
+      "mode": {
+        "type": "string",
+        "enum": ["MQTT", "LEGACY"]
+      },
+      "status": {
+        "type": "string"
+      },
+      "organizationId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "groupId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "model": {
+        "type": "string"
+      },
+      "softwareVersion": {
+        "type": "string"
+      },
+      "lastConnected": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "lastTested": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "ipAddress": {
+        "type": "string"
+      },
+      "serviceAreaId": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "SensorRegistrationPatchRequest": {
+    "type": "object",
+    "properties": {
+      "macAddress": {
+        "type": "string"
+      },
+      "serialNumber": {
+        "type": "string"
+      },
+      "mode": {
+        "type": "string",
+        "enum": ["MQTT", "LEGACY"]
+      },
+      "status": {
+        "type": "string"
+      },
+      "organizationId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "groupId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "model": {
+        "type": "string"
+      },
+      "softwareVersion": {
+        "type": "string"
+      },
+      "lastConnected": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "lastTested": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "ipAddress": {
+        "type": "string"
+      },
+      "serviceAreaId": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "PageModelSensorRegistration": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "$ref": "#/SensorRegistration"
+        }
+      },
+      "pagination": {
+        "$ref": "#/Pagination"
+      }
+    }
+  },
+  "SensorRegistrationCsvImportResponse": {
+    "type": "object",
+    "required": [
+      "totalRows",
+      "successful",
+      "failed",
+      "skipped",
+      "errors"
+    ],
+    "properties": {
+      "totalRows": {
+        "type": "integer",
+        "description": "Total number of rows processed (excluding header)"
+      },
+      "successful": {
+        "type": "integer",
+        "description": "Number of sensors successfully imported"
+      },
+      "failed": {
+        "type": "integer",
+        "description": "Number of rows with validation or parsing errors"
+      },
+      "skipped": {
+        "type": "integer",
+        "description": "Number of rows skipped due to duplicates"
+      },
+      "errors": {
+        "type": "array",
+        "items": {
+          "$ref": "#/SensorRegistrationCsvImportError"
+        },
+        "description": "List of errors encountered during import"
+      }
+    }
+  },
+  "SensorRegistrationCsvImportError": {
+    "type": "object",
+    "required": [
+      "row",
+      "error",
+      "type"
+    ],
+    "properties": {
+      "row": {
+        "type": "integer",
+        "description": "Row number where the error occurred"
+      },
+      "error": {
+        "type": "string",
+        "description": "Error message"
+      },
+      "type": {
+        "type": "string",
+        "enum": [
+          "VALIDATION_ERROR",
+          "DUPLICATE",
+          "PARSING_ERROR"
+        ],
+        "description": "Error type category"
+      }
+    }
+  }
+}

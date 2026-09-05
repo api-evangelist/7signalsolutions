@@ -1,0 +1,133 @@
+generated: '2026-09-05'
+method: searched
+source: https://github.com/7Signal/API-Examples/tree/develop/docs/migration
+docs:
+- https://github.com/7Signal/API-Examples/blob/develop/docs/migration/kpi-endpoints.md
+- https://github.com/7Signal/API-Examples/blob/develop/docs/migration/topology-endpoints.md
+derived_from: openapi/7signalsolutions-openapi.json
+versioning:
+  scheme: major version in the hostname, semver in the spec
+  current_host: https://api-v2.7signal.com
+  current_spec_version: 2.21.1
+  previous: >-
+    api-v1.7signal.com was the v1 gateway host and no longer resolves in DNS (NXDOMAIN as of
+    2026-09-05), so v1 is retired, not merely deprecated. Public Swagger UI references to
+    api-v1.7signal.com are therefore stale.
+status_page:
+  url: https://7signal.com/status/
+  embed: https://status-content.7signal.com
+  title: 7SIGNAL System Status
+  http_status: 200
+  note: >-
+    The status page is a first-party page at 7signal.com/status/ that iframes a status app on
+    status-content.7signal.com. It is client-rendered, so there is no machine-readable component/incident
+    feed at either URL — a monitoring agent cannot subscribe to it.
+deprecation_policy:
+  published: true
+  form: >-
+    Migration notes in the public API-Examples repository, plus `deprecated: true` flags carried on the
+    affected operations in the OpenAPI itself. Both surfaces agree, which is rare.
+  removal_commitment: >-
+    "will be removed in a future release" — no date, no minimum notice period and no version at which
+    removal happens. That is a deprecation NOTICE, not a deprecation POLICY with a clock.
+  sunset_header: not implemented
+  deprecation_header: not implemented
+  rfc8594: false
+  parity_caveat: >-
+    On the topology migration 7SIGNAL states plainly that "exact parity cannot be guaranteed" between
+    the deprecated endpoints and their replacements, and invites a ticket where fields are missing.
+  deprecated_operation_count: 19
+  deprecated_families:
+  - family: KPIs
+    prefix: /kpis
+    count: 11
+    replacement: /time-series/* (see migration/kpi-endpoints.md)
+    replacement_complete: false
+    note: >-
+      Four of the eleven have NO replacement named — /kpis/agents, /kpis/agents/access-points,
+      /kpis/agents/adapter-drivers and /kpis/agents/client-capabilities are all mapped to "TBD", and
+      /kpis/sensors/dest-nw-band-loc/{targetId} is mapped to "No corresponding group-by dimension
+      currently". A caller on those endpoints has been told to leave with nowhere to go.
+    parameter_changes:
+    - averaging -> timeBucket (1_MIN, 10_MIN, 1_HOUR, 1_DAY, 1_MONTH)
+    - kpiCodes -> metrics (same code values)
+    - aggregateFunctions is new and REQUIRED
+    - timelimit is dropped; the series is capped at 120 records
+  - family: Topologies
+    prefix: /topologies
+    count: 8
+    replacement: /locations/*, /service-areas/*, /access-points/* (see migration/topology-endpoints.md)
+    replacement_complete: true
+deprecated_operations:
+- operationId: agent-kpis-all
+  rest: GET /kpis/agents
+  replacement: TBD
+- operationId: agent-kpis-by-access-point
+  rest: GET /kpis/agents/access-points
+  replacement: TBD
+- operationId: agent-kpis-by-adapter-drivers
+  rest: GET /kpis/agents/adapter-drivers
+  replacement: TBD
+- operationId: agent-kpis-by-location
+  rest: GET /kpis/agents/locations
+  replacement: GET /time-series/agents/discrete/locationId or /time-series/agents/numeric/locationId
+- operationId: agent-kpis-by-client-capability
+  rest: GET /kpis/agents/client-capabilities
+  replacement: TBD
+- operationId: sensor-kpis-by-organization
+  rest: GET /kpis/sensors/organizations
+  replacement: GET /time-series/sensors/numeric
+- operationId: sensor-kpis-by-access-point
+  rest: GET /kpis/sensors/access-points/{accessPointId}
+  replacement: GET /time-series/sensors/numeric/accessPoint
+- operationId: sensor-kpis-by-destination-network-band-location
+  rest: GET /kpis/sensors/dest-nw-band-loc/{targetId}
+  replacement: none — no corresponding group-by dimension currently
+- operationId: sensor-kpis-by-location
+  rest: GET /kpis/sensors/locations/{locationId}
+  replacement: GET /time-series/sensors/numeric/locationId
+- operationId: sensor-kpis-by-eye
+  rest: GET /kpis/sensors/eyes/{sensorId}
+  replacement: GET /time-series/sensors/numeric/sensor
+- operationId: sensor-kpis-by-service-area
+  rest: GET /kpis/sensors/service-areas/{serviceAreaId}
+  replacement: GET /time-series/sensors/numeric/serviceArea
+- operationId: agent-topology-locations
+  rest: GET /topologies/agents/locations
+  replacement: GET /locations/agents
+- operationId: agent-topology-location
+  rest: GET /topologies/agents/locations/{locationId}
+  replacement: GET /locations/agents/{locationId}
+- operationId: sensor-topology-locations
+  rest: GET /topologies/sensors/locations
+  replacement: GET /locations/sensors
+- operationId: sensor-topology-location
+  rest: GET /topologies/sensors/locations/{locationId}
+  replacement: GET /locations/sensors/{locationId}
+- operationId: sensor-topology-service-areas
+  rest: GET /topologies/sensors/serviceAreas
+  replacement: GET /service-areas/sensors
+- operationId: sensor-topology-service-area
+  rest: GET /topologies/sensors/serviceAreas/{serviceAreaId}
+  replacement: GET /service-areas/sensors/{serviceAreaId}
+- operationId: sensor-topology-access-points
+  rest: GET /topologies/sensors/accessPoints
+  replacement: GET /access-points/sensors
+- operationId: sensor-topology-access-point
+  rest: GET /topologies/sensors/accessPoints/{accessPointId}
+  replacement: GET /access-points/sensors/{accessPointId}
+sla:
+  published: false
+  note: >-
+    No public SLA, uptime commitment or support-response target was found on 7signal.com, the pricing
+    page or the API documentation. The pricing page names "live support" and "24/7 on-demand access" as
+    subscription inclusions without quantifying either.
+support:
+  contact: https://7signal.com/contact/
+  email: info@7SIGNAL.com
+  phone: 1-216-777-2900
+  community_portal: https://info.7signal.com/communityportal/
+  community_portal_note: >-
+    Salesforce Experience Cloud; the "Start Here - 7SIGNAL API Guide" article renders only in a browser
+    and returns a JS shell with no article text to a crawler.
+  academy: https://academy.7signal.com/

@@ -1,0 +1,277 @@
+{
+  "GetAgentServiceAreasResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentServiceArea"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetAgentServiceAreaResponse": {
+    "type": "object",
+    "$ref": "#/AgentServiceArea"
+  },
+  "AgentServiceArea": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      },
+      "createdAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "updatedAt": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "locationId": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "PostAgentServiceAreasRequest": {
+    "type": "object",
+    "properties": {
+      "serviceAreas": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentCreateServiceAreaRequest"
+        }
+      }
+    }
+  },
+  "PutAgentServiceAreasRequest": {
+    "type": "object",
+    "properties": {
+      "serviceAreas": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentUpdateServiceAreaRequest"
+        }
+      }
+    }
+  },
+  "AgentServiceAreaId": {
+    "name": "serviceAreaId",
+    "in": "path",
+    "description": "Agent Service Area Id",
+    "required": true,
+    "schema": {
+      "type": "string",
+      "format": "uuid"
+    }
+  },
+  "DeleteAgentServiceAreaIdList": {
+    "name": "ids",
+    "in": "query",
+    "description": "One or more service area ids to delete",
+    "required": true,
+    "schema": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uuid"
+      }
+    }
+  },
+  "AgentCreateServiceAreaRequest": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      }
+    }
+  },
+  "AgentUpdateServiceAreaRequest": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      }
+    }
+  },
+  "AgentSingleUpdateServiceAreaRequest": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      }
+    }
+  },
+  "GetSensorServiceAreasResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/SensorServiceArea"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetSensorServiceAreaResponse": {
+    "type": "object",
+    "$ref": "#/SensorServiceArea"
+  },
+  "SensorServiceArea": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "number"
+      },
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "parentLocationId": {
+        "type": "number"
+      },
+      "parentLocationName": {
+        "type": "string"
+      },
+      "defaultServiceArea": {
+        "type": "boolean",
+        "description": "Whether this is the system-wide default service area"
+      },
+      "autoRebalance": {
+        "type": "boolean",
+        "description": "Whether automatic BSSID rebalancing is enabled for this service area's Eyes"
+      },
+      "otaBand": {
+        "type": "string",
+        "enum": ["UNDEFINED", "BAND_2400MHZ", "BAND_5000MHZ", "BAND_6000MHZ"],
+        "description": "The WlanBand this service area's OTA (over-the-air) configuration applies to"
+      },
+      "defaultConfigurationId": {
+        "type": "number",
+        "description": "id of the DefaultConfiguration applied to this service area's Eyes, if any"
+      }
+    }
+  },
+  "SensorServiceAreaId": {
+    "name": "serviceAreaId",
+    "in": "path",
+    "description": "Sensor Service Area Id",
+    "required": true,
+    "schema": {
+      "type": "number"
+    }
+  },
+  "PostSensorServiceAreaRequest": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "parentLocationId": {
+        "type": "number",
+        "description": "The parent Location's id this service area belongs to"
+      },
+      "defaultServiceArea": {
+        "type": "boolean",
+        "description": "Whether this is the system-wide default service area - setting true automatically unsets any previous default (enforced server-side); omit to leave at the domain default (false)"
+      },
+      "autoRebalance": {
+        "type": "boolean",
+        "description": "Enables automatic BSSID rebalancing for this service area's Eyes; omit to leave at the domain default (enabled for newly created service areas)"
+      }
+    }
+  },
+  "PutSensorServiceAreaRequest": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "defaultServiceArea": {
+        "type": "boolean",
+        "description": "Whether this is the system-wide default service area - setting true automatically unsets any previous default (enforced server-side); omit to leave unchanged"
+      },
+      "autoRebalance": {
+        "type": "boolean",
+        "description": "Enables automatic BSSID rebalancing for this service area's Eyes; omit to leave unchanged"
+      },
+      "otaBand": {
+        "type": "string",
+        "enum": [
+          "UNDEFINED",
+          "BAND_2400MHZ", "24", "24ghz",
+          "BAND_5000MHZ", "5", "50", "5ghz", "50ghz",
+          "BAND_6000MHZ", "6", "60", "6ghz", "60ghz"
+        ],
+        "description": "The WlanBand this service area's OTA (over-the-air) configuration applies to - accepts either the exact enum constant name or a friendly short form (both case-insensitive); unlike defaultServiceArea/autoRebalance above, omitting this (or sending an explicit null) resets it to UNDEFINED rather than leaving it unchanged",
+        "example": "5ghz"
+      },
+      "defaultConfigurationId": {
+        "type": "number",
+        "description": "id of a DefaultConfiguration to apply to this service area's Eyes (see GET /default-configurations for valid ids) - unlike defaultServiceArea/autoRebalance above, omitting this (or sending an explicit null) unsets it rather than leaving it unchanged"
+      }
+    }
+  },
+  "SensorNetworkId": {
+    "name": "networkId",
+    "in": "path",
+    "description": "Sensor Wireless Network Id",
+    "required": true,
+    "schema": {
+      "type": "number"
+    }
+  },
+  "PostSensorServiceAreaSensorsRequest": {
+    "type": "object",
+    "properties": {
+      "sensorIds": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "description": "ids of the sensors to move into this service area, from wherever they currently are"
+      }
+    }
+  }
+}

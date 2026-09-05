@@ -1,0 +1,94 @@
+{
+  "OAuth2ClientCredentialsRequest": {
+    "required": true,
+    "content": {
+      "application/x-www-form-urlencoded": {
+        "schema": {
+          "type": "object",
+          "required": [
+            "grant_type",
+            "client_id",
+            "client_secret"
+          ],
+          "properties": {
+            "grant_type": {
+              "type": "string",
+              "description": "OAuth2 Grant Type. Only `client_credentials` is supported.",
+              "default": "client_credentials"
+            },
+            "client_id": {
+              "type": "string",
+              "description": "OAuth2 client ID to identify the client",
+              "format": "password"
+            },
+            "client_secret": {
+              "type": "string",
+              "description": "OAuth2 client secret to authenticate the client",
+              "format": "password"
+            }
+          }
+        },
+        "encoding": {
+          "scope": {
+            "style": "spaceDelimited"
+          }
+        }
+      }
+    }
+  },
+  "OAuth2AccessTokenResponse": {
+    "type": "object",
+    "required": [
+      "token_type",
+      "access_token"
+    ],
+    "properties": {
+      "token_type": {
+        "type": "string"
+      },
+      "access_token": {
+        "type": "string"
+      },
+      "expires_in": {
+        "type": "integer"
+      },
+      "refresh_token": {
+        "type": "string"
+      },
+      "scope": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "OAuth2AccessTokenError": {
+    "type": "object",
+    "required": [
+      "error"
+    ],
+    "properties": {
+      "error": {
+        "type": "string",
+        "description": "error message",
+        "enum": [
+          "invalid_request",
+          "invalid_client",
+          "invalid_grant",
+          "unauthorized_client",
+          "unsupported_grant_type",
+          "invalid_scope"
+        ]
+      },
+      "error_description": {
+        "type": "string",
+        "description": "Human-readable ASCII text providing additional information"
+      },
+      "error_uri": {
+        "type": "string",
+        "description": "A URI identifying a human-readable web page with information about the error"
+      }
+    }
+  }
+}

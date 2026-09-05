@@ -1,0 +1,197 @@
+{
+  "GetAgentAccessPointsResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentAccessPoint"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetAgentAccessPointResponse": {
+    "type": "object",
+    "$ref": "#/AgentAccessPoint"
+  },
+  "AgentAccessPoint": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "name": {
+        "type": "string"
+      },
+      "controller": {
+        "type": "string"
+      },
+      "overTheAirName": {
+        "type": "string"
+      },
+      "modifiedBy": {
+        "type": "string"
+      },
+      "macAddress": {
+        "type": "string"
+      },
+      "locationId": {
+        "deprecated": true,
+        "type": "string",
+        "format": "uuid",
+        "description": "Deprecated: use serviceAreaId instead."
+      },
+      "serviceAreaId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "bssids": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentAccessPointBssid"
+        }
+      }
+    }
+  },
+  "AgentAccessPointBssid": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "bssid": {
+        "type": "string"
+      },
+      "band": {
+        "type": "string"
+      }
+    }
+  },
+  "PostAgentAccessPointsRequest": {
+    "type": "array",
+    "items": {
+      "type": "object",
+      "$ref": "#/AgentAccessPointRequest"
+    }
+  },
+  "AgentAccessPointRequest": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "controller": {
+        "type": "string"
+      },
+      "locationId": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "bssids": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/AgentAccessPointBssidRequest"
+        }
+      }
+    }
+  },
+  "AgentAccessPointBssidRequest": {
+    "type": "object",
+    "properties": {
+      "bssid": {
+        "type": "string"
+      },
+      "band": {
+        "type": "string"
+      }
+    }
+  },
+  "GetSensorAccessPointsResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/SensorAccessPoint"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "GetSensorAccessPointResponse": {
+    "type": "object",
+    "$ref": "#/SensorAccessPoint"
+  },
+  "SensorAccessPoint": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "number"
+      },
+      "name": {
+        "type": "string"
+      },
+      "bssid": {
+        "type": "string"
+      },
+      "description": {
+        "type": "string"
+      },
+      "serviceAreaId": {
+        "type": "number"
+      },
+      "serviceAreaName": {
+        "type": "string"
+      },
+      "network": {
+        "type": "string"
+      },
+      "band": {
+        "type": "number",
+        "example": 5
+      },
+      "managed" : {
+        "type": "string"
+      },
+      "managingEyeId" : {
+        "type": "number"
+      },
+      "essid" : {
+        "type": "string"
+      },
+      "frequency" : {
+        "type": "number"
+      },
+      "channelNumber" : {
+        "type": "string"
+      },
+      "accessPointState" : {
+        "type": "string"
+      },
+      "accessPointStatus" : {
+        "type": "string"
+      }
+    }
+  },
+  "SensorAccessPointPatchRequest": {
+    "type": "object",
+    "properties": {
+      "accessPointAlias": {
+        "type": "string"
+      }
+    }
+  }
+}

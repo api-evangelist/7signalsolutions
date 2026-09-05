@@ -1,0 +1,2793 @@
+{
+  "access-summary": {
+    "get": {
+      "operationId": "access-summary-get-a1b2",
+      "tags": [
+        "Access"
+      ],
+      "summary": "List the access summary for the given user",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AccessSummaryResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "users-summary": {
+    "get": {
+      "operationId": "users-summary-get-c3d4",
+      "tags": [
+        "Users"
+      ],
+      "summary": "Gets the summary of the logged in user for the given organization or the primary organization if not specified.",
+      "parameters": [
+        {
+          "name": "organizationId",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/UserSummaryResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "apikeys": {
+    "get": {
+      "operationId": "apikeys-get-e5f6",
+      "tags": [
+        "API Keys"
+      ],
+      "summary": "List all accessible ApiKeys, optionally filtered by permissions, ids, createdBys and organizationsIds",
+      "parameters": [
+        {
+          "name": "permissions",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "ids",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "createdBys",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "organizationIds",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PageModelApiKey"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "post": {
+      "operationId": "apikeys-post-g7h8",
+      "tags": [
+        "API Keys"
+      ],
+      "summary": "Create an ApiKey and make it available for usage",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/ApiKeyRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/ApiKeyResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "apikeys-with-id": {
+    "get": {
+      "operationId": "apikeys-with-id-get-i9j0",
+      "tags": [
+        "API Keys"
+      ],
+      "summary": "List the specific ApiKey identified by its UUID, and its associated Permissions",
+      "parameters": [
+        {
+          "name": "apikeyId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/ApiKeyResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "delete": {
+      "operationId": "apikeys-with-id-delete-k1l2",
+      "tags": [
+        "API Keys"
+      ],
+      "summary": "Delete the ApiKey specified by the UUID",
+      "parameters": [
+        {
+          "name": "apikeyId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "groups": {
+    "get": {
+      "operationId": "groups-get-m3n4",
+      "tags": [
+        "Groups"
+      ],
+      "summary": "List all accessible Groups",
+      "parameters": [
+        {
+          "name": "ids",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "keys",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "organizationIds",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "instanceIds",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PageModelGroup"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "groups-with-id": {
+    "get": {
+      "operationId": "groups-with-id-get-o5p6",
+      "tags": [
+        "Groups"
+      ],
+      "summary": "Get a specific Group by UUID",
+      "parameters": [
+        {
+          "name": "groupId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/Group"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "groups-with-id-sensors": {
+    "delete": {
+      "operationId": "groups-with-id-sensors-delete",
+      "tags": [
+        "Groups"
+      ],
+      "summary": "Unmap all sensors from the Group specified by the UUID",
+      "parameters": [
+        {
+          "name": "groupId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "meraki-integration-config": {
+    "get": {
+      "operationId": "meraki-integration-config-get",
+      "tags": [
+        "Integration Configs"
+      ],
+      "summary": "List all accessible meraki integration configurations",
+      "parameters": [
+        {
+          "name": "ids",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "createdBys",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "organizationIds",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PageModelMerakiIntegrationConfig"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "post": {
+      "operationId": "meraki-integration-config-post",
+      "tags": [
+        "Integration Configs"
+      ],
+      "summary": "Create a meraki integration configuration",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/MerakiIntegrationConfigRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/MerakiIntegrationConfigResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "meraki-integration-config-id": {
+    "get": {
+      "operationId": "meraki-integration-config-with-id-get",
+      "tags": [
+        "Integration Configs"
+      ],
+      "summary": "List the specific meraki integration configuration identified by its UUID",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/MerakiIntegrationConfigResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "put": {
+      "operationId": "meraki-integration-config-with-id-put",
+      "tags": [
+        "Integration Configs"
+      ],
+      "summary": "Replace the configurable parameters of a meraki integration configuration specified by its UUID",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/MerakiIntegrationConfigPutRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/MerakiIntegrationConfigResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "delete": {
+      "operationId": "meraki-integration-config-with-id-delete",
+      "tags": [
+        "Integration Configs"
+      ],
+      "summary": "Delete the meraki integration configuration specified by the UUID",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "servicenow-integration-config": {
+    "get": {
+      "operationId": "servicenow-integration-config-get",
+      "tags": [
+        "Integration Configs"
+      ],
+      "summary": "List all accessible ServiceNow integration configurations",
+      "parameters": [
+        {
+          "name": "ids",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "createdBys",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "organizationIds",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "mobileEyeOrgCode",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "sapphireGroups",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "sapphireInstances",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PageModelServiceNowIntegrationConfig"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "post": {
+      "operationId": "servicenow-integration-config-post",
+      "tags": [
+        "Integration Configs"
+      ],
+      "summary": "Create a ServiceNow integration configuration",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/ServiceNowIntegrationConfigCreateRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/ServiceNowIntegrationConfigWithOrgId"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "servicenow-integration-config-id": {
+    "get": {
+      "operationId": "servicenow-integration-config-with-id-get",
+      "tags": [
+        "Integration Configs"
+      ],
+      "summary": "List the specific ServiceNow integration configuration identified by its UUID",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/ServiceNowIntegrationConfig"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "put": {
+      "operationId": "servicenow-integration-config-with-id-put",
+      "tags": [
+        "Integration Configs"
+      ],
+      "summary": "Replace the configurable parameters of a ServiceNow integration configuration specified by its UUID",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/ServiceNowIntegrationConfigUpdateRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/ServiceNowIntegrationConfigWithOrgId"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "patch": {
+      "operationId": "servicenow-integration-config-with-id-patch",
+      "tags": [
+        "Integration Configs"
+      ],
+      "summary": "Patch the configurable parameters of a ServiceNow integration configuration specified by its UUID",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/ServiceNowIntegrationConfigPatchRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/ServiceNowIntegrationConfigWithOrgId"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "delete": {
+      "operationId": "servicenow-integration-config-with-id-delete",
+      "tags": [
+        "Integration Configs"
+      ],
+      "summary": "Delete the ServiceNow integration configuration specified by the UUID",
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "organizations": {
+    "get": {
+      "operationId": "organizations-get-q7r8",
+      "tags": [
+        "Organizations"
+      ],
+      "summary": "List all accessible Organizations",
+      "parameters": [
+        {
+          "name": "ids",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "names",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "mobileEyeOrgCodes",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PageModelOrganization"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "organizations-with-id": {
+    "get": {
+      "operationId": "organizations-with-id-get-s9t0",
+      "tags": [
+        "Organizations"
+      ],
+      "summary": "List the specific Organization identified by its UUID",
+      "parameters": [
+        {
+          "name": "organizationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/Organization"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "organizations-with-id-get-features": {
+    "get": {
+      "operationId": "organizations-with-id-get-features-get-u1v2",
+      "tags": [
+        "Organizations"
+      ],
+      "summary": "List all the features mapped to the Organization specified by the UUID",
+      "parameters": [
+        {
+          "name": "organizationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PageModelFeature"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "organizations-with-id-sensors": {
+    "delete": {
+      "operationId": "organizations-with-id-sensors-delete",
+      "tags": [
+        "Organizations"
+      ],
+      "summary": "Unmap all sensors from the Organization specified by the UUID",
+      "parameters": [
+        {
+          "name": "organizationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "permissions": {
+    "get": {
+      "operationId": "permissions-get-w3x4",
+      "tags": [
+        "Permissions"
+      ],
+      "summary": "List all accessible Permissions",
+      "parameters": [
+        {
+          "name": "ids",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "keys",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "isPublic",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "boolean"
+          }
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PageModelPermission"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "permissions-with-id": {
+    "get": {
+      "operationId": "permissions-with-id-get-y5z6",
+      "tags": [
+        "Permissions"
+      ],
+      "summary": "List the specific Permission identified by its UUID",
+      "parameters": [
+        {
+          "name": "permissionId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/Permission"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "roles": {
+    "get": {
+      "operationId": "roles-get-a7b8",
+      "tags": [
+        "Roles"
+      ],
+      "summary": "List all accessible Roles",
+      "parameters": [
+        {
+          "name": "ids",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "keys",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "isPublic",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "boolean"
+          }
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PageModelRole"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "roles-with-id": {
+    "get": {
+      "operationId": "roles-with-id-get-c9d0",
+      "tags": [
+        "Roles"
+      ],
+      "summary": "List the specific Role identified by its UUID",
+      "parameters": [
+        {
+          "name": "roleId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/RoleResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "sensor-registrations": {
+    "get": {
+      "operationId": "sensor-registrations-get",
+      "tags": [
+        "Sensor Registrations"
+      ],
+      "summary": "List all sensor registrations with optional filtering",
+      "parameters": [
+        {
+          "name": "ids",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "modes",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["MQTT", "LEGACY"]
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "statuses",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "macAddresses",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "serialNumbers",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "organizationIds",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "groupIds",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "models",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "softwareVersions",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "ipAddresses",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "serviceAreaIds",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PageModelSensorRegistration"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "post": {
+      "operationId": "sensor-registrations-post",
+      "tags": [
+        "Sensor Registrations"
+      ],
+      "summary": "Create a new sensor registration",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/SensorRegistrationCreateRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/SensorRegistration"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "sensor-registrations-with-id": {
+    "get": {
+      "operationId": "sensor-registrations-with-id-get",
+      "tags": [
+        "Sensor Registrations"
+      ],
+      "summary": "Get a sensor registration by UUID",
+      "parameters": [
+        {
+          "name": "sensorRegistrationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/SensorRegistration"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "patch": {
+      "operationId": "sensor-registrations-with-id-patch",
+      "tags": [
+        "Sensor Registrations"
+      ],
+      "summary": "Partially update a sensor registration by UUID",
+      "parameters": [
+        {
+          "name": "sensorRegistrationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/SensorRegistrationPatchRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/SensorRegistration"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "delete": {
+      "operationId": "sensor-registrations-with-id-delete",
+      "tags": [
+        "Sensor Registrations"
+      ],
+      "summary": "Delete a sensor registration by UUID",
+      "parameters": [
+        {
+          "name": "sensorRegistrationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "sensor-registrations-import": {
+    "post": {
+      "operationId": "sensor-registrations-import-post",
+      "tags": [
+        "Sensor Registrations"
+      ],
+      "summary": "Bulk import sensor registrations from CSV file",
+      "requestBody": {
+        "content": {
+          "multipart/form-data": {
+            "schema": {
+              "type": "object",
+              "required": [
+                "file"
+              ],
+              "properties": {
+                "file": {
+                  "type": "string",
+                  "format": "binary",
+                  "description": "CSV file containing sensor registrations"
+                }
+              }
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/SensorRegistrationCsvImportResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "users": {
+    "get": {
+      "operationId": "users-get-e1f2",
+      "tags": [
+        "Users"
+      ],
+      "summary": "List all accessible Users",
+      "parameters": [
+        {
+          "name": "ids",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "roles",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "permissions",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "emails",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "firstNames",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "lastNames",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "auth0Ids",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": []
+          }
+        },
+        {
+          "name": "organizationIds",
+          "in": "query",
+          "required": false,
+          "schema": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "default": []
+          }
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PageModelUser"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "post": {
+      "operationId": "users-post-g3h4",
+      "tags": [
+        "Users"
+      ],
+      "summary": "Create a User in Metadata service and mark it as 'invited'.\nUser info will be synchronized when the user logs into Auth0",
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/UserRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/UserResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "users-with-id": {
+    "get": {
+      "operationId": "users-with-id-get-i5j6",
+      "tags": [
+        "Users"
+      ],
+      "summary": "List the specific User identified by its UUID",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/UserResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "delete": {
+      "operationId": "users-with-id-delete-k7l8",
+      "tags": [
+        "Users"
+      ],
+      "summary": "Delete the User specified by the UUID",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "users-with-id-get-role": {
+    "put": {
+      "operationId": "users-with-id-get-role-put-m9n0",
+      "tags": [
+        "Users"
+      ],
+      "summary": "Update user's Role and Synchronize in Auth0",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/UsersRoleRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "delete": {
+      "operationId": "users-with-id-get-role-delete-o1p2",
+      "tags": [
+        "Users"
+      ],
+      "summary": "Remove user's Role and Synchronize in Auth0",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "users-with-id-get-permissions": {
+    "get": {
+      "operationId": "users-with-id-get-permissions-get-q3r4",
+      "tags": [
+        "Users"
+      ],
+      "summary": "List all the permissions(assigned via the role and directly) mapped to the User specified by the UUID",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PageModelPermission"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "put": {
+      "operationId": "users-with-id-get-permissions-put-s5t6",
+      "tags": [
+        "Users"
+      ],
+      "summary": "Replace User mapping with one or more Permissions in the given payload",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/UsersPermissionsRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "post": {
+      "operationId": "users-with-id-get-permissions-post-u7v8",
+      "tags": [
+        "Users"
+      ],
+      "summary": "Map User to one or more Permissions",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/UsersPermissionsRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "users-with-id-get-organizations": {
+    "get": {
+      "operationId": "users-with-id-get-organizations-get-w9x0",
+      "tags": [
+        "Users"
+      ],
+      "summary": "List all the organizations mapped to the User specified by the UUID",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "name": "primary",
+          "in": "query",
+          "description": "Filter by primary. True will return the mapped primary organization or else return all the mapped organizations.",
+          "required": false,
+          "schema": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        {
+          "name": "mobileEyeEnabled",
+          "in": "query",
+          "description": "Filter by mobile eye enabled. True will return mapped mobile eye enabled organizations or else return all the mapped organizations.",
+          "required": false,
+          "schema": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PageModelUserOrganization"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "put": {
+      "operationId": "users-with-id-get-organizations-put-y1z2",
+      "tags": [
+        "Users"
+      ],
+      "summary": "Replace User mapping with one or more Organizations in the given payload",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/OrganizationsUsersRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "post": {
+      "operationId": "users-with-id-get-organizations-post-a3b4",
+      "tags": [
+        "Users"
+      ],
+      "summary": "Map User to one or more Organizations",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/OrganizationsUsersRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "users-with-id-get-groups": {
+    "get": {
+      "operationId": "users-with-id-get-groups-get-c5d6",
+      "tags": [
+        "Users"
+      ],
+      "summary": "List all the groups mapped to the User specified by the UUID",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/PerPageRequestParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortOrderParam"
+        },
+        {
+          "$ref": "../common/schema.json#/SortFieldParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "OK",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/PageModelGroup"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "put": {
+      "operationId": "users-with-id-get-groups-put-e7f8",
+      "tags": [
+        "Users"
+      ],
+      "summary": "Replace User mapping with one or more Groups in the given payload",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/UsersGroupsRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    },
+    "post": {
+      "operationId": "users-with-id-get-groups-post-g9h0",
+      "tags": [
+        "Users"
+      ],
+      "summary": "Map User to one or more Groups",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/UsersGroupsRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "users-with-id-get-permissions-with-id": {
+    "delete": {
+      "operationId": "users-with-id-get-permissions-with-id-delete-i1j2",
+      "tags": [
+        "Users"
+      ],
+      "summary": "Unmap Permission from the User",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "name": "permissionId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "users-with-id-get-organizations-with-id": {
+    "delete": {
+      "operationId": "users-with-id-get-organizations-with-id-delete-k3l4",
+      "tags": [
+        "Users"
+      ],
+      "summary": "Unmap organization from the User",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "name": "organizationId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  },
+  "users-with-id-get-groups-with-id": {
+    "delete": {
+      "operationId": "users-with-id-get-groups-with-id-delete-m5n6",
+      "tags": [
+        "Users"
+      ],
+      "summary": "Unmap Group from the User",
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        {
+          "name": "groupId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ]
+    }
+  }
+}

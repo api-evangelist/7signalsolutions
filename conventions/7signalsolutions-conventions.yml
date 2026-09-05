@@ -1,0 +1,211 @@
+generated: '2026-09-05'
+method: searched
+source: https://github.com/7Signal/API-Examples/blob/develop/docs/README.md
+docs:
+- https://github.com/7Signal/API-Examples/blob/develop/DEVELOPER_GUIDE.md
+- https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
+- https://github.com/7Signal/API-Examples/blob/develop/docs/02-rate-limiting.md
+- https://github.com/7Signal/API-Examples/blob/develop/docs/12-integration-configs.md
+- https://github.com/7Signal/API-Examples/blob/develop/docs/16-alerting.md
+derived_from: openapi/7signalsolutions-openapi.json
+base_url: https://api-v2.7signal.com
+auth:
+  style: OAuth 2.0 client credentials -> 24h JWT bearer
+  header: 'Authorization: Bearer <access_token>'
+  detail: authentication/7signalsolutions-authentication.yml
+idempotency:
+  coverage: none
+  mechanism: none
+  header: null
+  scope: []
+  retention: null
+  evidence: >-
+    No occurrence of "idempoten" anywhere in the 215-operation OpenAPI, in any of the 51 published spec
+    fragments, or in the 22-chapter reference documentation. No Idempotency-Key header, no client-supplied
+    request id, no dedupe window. The one replay-safety property 7SIGNAL does publish is a per-response
+    correlation id (`requestId` in every error envelope, and Eyeris-Request-Id / Eyeris-Response-Id on
+    the Eyeris analysis endpoints) — that is tracing, not replay protection.
+  consequence: >-
+    A retried POST (create an alert rule, create an access point, create an API key, request an
+    on-demand test) will create a second resource. An agent must read back before retrying a write.
+  writes_affected: 62
+  safe_by_shape:
+  - 'PUT (full replace) and PATCH on a known id are naturally idempotent by target'
+  - 'DELETE on a known id is idempotent in effect (repeat yields 404)'
+pagination:
+  style: page-number
+  request_params:
+  - name: page
+    note: 1-based on most list endpoints ("The first page is 1"), but the Meraki integration-config docs describe page as starting at 0. Read the parameter description on the specific operation.
+  - name: perPage
+    note: records per page; default 20 on integration configs, 30 in the developer guide's worked example
+  - name: sortField
+  - name: order
+  response_fields:
+    envelope: pagination
+    fields:
+    - perPage
+    - page
+    - total
+    - pages
+    results_key: results
+  example: '{"pagination":{"perPage":20,"page":0,"total":4,"pages":1},"results":[...]}'
+  special_case: >-
+    Time-series endpoints paginate at the METRIC level, not the data-point level — requesting 10
+    metrics with perPage 5 yields 2 pages, and the series inside each metric is never paginated. A
+    single series is hard-capped at 120 data points; widen timeBucket or shorten the range instead.
+filtering:
+  style: repeated query parameters of ids / enum values (ids, organizationIds, createdBys, permissions, keys)
+  time_range:
+    params:
+    - from
+    - to
+    unit: epoch milliseconds (UTC)
+  bucketing:
+    param: timeBucket
+    values:
+    - 1_MIN
+    - 10_MIN
+    - 1_HOUR
+    - 1_DAY
+    - 1_MONTH
+  aggregation:
+    param: aggregateFunctions
+    values:
+    - SUM
+    - AVG
+    - MIN
+    - MAX
+    - COUNT
+    - PCTL
+    required_on: time-series endpoints
+field_expansion:
+  supported: false
+  note: No expand / fields / sparse-fieldset parameter is declared anywhere in the spec.
+metadata:
+  user_defined_fields: false
+  note: >-
+    No free-form metadata bag. Human-attachable text exists only as first-class fields on specific
+    resources (an access point `alias`, an agent `nickname`, an API key `description`).
+tracing:
+  request_id:
+    in_errors: requestId (required field on every common.ResponseStatusException body)
+    on_success: not documented
+  eyeris_headers:
+  - Eyeris-Request-Id
+  - Eyeris-Request-Queue-Id
+  - Eyeris-Response-Id
+  note: >-
+    No W3C traceparent, no X-Request-Id echo on success. The only correlation handle a client can quote
+    to support is the requestId returned on a failure.
+versioning:
+  style: host + gateway major version
+  current: v2 (api-v2.7signal.com), OpenAPI info.version 2.21.1
+  in_path: false
+  in_header: false
+  note: >-
+    The major version is carried by the hostname (api-v1 -> api-v2); api-v1.7signal.com no longer
+    resolves in DNS. Minor/patch movement is visible only in the spec's info.version. There is no
+    version negotiation header and no dated version pinning.
+errors:
+  envelope: Spring Boot error object (timestamp, status, error, message, path, requestId)
+  rfc9457: false
+  detail: errors/7signalsolutions-problem-types.yml
+rate_limit_signaling:
+  algorithm: token bucket
+  headers:
+  - ratelimit-remaining
+  - ratelimit-burst-capacity
+  - ratelimit-replenish-rate
+  - ratelimit-requested-tokens
+  status: 429
+  retry_after: not documented
+  detail: rate-limits/7signalsolutions-rate-limits.yml
+content_types:
+  request:
+  - application/json
+  - application/x-www-form-urlencoded (token endpoint only)
+  response:
+  - application/json
+  - text/event-stream (Eyeris analysis stream)
+  - application/octet-stream (packet capture download)
+  - application/vnd.tcpdump.pcap (packet capture)
+streaming:
+  protocol: Server-Sent Events
+  operation: GET /eyeris/analysis/stream
+  note: The only push surface on the REST gateway; everything else is request/response.
+dry_run_mode:
+  supported: false
+  value: none
+  note: >-
+    No preview, validate-only, or simulate parameter exists on any of the 62 write operations. An agent
+    cannot rehearse a write against this API.
+reversibility:
+  grade: documented
+  summary: >-
+    Reversal paths exist for the alerting and binding surfaces and are documented in prose, but 7SIGNAL
+    publishes NO time window for any of them. Under the 0.12.0 rule that is `documented` (0.4), not
+    `verified` — and it is deliberately not upgraded, because inventing a window here is the one error
+    that could cost a user real configuration.
+  write_surface_operations: 62
+  reversals:
+  - action: Disable an alert rule
+    operation: patch-alert-rule-enabled
+    rest: PATCH /alerting/alert-rules/{id}/enabled
+    reversal: the same operation with enabled=true
+    window: none stated — the toggle is unbounded in time
+    preserves: rule configuration and full incident history
+    docs: https://github.com/7Signal/API-Examples/blob/develop/docs/16-alerting.md
+    note: >-
+      7SIGNAL states the distinction explicitly — "Toggling a rule off is not the same as deleting it.
+      PATCH .../enabled keeps the configuration and the incident history, and stops evaluation. DELETE
+      removes the rule permanently." Prefer the toggle over DELETE whenever the intent is reversible.
+  - action: Resolve an alerting incident
+    operation: resolve-alerting-incident
+    rest: POST /alerting/incidents/{id}/resolve
+    reversal: none — resolving is terminal; a second call returns 409 "already resolved"
+    window: n/a
+    docs: https://github.com/7Signal/API-Examples/blob/develop/docs/16-alerting.md
+  - action: Unbind a wireless network from a service area
+    operation: sensor-service-area-unbind-network
+    rest: DELETE /service-areas/sensors/{serviceAreaId}/networks/{networkId}
+    reversal: re-bind the network to the service area
+    window: none stated
+  - action: Unbind an access point from its managing sensor
+    operation: PathAccessPointsSensor-delete-y7z8
+    rest: DELETE /access-points/sensors/{accessPointId}
+    reversal: not documented
+    window: none stated
+  - action: Stop automated testing on a sensor
+    operation: post-eyes-sensor-automated-testing
+    rest: POST /eyes/sensors/{sensorId}/automated-testing
+    reversal: the same operation started again
+    window: none stated
+  irreversible:
+  - operation: delete-alert-rule
+    rest: DELETE /alerting/alert-rules/{id}
+    note: permanent; use PATCH .../enabled when the intent is reversible
+  - operation: apikeys-with-id-delete-k1l2
+    rest: DELETE /apikeys/{apikeyId}
+    note: permanent; the secret is never recoverable
+  - operation: PathNetworkKeysSensor-delete-nk5s6
+    rest: DELETE /network-keys/sensors/{networkKeyId}
+    note: >-
+      Reference-checked (409 while still bound), but once deleted the key material is gone — network key
+      secrets are returned masked as ******** and the real value is NEVER returned by the API.
+  destructive_write_hazard:
+    operation_class: PUT
+    detail: >-
+      PUT is a FULL REPLACE, not a merge, on alert rules, sensor targets and network keys. Omitted
+      optional fields silently fall back to defaults (pendingPeriodSeconds 300, missingDataPolicy
+      ignore, enabled true), which reads to a user as settings being wiped. On network keys the hazard
+      is worse: because the fetched secret is masked, GET-then-PUT writes the literal string ********
+      as the credential. GET, edit the fields you mean to change, and PUT the complete object back.
+    docs: https://github.com/7Signal/API-Examples/blob/develop/docs/16-alerting.md
+cross_links:
+  authentication: authentication/7signalsolutions-authentication.yml
+  scopes: scopes/7signalsolutions-scopes.yml
+  errors: errors/7signalsolutions-problem-types.yml
+  rate_limits: rate-limits/7signalsolutions-rate-limits.yml
+  lifecycle: lifecycle/7signalsolutions-lifecycle.yml
+  webhooks: asyncapi/7signalsolutions-webhooks.yml

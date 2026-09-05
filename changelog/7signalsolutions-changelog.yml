@@ -1,0 +1,56 @@
+generated: '2026-09-05'
+method: searched
+source: https://github.com/7Signal/API-Examples/blob/develop/docs/WHATS-NEW.md
+docs: https://github.com/7Signal/API-Examples/blob/develop/docs/WHATS-NEW.md
+scheme: semver on the OpenAPI info.version, plus a hand-written "What's New" note in the public examples repo
+current_version: 2.21.1
+current_version_source: https://api-v2.7signal.com/api/gateway-v2.json
+dated: false
+dated_note: >-
+  This is the pipeline's honest reservation about the artifact: 7SIGNAL's What's New page groups newly
+  documented endpoints by capability but carries NO dates and NO version numbers per entry. There is no
+  dated changelog, no release-notes feed, and no RSS. Ordering is only inferable from git history on the
+  API-Examples repository (last pushed 2026-08-20).
+repo_last_updated: '2026-08-20'
+entries:
+- version: null
+  date: null
+  release: 'What''s New (current)'
+  summary: 16 newly documented endpoints across 2 areas of the API
+  breaking: false
+  additions:
+  - area: Alerting
+    reference: https://github.com/7Signal/API-Examples/blob/develop/docs/16-alerting.md
+    endpoints:
+    - GET,POST /alerting/alert-rules
+    - GET /alerting/alert-rules/summary
+    - GET,PUT,DELETE /alerting/alert-rules/{id}
+    - PATCH /alerting/alert-rules/{id}/enabled
+    - GET /alerting/incidents
+    - GET /alerting/incidents/summary
+    - GET /alerting/incidents/by-rule
+    - GET /alerting/incidents/{id}
+    - POST /alerting/incidents/{id}/resolve
+    highlights:
+    - A rule is evaluated once per combination of the dimensions in its dimensionSet
+    - Enum values on these endpoints are lowercase (avg, ignore, <)
+  - area: Sensor Targets, Network Keys & Default Configurations
+    reference: https://github.com/7Signal/API-Examples/blob/develop/docs/19-sensor-targets-and-network-keys.md
+    endpoints:
+    - GET,POST /targets/sensors
+    - GET,PUT,DELETE /targets/sensors/{targetId}
+    - GET,POST /network-keys/sensors
+    - GET /network-keys/sensors/templates
+    - GET,PUT,DELETE /network-keys/sensors/{networkKeyId}
+    - GET /default-configurations/sensors
+    - GET /default-configurations/sensors/{configurationId}
+    highlights:
+    - Network key secrets are returned masked as ******** and the real value is never returned
+    - PUT is a full replace, so echoing a fetched key back writes the mask as the literal secret
+    - Deletes are reference-checked; a key still bound to a network returns 409
+- version: null
+  date: null
+  release: Deprecations in flight
+  summary: KPI and Topology endpoint families deprecated in favour of Time Series and the resource-scoped endpoints
+  breaking: pending
+  detail: lifecycle/7signalsolutions-lifecycle.yml

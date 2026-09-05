@@ -1,0 +1,195 @@
+{
+  "ToRequestParam": {
+    "name": "to",
+    "in": "query",
+    "description": "The time in milliseconds from the epoch up to which incidents are fetched (the upper bound). Defaults to the present now.",
+    "required": false,
+    "schema": {
+      "type": "integer"
+    }
+  },
+  "FromRequestParam": {
+    "name": "from",
+    "in": "query",
+    "description": "The time in milliseconds from the epoch after which incidents are fetched (the lower bound). Defaults to the present 24 hours ago. The difference between `from` and `to` is not allowed be greater than 30 days.",
+    "required": false,
+    "schema": {
+      "type": "integer"
+    }
+  },
+  "GetIncidentsResponse": {
+    "type": "object",
+    "properties": {
+      "range": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Range"
+      },
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/NestedIncident"
+        }
+      }
+    }
+  },
+  "GetIncidentResponse": {
+    "type": "object",
+    "$ref": "#/FlatIncident"
+  },
+  "NestedIncident": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "startTimestamp": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "asOfTimestamp": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "endTimestamp": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "timestampDeterminedToBeIncident": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "organizationName": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "location": {
+        "type": "string"
+      },
+      "network": {
+        "type": "string"
+      },
+      "band": {
+        "type": "number",
+        "enum": [
+          2.40,
+          5.00,
+          6.00
+        ]
+      },
+      "countImpacted": {
+        "type": "number"
+      },
+      "populationCount": {
+        "type": "number"
+      },
+      "thresholds": {
+        "type": "object",
+        "properties": {
+          "warningThreshold": {
+            "type": "number"
+          },
+          "criticalThreshold": {
+            "type": "number"
+          },
+          "successRateThreshold": {
+            "type": "number"
+          },
+          "minPopulationCount": {
+            "type": "number"
+          },
+          "minCountImpacted": {
+            "type": "number"
+          },
+          "minPercentImpacted": {
+            "type": "number"
+          },
+          "minIncidentDurationMinutes": {
+            "type": "number"
+          }
+        }
+      },
+      "locationName": {
+        "type": "string"
+      }
+    }
+  },
+  "FlatIncident": {
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "startTimestamp": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "asOfTimestamp": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "endTimestamp": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "timestampDeterminedToBeIncident": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "organizationName": {
+        "type": "string"
+      },
+      "type": {
+        "type": "string"
+      },
+      "location": {
+        "type": "string"
+      },
+      "network": {
+        "type": "string"
+      },
+      "band": {
+        "type": "number",
+        "enum": [
+          2.40,
+          5.00,
+          6.00
+        ]
+      },
+      "countImpacted": {
+        "type": "number"
+      },
+      "populationCount": {
+        "type": "number"
+      },
+      "successRateThreshold": {
+        "type": "number"
+      },
+      "minPopulationCount": {
+        "type": "number"
+      },
+      "minCountImpacted": {
+        "type": "number"
+      },
+      "minPercentImpacted": {
+        "type": "number"
+      },
+      "minIncidentDurationMinutes": {
+        "type": "number"
+      },
+      "warningThreshold": {
+        "type": "number"
+      },
+      "criticalThreshold": {
+        "type": "number"
+      },
+      "locationName": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "TokenPost": {
+    "post": {
+      "summary": "OAuth2 Token Endpoint",
+      "operationId": "oauth2-token-endpoint",
+      "description": "The API requires a JWT bearer token. To fetch one, you may use this endpoint which supports the standard OAuth2 client credentials grant flow.",
+      "requestBody": {
+        "$ref": "schema.json#/OAuth2ClientCredentialsRequest"
+      },
+      "responses": {
+        "200": {
+          "description": "Success. A JWT token has been granted",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OAuth2AccessTokenResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "description": "There was a [problem with the request](https://datatracker.ietf.org/doc/html/rfc6749#section-5.2).",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/OAuth2AccessTokenError"
+              }
+            }
+          }
+        }
+      },
+      "security": [
+      ],
+      "tags": [
+        "Authentication"
+      ]
+    }
+  }
+}

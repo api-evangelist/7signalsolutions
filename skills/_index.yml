@@ -1,0 +1,55 @@
+generated: '2026-09-05'
+method: generated
+source: openapi/7signalsolutions-openapi.json + https://github.com/7Signal/API-Examples/tree/develop/docs
+api: 7SIGNAL Platform API (Gateway v2)
+base_url: https://api-v2.7signal.com
+note: >-
+  Five packaged Agent Skills for the marquee flows on the 7SIGNAL gateway. Every operationId named in
+  these skills was grepped out of the published contract; none is invented. 7SIGNAL publishes no
+  AGENTS.md and no skills of its own, so these are GENERATED, not searched. Each carries the
+  cross-cutting rules an agent needs before it acts: the 24-hour token, the token-bucket rate limiter,
+  the absence of any idempotency mechanism, the absence of any dry-run mode, and the PUT-is-a-full-
+  replace hazard.
+skills:
+- name: 7signal-authenticate
+  file: skills/7signalsolutions-authenticate.md
+  summary: Obtain and reuse a 24-hour bearer token with the OAuth 2.0 client-credentials grant.
+  operations: 1
+  writes: true
+  reversible: n/a
+- name: 7signal-query-wifi-experience
+  file: skills/7signalsolutions-query-wifi-experience.md
+  summary: Pull Wi-Fi experience time series for agents or sensors, grouped by location, band, channel or access point.
+  operations: 5
+  writes: false
+  reversible: n/a
+- name: 7signal-run-on-demand-test
+  file: skills/7signalsolutions-run-on-demand-test.md
+  summary: Trigger an on-demand network test on a Sapphire Eye sensor, poll for the result, download a packet capture.
+  operations: 6
+  writes: true
+  reversible: false
+  hazard: >-
+    Not idempotent and not cancellable — a retried trigger starts a second test on real hardware. Poll
+    active-tests before re-firing.
+- name: 7signal-manage-alert-rules
+  file: skills/7signalsolutions-manage-alert-rules.md
+  summary: Create, tune, disable and audit alert rules and the incidents they raise.
+  operations: 12
+  writes: true
+  reversible: partial
+  hazard: >-
+    PUT is a full replace, resolving an incident is terminal (409 on repeat), and DELETE on a rule is
+    permanent — use PATCH .../enabled to turn a rule off reversibly.
+- name: 7signal-triage-agent-experience
+  file: skills/7signalsolutions-triage-agent-experience.md
+  summary: Investigate a degraded endpoint or location across agents, impact, incidents, RF scans and Eyeris AI.
+  operations: 10
+  writes: false
+  reversible: n/a
+cross_cutting:
+  authentication: authentication/7signalsolutions-authentication.yml
+  conventions: conventions/7signalsolutions-conventions.yml
+  errors: errors/7signalsolutions-problem-types.yml
+  rate_limits: rate-limits/7signalsolutions-rate-limits.yml
+  deprecations: lifecycle/7signalsolutions-lifecycle.yml

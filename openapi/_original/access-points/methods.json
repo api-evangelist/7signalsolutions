@@ -1,0 +1,455 @@
+{
+  "PathAccessPointsAgents": {
+    "get": {
+      "summary": "List the Agent Access Points",
+      "operationId": "agent-access-points",
+      "description": "Page through all of the Agent Access Points",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "bssids",
+          "in": "query",
+          "description": "Filter by specific BSSID MAC addresses. Provide a comma-separated list of BSSID strings to return only access points with those BSSIDs.",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentAccessPointsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "AccessPoints"
+      ]
+    },
+    "post": {
+      "operationId": "PathAccessPointsAgents-post-n7p8",
+      "summary": "Creates one or many Agent Access Points",
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/PostAgentAccessPointsRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "201": {
+          "description": "Created",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentAccessPointsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "AccessPoints"
+      ]
+    }
+  },
+  "PathAccessPointsAgent": {
+    "get": {
+      "summary": "Fetch the specified Access Point",
+      "operationId": "agent-access-point",
+      "description": "Fetch the specified Access Point",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "accessPointId",
+          "in": "path",
+          "description": "Fetch the specific access Point referenced by its id",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetAgentAccessPointResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "AccessPoints"
+      ]
+    },
+    "put": {
+      "operationId": "PathAccessPointsAgent-put-q9r0",
+      "summary": "Replace the specified Access Point with the details in the payload",
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "accessPointId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/AgentAccessPointRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "AccessPoints"
+      ]
+    },
+    "patch": {
+      "operationId": "PathAccessPointsAgent-patch-s1t2",
+      "summary": "Update the specified Access Point with the details in the payload, name being required",
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "accessPointId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/AgentAccessPointRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "AccessPoints"
+      ]
+    },
+    "delete": {
+      "operationId": "PathAccessPointsAgent-delete-u3v4",
+      "summary": "Delete the Access Point specified by the UUID",
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "name": "accessPointId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "AccessPoints"
+      ]
+    }
+  },
+  "PathAccessPointsSensors": {
+    "get": {
+      "summary": "List the Sensor Access Points",
+      "operationId": "sensor-access-points",
+      "description": "Page through all of the Sensor Access Points",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "serviceAreaId",
+          "in": "query",
+          "description": "Filter the specific access point referenced by its service area id",
+          "required": false,
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "sensorId",
+          "in": "query",
+          "description": "Filter the specific access point referenced by its sensor id",
+          "required": false,
+          "schema": {
+            "type": "number"
+          }
+        },
+        {
+          "name": "excludeDefaultServiceArea",
+          "in": "query",
+          "description": "Exclude the default service area from the results unless it is explicitly requested via sensorId or serviceAreaId",
+          "required": false,
+          "schema": {
+            "type": "boolean"
+          }
+        },
+        {
+          "name": "signalStrengthMin",
+          "in": "query",
+          "description": "Filter access points whose average signal strength is below this threshold in dBm (e.g. -70). Only applies when sensorId is also provided.",
+          "required": false,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorAccessPointsResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "AccessPoints"
+      ]
+    }
+  },
+  "PathAccessPointsSensor": {
+    "get": {
+      "summary": "Fetch the specified Sensor Access Point",
+      "operationId": "sensor-access-point",
+      "description": "Fetch the specified Sensor Access Point",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "name": "accessPointId",
+          "in": "path",
+          "description": "Fetch the specific access point referenced by its id",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/GetSensorAccessPointResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "AccessPoints"
+      ]
+    },
+    "patch": {
+      "operationId": "PathAccessPointsSensor-patch-w5x6",
+      "summary": "Update the alias of the specified Access Point",
+      "parameters": [
+        {
+          "name": "accessPointId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "requestBody": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "schema.json#/SensorAccessPointPatchRequest"
+            }
+          }
+        },
+        "required": true
+      },
+      "responses": {
+        "200": {
+          "description": "OK"
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "AccessPoints"
+      ]
+    },
+    "delete": {
+      "operationId": "PathAccessPointsSensor-delete-y7z8",
+      "summary": "Unbind the specified access point from its managing sensor",
+      "description": "Removes the association between the access point and its managing sensor. The access point is not deleted from the database.",
+      "parameters": [
+        {
+          "name": "accessPointId",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "integer"
+          }
+        }
+      ],
+      "responses": {
+        "204": {
+          "description": "No Content"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "tags": [
+        "AccessPoints"
+      ]
+    }
+  }
+}

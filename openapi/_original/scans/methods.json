@@ -1,0 +1,105 @@
+{
+  "PathScansAgents": {
+    "get": {
+      "summary": "Retrieve scan data for an agent",
+      "operationId": "scans-agents",
+      "description": "Fetch paginated scan data collected by a specific agent",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "../common/schema.json#/OrganizationRequestParam"
+        },
+        {
+          "$ref": "schema.json#/AgentIdRequestParam"
+        },
+        {
+          "$ref": "schema.json#/StartTimeRequestParam"
+        },
+        {
+          "$ref": "schema.json#/EndTimeRequestParam"
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "schema.json#/SizeRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/AgentsScanDataResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Scans"
+      ]
+    }
+  },
+  "PathScansSensors": {
+    "get": {
+      "summary": "Retrieve scan data for a sensor",
+      "operationId": "scans-sensors",
+      "description": "Fetch paginated scan data collected by a specific sensor (eye)",
+      "security": [
+        {
+          "oauth2": []
+        }
+      ],
+      "parameters": [
+        {
+          "$ref": "schema.json#/SensorIdRequestParam"
+        },
+        {
+          "$ref": "schema.json#/StartTimeRequestParam"
+        },
+        {
+          "$ref": "schema.json#/EndTimeRequestParam"
+        },
+        {
+          "$ref": "schema.json#/PageRequestParam"
+        },
+        {
+          "$ref": "schema.json#/SizeRequestParam"
+        }
+      ],
+      "responses": {
+        "200": {
+          "description": "Success",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "schema.json#/SensorsScanDataResponse"
+              }
+            }
+          }
+        },
+        "400": {
+          "$ref": "../common/schema.json#/400BadRequestResponse"
+        },
+        "404": {
+          "$ref": "../common/schema.json#/404NotFoundResponse"
+        }
+      },
+      "tags": [
+        "Scans"
+      ]
+    }
+  }
+}

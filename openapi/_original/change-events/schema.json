@@ -1,0 +1,45 @@
+{
+  "GetChangeEventsSensorResponse": {
+    "type": "object",
+    "properties": {
+      "results": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "$ref": "#/ChangeEventsSensor"
+        }
+      },
+      "pagination": {
+        "type": "object",
+        "$ref": "../common/schema.json#/Pagination"
+      }
+    }
+  },
+  "ChangeEventsSensor": {
+    "type": "object",
+    "properties": {
+      "timestamp": {
+        "type": "integer",
+        "format": "int64",
+        "description": "Timestamp in milliseconds since epoch (Unix time)",
+        "example": 1750821376000
+      },
+      "name": {
+        "type": "string",
+        "description": "Name of the change event"
+      },
+      "element": {
+        "type": "string",
+        "description": "Name of the element"
+      },
+      "parentElement": {
+        "type": "string",
+        "description": "Name of the parent element"
+      },
+      "description": {
+        "type": "string",
+        "description": "Description of the change event"
+      }
+    }
+  }
+}

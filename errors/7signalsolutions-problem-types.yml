@@ -1,0 +1,126 @@
+generated: '2026-09-05'
+method: derived
+source: openapi/7signalsolutions-openapi.json
+docs: https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
+format: spring-boot-error-envelope
+rfc9457: false
+format_note: >-
+  7SIGNAL does NOT use RFC 9457 application/problem+json. Every 4xx across the gateway serializes a
+  Spring Boot style error envelope as application/json under the schema common.ResponseStatusException.
+  There is no `type` URI, no `title`, and no per-error catalogue of machine-readable codes — the only
+  machine-readable discriminator is the numeric `status` plus the `error` reason phrase. The one
+  exception is the token endpoint, which correctly returns the RFC 6749 section 5.2 error object.
+envelope:
+  media_type: application/json
+  schema: common.ResponseStatusException
+  required:
+  - timestamp
+  - status
+  - error
+  - path
+  - requestId
+  fields:
+  - name: timestamp
+    type: string(date-time)
+    note: server time the error was produced
+  - name: status
+    type: integer
+    note: repeats the HTTP status code
+  - name: error
+    type: string
+    note: the HTTP reason phrase (e.g. "Not Found", "Bad Request")
+  - name: message
+    type: string
+    optional: true
+    note: human-readable detail; the only field carrying the specific cause
+  - name: path
+    type: string
+    note: the request path that failed
+  - name: requestId
+    type: string
+    note: correlation id — quote this to 7SIGNAL support when reporting a failure
+  observed_example: >-
+    {"timestamp":"2026-09-05T20:37:24.550+00:00","path":"/swagger-ui/swagger-config","status":404,
+    "error":"Not Found","requestId":"fa1b59e6-6259869","message":"No static resource
+    swagger-ui/swagger-config."}
+  observed_at: https://api-v2.7signal.com/swagger-ui/swagger-config
+problem_types:
+- status: 400
+  title: Bad Request
+  schema: common.ResponseStatusException
+  operations: 199
+  remediation: >-
+    Validate enum casing and required-field combinations before sending. 7SIGNAL's alerting docs call
+    this out explicitly: enum values are lowercase, and sending "AVG" or "Avg" instead of "avg"
+    returns a 400.
+- status: 401
+  title: Unauthorized
+  schema: not declared in the spec
+  operations: 0
+  documented_in_prose: true
+  remediation: >-
+    Token missing, expired or invalid. Re-run the client-credentials grant against
+    https://api-v2.7signal.com/oauth2/token. Tokens live 24 hours and cannot be extended.
+  note: >-
+    A real gap in the contract: 401 is the single most common failure an API client will hit, it is
+    documented in the authentication chapter, and NOT ONE of the 215 operations declares it as a
+    response.
+- status: 403
+  title: Forbidden
+  schema: common.ResponseStatusException
+  operations: 15
+  remediation: >-
+    The token is valid but the API key's Role/Organization/Sapphire Group grant does not include this
+    permission. Re-issue the key with the needed role at https://start.7signal.com.
+- status: 404
+  title: Resource Not Found
+  schema: common.ResponseStatusException
+  operations: 180
+  remediation: Check the UUID path parameter; ids are organization-scoped.
+- status: 409
+  title: Conflict
+  schema: common.ResponseStatusException
+  operations: 2
+  instances:
+  - operation: resolve-alerting-incident
+    detail: the incident is already resolved
+  - operation: PathNetworkKeysSensor-delete-nk5s6
+    detail: the network key is still in use by a wireless network or a sensor
+  remediation: >-
+    Both 409s are reference/state checks. For a network key, unbind it from every network and sensor
+    before deleting; for an incident, re-read it before resolving.
+- status: 429
+  title: Too Many Requests
+  schema: not declared in the spec
+  operations: 0
+  documented_in_prose: true
+  remediation: >-
+    Token bucket exhausted. Back off and retry; read ratelimit-remaining and ratelimit-replenish-rate.
+    See rate-limits/7signalsolutions-rate-limits.yml. Another contract gap — documented in prose, not
+    declared on a single operation.
+oauth_errors:
+  endpoint: POST https://api-v2.7signal.com/oauth2/token
+  media_type: application/json
+  schema: oauth2.OAuth2AccessTokenError
+  rfc: RFC 6749 section 5.2
+  codes:
+  - code: invalid_request
+  - code: invalid_client
+  - code: invalid_grant
+    meaning: >-
+      7SIGNAL's docs: "usually means that the grant_type parameter is incorrect or missing. Make sure
+      it is set to client_credentials."
+  - code: unauthorized_client
+  - code: unsupported_grant_type
+  - code: invalid_scope
+  fields:
+  - error
+  - error_description
+  - error_uri
+mcp_errors:
+  endpoint: https://mcp-v2.7signal.com/mcp
+  observed:
+  - status: 401
+    body: '{"error": "invalid_token", "error_description": "Authentication required"}'
+    www_authenticate_carries_resource_metadata: true
+    rfc: RFC 9728
