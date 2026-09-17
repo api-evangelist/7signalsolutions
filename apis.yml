@@ -105,38 +105,6 @@ apis:
     url: rate-limits/7signalsolutions-rate-limits.yml
   - type: Webhooks
     url: asyncapi/7signalsolutions-webhooks.yml
-- aid: 7signalsolutions:7signalsolutions-accesspoints-api
-  name: 7SIGNAL Access Points API
-  description: The AccessPoints API from 7SIGNAL — 4 operation(s) for accesspoints.
-  humanURL: https://api-v2.7signal.com/swagger-ui/index.html
-  baseURL: https://api-v2.7signal.com
-  tags:
-  - AccessPoints
-  properties:
-  - type: OpenAPI
-    url: openapi/7signalsolutions-accesspoints-api-openapi.yml
-  - type: Documentation
-    url: https://github.com/7Signal/API-Examples/blob/develop/docs/README.md
-  - type: APIReference
-    url: https://api-v2.7signal.com/swagger-ui/index.html
-  - type: GettingStarted
-    url: https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
-  - type: Examples
-    url: https://github.com/7Signal/API-Examples
-  - type: Authentication
-    url: authentication/7signalsolutions-authentication.yml
-  - type: OAuthScopes
-    url: scopes/7signalsolutions-scopes.yml
-  - type: Conventions
-    url: conventions/7signalsolutions-conventions.yml
-  - type: ErrorCatalog
-    url: errors/7signalsolutions-problem-types.yml
-  - type: DataModel
-    url: data-model/7signalsolutions-data-model.yml
-  - type: RateLimits
-    url: rate-limits/7signalsolutions-rate-limits.yml
-  - type: Webhooks
-    url: asyncapi/7signalsolutions-webhooks.yml
 - aid: 7signalsolutions:7signalsolutions-adapter-driver-report-api
   name: 7SIGNAL Adapter Driver Report API
   description: The Adapter Driver Report API from 7SIGNAL — 4 operation(s) for adapter driver report.
@@ -275,38 +243,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/7signalsolutions-authentication-api-openapi.yml
-  - type: Documentation
-    url: https://github.com/7Signal/API-Examples/blob/develop/docs/README.md
-  - type: APIReference
-    url: https://api-v2.7signal.com/swagger-ui/index.html
-  - type: GettingStarted
-    url: https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
-  - type: Examples
-    url: https://github.com/7Signal/API-Examples
-  - type: Authentication
-    url: authentication/7signalsolutions-authentication.yml
-  - type: OAuthScopes
-    url: scopes/7signalsolutions-scopes.yml
-  - type: Conventions
-    url: conventions/7signalsolutions-conventions.yml
-  - type: ErrorCatalog
-    url: errors/7signalsolutions-problem-types.yml
-  - type: DataModel
-    url: data-model/7signalsolutions-data-model.yml
-  - type: RateLimits
-    url: rate-limits/7signalsolutions-rate-limits.yml
-  - type: Webhooks
-    url: asyncapi/7signalsolutions-webhooks.yml
-- aid: 7signalsolutions:7signalsolutions-changeevents-api
-  name: 7SIGNAL Change Events API
-  description: The ChangeEvents API from 7SIGNAL — 1 operation(s) for changeevents.
-  humanURL: https://api-v2.7signal.com/swagger-ui/index.html
-  baseURL: https://api-v2.7signal.com
-  tags:
-  - ChangeEvents
-  properties:
-  - type: OpenAPI
-    url: openapi/7signalsolutions-changeevents-api-openapi.yml
   - type: Documentation
     url: https://github.com/7Signal/API-Examples/blob/develop/docs/README.md
   - type: APIReference
@@ -905,38 +841,6 @@ apis:
     url: rate-limits/7signalsolutions-rate-limits.yml
   - type: Webhooks
     url: asyncapi/7signalsolutions-webhooks.yml
-- aid: 7signalsolutions:7signalsolutions-serviceareas-api
-  name: 7SIGNAL Service Areas API
-  description: The ServiceAreas API from 7SIGNAL — 6 operation(s) for serviceareas.
-  humanURL: https://api-v2.7signal.com/swagger-ui/index.html
-  baseURL: https://api-v2.7signal.com
-  tags:
-  - ServiceAreas
-  properties:
-  - type: OpenAPI
-    url: openapi/7signalsolutions-serviceareas-api-openapi.yml
-  - type: Documentation
-    url: https://github.com/7Signal/API-Examples/blob/develop/docs/README.md
-  - type: APIReference
-    url: https://api-v2.7signal.com/swagger-ui/index.html
-  - type: GettingStarted
-    url: https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
-  - type: Examples
-    url: https://github.com/7Signal/API-Examples
-  - type: Authentication
-    url: authentication/7signalsolutions-authentication.yml
-  - type: OAuthScopes
-    url: scopes/7signalsolutions-scopes.yml
-  - type: Conventions
-    url: conventions/7signalsolutions-conventions.yml
-  - type: ErrorCatalog
-    url: errors/7signalsolutions-problem-types.yml
-  - type: DataModel
-    url: data-model/7signalsolutions-data-model.yml
-  - type: RateLimits
-    url: rate-limits/7signalsolutions-rate-limits.yml
-  - type: Webhooks
-    url: asyncapi/7signalsolutions-webhooks.yml
 - aid: 7signalsolutions:7signalsolutions-summaries-api
   name: 7SIGNAL Summaries API
   description: The Summaries API from 7SIGNAL — 1 operation(s) for summaries.
@@ -1001,38 +905,6 @@ apis:
     url: rate-limits/7signalsolutions-rate-limits.yml
   - type: Webhooks
     url: asyncapi/7signalsolutions-webhooks.yml
-- aid: 7signalsolutions:7signalsolutions-timeseries-api
-  name: 7SIGNAL Time Series API
-  description: The TimeSeries API from 7SIGNAL — 13 operation(s) for timeseries.
-  humanURL: https://api-v2.7signal.com/swagger-ui/index.html
-  baseURL: https://api-v2.7signal.com
-  tags:
-  - TimeSeries
-  properties:
-  - type: OpenAPI
-    url: openapi/7signalsolutions-timeseries-api-openapi.yml
-  - type: Documentation
-    url: https://github.com/7Signal/API-Examples/blob/develop/docs/README.md
-  - type: APIReference
-    url: https://api-v2.7signal.com/swagger-ui/index.html
-  - type: GettingStarted
-    url: https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
-  - type: Examples
-    url: https://github.com/7Signal/API-Examples
-  - type: Authentication
-    url: authentication/7signalsolutions-authentication.yml
-  - type: OAuthScopes
-    url: scopes/7signalsolutions-scopes.yml
-  - type: Conventions
-    url: conventions/7signalsolutions-conventions.yml
-  - type: ErrorCatalog
-    url: errors/7signalsolutions-problem-types.yml
-  - type: DataModel
-    url: data-model/7signalsolutions-data-model.yml
-  - type: RateLimits
-    url: rate-limits/7signalsolutions-rate-limits.yml
-  - type: Webhooks
-    url: asyncapi/7signalsolutions-webhooks.yml
 - aid: 7signalsolutions:7signalsolutions-topologies-api
   name: 7SIGNAL Topologies API
   description: The Topologies API from 7SIGNAL — 8 operation(s) for topologies.
@@ -1075,6 +947,134 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/7signalsolutions-users-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/7Signal/API-Examples/blob/develop/docs/README.md
+  - type: APIReference
+    url: https://api-v2.7signal.com/swagger-ui/index.html
+  - type: GettingStarted
+    url: https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
+  - type: Examples
+    url: https://github.com/7Signal/API-Examples
+  - type: Authentication
+    url: authentication/7signalsolutions-authentication.yml
+  - type: OAuthScopes
+    url: scopes/7signalsolutions-scopes.yml
+  - type: Conventions
+    url: conventions/7signalsolutions-conventions.yml
+  - type: ErrorCatalog
+    url: errors/7signalsolutions-problem-types.yml
+  - type: DataModel
+    url: data-model/7signalsolutions-data-model.yml
+  - type: RateLimits
+    url: rate-limits/7signalsolutions-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/7signalsolutions-webhooks.yml
+- aid: 7signalsolutions:7signalsolutions-access-points-api
+  name: 7SIGNAL Access Points API
+  description: The Access Points API from 7SIGNAL — 4 operation(s) for access points.
+  humanURL: https://7signal.com/platform/mcp-wi-fi-monitoring/
+  baseURL: https://mcp-v2.7signal.com/mcp
+  tags:
+  - Access Points
+  properties:
+  - type: OpenAPI
+    url: openapi/7signalsolutions-access-points-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/7Signal/API-Examples/blob/develop/docs/README.md
+  - type: APIReference
+    url: https://api-v2.7signal.com/swagger-ui/index.html
+  - type: GettingStarted
+    url: https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
+  - type: Examples
+    url: https://github.com/7Signal/API-Examples
+  - type: Authentication
+    url: authentication/7signalsolutions-authentication.yml
+  - type: OAuthScopes
+    url: scopes/7signalsolutions-scopes.yml
+  - type: Conventions
+    url: conventions/7signalsolutions-conventions.yml
+  - type: ErrorCatalog
+    url: errors/7signalsolutions-problem-types.yml
+  - type: DataModel
+    url: data-model/7signalsolutions-data-model.yml
+  - type: RateLimits
+    url: rate-limits/7signalsolutions-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/7signalsolutions-webhooks.yml
+- aid: 7signalsolutions:7signalsolutions-change-events-api
+  name: 7SIGNAL Change Events API
+  description: The Change Events API from 7SIGNAL — 1 operation(s) for change events.
+  humanURL: https://7signal.com/platform/mcp-wi-fi-monitoring/
+  baseURL: https://mcp-v2.7signal.com/mcp
+  tags:
+  - Change Events
+  properties:
+  - type: OpenAPI
+    url: openapi/7signalsolutions-change-events-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/7Signal/API-Examples/blob/develop/docs/README.md
+  - type: APIReference
+    url: https://api-v2.7signal.com/swagger-ui/index.html
+  - type: GettingStarted
+    url: https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
+  - type: Examples
+    url: https://github.com/7Signal/API-Examples
+  - type: Authentication
+    url: authentication/7signalsolutions-authentication.yml
+  - type: OAuthScopes
+    url: scopes/7signalsolutions-scopes.yml
+  - type: Conventions
+    url: conventions/7signalsolutions-conventions.yml
+  - type: ErrorCatalog
+    url: errors/7signalsolutions-problem-types.yml
+  - type: DataModel
+    url: data-model/7signalsolutions-data-model.yml
+  - type: RateLimits
+    url: rate-limits/7signalsolutions-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/7signalsolutions-webhooks.yml
+- aid: 7signalsolutions:7signalsolutions-service-areas-api
+  name: 7SIGNAL Service Areas API
+  description: The Service Areas API from 7SIGNAL — 6 operation(s) for service areas.
+  humanURL: https://7signal.com/platform/mcp-wi-fi-monitoring/
+  baseURL: https://mcp-v2.7signal.com/mcp
+  tags:
+  - Service Areas
+  properties:
+  - type: OpenAPI
+    url: openapi/7signalsolutions-service-areas-api-openapi.yml
+  - type: Documentation
+    url: https://github.com/7Signal/API-Examples/blob/develop/docs/README.md
+  - type: APIReference
+    url: https://api-v2.7signal.com/swagger-ui/index.html
+  - type: GettingStarted
+    url: https://github.com/7Signal/API-Examples/blob/develop/docs/01-authentication.md
+  - type: Examples
+    url: https://github.com/7Signal/API-Examples
+  - type: Authentication
+    url: authentication/7signalsolutions-authentication.yml
+  - type: OAuthScopes
+    url: scopes/7signalsolutions-scopes.yml
+  - type: Conventions
+    url: conventions/7signalsolutions-conventions.yml
+  - type: ErrorCatalog
+    url: errors/7signalsolutions-problem-types.yml
+  - type: DataModel
+    url: data-model/7signalsolutions-data-model.yml
+  - type: RateLimits
+    url: rate-limits/7signalsolutions-rate-limits.yml
+  - type: Webhooks
+    url: asyncapi/7signalsolutions-webhooks.yml
+- aid: 7signalsolutions:7signalsolutions-time-series-api
+  name: 7SIGNAL Time Series API
+  description: The Time Series API from 7SIGNAL — 13 operation(s) for time series.
+  humanURL: https://7signal.com/platform/mcp-wi-fi-monitoring/
+  baseURL: https://mcp-v2.7signal.com/mcp
+  tags:
+  - Time Series
+  properties:
+  - type: OpenAPI
+    url: openapi/7signalsolutions-time-series-api-openapi.yml
   - type: Documentation
     url: https://github.com/7Signal/API-Examples/blob/develop/docs/README.md
   - type: APIReference
