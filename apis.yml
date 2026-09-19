@@ -175,6 +175,8 @@ apis:
   humanURL: https://api-v2.7signal.com/swagger-ui/index.html
   baseURL: https://api-v2.7signal.com
   tags:
+  - APIKeys
+  tags_raw:
   - API Keys
   properties:
   - type: OpenAPI
@@ -399,6 +401,8 @@ apis:
   humanURL: https://api-v2.7signal.com/swagger-ui/index.html
   baseURL: https://api-v2.7signal.com
   tags:
+  - Group
+  tags_raw:
   - Groups
   properties:
   - type: OpenAPI
@@ -591,6 +595,8 @@ apis:
   humanURL: https://api-v2.7signal.com/swagger-ui/index.html
   baseURL: https://api-v2.7signal.com
   tags:
+  - Location
+  tags_raw:
   - Locations
   properties:
   - type: OpenAPI
@@ -719,6 +725,8 @@ apis:
   humanURL: https://api-v2.7signal.com/swagger-ui/index.html
   baseURL: https://api-v2.7signal.com
   tags:
+  - Organization
+  tags_raw:
   - Organizations
   properties:
   - type: OpenAPI
@@ -847,6 +855,8 @@ apis:
   humanURL: https://api-v2.7signal.com/swagger-ui/index.html
   baseURL: https://api-v2.7signal.com
   tags:
+  - Summary
+  tags_raw:
   - Summaries
   properties:
   - type: OpenAPI
@@ -943,6 +953,8 @@ apis:
   humanURL: https://api-v2.7signal.com/swagger-ui/index.html
   baseURL: https://api-v2.7signal.com
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
