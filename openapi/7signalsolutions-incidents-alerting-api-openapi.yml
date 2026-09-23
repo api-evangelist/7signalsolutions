@@ -1,0 +1,505 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Incidents (Alerting) API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Incidents (Alerting)
+paths:
+  /alerting/incidents:
+    get:
+      summary: List incidents
+      operationId: list-alerting-incidents
+      description: Page through alert-rule incidents for an organization, with optional filtering
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/alert-incidents.StatusFilterParam'
+      - $ref: '#/components/parameters/alert-incidents.MetricFilterParam'
+      - $ref: '#/components/parameters/alert-incidents.DimensionKeyFilterParam'
+      - $ref: '#/components/parameters/alert-incidents.RuleIdFilterParam'
+      - $ref: '#/components/parameters/alert-incidents.StartedAfterParam'
+      - $ref: '#/components/parameters/alert-incidents.StartedBeforeParam'
+      - $ref: '#/components/parameters/alert-incidents.ResolvedAfterParam'
+      - $ref: '#/components/parameters/alert-incidents.ResolvedBeforeParam'
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/alert-incidents.GetIncidentsResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '403':
+          $ref: '#/components/responses/common.403Forbidden'
+      tags:
+      - Incidents (Alerting)
+  /alerting/incidents/by-rule:
+    get:
+      summary: List incidents aggregated by rule
+      operationId: list-alerting-incidents-by-rule
+      description: Fetch incident counts grouped by the alert rule that produced them
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/alert-incidents.FromParam'
+      - $ref: '#/components/parameters/alert-incidents.ToParam'
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/alert-incidents.GetIncidentsByRuleResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '403':
+          $ref: '#/components/responses/common.403Forbidden'
+      tags:
+      - Incidents (Alerting)
+  /alerting/incidents/summary:
+    get:
+      summary: Get an incidents summary
+      operationId: alerting-incidents-summary
+      description: Fetch aggregate counts of the alert-rule incidents for an organization
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/alert-incidents.IncidentsSummary'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '403':
+          $ref: '#/components/responses/common.403Forbidden'
+      tags:
+      - Incidents (Alerting)
+  /alerting/incidents/{id}:
+    get:
+      summary: Fetch the specified incident
+      operationId: get-alerting-incident
+      description: Fetch a single incident by its id
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - name: id
+        in: path
+        description: The incident id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/alert-incidents.IncidentResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '403':
+          $ref: '#/components/responses/common.403Forbidden'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Incidents (Alerting)
+  /alerting/incidents/{id}/resolve:
+    post:
+      summary: Resolve an incident
+      operationId: resolve-alerting-incident
+      description: Manually resolve an active incident
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - name: id
+        in: path
+        description: The incident id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/alert-incidents.IncidentResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '403':
+          $ref: '#/components/responses/common.403Forbidden'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+        '409':
+          description: Conflict - the incident is already resolved
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/common.ResponseStatusException'
+      tags:
+      - Incidents (Alerting)
+components:
+  schemas:
+    alert-incidents.IncidentsSummary:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        activeCount:
+          type: integer
+          format: int64
+    alert-incidents.Dimension:
+      type: string
+      description: A dimension the metric is grouped/keyed by
+      enum:
+      - device_id
+      - bssid
+      - network
+      - band
+      - location_id
+      - target
+    alert-incidents.AggregationFunction:
+      type: string
+      enum:
+      - avg
+      - min
+      - max
+    alert-incidents.GetIncidentsByRuleResponse:
+      type: array
+      items:
+        $ref: '#/components/schemas/alert-incidents.IncidentByRuleResponse'
+    alert-incidents.IncidentSnapshot:
+      type: object
+      description: The rule configuration captured at the time the incident was raised
+      properties:
+        thresholdValue:
+          type: number
+          format: double
+        thresholdOperator:
+          $ref: '#/components/schemas/alert-incidents.ThresholdOperator'
+        aggregationFunction:
+          $ref: '#/components/schemas/alert-incidents.AggregationFunction'
+        pendingPeriodSeconds:
+          type: integer
+        dimensionFilters:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+    alert-incidents.IncidentResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        ticketId:
+          type: string
+        ruleId:
+          type: string
+          format: uuid
+        metric:
+          type: string
+        dimensionSet:
+          type: array
+          items:
+            $ref: '#/components/schemas/alert-incidents.Dimension'
+        dimensionKey:
+          type: string
+        startedAt:
+          type: integer
+          format: int64
+          description: Epoch millis
+        resolvedAt:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: Epoch millis
+        resolutionReason:
+          allOf:
+          - $ref: '#/components/schemas/alert-incidents.ResolutionReason'
+        triggerValue:
+          type:
+          - number
+          - 'null'
+          format: double
+        resolveValue:
+          type:
+          - number
+          - 'null'
+          format: double
+        snapshot:
+          $ref: '#/components/schemas/alert-incidents.IncidentSnapshot'
+    alert-incidents.GetIncidentsResponse:
+      type: object
+      required:
+      - results
+      - pagination
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/alert-incidents.IncidentResponse'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    alert-incidents.ResolutionReason:
+      type: string
+      description: Why an incident was resolved
+      enum:
+      - cleared
+      - cleared_by_user
+      - rule_deleted
+      - rule_config_changed
+      - insufficient_data
+      - location_deleted
+      - rule_disabled
+    alert-incidents.IncidentByRuleResponse:
+      type: object
+      properties:
+        ruleId:
+          type: string
+          format: uuid
+        rule:
+          type: object
+          properties:
+            metric:
+              type: string
+            dimensionSet:
+              type: array
+              items:
+                $ref: '#/components/schemas/alert-incidents.Dimension'
+            thresholdValue:
+              type: number
+              format: double
+            thresholdOperator:
+              $ref: '#/components/schemas/alert-incidents.ThresholdOperator'
+        incidentCount:
+          type: integer
+          format: int64
+        activeCount:
+          type: integer
+          format: int64
+    alert-incidents.ThresholdOperator:
+      type: string
+      enum:
+      - <
+      - <=
+      - '>'
+      - '>='
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    common.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is 1.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    alert-incidents.ResolvedBeforeParam:
+      name: resolvedBefore
+      in: query
+      description: Only include incidents resolved at or before this epoch-millis timestamp
+      required: false
+      schema:
+        type: integer
+        format: int64
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    alert-incidents.MetricFilterParam:
+      name: metric
+      in: query
+      description: Filter incidents by metric name
+      required: false
+      schema:
+        type: string
+    alert-incidents.StartedAfterParam:
+      name: startedAfter
+      in: query
+      description: Only include incidents started at or after this epoch-millis timestamp
+      required: false
+      schema:
+        type: integer
+        format: int64
+    alert-incidents.RuleIdFilterParam:
+      name: ruleId
+      in: query
+      description: Filter incidents by the alert rule that produced them
+      required: false
+      schema:
+        type: string
+        format: uuid
+    alert-incidents.FromParam:
+      name: from
+      in: query
+      description: Start of the window (epoch millis) for the by-rule aggregation
+      required: false
+      schema:
+        type: integer
+        format: int64
+    alert-incidents.ToParam:
+      name: to
+      in: query
+      description: End of the window (epoch millis) for the by-rule aggregation
+      required: false
+      schema:
+        type: integer
+        format: int64
+    alert-incidents.StartedBeforeParam:
+      name: startedBefore
+      in: query
+      description: Only include incidents started at or before this epoch-millis timestamp
+      required: false
+      schema:
+        type: integer
+        format: int64
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    alert-incidents.StatusFilterParam:
+      name: status
+      in: query
+      description: Filter incidents by their status
+      required: false
+      schema:
+        type: string
+        enum:
+        - active
+        - resolved
+    common.SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    alert-incidents.DimensionKeyFilterParam:
+      name: dimensionKey
+      in: query
+      description: Filter incidents by dimension key
+      required: false
+      schema:
+        type: string
+    alert-incidents.ResolvedAfterParam:
+      name: resolvedAfter
+      in: query
+      description: Only include incidents resolved at or after this epoch-millis timestamp
+      required: false
+      schema:
+        type: integer
+        format: int64
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

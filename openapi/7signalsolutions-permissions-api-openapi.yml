@@ -1,0 +1,203 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Permissions API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Permissions
+paths:
+  /permissions:
+    get:
+      operationId: permissions-get-w3x4
+      tags:
+      - Permissions
+      summary: List all accessible Permissions
+      parameters:
+      - name: ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+          default: []
+      - name: keys
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          default: []
+      - name: isPublic
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - $ref: '#/components/parameters/metadata.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadata.PageModelPermission'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+  /permissions/{permissionId}:
+    get:
+      operationId: permissions-with-id-get-y5z6
+      tags:
+      - Permissions
+      summary: List the specific Permission identified by its UUID
+      parameters:
+      - name: permissionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadata.Permission'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+components:
+  schemas:
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    metadata.Pagination:
+      type: object
+      properties:
+        perPage:
+          type: integer
+          format: int32
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+          description: The current page number. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
+        total:
+          type: integer
+          format: int64
+        pages:
+          type: integer
+          format: int32
+    metadata.PageModelPermission:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Permission'
+        pagination:
+          $ref: '#/components/schemas/metadata.Pagination'
+    metadata.Permission:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        key:
+          type: string
+        description:
+          type: string
+        isPublic:
+          type: boolean
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    common.SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    metadata.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

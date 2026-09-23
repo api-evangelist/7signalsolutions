@@ -1,0 +1,98 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Summaries API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Summaries
+paths:
+  /summaries/users:
+    get:
+      operationId: users-summary-get-i7j8
+      tags:
+      - Summaries
+      summary: Gets the summary of the logged in user for the given organization or the…
+      parameters:
+      - name: organizationId
+        in: query
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/summaries.UserSummaryResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+components:
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  schemas:
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    summaries.UserSummaryResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+        loginLast30Days:
+          type: integer
+          format: int64
+        loginLast90Days:
+          type: integer
+          format: int64
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

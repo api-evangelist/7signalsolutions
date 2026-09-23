@@ -1,0 +1,304 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Incidents API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Incidents
+paths:
+  /incidents/agents:
+    get:
+      summary: List the Agent Incidents
+      operationId: agent-incidents
+      description: Page through all of the Agent Incidents for the given time period
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/incidents.ToRequestParam'
+      - $ref: '#/components/parameters/incidents.FromRequestParam'
+      - name: location_id
+        in: query
+        description: location id
+        required: false
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/incidents.GetIncidentsResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Incidents
+  /incidents/agents/{incidentId}:
+    get:
+      summary: Fetch the specified Agent Incident
+      operationId: agent-incident
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - name: incidentId
+        in: path
+        description: Fetch the specific incident referenced by its id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/incidents.GetIncidentResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Incidents
+components:
+  schemas:
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    incidents.GetIncidentResponse:
+      $ref: '#/components/schemas/incidents.FlatIncident'
+    incidents.NestedIncident:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        startTimestamp:
+          type: string
+          format: date-time
+        asOfTimestamp:
+          type: string
+          format: date-time
+        endTimestamp:
+          type: string
+          format: date-time
+        timestampDeterminedToBeIncident:
+          type: string
+          format: date-time
+        organizationName:
+          type: string
+        type:
+          type: string
+        location:
+          type: string
+        network:
+          type: string
+        band:
+          type: number
+          enum:
+          - 2.4
+          - 5.0
+          - 6.0
+        countImpacted:
+          type: number
+        populationCount:
+          type: number
+        thresholds:
+          type: object
+          properties:
+            warningThreshold:
+              type: number
+            criticalThreshold:
+              type: number
+            successRateThreshold:
+              type: number
+            minPopulationCount:
+              type: number
+            minCountImpacted:
+              type: number
+            minPercentImpacted:
+              type: number
+            minIncidentDurationMinutes:
+              type: number
+        locationName:
+          type: string
+    common.Range:
+      type: object
+      required:
+      - to
+      - toAsDateString
+      - from
+      - fromAsDateString
+      - total
+      - duration
+      - durationAsString
+      properties:
+        to:
+          type: integer
+          example: 1674055815825
+        toAsDateString:
+          type: string
+          format: date-time
+          example: 2023-01-18T15:51:20.437Z[UTC]
+        from:
+          type: integer
+          example: 1674055815825
+        fromAsDateString:
+          type: string
+          format: date-time
+          example: 2023-01-17T15:51:20.438Z[UTC]
+        total:
+          type: integer
+          example: 5
+        duration:
+          type: integer
+          example: 60000
+        durationAsString:
+          type: string
+          example: 60 seconds
+    incidents.GetIncidentsResponse:
+      type: object
+      properties:
+        range:
+          $ref: '#/components/schemas/common.Range'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/incidents.NestedIncident'
+    incidents.FlatIncident:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        startTimestamp:
+          type: string
+          format: date-time
+        asOfTimestamp:
+          type: string
+          format: date-time
+        endTimestamp:
+          type: string
+          format: date-time
+        timestampDeterminedToBeIncident:
+          type: string
+          format: date-time
+        organizationName:
+          type: string
+        type:
+          type: string
+        location:
+          type: string
+        network:
+          type: string
+        band:
+          type: number
+          enum:
+          - 2.4
+          - 5.0
+          - 6.0
+        countImpacted:
+          type: number
+        populationCount:
+          type: number
+        successRateThreshold:
+          type: number
+        minPopulationCount:
+          type: number
+        minCountImpacted:
+          type: number
+        minPercentImpacted:
+          type: number
+        minIncidentDurationMinutes:
+          type: number
+        warningThreshold:
+          type: number
+        criticalThreshold:
+          type: number
+        locationName:
+          type: string
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    common.SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    incidents.FromRequestParam:
+      name: from
+      in: query
+      description: The time in milliseconds from the epoch after which incidents are fetched (the lower bound). Defaults to the present 24 hours ago. The difference between `from` and `to` is not allowed be greater than 30 days.
+      required: false
+      schema:
+        type: integer
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    incidents.ToRequestParam:
+      name: to
+      in: query
+      description: The time in milliseconds from the epoch up to which incidents are fetched (the upper bound). Defaults to the present now.
+      required: false
+      schema:
+        type: integer
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

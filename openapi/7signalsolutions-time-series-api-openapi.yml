@@ -1,0 +1,1735 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Time Series API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Time Series
+paths:
+  /time-series/agents/discrete:
+    get:
+      summary: Retrieve Time Series with discrete aggregation for agents
+      operationId: time-series-agents-discrete
+      description: Page through Time Series with discrete aggregation for agents
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/time-series.FromRequestParam'
+      - $ref: '#/components/parameters/time-series.ToRequestParam'
+      - $ref: '#/components/parameters/time-series.TimeBucketFilter'
+      - $ref: '#/components/parameters/time-series.AggregateFunctionsDiscreteFilter'
+      - $ref: '#/components/parameters/time-series.MetricsDiscreteFilter'
+      - $ref: '#/components/parameters/time-series.DeviceIdsFilter'
+      - $ref: '#/components/parameters/time-series.BssidsFilter'
+      - $ref: '#/components/parameters/time-series.LocationsFilter'
+      - $ref: '#/components/parameters/time-series.NetworksFilter'
+      - $ref: '#/components/parameters/time-series.BandsFilter'
+      - $ref: '#/components/parameters/time-series.TargetsFilter'
+      - $ref: '#/components/parameters/time-series.PlatformsFilter'
+      - $ref: '#/components/parameters/time-series.PlatformVersionsFilter'
+      - $ref: '#/components/parameters/time-series.MakesFilter'
+      - $ref: '#/components/parameters/time-series.ModelsFilter'
+      - $ref: '#/components/parameters/time-series.DriverProvidersFilter'
+      - $ref: '#/components/parameters/time-series.DriverVersionsFilter'
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/time-series.GetAgentTimeSeriesDiscreteResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Time Series
+  /time-series/agents/discrete/{groupByDimension}:
+    get:
+      summary: Retrieve Time Series with discrete aggregation for agents
+      operationId: time-series-agents-discrete-group-by
+      description: Page through Time Series with discrete aggregation for agents
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/time-series.AgentsGroupByDimensionFilter'
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/time-series.FromRequestParam'
+      - $ref: '#/components/parameters/time-series.ToRequestParam'
+      - $ref: '#/components/parameters/time-series.TimeBucketFilter'
+      - $ref: '#/components/parameters/time-series.AggregateFunctionsDiscreteFilter'
+      - $ref: '#/components/parameters/time-series.MetricsDiscreteFilter'
+      - $ref: '#/components/parameters/time-series.DeviceIdsFilter'
+      - $ref: '#/components/parameters/time-series.BssidsFilter'
+      - $ref: '#/components/parameters/time-series.LocationsFilter'
+      - $ref: '#/components/parameters/time-series.NetworksFilter'
+      - $ref: '#/components/parameters/time-series.BandsFilter'
+      - $ref: '#/components/parameters/time-series.TargetsFilter'
+      - $ref: '#/components/parameters/time-series.PlatformsFilter'
+      - $ref: '#/components/parameters/time-series.PlatformVersionsFilter'
+      - $ref: '#/components/parameters/time-series.MakesFilter'
+      - $ref: '#/components/parameters/time-series.ModelsFilter'
+      - $ref: '#/components/parameters/time-series.DriverProvidersFilter'
+      - $ref: '#/components/parameters/time-series.DriverVersionsFilter'
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/time-series.GetAgentTimeSeriesDiscreteGroupByResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Time Series
+  /time-series/agents/histogram/{groupByDimension}:
+    get:
+      summary: Retrieve Time Series Histogram for agents
+      operationId: time-series-agents-histogram
+      description: Page through Time Series histogram for agents
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/time-series.AgentsGroupByDimensionFilter'
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/time-series.FromRequestParam'
+      - $ref: '#/components/parameters/time-series.ToRequestParam'
+      - $ref: '#/components/parameters/time-series.TimeBucketFilter'
+      - $ref: '#/components/parameters/time-series.MetricHistogramFilter'
+      - $ref: '#/components/parameters/time-series.DeviceIdsFilter'
+      - $ref: '#/components/parameters/time-series.BssidsFilter'
+      - $ref: '#/components/parameters/time-series.LocationsFilter'
+      - $ref: '#/components/parameters/time-series.NetworksFilter'
+      - $ref: '#/components/parameters/time-series.BandsFilter'
+      - $ref: '#/components/parameters/time-series.TargetsFilter'
+      - $ref: '#/components/parameters/time-series.PlatformsFilter'
+      - $ref: '#/components/parameters/time-series.PlatformVersionsFilter'
+      - $ref: '#/components/parameters/time-series.MakesFilter'
+      - $ref: '#/components/parameters/time-series.ModelsFilter'
+      - $ref: '#/components/parameters/time-series.DriverProvidersFilter'
+      - $ref: '#/components/parameters/time-series.DriverVersionsFilter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/time-series.GetAgentTimeSeriesHistogramResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Time Series
+  /time-series/agents/numeric-summary/{groupByDimension}:
+    get:
+      summary: Retrieve Time Series with numeric summary aggregation for agents
+      operationId: time-series-agents-numeric-summary
+      description: Page through Time Series with numeric summary aggregation for agents
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/time-series.AgentsGroupByDimensionFilter'
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/time-series.FromRequestParam'
+      - $ref: '#/components/parameters/time-series.ToRequestParam'
+      - $ref: '#/components/parameters/time-series.AgentsAggregateFunctionsNumericFilter'
+      - $ref: '#/components/parameters/time-series.MetricsNumericFilter'
+      - $ref: '#/components/parameters/time-series.DeviceIdsFilter'
+      - $ref: '#/components/parameters/time-series.BssidsFilter'
+      - $ref: '#/components/parameters/time-series.LocationsFilter'
+      - $ref: '#/components/parameters/time-series.NetworksFilter'
+      - $ref: '#/components/parameters/time-series.BandsFilter'
+      - $ref: '#/components/parameters/time-series.TargetsFilter'
+      - $ref: '#/components/parameters/time-series.PlatformsFilter'
+      - $ref: '#/components/parameters/time-series.PlatformVersionsFilter'
+      - $ref: '#/components/parameters/time-series.MakesFilter'
+      - $ref: '#/components/parameters/time-series.ModelsFilter'
+      - $ref: '#/components/parameters/time-series.DriverProvidersFilter'
+      - $ref: '#/components/parameters/time-series.DriverVersionsFilter'
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/time-series.GetAgentTimeSeriesNumericSummaryResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Time Series
+  /time-series/agents/numeric-summary:
+    get:
+      summary: Retrieve Time Series with overall numeric summary aggregation for agents
+      operationId: time-series-agents-overall-numeric-summary
+      description: Page through Time Series with overall numeric summary aggregation for agents
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/time-series.FromRequestParam'
+      - $ref: '#/components/parameters/time-series.ToRequestParam'
+      - $ref: '#/components/parameters/time-series.AgentsAggregateFunctionsNumericFilter'
+      - $ref: '#/components/parameters/time-series.MetricsNumericFilter'
+      - $ref: '#/components/parameters/time-series.DeviceIdsFilter'
+      - $ref: '#/components/parameters/time-series.BssidsFilter'
+      - $ref: '#/components/parameters/time-series.LocationsFilter'
+      - $ref: '#/components/parameters/time-series.NetworksFilter'
+      - $ref: '#/components/parameters/time-series.BandsFilter'
+      - $ref: '#/components/parameters/time-series.TargetsFilter'
+      - $ref: '#/components/parameters/time-series.PlatformsFilter'
+      - $ref: '#/components/parameters/time-series.PlatformVersionsFilter'
+      - $ref: '#/components/parameters/time-series.MakesFilter'
+      - $ref: '#/components/parameters/time-series.ModelsFilter'
+      - $ref: '#/components/parameters/time-series.DriverProvidersFilter'
+      - $ref: '#/components/parameters/time-series.DriverVersionsFilter'
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/time-series.GetAgentTimeSeriesOverallNumericSummaryResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Time Series
+  /time-series/agents/numeric:
+    get:
+      summary: Retrieve Time Series with numeric aggregation for agents
+      operationId: time-series-agents-numeric
+      description: Page through Time Series with numeric aggregation for agents
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/time-series.FromRequestParam'
+      - $ref: '#/components/parameters/time-series.ToRequestParam'
+      - $ref: '#/components/parameters/time-series.TimeBucketFilter'
+      - $ref: '#/components/parameters/time-series.AgentsAggregateFunctionsNumericFilter'
+      - $ref: '#/components/parameters/time-series.MetricsNumericFilter'
+      - $ref: '#/components/parameters/time-series.DeviceIdsFilter'
+      - $ref: '#/components/parameters/time-series.BssidsFilter'
+      - $ref: '#/components/parameters/time-series.LocationsFilter'
+      - $ref: '#/components/parameters/time-series.NetworksFilter'
+      - $ref: '#/components/parameters/time-series.BandsFilter'
+      - $ref: '#/components/parameters/time-series.TargetsFilter'
+      - $ref: '#/components/parameters/time-series.PlatformsFilter'
+      - $ref: '#/components/parameters/time-series.PlatformVersionsFilter'
+      - $ref: '#/components/parameters/time-series.MakesFilter'
+      - $ref: '#/components/parameters/time-series.ModelsFilter'
+      - $ref: '#/components/parameters/time-series.DriverProvidersFilter'
+      - $ref: '#/components/parameters/time-series.DriverVersionsFilter'
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/time-series.GetAgentTimeSeriesNumericResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Time Series
+  /time-series/agents/numeric/{groupByDimension}:
+    get:
+      summary: Retrieve Time Series with numeric aggregation for agents
+      operationId: time-series-agents-numeric-group-by
+      description: Page through Time Series with numeric aggregation for agents
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/time-series.AgentsGroupByDimensionFilter'
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/time-series.FromRequestParam'
+      - $ref: '#/components/parameters/time-series.ToRequestParam'
+      - $ref: '#/components/parameters/time-series.TimeBucketFilter'
+      - $ref: '#/components/parameters/time-series.AgentsAggregateFunctionsNumericFilter'
+      - $ref: '#/components/parameters/time-series.MetricsNumericFilter'
+      - $ref: '#/components/parameters/time-series.DeviceIdsFilter'
+      - $ref: '#/components/parameters/time-series.BssidsFilter'
+      - $ref: '#/components/parameters/time-series.LocationsFilter'
+      - $ref: '#/components/parameters/time-series.NetworksFilter'
+      - $ref: '#/components/parameters/time-series.BandsFilter'
+      - $ref: '#/components/parameters/time-series.TargetsFilter'
+      - $ref: '#/components/parameters/time-series.PlatformsFilter'
+      - $ref: '#/components/parameters/time-series.PlatformVersionsFilter'
+      - $ref: '#/components/parameters/time-series.MakesFilter'
+      - $ref: '#/components/parameters/time-series.ModelsFilter'
+      - $ref: '#/components/parameters/time-series.DriverProvidersFilter'
+      - $ref: '#/components/parameters/time-series.DriverVersionsFilter'
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/time-series.GetAgentTimeSeriesNumericGroupByResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Time Series
+  /time-series/agents/metric-types:
+    get:
+      summary: Retrieve details of all or a subset of the Metric Types
+      operationId: time-series-agents-metric-types
+      description: Page through Metric Types for agents
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/time-series.AgentsMetricTypesFilter'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/time-series.GetAgentTimeSeriesMetricTypesResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Time Series
+  /time-series/sensors/numeric-summary:
+    get:
+      summary: Retrieve Time Series with overall numeric summary aggregation for sensors
+      operationId: time-series-sensors-overall-numeric-summary
+      description: Page through Time Series with overall numeric summary aggregation for sensors
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/time-series.SensorsTimeSeriesOrganizationRequestParam'
+      - $ref: '#/components/parameters/time-series.FromRequestParam'
+      - $ref: '#/components/parameters/time-series.ToRequestParam'
+      - $ref: '#/components/parameters/time-series.SensorsAggregateFunctionsNumericFilter'
+      - $ref: '#/components/parameters/time-series.SensorMetricsKPIFilter'
+      - $ref: '#/components/parameters/time-series.SensorLocationIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorServiceAreaIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorAccessPointIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorNetworkIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorBandFilter'
+      - $ref: '#/components/parameters/time-series.SensorClientMacsFilter'
+      - $ref: '#/components/parameters/time-series.SensorVendorsFilter'
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/time-series.GetSensorTimeSeriesOverallNumericSummaryResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Time Series
+  /time-series/sensors/numeric-summary/{groupByDimension}:
+    get:
+      summary: Retrieve Time Series with numeric summary aggregation for sensors
+      operationId: time-series-sensors-numeric-summary
+      description: Page through Time Series with numeric summary aggregation for sensors
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/time-series.SensorsGroupByDimensionFilter'
+      - $ref: '#/components/parameters/time-series.SensorsTimeSeriesOrganizationRequestParam'
+      - $ref: '#/components/parameters/time-series.FromRequestParam'
+      - $ref: '#/components/parameters/time-series.ToRequestParam'
+      - $ref: '#/components/parameters/time-series.SensorsAggregateFunctionsNumericFilter'
+      - $ref: '#/components/parameters/time-series.SensorMetricsKPIFilter'
+      - $ref: '#/components/parameters/time-series.SensorLocationIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorServiceAreaIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorAccessPointIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorNetworkIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorBandFilter'
+      - $ref: '#/components/parameters/time-series.SensorClientMacsFilter'
+      - $ref: '#/components/parameters/time-series.SensorVendorsFilter'
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/time-series.GetSensorTimeSeriesNumericSummaryResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Time Series
+  /time-series/sensors/numeric:
+    get:
+      summary: Retrieve Time Series with numeric aggregation for sensors by organization
+      operationId: time-series-sensors-overall-numeric
+      description: Page through Time Series with numeric aggregation for sensors by organization
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/time-series.SensorsTimeSeriesOrganizationRequestParam'
+      - $ref: '#/components/parameters/time-series.FromRequestParam'
+      - $ref: '#/components/parameters/time-series.ToRequestParam'
+      - $ref: '#/components/parameters/time-series.SensorTimeBucketFilter'
+      - $ref: '#/components/parameters/time-series.SensorsAggregateFunctionsNumericFilter'
+      - $ref: '#/components/parameters/time-series.SensorMetricsKPIFilter'
+      - $ref: '#/components/parameters/time-series.SensorLocationIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorServiceAreaIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorAccessPointIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorNetworkIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorBandFilter'
+      - $ref: '#/components/parameters/time-series.SensorClientMacsFilter'
+      - $ref: '#/components/parameters/time-series.SensorVendorsFilter'
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/time-series.GetSensorsTimeSeriesNumericResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Time Series
+  /time-series/sensors/numeric/{groupByDimension}:
+    get:
+      summary: Retrieve Time Series with numeric aggregation for sensors by the given grouping
+      operationId: time-series-sensors-numeric
+      description: Page through Time Series with numeric aggregation for sensors by the given grouping
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/time-series.SensorsGroupByDimensionFilter'
+      - $ref: '#/components/parameters/time-series.SensorsTimeSeriesOrganizationRequestParam'
+      - $ref: '#/components/parameters/time-series.FromRequestParam'
+      - $ref: '#/components/parameters/time-series.ToRequestParam'
+      - $ref: '#/components/parameters/time-series.SensorTimeBucketFilter'
+      - $ref: '#/components/parameters/time-series.SensorsAggregateFunctionsNumericFilter'
+      - $ref: '#/components/parameters/time-series.SensorMetricsKPIFilter'
+      - $ref: '#/components/parameters/time-series.SensorLocationIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorServiceAreaIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorAccessPointIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorNetworkIdsFilter'
+      - $ref: '#/components/parameters/time-series.SensorBandFilter'
+      - $ref: '#/components/parameters/time-series.SensorClientMacsFilter'
+      - $ref: '#/components/parameters/time-series.SensorVendorsFilter'
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/time-series.GetSensorsTimeSeriesNumericGroupByResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Time Series
+  /time-series/sensors/metric-types:
+    get:
+      summary: Retrieve details of all or a subset of the Metric Types
+      operationId: time-series-sensors-metric-types
+      description: Page through Metric Types for sensors
+      security:
+      - oauth2: []
+      parameters:
+      - name: metricTypes
+        in: query
+        description: Filter data returned by one or more metric types
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/time-series.GetSensorTimeSeriesMetricTypesResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Time Series
+components:
+  schemas:
+    time-series.GetAgentTimeSeriesDiscreteResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.AgentTimeSeriesDiscrete'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    time-series.AgentDriverType:
+      type: object
+      properties:
+        provider:
+          type: string
+        version:
+          type: string
+    time-series.TimeSeriesDiscreteType:
+      type: object
+      properties:
+        ts:
+          type: number
+        value:
+          type: string
+        count:
+          type: number
+    time-series.AgentTimeSeriesNumericGroupBy:
+      type: object
+      properties:
+        deviceId:
+          type: string
+        locationId:
+          type: string
+        network:
+          type: string
+        band:
+          type: string
+        bssid:
+          type: string
+        target:
+          type: string
+        platform:
+          type: string
+        platformVersion:
+          type: string
+        make:
+          type: string
+        model:
+          type: string
+        driver:
+          $ref: '#/components/schemas/time-series.AgentDriverType'
+        metricAggregates:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.MetricNumericAggregatesType'
+    time-series.AgentTimeSeriesOverallNumericSummary:
+      type: object
+      properties:
+        metric:
+          type: string
+          enum:
+          - ADJACENT_CHANNEL_INTERFERENCE
+          - APPLICATION_CONNECTIVITY
+          - BATTERY_PERCENTAGE
+          - BEST_NEIGHBOR_SIGNAL_STRENGTH
+          - BEST_NEIGHBOR_SIGNAL_STRENGTH_PREFERRED_BAND
+          - CHANNEL_UTILIZATION
+          - CLASSIC_STICKY_FACTOR
+          - CLIENT_COUNT
+          - CONGESTION
+          - CONNECTIVITY
+          - COVERAGE
+          - CO_CHANNEL_INTERFERENCE
+          - CPU_AVERAGE
+          - CPU_MAXIMUM
+          - CPU_MINIMUM
+          - EXPERIENCE_SCORE
+          - GATEWAY_PING_CONNECTIVITY
+          - GATEWAY_PING_LATENCY
+          - IDLE_TIME
+          - INTERFERENCE
+          - MOS_UPLOAD
+          - MOS_UPLOAD_JITTER
+          - MOS_UPLOAD_PACKET_LOSS
+          - NETWORK_CONNECTIVITY
+          - NOISE
+          - NUMBER_OF_ADJACENT_OVERLAPPING_BSSIDS
+          - NUMBER_OF_CLOSER_ACCESS_POINTS
+          - NUMBER_OF_CLOSER_ACCESS_POINTS_PREFERRED_BAND
+          - NUMBER_OF_CO_CHANNEL_OVERLAPPING_BSSIDS
+          - OVERALL_BEST_NEIGHBOR_SIGNAL_STRENGTH
+          - PING_CONNECTIVITY
+          - PING_LATENCY
+          - PLATFORM_AVAILABLE_MEMORY
+          - PLATFORM_MAX_MEMORY
+          - PLATFORM_TOTAL_MEMORY
+          - PLATFORM_USED_MEMORY
+          - RF_PROBLEM
+          - ROAMING
+          - SIGNAL_STRENGTH
+          - STICKY_FACTOR
+          - STICKY_FACTOR_PREFERRED_BAND
+          - TEST_DURATION
+          - THROUGHPUT_DOWNLOAD
+          - THROUGHPUT_DOWNLOAD_SIZE
+          - THROUGHPUT_UPLOAD
+          - THROUGHPUT_UPLOAD_SIZE
+          - WEB_CONNECTIVITY
+          - WEB_DURATION
+          - WEB_THROUGHPUT
+        min:
+          type: number
+        max:
+          type: number
+        avg:
+          type: number
+        sum:
+          type: number
+        count:
+          type: number
+        threshold:
+          type: number
+        grade:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+          - D
+          - F
+        score:
+          type: number
+    time-series.SensorTimeSeriesNumericGroupBy:
+      type: object
+      properties:
+        accessPointId:
+          type: number
+        name:
+          type: string
+          description: Name of the grouped access point. Present when grouping by accessPoint.
+          example: TENNANTS_5GHz
+        network:
+          type: string
+          description: Network name. When grouping by accessPoint this is the ESSID the access point broadcasts; when grouping by networkband it is the configured name of the wireless network. The two are not guaranteed to be identical.
+          example: TENNANTS
+        bssid:
+          type: string
+          description: MAC address of the grouped access point. Present when grouping by accessPoint.
+          example: 8C:30:66:A0:75:69
+        sensorId:
+          type: number
+        locationId:
+          type: number
+        organization:
+          type: string
+        serviceAreaId:
+          type: number
+        networkId:
+          type: number
+        band:
+          type: string
+          example: 5 GHz
+        channel:
+          type: number
+          description: Channel number of the grouped access point. Present when grouping by accessPoint and the access point has a defined channel.
+          example: 36
+        clientMac:
+          type: string
+        vendor:
+          type: string
+        metricAggregates:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.MetricNumericAggregatesType'
+    time-series.MetricDiscreteAggregatesType:
+      type: object
+      properties:
+        metric:
+          type: string
+        timeSeries:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.TimeSeriesDiscreteType'
+    time-series.AgentMetricType:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        unit:
+          type: string
+    time-series.GetSensorTimeSeriesNumericSummaryResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.SensorTimeSeriesNumericSummary'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    time-series.MetricNumericAggregatesType:
+      type: object
+      properties:
+        metric:
+          type: string
+        min:
+          type: number
+        max:
+          type: number
+        avg:
+          type: number
+        sum:
+          type: number
+        count:
+          type: number
+        threshold:
+          type: number
+        unit:
+          type: string
+        timeSeries:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.TimeSeriesNumericType'
+        grade:
+          type: string
+        score:
+          type: number
+    time-series.GetSensorTimeSeriesOverallNumericSummaryResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.SensorTimeSeriesOverallNumericSummary'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    time-series.GetAgentTimeSeriesNumericResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.AgentTimeSeriesNumeric'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    time-series.GetSensorsTimeSeriesNumericGroupByResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.SensorTimeSeriesNumericGroupBy'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    time-series.AgentTimeSeriesDiscrete:
+      type: object
+      properties:
+        metricAggregates:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.MetricDiscreteAggregatesType'
+    time-series.TimeSeriesNumericType:
+      type: object
+      properties:
+        ts:
+          type: number
+        min:
+          type: number
+        max:
+          type: number
+        avg:
+          type: number
+        sum:
+          type: number
+        count:
+          type: number
+        grade:
+          type: string
+        score:
+          type: number
+    time-series.AgentBinsType:
+      type: object
+      properties:
+        additionalProp1:
+          type: number
+        additionalProp2:
+          type: number
+        additionalProp3:
+          type: number
+    time-series.GetAgentTimeSeriesDiscreteGroupByResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.AgentTimeSeriesDiscreteGroupBy'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    time-series.AgentTimeSeriesHistogram:
+      type: object
+      properties:
+        timestamp:
+          type: number
+        bins:
+          $ref: '#/components/schemas/time-series.AgentBinsType'
+    time-series.SensorTimeSeriesOverallNumericSummary:
+      type: object
+      properties:
+        metric:
+          type: string
+        min:
+          type: number
+        max:
+          type: number
+        avg:
+          type: number
+        sum:
+          type: number
+        count:
+          type: number
+        threshold:
+          type: number
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    time-series.AgentTimeSeriesDiscreteGroupBy:
+      type: object
+      properties:
+        deviceId:
+          type: string
+        locationId:
+          type: string
+        network:
+          type: string
+        band:
+          type: string
+        bssid:
+          type: string
+        target:
+          type: string
+        platform:
+          type: string
+        platformVersion:
+          type: string
+        make:
+          type: string
+        model:
+          type: string
+        driver:
+          $ref: '#/components/schemas/time-series.AgentDriverType'
+        metricAggregates:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.MetricDiscreteAggregatesType'
+    time-series.GetSensorsTimeSeriesNumericResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.SensorTimeSeriesNumeric'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    time-series.GetAgentTimeSeriesHistogramResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.AgentTimeSeriesHistogram'
+    time-series.SensorTimeSeriesNumeric:
+      type: object
+      properties:
+        metricAggregates:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.MetricNumericAggregatesType'
+    time-series.AgentTimeSeriesNumericSummary:
+      type: object
+      properties:
+        deviceId:
+          type: string
+        locationId:
+          type: string
+        network:
+          type: string
+        band:
+          type: string
+        bssid:
+          type: string
+        target:
+          type: string
+        platform:
+          type: string
+        platformVersion:
+          type: string
+        make:
+          type: string
+        model:
+          type: string
+        driver:
+          $ref: '#/components/schemas/time-series.AgentDriverType'
+        metric:
+          type: string
+          enum:
+          - ADJACENT_CHANNEL_INTERFERENCE
+          - APPLICATION_CONNECTIVITY
+          - BATTERY_PERCENTAGE
+          - BEST_NEIGHBOR_SIGNAL_STRENGTH
+          - BEST_NEIGHBOR_SIGNAL_STRENGTH_PREFERRED_BAND
+          - CHANNEL_UTILIZATION
+          - CLASSIC_STICKY_FACTOR
+          - CLIENT_COUNT
+          - CONGESTION
+          - CONNECTIVITY
+          - COVERAGE
+          - CO_CHANNEL_INTERFERENCE
+          - CPU_AVERAGE
+          - CPU_MAXIMUM
+          - CPU_MINIMUM
+          - EXPERIENCE_SCORE
+          - GATEWAY_PING_CONNECTIVITY
+          - GATEWAY_PING_LATENCY
+          - IDLE_TIME
+          - INTERFERENCE
+          - MOS_UPLOAD
+          - MOS_UPLOAD_JITTER
+          - MOS_UPLOAD_PACKET_LOSS
+          - NETWORK_CONNECTIVITY
+          - NOISE
+          - NUMBER_OF_ADJACENT_OVERLAPPING_BSSIDS
+          - NUMBER_OF_CLOSER_ACCESS_POINTS
+          - NUMBER_OF_CLOSER_ACCESS_POINTS_PREFERRED_BAND
+          - NUMBER_OF_CO_CHANNEL_OVERLAPPING_BSSIDS
+          - OVERALL_BEST_NEIGHBOR_SIGNAL_STRENGTH
+          - PING_CONNECTIVITY
+          - PING_LATENCY
+          - PLATFORM_AVAILABLE_MEMORY
+          - PLATFORM_MAX_MEMORY
+          - PLATFORM_TOTAL_MEMORY
+          - PLATFORM_USED_MEMORY
+          - RF_PROBLEM
+          - ROAMING
+          - SIGNAL_STRENGTH
+          - STICKY_FACTOR
+          - STICKY_FACTOR_PREFERRED_BAND
+          - TEST_DURATION
+          - THROUGHPUT_DOWNLOAD
+          - THROUGHPUT_DOWNLOAD_SIZE
+          - THROUGHPUT_UPLOAD
+          - THROUGHPUT_UPLOAD_SIZE
+          - WEB_CONNECTIVITY
+          - WEB_DURATION
+          - WEB_THROUGHPUT
+        min:
+          type: number
+        max:
+          type: number
+        avg:
+          type: number
+        sum:
+          type: number
+        count:
+          type: number
+        threshold:
+          type: number
+        grade:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+          - D
+          - F
+        score:
+          type: number
+    time-series.GetAgentTimeSeriesOverallNumericSummaryResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.AgentTimeSeriesOverallNumericSummary'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    time-series.GetSensorTimeSeriesMetricTypesResponse:
+      type: object
+      description: Map of metric identifiers to SensorMetricType objects
+      additionalProperties:
+        $ref: '#/components/schemas/time-series.SensorMetricType'
+      example:
+        PING_SUCCESS_RATE:
+          kpiCode: QURT007
+          name: Ping success rate
+          description: Number of successful pings divided by the total amount of ping attempts.
+          unit: '%'
+          aggregation: 'NO'
+        BEACON_AVAILABILITY:
+          kpiCode: AV008
+          name: Beacon availability
+          description: Measures beacon signal transmission from each monitored managed AP. The KPI is the relative amount of received and expected beacons. The test is called SCAN_MANAGED. Results from SCAN_RADIO-tests are ignored.
+          unit: '%'
+          aggregation: 'NO'
+    time-series.AgentTimeSeriesNumeric:
+      type: object
+      properties:
+        metricAggregates:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.MetricNumericAggregatesType'
+    time-series.SensorMetricType:
+      type: object
+      properties:
+        kpiCode:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        unit:
+          type: string
+        aggregation:
+          type: string
+    time-series.GetAgentTimeSeriesNumericSummaryResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.AgentTimeSeriesNumericSummary'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    time-series.GetAgentTimeSeriesMetricTypesResponse:
+      type: object
+      description: Map of metric identifiers to AgentMetricType objects
+      additionalProperties:
+        $ref: '#/components/schemas/time-series.AgentMetricType'
+      example:
+        CPU_AVERAGE:
+          name: Average CPU Usage
+          description: The average CPU utilization on the system
+          unit: '%'
+        CPU_MAXIMUM:
+          name: Network Latency
+          description: The maximum CPU utilization on the system
+          unit: '%'
+    time-series.GetAgentTimeSeriesNumericGroupByResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/time-series.AgentTimeSeriesNumericGroupBy'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    time-series.SensorTimeSeriesNumericSummary:
+      type: object
+      properties:
+        accessPointId:
+          type: number
+        name:
+          type: string
+          description: Name of the grouped access point. Present when grouping by accessPoint.
+          example: TENNANTS_5GHz
+        network:
+          type: string
+          description: Network name. When grouping by accessPoint this is the ESSID the access point broadcasts; when grouping by networkband it is the configured name of the wireless network. The two are not guaranteed to be identical.
+          example: TENNANTS
+        bssid:
+          type: string
+          description: MAC address of the grouped access point. Present when grouping by accessPoint.
+          example: 8C:30:66:A0:75:69
+        sensorId:
+          type: number
+        locationId:
+          type: number
+        organization:
+          type: string
+        serviceAreaId:
+          type: number
+        networkId:
+          type: number
+        band:
+          type: string
+          example: 5 GHz
+        channel:
+          type: number
+          description: Channel number of the grouped access point. Present when grouping by accessPoint and the access point has a defined channel.
+          example: 36
+        clientMac:
+          type: string
+        vendor:
+          type: string
+        metric:
+          type: string
+        min:
+          type: number
+        max:
+          type: number
+        avg:
+          type: number
+        sum:
+          type: number
+        count:
+          type: number
+        threshold:
+          type: number
+  parameters:
+    time-series.AgentsMetricTypesFilter:
+      name: metricTypes
+      in: query
+      description: Filter data returned by one or more metric types
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - ADAPTER_STATE
+          - ADJACENT_CHANNEL_INTERFERENCE
+          - APPLICATION_CONNECTIVITY
+          - BAND
+          - BATTERY_PERCENTAGE
+          - BEST_NEIGHBOR_BSSID
+          - BEST_NEIGHBOR_SIGNAL_STRENGTH
+          - BEST_NEIGHBOR_SIGNAL_STRENGTH_PREFERRED_BAND
+          - BSSID
+          - CHANNEL
+          - CHANNEL_UTILIZATION
+          - CLASSIC_STICKY_FACTOR
+          - CLIENT_COUNT
+          - CONGESTION
+          - CONNECTION_TYPE
+          - CONNECTIVITY
+          - COVERAGE
+          - CO_CHANNEL_INTERFERENCE
+          - CPU_AVERAGE
+          - CPU_MAXIMUM
+          - CPU_MINIMUM
+          - MLD_BSSIDS
+          - MLD_CHANNELS
+          - MLD_MAC_ADDRESS
+          - DOWNLOAD_MOS_SCORE
+          - EXPERIENCE_SCORE
+          - GATEWAY_PING_CONNECTIVITY
+          - GATEWAY_PING_LATENCY
+          - IDLE_TIME
+          - INTERFERENCE
+          - LOCATION
+          - MOS_UPLOAD
+          - MOS_UPLOAD_JITTER
+          - MOS_UPLOAD_PACKET_LOSS
+          - NETWORK
+          - NETWORK_CONNECTIVITY
+          - NOISE
+          - NUMBER_OF_ADJACENT_OVERLAPPING_BSSIDS
+          - NUMBER_OF_CLOSER_ACCESS_POINTS
+          - NUMBER_OF_CLOSER_ACCESS_POINTS_PREFERRED_BAND
+          - NUMBER_OF_CO_CHANNEL_OVERLAPPING_BSSIDS
+          - OVERALL_BEST_NEIGHBOR_SIGNAL_STRENGTH
+          - PING_CONNECTIVITY
+          - PING_LATENCY
+          - PLATFORM_AVAILABLE_MEMORY
+          - PLATFORM_MAX_MEMORY
+          - PLATFORM_TOTAL_MEMORY
+          - PLATFORM_USED_MEMORY
+          - RESTRICTED_NETWORK
+          - RF_PROBLEM
+          - ROAMING
+          - SEVEN_MCS
+          - SIGNAL_STRENGTH
+          - STICKY_FACTOR
+          - STICKY_FACTOR_PREFERRED_BAND
+          - TEST_DURATION
+          - THROUGHPUT_DOWNLOAD
+          - THROUGHPUT_DOWNLOAD_SIZE
+          - THROUGHPUT_UPLOAD
+          - THROUGHPUT_UPLOAD_SIZE
+          - TX_RATE
+          - VPN_CONNECTION
+          - WEB_CONNECTIVITY
+          - WEB_DURATION
+          - WEB_THROUGHPUT
+          - WIFI_STANDARD
+    time-series.MetricHistogramFilter:
+      name: metric
+      in: query
+      description: Filter by metric to be applied to the data.
+      required: true
+      schema:
+        type: string
+        enum:
+        - ADJACENT_CHANNEL_INTERFERENCE
+        - APPLICATION_CONNECTIVITY
+        - CLASSIC_STICKY_FACTOR
+        - CONGESTION
+        - CONNECTIVITY
+        - COVERAGE
+        - CO_CHANNEL_INTERFERENCE
+        - EXPERIENCE_SCORE
+        - INTERFERENCE
+        - NETWORK_CONNECTIVITY
+        - OVERALL_BEST_NEIGHBOR_SIGNAL_STRENGTH
+        - RF_PROBLEM
+        - ROAMING
+    time-series.PlatformVersionsFilter:
+      name: platformVersions
+      in: query
+      description: Filter data returned by one or more platform versions
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    time-series.PlatformsFilter:
+      name: platforms
+      in: query
+      description: Filter data returned by one or more platforms
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    time-series.SensorLocationIdsFilter:
+      name: locations
+      in: query
+      description: Filter data returned by one or more sensor location IDs
+      required: false
+      schema:
+        type: array
+        items:
+          type: integer
+    time-series.SensorClientMacsFilter:
+      name: clients
+      in: query
+      description: Filter data returned by one or more client MAC addresses (required when groupByDimension is 'client' or 'clientap')
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    time-series.ModelsFilter:
+      name: models
+      in: query
+      description: Filter data returned by one or more models
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    time-series.AgentsGroupByDimensionFilter:
+      name: groupByDimension
+      in: path
+      description: Group by dimension
+      required: true
+      schema:
+        type: string
+        enum:
+        - band
+        - bssid
+        - deviceId
+        - driverProvider
+        - driverVersion
+        - locationId
+        - make
+        - model
+        - network
+        - platform
+        - platformVersion
+        - target
+    time-series.DeviceIdsFilter:
+      name: deviceIds
+      in: query
+      description: Filter data returned by one or more device ids
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    time-series.SensorIdsFilter:
+      name: sensorIds
+      in: query
+      description: Filter data returned by one or more Sensor IDs
+      required: false
+      schema:
+        type: array
+        items:
+          type: integer
+    time-series.SensorMetricsKPIFilter:
+      name: metrics
+      in: query
+      description: Filter by metrics to be applied to the data. Common examples include HC005, HC006, HC007, HC008, AV008, AC001, RA103, AC002, DN002, QURT007, QUAP008, QUAP009, QURT004, QUAP005, QUAP006, QURS004, QURS007, QURS002, TR062, DR013, DR014, DR015, DR016, DR017, DR018. For the full list of KPI codes, see the [Time Series Sensors Metric Types endpoint](/swagger-ui/index.html#/TimeSeries/time-series-sensors-metric-types).
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    time-series.SensorsTimeSeriesOrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization by it's group name. By default, the group associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    time-series.MetricsNumericFilter:
+      name: metrics
+      in: query
+      description: Filter by metrics to be applied to the data.
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - ADJACENT_CHANNEL_INTERFERENCE
+          - APPLICATION_CONNECTIVITY
+          - BATTERY_PERCENTAGE
+          - BEST_NEIGHBOR_SIGNAL_STRENGTH
+          - BEST_NEIGHBOR_SIGNAL_STRENGTH_PREFERRED_BAND
+          - CHANNEL_UTILIZATION
+          - CLASSIC_STICKY_FACTOR
+          - CLIENT_COUNT
+          - CONGESTION
+          - CONNECTIVITY
+          - COVERAGE
+          - CO_CHANNEL_INTERFERENCE
+          - CPU_AVERAGE
+          - CPU_MAXIMUM
+          - CPU_MINIMUM
+          - EXPERIENCE_SCORE
+          - GATEWAY_PING_CONNECTIVITY
+          - GATEWAY_PING_LATENCY
+          - IDLE_TIME
+          - INTERFERENCE
+          - MOS_UPLOAD
+          - MOS_UPLOAD_JITTER
+          - MOS_UPLOAD_PACKET_LOSS
+          - NETWORK_CONNECTIVITY
+          - NOISE
+          - NUMBER_OF_ADJACENT_OVERLAPPING_BSSIDS
+          - NUMBER_OF_CLOSER_ACCESS_POINTS
+          - NUMBER_OF_CLOSER_ACCESS_POINTS_PREFERRED_BAND
+          - NUMBER_OF_CO_CHANNEL_OVERLAPPING_BSSIDS
+          - OVERALL_BEST_NEIGHBOR_SIGNAL_STRENGTH
+          - PING_CONNECTIVITY
+          - PING_LATENCY
+          - PLATFORM_AVAILABLE_MEMORY
+          - PLATFORM_MAX_MEMORY
+          - PLATFORM_TOTAL_MEMORY
+          - PLATFORM_USED_MEMORY
+          - RF_PROBLEM
+          - ROAMING
+          - SIGNAL_STRENGTH
+          - STICKY_FACTOR
+          - STICKY_FACTOR_PREFERRED_BAND
+          - TEST_DURATION
+          - THROUGHPUT_DOWNLOAD
+          - THROUGHPUT_DOWNLOAD_SIZE
+          - THROUGHPUT_UPLOAD
+          - THROUGHPUT_UPLOAD_SIZE
+          - WEB_CONNECTIVITY
+          - WEB_DURATION
+          - WEB_THROUGHPUT
+    time-series.MakesFilter:
+      name: makes
+      in: query
+      description: Filter data returned by one or more makes
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    time-series.SensorTimeBucketFilter:
+      name: timeBucket
+      in: query
+      description: Interval by which the time range will be divided
+      required: true
+      schema:
+        type: string
+        enum:
+        - 1_MIN
+        - 10_MIN
+        - 1_HOUR
+        - 1_DAY
+        - 1_MONTH
+    time-series.FromRequestParam:
+      name: from
+      in: query
+      description: The time in milliseconds from the epoch after which time series are fetched (the lower bound).
+      required: true
+      schema:
+        type: integer
+    time-series.BssidsFilter:
+      name: bssids
+      in: query
+      description: Filter data returned by one or more bssids
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    time-series.NetworksFilter:
+      name: networks
+      in: query
+      description: Filter data returned by one or more networks
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    common.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is 1.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    time-series.SensorsGroupByDimensionFilter:
+      name: groupByDimension
+      in: path
+      description: Group by dimension
+      required: true
+      schema:
+        type: string
+        enum:
+        - locationId
+        - networkband
+        - networkbandservicearea
+        - serviceArea
+        - accessPoint
+        - sensor
+        - client
+        - clientap
+    common.SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    time-series.LocationsFilter:
+      name: locations
+      in: query
+      description: Filter data returned by one or more locations
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    time-series.BandsFilter:
+      name: bands
+      in: query
+      description: Filter data returned by one or more bands
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    time-series.SensorNetworkIdsFilter:
+      name: networks
+      in: query
+      description: Filter data returned by one or more sensor network IDs
+      required: false
+      schema:
+        type: array
+        items:
+          type: integer
+    time-series.SensorBandFilter:
+      name: band
+      in: query
+      description: Filter data returned by a band
+      required: false
+      schema:
+        type: string
+        enum:
+        - '2.4'
+        - '5'
+        - '6'
+    time-series.TimeBucketFilter:
+      name: timeBucket
+      in: query
+      description: Interval by which the time range will be divided
+      required: true
+      schema:
+        type: string
+        enum:
+        - 1_MIN
+        - 10_MIN
+        - 15_MIN
+        - 1_HOUR
+        - 2_HOUR
+        - 1_DAY
+        - 1_WEEK
+        - 1_MONTH
+    time-series.AggregateFunctionsDiscreteFilter:
+      name: aggregateFunctions
+      in: query
+      description: Filter by aggregate functions to be applied to the data.
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - MODE
+          - COUNT
+    time-series.DriverProvidersFilter:
+      name: driverProviders
+      in: query
+      description: Filter data returned by one or more driver providers
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    time-series.AgentsAggregateFunctionsNumericFilter:
+      name: aggregateFunctions
+      in: query
+      description: Filter by aggregate functions to be applied to the data.
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - SUM
+          - AVG
+          - GRADE
+          - SCORE
+          - MIN
+          - MAX
+          - COUNT
+    time-series.SensorServiceAreaIdsFilter:
+      name: serviceAreas
+      in: query
+      description: Filter data returned by one or more sensor service areas IDs
+      required: false
+      schema:
+        type: array
+        items:
+          type: integer
+    time-series.SensorsAggregateFunctionsNumericFilter:
+      name: aggregateFunctions
+      in: query
+      description: Filter by aggregate functions to be applied to the data.
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - AVG
+          - MIN
+          - MAX
+          - COUNT
+          - SUM
+          - PCTL
+    time-series.SensorAccessPointIdsFilter:
+      name: accessPoints
+      in: query
+      description: Filter data returned by one or more sensor access point IDs (required when groupByDimension is 'accessPoint' or 'clientap')
+      required: false
+      schema:
+        type: array
+        items:
+          type: integer
+    time-series.DriverVersionsFilter:
+      name: driverVersions
+      in: query
+      description: Filter data returned by one or more driver versions
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    time-series.SensorVendorsFilter:
+      name: vendors
+      in: query
+      description: Filter clients by one or more vendor/OUI names (only applicable when groupByDimension is 'client' or 'clientap')
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    time-series.ToRequestParam:
+      name: to
+      in: query
+      description: The time in milliseconds from the epoch up to which time series are fetched (the upper bound).
+      required: true
+      schema:
+        type: integer
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
+    time-series.MetricsDiscreteFilter:
+      name: metrics
+      in: query
+      description: Filter by metrics to be applied to the data.
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - ADAPTER_STATE
+          - BAND
+          - BEST_NEIGHBOR_BSSID
+          - BSSID
+          - CHANNEL
+          - CONNECTION_TYPE
+          - LOCATION
+          - MLD_BSSIDS
+          - MLD_CHANNELS
+          - MLD_MAC_ADDRESS
+          - NETWORK
+          - RESTRICTED_NETWORK
+          - SEVEN_MCS
+          - TX_RATE
+          - VPN_CONNECTION
+          - WIFI_STANDARD
+    time-series.TargetsFilter:
+      name: targets
+      in: query
+      description: Filter data returned by one or more targets
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

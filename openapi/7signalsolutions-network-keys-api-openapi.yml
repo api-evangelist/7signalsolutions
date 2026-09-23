@@ -1,0 +1,1569 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Network Keys API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Network Keys
+paths:
+  /network-keys/sensors:
+    get:
+      summary: List the Sensor Network Keys
+      operationId: sensor-network-keys
+      description: Page through all of the Sensor Network Keys
+      security:
+      - oauth2: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/network-keys.GetNetworkKeysResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Network Keys
+    post:
+      operationId: PathNetworkKeysSensors-post-nk1s2
+      summary: Creates a Sensor Network Key
+      description: Creates a new Sensor Network Key. Request shape is resolved from 'type' - see the request examples.
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/network-keys.PostNetworkKeyRequest'
+            examples:
+              wpa1-passphrase:
+                summary: WPA1 with a passphrase
+                value:
+                  type: WPA1
+                  name: corp-wifi-legacy
+                  usePassphrase: true
+                  passphraseOrPsk: SuperSecret123
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa2-passphrase:
+                summary: WPA2 with a passphrase
+                value:
+                  type: WPA2
+                  name: corp-wifi
+                  usePassphrase: true
+                  passphraseOrPsk: SuperSecret123
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa3-mixed:
+                summary: WPA3 in Mixed WPA3/WPA2-PSK mode
+                value:
+                  type: WPA3
+                  name: corp-wifi-wpa3-mixed
+                  passphraseOrPsk: SuperSecret123
+                  pure: false
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa3-pure:
+                summary: WPA3 in WPA3-only mode
+                value:
+                  type: WPA3
+                  name: corp-wifi-wpa3-only
+                  passphraseOrPsk: SuperSecret123
+                  pure: true
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa3-owe:
+                summary: WPA3 OWE (Opportunistic Wireless Encryption)
+                value:
+                  type: WPA3_OWE
+                  name: guest-wifi-owe
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-tls:
+                summary: WPA_EAP with EAP-TLS
+                value:
+                  type: WPA_EAP
+                  eapMethod: EAP_TLS
+                  name: corp-wifi-eap-tls
+                  wpaVersion: WPA2
+                  identity: user@corp.example
+                  allowAny: false
+                  eapolVersion: EAPOL_VERSION_2
+                  subKeyId: 5
+                  certificateProperties:
+                    caCertificate:
+                      fileName: ca.pem
+                      certificateBytes: Y2EtYnl0ZXM=
+                    clientCertificate:
+                      fileName: client.pem
+                      certificateBytes: Y2xpZW50LWJ5dGVz
+                    privateKey:
+                      fileName: key.pem
+                      certificateBytes: a2V5LWJ5dGVz
+                    privateKeyPassword: keySecret123
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-peap:
+                summary: 'WPA_EAP with EAP-PEAP (inner authentication: TLS)'
+                value:
+                  type: WPA_EAP
+                  eapMethod: EAP_PEAP
+                  name: corp-wifi-eap-peap
+                  wpaVersion: WPA2
+                  identity: user@corp.example
+                  allowAny: false
+                  eapolVersion: EAPOL_VERSION_2
+                  password: SuperSecret123
+                  peapLabel: CLIENT_EAP_ENCRYPTION
+                  peapVersion: V0
+                  subKeyId: 5
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  innerAuthentication:
+                    method: TLS
+                    caCertificate:
+                      fileName: inner-ca.pem
+                      certificateBytes: aW5uZXItY2EtYnl0ZXM=
+                    clientCertificate:
+                      fileName: inner-client.pem
+                      certificateBytes: aW5uZXItY2xpZW50LWJ5dGVz
+                    privateKey:
+                      fileName: inner-key.pem
+                      certificateBytes: aW5uZXIta2V5LWJ5dGVz
+                    privateKeyPassword: innerKeySecret
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-ttls:
+                summary: 'WPA_EAP with EAP-TTLS (inner authentication: EAP-TLS)'
+                value:
+                  type: WPA_EAP
+                  eapMethod: EAP_TTLS
+                  name: corp-wifi-eap-ttls
+                  wpaVersion: WPA2
+                  identity: user@corp.example
+                  anonymousIdentity: anon@corp.example
+                  allowAny: false
+                  eapolVersion: EAPOL_VERSION_2
+                  password: SuperSecret123
+                  subKeyId: 5
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  clientCertificate:
+                    fileName: client.pem
+                    certificateBytes: Y2xpZW50LWJ5dGVz
+                  innerAuthentication:
+                    method: EAP_TLS
+                    caCertificate:
+                      fileName: inner-ca.pem
+                      certificateBytes: aW5uZXItY2EtYnl0ZXM=
+                    clientCertificate:
+                      fileName: inner-client.pem
+                      certificateBytes: aW5uZXItY2xpZW50LWJ5dGVz
+                    privateKey:
+                      fileName: inner-key.pem
+                      certificateBytes: aW5uZXIta2V5LWJ5dGVz
+                    privateKeyPassword: innerKeySecret
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-psk:
+                summary: WPA_EAP with EAP-PSK
+                value:
+                  type: WPA_EAP
+                  eapMethod: EAP_PSK
+                  name: corp-wifi-eap-psk
+                  wpaVersion: WPA2
+                  identity: user@corp.example
+                  nai: user@corp.example
+                  allowAny: false
+                  eapolVersion: EAPOL_VERSION_2
+                  preSharedKey: 0123456789ABCDEF0123456789ABCDEF
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-fast:
+                summary: WPA_EAP with EAP-FAST
+                value:
+                  type: WPA_EAP
+                  eapMethod: EAP_FAST
+                  name: corp-wifi-eap-fast
+                  wpaVersion: WPA2
+                  identity: user@corp.example
+                  anonymousIdentity: anon@corp.example
+                  allowAny: false
+                  eapolVersion: EAPOL_VERSION_2
+                  password: SuperSecret123
+                  tlsVersion: TLS_1_2
+                  pacFile:
+                    fileName: pac.bin
+                    certificateBytes: cGFjLWJ5dGVz
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-leap:
+                summary: WPA_EAP with LEAP
+                value:
+                  type: WPA_EAP
+                  eapMethod: LEAP
+                  name: corp-wifi-leap
+                  wpaVersion: WPA1
+                  identity: user@corp.example
+                  allowAny: false
+                  eapolVersion: EAPOL_VERSION_1
+                  password: SuperSecret123
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-mschapv2:
+                summary: WPA_EAP with EAP-MSCHAPv2
+                value:
+                  type: WPA_EAP
+                  eapMethod: EAP_MSCHAP_V2
+                  name: corp-wifi-mschapv2
+                  wpaVersion: WPA2
+                  identity: user@corp.example
+                  allowAny: false
+                  eapolVersion: EAPOL_VERSION_2
+                  password: SuperSecret123
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  clientCertificate:
+                    fileName: client.pem
+                    certificateBytes: Y2xpZW50LWJ5dGVz
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-scep:
+                summary: WPA_EAP_SCEP
+                value:
+                  type: WPA_EAP_SCEP
+                  name: corp-wifi-scep
+                  wpaVersion: WPA2
+                  scepUrl: https://scep.corp.example/pkiclient.exe
+                  challengePassword: SuperSecret123
+                  caFingerprint: AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD
+                  subjectName: CN=eye-{serial},O=Corp Inc
+                  subjectAltName: eye-{serial}.corp.example
+                  keySize: RSA_2048
+                  renewalThresholdPercent: 33
+                  eapolVersion: EAPOL_VERSION_2
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  subKeyId: 5
+              ieee8021x-eap-tls:
+                summary: IEEE_802_1X with EAP-TLS
+                value:
+                  type: IEEE_802_1X
+                  eapMethod: EAP_TLS
+                  name: ieee-eap-tls
+                  identity: user@corp.example
+                  allowAny: false
+                  certificateProperties:
+                    caCertificate:
+                      fileName: ca.pem
+                      certificateBytes: Y2EtYnl0ZXM=
+                    clientCertificate:
+                      fileName: client.pem
+                      certificateBytes: Y2xpZW50LWJ5dGVz
+                    privateKey:
+                      fileName: key.pem
+                      certificateBytes: a2V5LWJ5dGVz
+                    privateKeyPassword: keySecret123
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              ieee8021x-eap-peap:
+                summary: 'IEEE_802_1X with EAP-PEAP (inner authentication: TLS)'
+                value:
+                  type: IEEE_802_1X
+                  eapMethod: EAP_PEAP
+                  name: ieee-eap-peap
+                  identity: user@corp.example
+                  allowAny: false
+                  password: SuperSecret123
+                  peapLabel: CLIENT_EAP_ENCRYPTION
+                  peapVersion: V0
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  innerAuthentication:
+                    method: TLS
+                    caCertificate:
+                      fileName: inner-ca.pem
+                      certificateBytes: aW5uZXItY2EtYnl0ZXM=
+                    clientCertificate:
+                      fileName: inner-client.pem
+                      certificateBytes: aW5uZXItY2xpZW50LWJ5dGVz
+                    privateKey:
+                      fileName: inner-key.pem
+                      certificateBytes: aW5uZXIta2V5LWJ5dGVz
+                    privateKeyPassword: innerKeySecret
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              ieee8021x-eap-ttls:
+                summary: 'IEEE_802_1X with EAP-TTLS (inner authentication: EAP-TLS) - clientCertificate is required for this template''s EAP_TTLS, unlike WPA_EAP''s'
+                value:
+                  type: IEEE_802_1X
+                  eapMethod: EAP_TTLS
+                  name: ieee-eap-ttls
+                  identity: user@corp.example
+                  allowAny: false
+                  anonymousIdentity: anon@corp.example
+                  password: SuperSecret123
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  clientCertificate:
+                    fileName: client.pem
+                    certificateBytes: Y2xpZW50LWJ5dGVz
+                  innerAuthentication:
+                    method: EAP_TLS
+                    caCertificate:
+                      fileName: inner-ca.pem
+                      certificateBytes: aW5uZXItY2EtYnl0ZXM=
+                    clientCertificate:
+                      fileName: inner-client.pem
+                      certificateBytes: aW5uZXItY2xpZW50LWJ5dGVz
+                    privateKey:
+                      fileName: inner-key.pem
+                      certificateBytes: aW5uZXIta2V5LWJ5dGVz
+                    privateKeyPassword: innerKeySecret
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              ieee8021x-leap:
+                summary: IEEE_802_1X with LEAP
+                value:
+                  type: IEEE_802_1X
+                  eapMethod: LEAP
+                  name: ieee-leap
+                  identity: user@corp.example
+                  allowAny: false
+                  password: SuperSecret123
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              ieee8021x-eap-mschapv2:
+                summary: IEEE_802_1X with EAP-MSCHAPv2
+                value:
+                  type: IEEE_802_1X
+                  eapMethod: EAP_MSCHAP_V2
+                  name: ieee-mschapv2
+                  identity: user@corp.example
+                  allowAny: false
+                  password: SuperSecret123
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  clientCertificate:
+                    fileName: client.pem
+                    certificateBytes: Y2xpZW50LWJ5dGVz
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              open-http:
+                summary: OPEN_HTTP
+                value:
+                  type: OPEN_HTTP
+                  name: corp-open-http
+                  authenticationUrl: https://auth.corp.example/login
+                  requireServerCertificateCheck: true
+                  postData: username=${username}&password=${password}
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  clientCertificate:
+                    fileName: client.pem
+                    certificateBytes: Y2xpZW50LWJ5dGVz
+                  clientCertificateFileType: PEM
+                  privateKey:
+                    fileName: key.pem
+                    certificateBytes: a2V5LWJ5dGVz
+                  privateKeyFileType: DER
+              http-authentication:
+                summary: HTTP_AUTHENTICATION
+                value:
+                  type: HTTP_AUTHENTICATION
+                  name: corp-http-auth
+                  targetUrl: https://portal.corp.example/login
+                  requireServerCertificateCheck: true
+                  contentOnTargetUrlPage: Please sign in
+                  contentOnLoginPage: Enter your credentials
+                  contentOnSuccessfulLogin: Login successful
+                  contentOnUnSuccessfulLogin: Login failed
+                  secureProtocol: TLSv1_2
+                  userAgent: CUSTOM_USER_AGENT
+                  customUserAgent: SevenSignalEye/1.0
+                  loginPages:
+                  - fields:
+                    - name: username
+                      value: guest
+                    - name: password
+                      value: guest
+                  logoutPages:
+                  - fields:
+                    - name: action
+                      value: logout
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  clientCertificate:
+                    fileName: client.pem
+                    certificateBytes: Y2xpZW50LWJ5dGVz
+                  clientCertificateFileType: PEM
+                  privateKey:
+                    fileName: key.pem
+                    certificateBytes: a2V5LWJ5dGVz
+                  privateKeyFileType: DER
+              raw:
+                summary: RAW
+                value:
+                  type: RAW
+                  name: corp-raw-supplicant
+                  subKeyId: 5
+                  keyFileContent: "ap_scan=1\nctrl_interface=/tmp/wpactrl\nfast_reauth=1\nnetwork={\n    ssid=__SSID__\n    bssid=__BSSID__\n    scan_freq=2412\n    key_mgmt=WPA-PSK WPA-PSK-SHA256 FT-PSK\n    psk=\"7signallab\"\n    proto=RSN\n    scan_ssid=1\n    ieee80211w=2\n}"
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/network-keys.GetNetworkKeyResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      security:
+      - oauth2: []
+      tags:
+      - Network Keys
+  /network-keys/sensors/templates:
+    get:
+      summary: List the Sensor Network Key templates
+      operationId: sensor-network-key-templates
+      description: Lists the pre-built network key templates. These can be used for creating HTTP_AUTHENTICATION network keys.
+      security:
+      - oauth2: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/network-keys.GetNetworkKeysResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Network Keys
+  /network-keys/sensors/{networkKeyId}:
+    get:
+      summary: Fetch the specified Sensor Network Key
+      operationId: sensor-network-key
+      security:
+      - oauth2: []
+      parameters:
+      - name: networkKeyId
+        in: path
+        description: Fetch the specific network key referenced by its id
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/network-keys.GetNetworkKeyResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Network Keys
+    put:
+      operationId: PathNetworkKeysSensor-put-nk3s4
+      summary: Replace the specified Sensor Network Key with the details in the payload
+      description: Full replace, not a patch - provide the complete desired state on every call.
+      parameters:
+      - name: networkKeyId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/network-keys.PutNetworkKeyRequest'
+            examples:
+              wpa1-passphrase:
+                summary: WPA1 with a passphrase
+                value:
+                  type: WPA1
+                  name: corp-wifi-legacy
+                  usePassphrase: true
+                  passphraseOrPsk: SuperSecret123
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa2-passphrase:
+                summary: WPA2 with a passphrase
+                value:
+                  type: WPA2
+                  name: corp-wifi
+                  usePassphrase: true
+                  passphraseOrPsk: SuperSecret123
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa3-mixed:
+                summary: WPA3 in Mixed WPA3/WPA2-PSK mode
+                value:
+                  type: WPA3
+                  name: corp-wifi-wpa3-mixed
+                  passphraseOrPsk: SuperSecret123
+                  pure: false
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa3-pure:
+                summary: WPA3 in WPA3-only mode
+                value:
+                  type: WPA3
+                  name: corp-wifi-wpa3-only
+                  passphraseOrPsk: SuperSecret123
+                  pure: true
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa3-owe:
+                summary: WPA3 OWE (Opportunistic Wireless Encryption)
+                value:
+                  type: WPA3_OWE
+                  name: guest-wifi-owe
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-tls:
+                summary: WPA_EAP with EAP-TLS
+                value:
+                  type: WPA_EAP
+                  eapMethod: EAP_TLS
+                  name: corp-wifi-eap-tls
+                  wpaVersion: WPA2
+                  identity: user@corp.example
+                  allowAny: false
+                  eapolVersion: EAPOL_VERSION_2
+                  subKeyId: 5
+                  certificateProperties:
+                    caCertificate:
+                      fileName: ca.pem
+                      certificateBytes: Y2EtYnl0ZXM=
+                    clientCertificate:
+                      fileName: client.pem
+                      certificateBytes: Y2xpZW50LWJ5dGVz
+                    privateKey:
+                      fileName: key.pem
+                      certificateBytes: a2V5LWJ5dGVz
+                    privateKeyPassword: keySecret123
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-peap:
+                summary: 'WPA_EAP with EAP-PEAP (inner authentication: TLS)'
+                value:
+                  type: WPA_EAP
+                  eapMethod: EAP_PEAP
+                  name: corp-wifi-eap-peap
+                  wpaVersion: WPA2
+                  identity: user@corp.example
+                  allowAny: false
+                  eapolVersion: EAPOL_VERSION_2
+                  password: SuperSecret123
+                  peapLabel: CLIENT_EAP_ENCRYPTION
+                  peapVersion: V0
+                  subKeyId: 5
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  innerAuthentication:
+                    method: TLS
+                    caCertificate:
+                      fileName: inner-ca.pem
+                      certificateBytes: aW5uZXItY2EtYnl0ZXM=
+                    clientCertificate:
+                      fileName: inner-client.pem
+                      certificateBytes: aW5uZXItY2xpZW50LWJ5dGVz
+                    privateKey:
+                      fileName: inner-key.pem
+                      certificateBytes: aW5uZXIta2V5LWJ5dGVz
+                    privateKeyPassword: innerKeySecret
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-ttls:
+                summary: 'WPA_EAP with EAP-TTLS (inner authentication: EAP-TLS)'
+                value:
+                  type: WPA_EAP
+                  eapMethod: EAP_TTLS
+                  name: corp-wifi-eap-ttls
+                  wpaVersion: WPA2
+                  identity: user@corp.example
+                  anonymousIdentity: anon@corp.example
+                  allowAny: false
+                  eapolVersion: EAPOL_VERSION_2
+                  password: SuperSecret123
+                  subKeyId: 5
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  clientCertificate:
+                    fileName: client.pem
+                    certificateBytes: Y2xpZW50LWJ5dGVz
+                  innerAuthentication:
+                    method: EAP_TLS
+                    caCertificate:
+                      fileName: inner-ca.pem
+                      certificateBytes: aW5uZXItY2EtYnl0ZXM=
+                    clientCertificate:
+                      fileName: inner-client.pem
+                      certificateBytes: aW5uZXItY2xpZW50LWJ5dGVz
+                    privateKey:
+                      fileName: inner-key.pem
+                      certificateBytes: aW5uZXIta2V5LWJ5dGVz
+                    privateKeyPassword: innerKeySecret
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-psk:
+                summary: WPA_EAP with EAP-PSK
+                value:
+                  type: WPA_EAP
+                  eapMethod: EAP_PSK
+                  name: corp-wifi-eap-psk
+                  wpaVersion: WPA2
+                  identity: user@corp.example
+                  nai: user@corp.example
+                  allowAny: false
+                  eapolVersion: EAPOL_VERSION_2
+                  preSharedKey: 0123456789ABCDEF0123456789ABCDEF
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-fast:
+                summary: WPA_EAP with EAP-FAST
+                value:
+                  type: WPA_EAP
+                  eapMethod: EAP_FAST
+                  name: corp-wifi-eap-fast
+                  wpaVersion: WPA2
+                  identity: user@corp.example
+                  anonymousIdentity: anon@corp.example
+                  allowAny: false
+                  eapolVersion: EAPOL_VERSION_2
+                  password: SuperSecret123
+                  tlsVersion: TLS_1_2
+                  pacFile:
+                    fileName: pac.bin
+                    certificateBytes: cGFjLWJ5dGVz
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-leap:
+                summary: WPA_EAP with LEAP
+                value:
+                  type: WPA_EAP
+                  eapMethod: LEAP
+                  name: corp-wifi-leap
+                  wpaVersion: WPA1
+                  identity: user@corp.example
+                  allowAny: false
+                  eapolVersion: EAPOL_VERSION_1
+                  password: SuperSecret123
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-mschapv2:
+                summary: WPA_EAP with EAP-MSCHAPv2
+                value:
+                  type: WPA_EAP
+                  eapMethod: EAP_MSCHAP_V2
+                  name: corp-wifi-mschapv2
+                  wpaVersion: WPA2
+                  identity: user@corp.example
+                  allowAny: false
+                  eapolVersion: EAPOL_VERSION_2
+                  password: SuperSecret123
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  clientCertificate:
+                    fileName: client.pem
+                    certificateBytes: Y2xpZW50LWJ5dGVz
+                  subKeyId: 5
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              wpa-eap-scep:
+                summary: WPA_EAP_SCEP
+                value:
+                  type: WPA_EAP_SCEP
+                  name: corp-wifi-scep
+                  wpaVersion: WPA2
+                  scepUrl: https://scep.corp.example/pkiclient.exe
+                  challengePassword: SuperSecret123
+                  caFingerprint: AA:BB:CC:DD:EE:FF:00:11:22:33:44:55:66:77:88:99:AA:BB:CC:DD
+                  subjectName: CN=eye-{serial},O=Corp Inc
+                  subjectAltName: eye-{serial}.corp.example
+                  keySize: RSA_2048
+                  renewalThresholdPercent: 33
+                  eapolVersion: EAPOL_VERSION_2
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  subKeyId: 5
+              ieee8021x-eap-tls:
+                summary: IEEE_802_1X with EAP-TLS
+                value:
+                  type: IEEE_802_1X
+                  eapMethod: EAP_TLS
+                  name: ieee-eap-tls
+                  identity: user@corp.example
+                  allowAny: false
+                  certificateProperties:
+                    caCertificate:
+                      fileName: ca.pem
+                      certificateBytes: Y2EtYnl0ZXM=
+                    clientCertificate:
+                      fileName: client.pem
+                      certificateBytes: Y2xpZW50LWJ5dGVz
+                    privateKey:
+                      fileName: key.pem
+                      certificateBytes: a2V5LWJ5dGVz
+                    privateKeyPassword: keySecret123
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              ieee8021x-eap-peap:
+                summary: 'IEEE_802_1X with EAP-PEAP (inner authentication: TLS)'
+                value:
+                  type: IEEE_802_1X
+                  eapMethod: EAP_PEAP
+                  name: ieee-eap-peap
+                  identity: user@corp.example
+                  allowAny: false
+                  password: SuperSecret123
+                  peapLabel: CLIENT_EAP_ENCRYPTION
+                  peapVersion: V0
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  innerAuthentication:
+                    method: TLS
+                    caCertificate:
+                      fileName: inner-ca.pem
+                      certificateBytes: aW5uZXItY2EtYnl0ZXM=
+                    clientCertificate:
+                      fileName: inner-client.pem
+                      certificateBytes: aW5uZXItY2xpZW50LWJ5dGVz
+                    privateKey:
+                      fileName: inner-key.pem
+                      certificateBytes: aW5uZXIta2V5LWJ5dGVz
+                    privateKeyPassword: innerKeySecret
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              ieee8021x-eap-ttls:
+                summary: 'IEEE_802_1X with EAP-TTLS (inner authentication: EAP-TLS) - clientCertificate is required for this template''s EAP_TTLS, unlike WPA_EAP''s'
+                value:
+                  type: IEEE_802_1X
+                  eapMethod: EAP_TTLS
+                  name: ieee-eap-ttls
+                  identity: user@corp.example
+                  allowAny: false
+                  anonymousIdentity: anon@corp.example
+                  password: SuperSecret123
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  clientCertificate:
+                    fileName: client.pem
+                    certificateBytes: Y2xpZW50LWJ5dGVz
+                  innerAuthentication:
+                    method: EAP_TLS
+                    caCertificate:
+                      fileName: inner-ca.pem
+                      certificateBytes: aW5uZXItY2EtYnl0ZXM=
+                    clientCertificate:
+                      fileName: inner-client.pem
+                      certificateBytes: aW5uZXItY2xpZW50LWJ5dGVz
+                    privateKey:
+                      fileName: inner-key.pem
+                      certificateBytes: aW5uZXIta2V5LWJ5dGVz
+                    privateKeyPassword: innerKeySecret
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              ieee8021x-leap:
+                summary: IEEE_802_1X with LEAP
+                value:
+                  type: IEEE_802_1X
+                  eapMethod: LEAP
+                  name: ieee-leap
+                  identity: user@corp.example
+                  allowAny: false
+                  password: SuperSecret123
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              ieee8021x-eap-mschapv2:
+                summary: IEEE_802_1X with EAP-MSCHAPv2
+                value:
+                  type: IEEE_802_1X
+                  eapMethod: EAP_MSCHAP_V2
+                  name: ieee-mschapv2
+                  identity: user@corp.example
+                  allowAny: false
+                  password: SuperSecret123
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  clientCertificate:
+                    fileName: client.pem
+                    certificateBytes: Y2xpZW50LWJ5dGVz
+                  customFields:
+                  - scope: GLOBAL
+                    name: site
+                    value: hq
+              open-http:
+                summary: OPEN_HTTP
+                value:
+                  type: OPEN_HTTP
+                  name: corp-open-http
+                  authenticationUrl: https://auth.corp.example/login
+                  requireServerCertificateCheck: true
+                  postData: username=${username}&password=${password}
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  clientCertificate:
+                    fileName: client.pem
+                    certificateBytes: Y2xpZW50LWJ5dGVz
+                  clientCertificateFileType: PEM
+                  privateKey:
+                    fileName: key.pem
+                    certificateBytes: a2V5LWJ5dGVz
+                  privateKeyFileType: DER
+              http-authentication:
+                summary: HTTP_AUTHENTICATION
+                value:
+                  type: HTTP_AUTHENTICATION
+                  name: corp-http-auth
+                  targetUrl: https://portal.corp.example/login
+                  requireServerCertificateCheck: true
+                  contentOnTargetUrlPage: Please sign in
+                  contentOnLoginPage: Enter your credentials
+                  contentOnSuccessfulLogin: Login successful
+                  contentOnUnSuccessfulLogin: Login failed
+                  secureProtocol: TLSv1_2
+                  userAgent: CUSTOM_USER_AGENT
+                  customUserAgent: SevenSignalEye/1.0
+                  loginPages:
+                  - fields:
+                    - name: username
+                      value: guest
+                    - name: password
+                      value: guest
+                  logoutPages:
+                  - fields:
+                    - name: action
+                      value: logout
+                  caCertificate:
+                    fileName: ca.pem
+                    certificateBytes: Y2EtYnl0ZXM=
+                  clientCertificate:
+                    fileName: client.pem
+                    certificateBytes: Y2xpZW50LWJ5dGVz
+                  clientCertificateFileType: PEM
+                  privateKey:
+                    fileName: key.pem
+                    certificateBytes: a2V5LWJ5dGVz
+                  privateKeyFileType: DER
+              raw:
+                summary: RAW
+                value:
+                  type: RAW
+                  name: corp-raw-supplicant
+                  subKeyId: 5
+                  keyFileContent: "ap_scan=1\nctrl_interface=/tmp/wpactrl\nfast_reauth=1\nnetwork={\n    ssid=__SSID__\n    bssid=__BSSID__\n    scan_freq=2412\n    key_mgmt=WPA-PSK WPA-PSK-SHA256 FT-PSK\n    psk=\"7signallab\"\n    proto=RSN\n    scan_ssid=1\n    ieee80211w=2\n}"
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/network-keys.GetNetworkKeyResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+      tags:
+      - Network Keys
+    delete:
+      operationId: PathNetworkKeysSensor-delete-nk5s6
+      summary: Delete the Sensor Network Key specified by the id
+      description: Fails with a conflict if the key is still bound to a wireless network or a sensor.
+      parameters:
+      - name: networkKeyId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+        '409':
+          description: Conflict - the network key is still in use by a wireless network or a sensor
+      security:
+      - oauth2: []
+      tags:
+      - Network Keys
+components:
+  schemas:
+    network-keys.ScepKeySize:
+      type: string
+      description: WPA_EAP_SCEP only - RSA key size for the Eye-generated keypair. Optional, defaults to RSA_2048 when omitted.
+      enum:
+      - RSA_2048
+      - RSA_3072
+      - RSA_4096
+    network-keys.PEAPLabel:
+      type: string
+      description: EAP_PEAP only (WPA_EAP or IEEE_802_1X) - optional, defaults to CLIENT_EAP_ENCRYPTION when omitted
+      enum:
+      - CLIENT_EAP_ENCRYPTION
+      - CLIENT_PEAP_ENCRYPTION
+    network-keys.WpaVersion:
+      type: string
+      description: The WPA generation a WPA_EAP key is used with - distinct from the top-level 'type' WPA1/WPA2/WPA3 values, which instead select a WPA-PSK request shape.
+      enum:
+      - WPA1
+      - WPA2
+      - WPA3
+    network-keys.EapMethod:
+      type: string
+      description: Determines which WPA_EAP or IEEE_802_1X request shape applies - see the request examples for each. IEEE_802_1X only supports 5 of these 7 values - EAP_PSK and EAP_FAST are WPA_EAP only.
+      enum:
+      - EAP_TLS
+      - EAP_PEAP
+      - EAP_TTLS
+      - EAP_PSK
+      - EAP_FAST
+      - LEAP
+      - EAP_MSCHAP_V2
+    network-keys.HttpAuthenticationPage:
+      type: object
+      description: HTTP_AUTHENTICATION only - one step in a multi-step login/logout sequence. Configurator's own UI keys pages by a page number, but that number is purely a transient UI grouping aid never actually persisted - only the resulting order survives, which is why this shape is just a plain ordered list of pages with no page-number field.
+      properties:
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/network-keys.HttpAuthenticationField'
+    network-keys.PutNetworkKeyRequest:
+      $ref: '#/components/schemas/network-keys.PostNetworkKeyRequest'
+    network-keys.PostNetworkKeyRequest:
+      type: object
+      description: Request shape is resolved from 'type' (and, for WPA_EAP/IEEE_802_1X, further resolved from 'eapMethod') - see their own descriptions for which values are documented. WPA_EAP_SCEP, OPEN_HTTP, and HTTP_AUTHENTICATION are top-level shapes in their own right, with no 'eapMethod'. See the request examples for concrete payloads.
+      required:
+      - type
+      - name
+      properties:
+        type:
+          $ref: '#/components/schemas/network-keys.NetworkKeyType'
+        name:
+          type: string
+        usePassphrase:
+          type: boolean
+          description: WPA1/WPA2 only - required for those types. WPA3 has no equivalent - it's always passphrase-based (see 'pure' instead). Not applicable to WPA3_OWE or WPA_EAP.
+        pure:
+          type: boolean
+          description: WPA3 only - required for that type. true for "WPA3 only" mode, false for "Mixed WPA3/WPA2-PSK" mode. Not applicable to any other type.
+        passphraseOrPsk:
+          type: string
+          description: WPA1/WPA2/WPA3 only - required for those types. Not applicable to WPA3_OWE, which has no shared secret at all, or WPA_EAP.
+        subKeyId:
+          type: integer
+          description: id of an existing HTTP_AUTHENTICATION network key to reference, if any. Applies to WPA1/WPA2/WPA3/WPA3_OWE, WPA_EAP (all 7 eapMethod variants), WPA_EAP_SCEP, and RAW below. Not applicable to IEEE_802_1X, OPEN_HTTP, or HTTP_AUTHENTICATION - none of those have a subKeyId concept.
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/network-keys.CustomFieldEntry'
+        eapMethod:
+          $ref: '#/components/schemas/network-keys.EapMethod'
+        wpaVersion:
+          $ref: '#/components/schemas/network-keys.WpaVersion'
+        identity:
+          type: string
+          description: WPA_EAP or IEEE_802_1X, all eapMethod variants of either - required
+        allowAny:
+          type: boolean
+          description: WPA_EAP or IEEE_802_1X, all eapMethod variants of either - required
+        eapolVersion:
+          $ref: '#/components/schemas/network-keys.EapolVersion'
+        certificateProperties:
+          $ref: '#/components/schemas/network-keys.CertificateProperties'
+        scepUrl:
+          type: string
+          description: WPA_EAP_SCEP only - required, must start with "http://" or "https://"
+        challengePassword:
+          type: string
+          description: WPA_EAP_SCEP only - required
+        caFingerprint:
+          type: string
+          description: WPA_EAP_SCEP only - optional
+        subjectName:
+          type: string
+          description: WPA_EAP_SCEP only - required, the certificate subject name (DN) to request
+        subjectAltName:
+          type: string
+          description: WPA_EAP_SCEP only - optional
+        keySize:
+          $ref: '#/components/schemas/network-keys.ScepKeySize'
+        renewalThresholdPercent:
+          type: integer
+          description: WPA_EAP_SCEP only - optional, defaults to 33, must be between 1 and 99
+        password:
+          type: string
+          description: Required for WPA_EAP's EAP_PEAP, EAP_TTLS, EAP_FAST, LEAP, and EAP_MSCHAP_V2, and for IEEE_802_1X's EAP_PEAP, EAP_TTLS, LEAP, and EAP_MSCHAP_V2 (IEEE_802_1X has no EAP_FAST) - the outer EAP password. Not applicable to EAP_TLS or EAP_PSK.
+        peapLabel:
+          $ref: '#/components/schemas/network-keys.PEAPLabel'
+        peapVersion:
+          $ref: '#/components/schemas/network-keys.PEAPVersion'
+        caCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        innerAuthentication:
+          description: 'WPA_EAP or IEEE_802_1X - shape depends on eapMethod: PeapInnerAuthentication for EAP_PEAP, TtlsInnerAuthentication for EAP_TTLS. See the request examples.'
+          oneOf:
+          - $ref: '#/components/schemas/network-keys.PeapInnerAuthentication'
+          - $ref: '#/components/schemas/network-keys.TtlsInnerAuthentication'
+        anonymousIdentity:
+          type: string
+          description: Required for WPA_EAP's EAP_TTLS and EAP_FAST, and for IEEE_802_1X's EAP_TTLS (IEEE_802_1X has no EAP_FAST)
+        clientCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        clientCertificateFileType:
+          $ref: '#/components/schemas/network-keys.CertificateType'
+        privateKey:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        privateKeyFileType:
+          $ref: '#/components/schemas/network-keys.CertificateType'
+        authenticationUrl:
+          type: string
+          description: OPEN_HTTP only - required, the URL the Eye authenticates against
+        requireServerCertificateCheck:
+          type: boolean
+          description: OPEN_HTTP and HTTP_AUTHENTICATION - required for both. A single flag that both controls whether the server's certificate is verified AND gates whether caCertificate/clientCertificate/privateKey are processed at all - matching Configurator's own single checkbox for this. This is the inverse of the domain model's own "no server certificate check" flag.
+        postData:
+          type: string
+          description: OPEN_HTTP only - optional; omitting it stores an empty string, matching Configurator's own behavior when its "use HTTP POST" checkbox is unchecked
+        targetUrl:
+          type: string
+          description: HTTP_AUTHENTICATION only - required, the URL the Eye authenticates against
+        contentOnTargetUrlPage:
+          type: string
+          description: HTTP_AUTHENTICATION only - optional
+        contentOnLoginPage:
+          type: string
+          description: HTTP_AUTHENTICATION only - optional
+        contentOnSuccessfulLogin:
+          type: string
+          description: HTTP_AUTHENTICATION only - optional
+        contentOnUnSuccessfulLogin:
+          type: string
+          description: HTTP_AUTHENTICATION only - optional
+        secureProtocol:
+          $ref: '#/components/schemas/network-keys.SecureProtocol'
+        userAgent:
+          type: string
+          description: HTTP_AUTHENTICATION only - optional, defaults to "WINDOWS7_FIREFOX" when omitted. One of Configurator's ~100 named user agent strings, or "CUSTOM_USER_AGENT" to use customUserAgent instead.
+        customUserAgent:
+          type: string
+          description: HTTP_AUTHENTICATION only - only meaningful when userAgent is CUSTOM_USER_AGENT; Configurator forces it to "" for every other userAgent value, and this request does the same rather than erroring if it's supplied anyway
+        loginPages:
+          type: array
+          description: HTTP_AUTHENTICATION only - an ordered list of login pages, each a set of form fields. Omitting this field on update leaves whatever was previously stored untouched; sending an explicit empty array clears it (the one certificate-like field on this template that CAN be cleared, since an empty array is distinguishable from an omitted field).
+          items:
+            $ref: '#/components/schemas/network-keys.HttpAuthenticationPage'
+        logoutPages:
+          type: array
+          description: HTTP_AUTHENTICATION only - same shape and update/clear semantics as loginPages, for the logout sequence
+          items:
+            $ref: '#/components/schemas/network-keys.HttpAuthenticationPage'
+        keyFileContent:
+          type: string
+          description: RAW only - optional; omitting it stores an empty string. A raw wpa_supplicant.conf-style config block - there's no separate ssid/bssid field even though the domain model has them, since a raw config embeds the actual SSID/BSSID inline as placeholders within this text itself (e.g. "ssid=__SSID__").
+        nai:
+          type: string
+          description: WPA_EAP EAP_PSK only - required
+        preSharedKey:
+          type: string
+          description: WPA_EAP EAP_PSK only - required, exactly 32 hex characters (a 128-bit key, not a passphrase)
+        tlsVersion:
+          $ref: '#/components/schemas/network-keys.TlsVersion'
+        pacFile:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+    network-keys.TlsVersion:
+      type: string
+      description: EAP_FAST only - optional, defaults to TLS_1_0 when omitted or explicitly ANY
+      enum:
+      - ANY
+      - TLS_1_0
+      - TLS_1_1
+      - TLS_1_2
+      - TLS_1_3
+      - TLS_1_0_AND_TLS_1_1
+      - TLS_1_0_AND_TLS_1_1_AND_TLS_1_2
+      - TLS_1_0_AND_TLS_1_1_AND_TLS_1_2_AND_TLS_1_3
+    network-keys.PEAPVersion:
+      type: string
+      description: EAP_PEAP only (WPA_EAP or IEEE_802_1X) - optional, defaults to V0 when omitted
+      enum:
+      - V0
+      - V1
+    network-keys.PEAPInnerAuthenticationMethod:
+      type: string
+      description: EAP_PEAP only (WPA_EAP or IEEE_802_1X) - the caCertificate/clientCertificate/privateKey/privateKeyPassword fields on PeapInnerAuthentication only apply when this is TLS
+      enum:
+      - NOT_SET
+      - MSCHAPV2
+      - TLS
+      - GTC
+      - OTP
+      - MD5
+    network-keys.CustomFieldEntry:
+      type: object
+      properties:
+        scope:
+          type: string
+          enum:
+          - GLOBAL
+          - NETWORK
+        name:
+          type: string
+        value:
+          type: string
+    network-keys.CertificateFile:
+      type: object
+      description: A certificate/private-key/PAC file. certificateBytes is the raw file content, base64-encoded.
+      properties:
+        fileName:
+          type: string
+        certificateBytes:
+          type: string
+          format: byte
+    network-keys.SecureProtocol:
+      type: string
+      description: HTTP_AUTHENTICATION only - optional, defaults to AUTOMATIC when omitted
+      enum:
+      - AUTOMATIC
+      - SSLv2
+      - SSLv3
+      - TLSv1
+      - TLSv1_1
+      - TLSv1_2
+      - PFS
+    network-keys.NetworkKey:
+      type: object
+      description: 'The set of properties present depends on the key''s type - every type is now documented: WPA1/WPA2 (WPA-PSK), WPA3, WPA3_OWE, WPA_EAP (all 7 eapMethod variants), WPA_EAP_SCEP, IEEE_802_1X (all 5 eapMethod variants), OPEN_HTTP, HTTP_AUTHENTICATION, and RAW.'
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        type:
+          $ref: '#/components/schemas/network-keys.NetworkKeyType'
+        subKeyId:
+          type: integer
+          description: id of an existing HTTP_AUTHENTICATION network key this one references, if any. Applies to WPA1/WPA2, WPA3, WPA3_OWE, WPA_EAP (all 7 eapMethod variants), WPA_EAP_SCEP, and RAW. Not applicable to IEEE_802_1X, OPEN_HTTP, or HTTP_AUTHENTICATION - none of those have a subKeyId concept.
+        keyFileContent:
+          type: string
+          description: RAW only - a raw wpa_supplicant.conf-style config block. "" when not configured, never null. Note there's no separate ssid/bssid field even though the domain model has them - a raw config embeds the actual SSID/BSSID inline as placeholders within this text itself (e.g. "ssid=__SSID__"), so the separate fields would be redundant.
+        usePassphrase:
+          type: boolean
+          description: WPA1/WPA2 only - true if passphraseOrPsk is a passphrase, false if it's a raw hex PSK. WPA3 has no equivalent - it's always passphrase-based (see 'pure' instead).
+        pure:
+          type: boolean
+          description: WPA3 only - true for "WPA3 only" mode, false for "Mixed WPA3/WPA2-PSK" mode
+        passphraseOrPsk:
+          type: string
+          description: WPA1/WPA2/WPA3 only - masked to "********" when set; the actual passphrase/PSK is never returned. WPA3_OWE has no shared secret at all, so this is absent for it.
+        customFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/network-keys.CustomFieldEntry'
+        eapMethod:
+          $ref: '#/components/schemas/network-keys.EapMethod'
+        wpaVersion:
+          $ref: '#/components/schemas/network-keys.WpaVersion'
+        identity:
+          type: string
+          description: WPA_EAP or IEEE_802_1X, all eapMethod variants of either
+        allowAny:
+          type: boolean
+          description: WPA_EAP or IEEE_802_1X, all eapMethod variants of either - Configurator's "Allow any" option
+        eapolVersion:
+          $ref: '#/components/schemas/network-keys.EapolVersion'
+        caCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        authenticationUrl:
+          type: string
+          description: OPEN_HTTP only - the URL the Eye authenticates against
+        requireServerCertificateCheck:
+          type: boolean
+          description: 'OPEN_HTTP and HTTP_AUTHENTICATION - gates the whole certificate block: when false, caCertificate/clientCertificate/privateKey are never populated even if previously set. This is the inverse of the domain model''s own "no server certificate check" flag.'
+        postData:
+          type: string
+          description: OPEN_HTTP only - the HTTP POST body sent to authenticationUrl; "" when not configured, never null
+        clientCertificateFileType:
+          $ref: '#/components/schemas/network-keys.CertificateType'
+        privateKeyFileType:
+          $ref: '#/components/schemas/network-keys.CertificateType'
+        targetUrl:
+          type: string
+          description: HTTP_AUTHENTICATION only - the URL the Eye authenticates against
+        contentOnTargetUrlPage:
+          type: string
+          description: HTTP_AUTHENTICATION only - expected content on the target URL's page, used to detect whether login is already satisfied
+        contentOnLoginPage:
+          type: string
+          description: HTTP_AUTHENTICATION only - expected content on the login page
+        contentOnSuccessfulLogin:
+          type: string
+          description: HTTP_AUTHENTICATION only - expected content after a successful login
+        contentOnUnSuccessfulLogin:
+          type: string
+          description: HTTP_AUTHENTICATION only - expected content after a failed login
+        secureProtocol:
+          $ref: '#/components/schemas/network-keys.SecureProtocol'
+        userAgent:
+          type: string
+          description: HTTP_AUTHENTICATION only - one of Configurator's ~100 named user agent strings (e.g. "WINDOWS7_FIREFOX", its own default), or "CUSTOM_USER_AGENT" to use customUserAgent instead
+        customUserAgent:
+          type: string
+          description: HTTP_AUTHENTICATION only - only present when userAgent is CUSTOM_USER_AGENT; meaningless (and absent) for every other userAgent value
+        loginPages:
+          type: array
+          description: HTTP_AUTHENTICATION only - an ordered list of login pages, each a set of form fields. Omitted entirely (not an empty array) when there are none.
+          items:
+            $ref: '#/components/schemas/network-keys.HttpAuthenticationPage'
+        logoutPages:
+          type: array
+          description: HTTP_AUTHENTICATION only - same shape as loginPages, for the logout sequence
+          items:
+            $ref: '#/components/schemas/network-keys.HttpAuthenticationPage'
+        scepUrl:
+          type: string
+          description: WPA_EAP_SCEP only - the SCEP server URL the Eye enrolls its client certificate against
+        challengePassword:
+          type: string
+          description: WPA_EAP_SCEP only - masked to "********" when set; the actual password is never returned
+        caFingerprint:
+          type: string
+          description: WPA_EAP_SCEP only, optional
+        subjectName:
+          type: string
+          description: WPA_EAP_SCEP only - the certificate subject name (DN) to request
+        subjectAltName:
+          type: string
+          description: WPA_EAP_SCEP only, optional
+        keySize:
+          $ref: '#/components/schemas/network-keys.ScepKeySize'
+        renewalThresholdPercent:
+          type: integer
+          description: WPA_EAP_SCEP only - percentage of the certificate's validity period elapsed before the Eye renews it
+        clientCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        privateKeyFileName:
+          type: string
+          description: WPA_EAP or IEEE_802_1X (eapMethod EAP_TLS of either), OPEN_HTTP, and HTTP_AUTHENTICATION - filename only, never the key bytes themselves
+        privateKeyPassword:
+          type: string
+          description: WPA_EAP or IEEE_802_1X, eapMethod EAP_TLS of either - masked to "********" when set; the actual password is never returned
+        peapLabel:
+          $ref: '#/components/schemas/network-keys.PEAPLabel'
+        peapVersion:
+          $ref: '#/components/schemas/network-keys.PEAPVersion'
+        innerAuthenticationMethod:
+          $ref: '#/components/schemas/network-keys.PEAPInnerAuthenticationMethod'
+        ttlsInnerAuthenticationMethod:
+          $ref: '#/components/schemas/network-keys.InnerAuthenticationMethod'
+        nai:
+          type: string
+          description: WPA_EAP only, eapMethod EAP_PSK
+        preSharedKey:
+          type: string
+          description: WPA_EAP only, eapMethod EAP_PSK - masked to "********" when set; the actual key is never returned
+        tlsVersion:
+          $ref: '#/components/schemas/network-keys.TlsVersion'
+        pacFileName:
+          type: string
+          description: WPA_EAP only, eapMethod EAP_FAST - filename only, the PAC file's bytes are never returned
+        anonymousIdentity:
+          type: string
+          description: WPA_EAP, eapMethod EAP_TTLS or EAP_FAST; or IEEE_802_1X, eapMethod EAP_TTLS (IEEE_802_1X has no EAP_FAST)
+        password:
+          type: string
+          description: WPA_EAP, eapMethod EAP_PEAP, EAP_TTLS, EAP_FAST, LEAP, or EAP_MSCHAP_V2; or IEEE_802_1X, eapMethod EAP_PEAP, EAP_TTLS, LEAP, or EAP_MSCHAP_V2 (IEEE_802_1X has no EAP_FAST) - the outer EAP password, masked to "********" when set; the actual password is never returned
+        innerCaCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        innerClientCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        innerPrivateKeyFileName:
+          type: string
+          description: WPA_EAP or IEEE_802_1X, eapMethod EAP_PEAP or EAP_TTLS of either with their inner method set to TLS/EAP_TLS - filename only
+        innerPrivateKeyPassword:
+          type: string
+          description: WPA_EAP or IEEE_802_1X, eapMethod EAP_PEAP or EAP_TTLS of either with their inner method set to TLS/EAP_TLS - masked to "********" when set
+    network-keys.NetworkKeyType:
+      type: string
+      description: Determines which other fields are meaningful on a NetworkKey/NetworkKeyRequest. Every value is now documented with request/response fields and examples.
+      enum:
+      - WPA1
+      - WPA2
+      - WPA3
+      - WPA3_OWE
+      - WPA_EAP
+      - WPA_EAP_SCEP
+      - IEEE_802_1X
+      - OPEN_HTTP
+      - HTTP_AUTHENTICATION
+      - RAW
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    network-keys.InnerAuthenticationMethod:
+      type: string
+      description: EAP_TTLS only (WPA_EAP or IEEE_802_1X) - a separate, larger enum than PEAP's own PEAPInnerAuthenticationMethod. The caCertificate/clientCertificate/privateKey/privateKeyPassword fields on TtlsInnerAuthentication only apply when this is EAP_TLS
+      enum:
+      - NOT_SET
+      - MSCHAP
+      - MSCHAPV2
+      - PAP
+      - CHAP
+      - EAP_MSCHAPV2
+      - EAP_TLS
+      - EAP_GTC
+      - EAP_OTP
+      - EAP_MD5
+    network-keys.CertificateType:
+      type: string
+      description: OPEN_HTTP and HTTP_AUTHENTICATION only - PEM vs DER for clientCertificate/privateKey. Required whenever the corresponding certificate is provided; there's no safe default since it's a fact about the uploaded bytes, not a preference.
+      enum:
+      - PEM
+      - DER
+    network-keys.EapolVersion:
+      type: string
+      description: Optional on every WPA_EAP variant.
+      enum:
+      - EAPOL_VERSION_1
+      - EAPOL_VERSION_2
+      - EAPOL_VERSION_3
+    network-keys.GetNetworkKeyResponse:
+      $ref: '#/components/schemas/network-keys.NetworkKey'
+    network-keys.TtlsInnerAuthentication:
+      type: object
+      description: EAP_TTLS only (WPA_EAP or IEEE_802_1X) - the "Inner Authentication" panel. caCertificate/clientCertificate/privateKey/privateKeyPassword only apply when method is EAP_TLS; clientCertificate is required in that case.
+      properties:
+        method:
+          $ref: '#/components/schemas/network-keys.InnerAuthenticationMethod'
+        caCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        clientCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        privateKey:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        privateKeyPassword:
+          type: string
+    network-keys.PeapInnerAuthentication:
+      type: object
+      description: EAP_PEAP only (WPA_EAP or IEEE_802_1X) - the "Inner Authentication" panel. caCertificate/clientCertificate/privateKey/privateKeyPassword only apply when method is TLS; clientCertificate is required in that case.
+      properties:
+        method:
+          $ref: '#/components/schemas/network-keys.PEAPInnerAuthenticationMethod'
+        caCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        clientCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        privateKey:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        privateKeyPassword:
+          type: string
+    network-keys.HttpAuthenticationField:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    network-keys.GetNetworkKeysResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/network-keys.NetworkKey'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    network-keys.CertificateProperties:
+      type: object
+      description: EAP_TLS only (WPA_EAP or IEEE_802_1X) - the outer "Certificate Properties" panel. All fields optional; omitting the whole object, or any certificate within it, on update leaves it untouched rather than clearing it.
+      properties:
+        caCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        clientCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        privateKey:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        privateKeyPassword:
+          type: string
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

@@ -1,0 +1,1384 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Eyes API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Eyes
+paths:
+  /eyes:
+    get:
+      summary: Summary of Eyes
+      operationId: eyes-summary
+      description: Fetch a summary of all registered Eyes
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/eyes.OrganizationIdRequestParam'
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/eyes.EyesSummaryRequestParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyes.SummaryResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Eyes
+  /eyes/agents:
+    get:
+      summary: List the Agent Eyes available
+      operationId: eyes-agents
+      description: Page through all of the registered Eyes. **Important:** When sorting by score and paging through results, you must retain a consistent scoreSortStart and scoreSortEnd time range from one call to the next, or results from paging will be unstable.
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/eyes.LicenseConstraintRequestParam'
+      - $ref: '#/components/parameters/eyes.ClientNameRequestParam'
+      - $ref: '#/components/parameters/eyes.NicknameRequestParam'
+      - $ref: '#/components/parameters/eyes.PlatformRequestParam'
+      - $ref: '#/components/parameters/eyes.LastSSIDRequestParam'
+      - $ref: '#/components/parameters/eyes.LastLocationRequestParam'
+      - name: lastLocationId
+        in: query
+        description: Filter on the last location ID seen
+        schema:
+          type: array
+          items:
+            type: string
+      - name: scoreSortStart
+        in: query
+        description: Start time for score-based sorting (epoch milliseconds) - required when sorting by 'score'
+        schema:
+          type: number
+      - name: scoreSortEnd
+        in: query
+        description: End time for score-based sorting (epoch milliseconds) - required when sorting by 'score'
+        schema:
+          type: number
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyes.GetEyesAgentsResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Eyes
+    patch:
+      summary: Patch multiple Eye Agents
+      operationId: patch-eyes-agents
+      description: Patch the specified Eye Agents
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      requestBody:
+        description: A list of the agents and the data to update.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/eyes.PatchBatchEyesAgentRequest'
+            examples:
+              license-multiple:
+                summary: License multiple devices
+                value:
+                - agentId: ebd0ffed-66ad-4a7b-a9d8-02245b3ede2c
+                  isLicensed: true
+                - agentId: 99b76dd0-4d26-40c7-b292-a330ce19f188
+                  isLicensed: true
+              unlicense-multiple:
+                summary: Unlicense multiple device
+                value:
+                - agentId: ebd0ffed-66ad-4a7b-a9d8-02245b3ede2c
+                  isLicensed: false
+                - agentId: 99b76dd0-4d26-40c7-b292-a330ce19f188
+                  isLicensed: false
+              set-nicknames:
+                summary: Update multiple nicknames
+                value:
+                - agentId: ebd0ffed-66ad-4a7b-a9d8-02245b3ede2c
+                  nickname: Agent 007
+                - agentId: 99b76dd0-4d26-40c7-b292-a330ce19f188
+                  nickname: Agent 002
+              delete-agents:
+                summary: Delete multiple agents
+                value:
+                - agentId: ebd0ffed-66ad-4a7b-a9d8-02245b3ede2c
+                  autoUninstall: true
+                  pendingDelete: true
+                - agentId: 99b76dd0-4d26-40c7-b292-a330ce19f188
+                  autoUninstall: false
+                  pendingDelete: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyes.PatchEyesAgentResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Eyes
+  /eyes/agents/search:
+    get:
+      summary: Search for Agent Eyes
+      operationId: eyes-agents-search
+      description: Search for registered Agent Eyes
+      security:
+      - oauth2: []
+      parameters:
+      - name: q
+        in: query
+        description: One or more search terms. This will execute a fuzzy search with the given terms and can partial or full agent names, nicknames, MAC addresses, IDs, local IPs, and/or external IPs.
+        required: true
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: The maximum number of search results to return.
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 25
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyes.GetEyesAgentsSearchResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Eyes
+  /eyes/agents/{agentId}:
+    get:
+      summary: Fetch the specified Eyes Agent
+      operationId: eyes-agent
+      description: Fetch the registered Eyes Agent
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/eyes.RequiredAgentId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyes.GetEyesAgentResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Eyes
+    patch:
+      summary: Patch the specified Eyes Agent
+      operationId: patch-eyes-agent
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/eyes.RequiredAgentId'
+      requestBody:
+        description: Agent fields to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/eyes.PatchEyesAgentRequest'
+            examples:
+              license:
+                summary: License a device
+                value:
+                  isLicensed: true
+              unlicense:
+                summary: Unlicense a device
+                value:
+                  isLicensed: false
+              set-nickname:
+                summary: Set a nickname
+                value:
+                  nickname: Agent 007
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyes.PatchEyesAgentResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Eyes
+    delete:
+      summary: Delete an Eyes Agent
+      operationId: delete-eyes-agent
+      description: Delete the specified Eyes Agent
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/eyes.DeleteAgentId'
+      - $ref: '#/components/parameters/eyes.AutoUninstall'
+      responses:
+        '202':
+          description: Accepted. Client to be deleted in the future.
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Eyes
+  /eyes/sensors:
+    get:
+      summary: List the Sensor Eyes available
+      operationId: eyes-sensors
+      description: Page through all of the registered Eyes
+      security:
+      - oauth2: []
+      parameters:
+      - name: excludeDefaultServiceArea
+        in: query
+        description: Exclude the default service area from the results
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyes.GetEyesSensorsResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Eyes
+  /eyes/sensors/{sensorId}:
+    get:
+      summary: Fetch the specified Eyes Sensor
+      operationId: eyes-sensor
+      description: Fetch the registered Eyes Sensor
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/eyes.RequiredSensorId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyes.GetEyesSensorResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Eyes
+    patch:
+      summary: Patch the specified Eyes Sensor
+      operationId: patch-eyes-sensor
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/eyes.RequiredSensorId'
+      requestBody:
+        description: Sensor fields to update
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/eyes.PatchEyesSensorRequest'
+            examples:
+              normal-mode:
+                summary: Led status to normal mode
+                value:
+                  ledStatus: NORMAL_MODE
+              blinking:
+                summary: Led status to blinking
+                value:
+                  ledStatus: BLINKING
+              'off':
+                summary: Led status to off
+                value:
+                  ledStatus: 'OFF'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyes.GetEyesSensorResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Eyes
+  /eyes/sensors/{sensorId}/automated-testing:
+    get:
+      summary: Get the status of automated test on Sensor
+      operationId: get-eyes-sensor-automated-testing
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/eyes.RequiredSensorId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyes.EyesSensorAutomatedTestStatus'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Eyes
+    post:
+      summary: Start or stopping automated test on Sensor
+      operationId: post-eyes-sensor-automated-testing
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/eyes.RequiredSensorId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/eyes.EyesSensorAutomatedTestRequest'
+            examples:
+              START_AUTOMATED_TESTING:
+                summary: Start automated testing
+                value:
+                  action: START_AUTOMATED_TESTING
+              STOP_AUTOMATED_TESTING:
+                summary: Stop automated testing
+                value:
+                  action: STOP_AUTOMATED_TESTING
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyes.EyesSensorAutomatedTestResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Eyes
+  /eyes/sensors/{sensorId}/packet-captures:
+    get:
+      summary: List packet capture tests for sensor
+      operationId: get-eyes-sensor-pcaps
+      description: Retrieve a paginated list of packet capture and access point traffic test pcaps for a sensor
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/eyes.RequiredSensorId'
+      - $ref: '#/components/parameters/eyes.PcapChannelRequestParam'
+      - $ref: '#/components/parameters/eyes.PcapApIdRequestParam'
+      - $ref: '#/components/parameters/eyes.PcapBandRequestParam'
+      - $ref: '#/components/parameters/eyes.PcapStartRequestParam'
+      - $ref: '#/components/parameters/eyes.PcapEndRequestParam'
+      - $ref: '#/components/parameters/eyes.PcapPageRequestParam'
+      - $ref: '#/components/parameters/eyes.PcapSizeRequestParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyes.PacketCaptureListResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Eyes
+  /eyes/sensors/{sensorId}/packet-captures/{testKey}/download:
+    get:
+      summary: Download packet capture file
+      operationId: get-eyes-sensor-pcap-download
+      description: Downloads the pcap file for the specified sensor and test key
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/eyes.RequiredSensorId'
+      - $ref: '#/components/parameters/eyes.RequiredTestKey'
+      responses:
+        '200':
+          description: pcap file returned
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+            application/vnd.tcpdump.pcap:
+              schema:
+                type: string
+                format: binary
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+        '403':
+          $ref: '#/components/responses/common.403Forbidden'
+      tags:
+      - Eyes
+  /eyes/sensors/packet-captures:
+    get:
+      summary: List packet capture tests across all sensors
+      operationId: get-eyes-packet-captures-global
+      description: Retrieve a paginated, cross-sensor list of packet capture and access point traffic test pcaps. Omitting sensorId returns results across all sensors; providing it scopes to one sensor.
+      security:
+      - oauth2: []
+      parameters:
+      - name: sensorId
+        in: query
+        required: false
+        description: Scope results to a single sensor. Omit for cross-sensor results.
+        schema:
+          type: integer
+      - $ref: '#/components/parameters/eyes.PcapChannelRequestParam'
+      - $ref: '#/components/parameters/eyes.PcapApIdRequestParam'
+      - $ref: '#/components/parameters/eyes.PcapBandRequestParam'
+      - $ref: '#/components/parameters/eyes.PcapStartRequestParam'
+      - $ref: '#/components/parameters/eyes.PcapEndRequestParam'
+      - name: testType
+        in: query
+        required: false
+        description: Filter by test type
+        schema:
+          type: string
+          enum:
+          - PacketCapture
+          - AccessPointTraffic
+      - name: searchValue
+        in: query
+        required: false
+        description: Free-text search across sensor name, AP name, ESSID, and BSSID
+        schema:
+          type: string
+      - $ref: '#/components/parameters/eyes.PcapPageRequestParam'
+      - $ref: '#/components/parameters/eyes.PcapSizeRequestParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyes.PacketCaptureListResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Eyes
+  /eyes/sensors/registration:
+    post:
+      summary: Register a new Eye Sensor
+      operationId: register-eyes-sensor
+      security:
+      - oauth2: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/eyes.RegistrationRequestBody'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyes.RegistrationResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      tags:
+      - Eyes
+components:
+  schemas:
+    eyes.EyesSensor:
+      type: object
+      properties:
+        commonId:
+          type: integer
+          readOnly: true
+          example: 1001
+        commonName:
+          type: string
+          description: Name of the Sensor
+          example: Golden Eye
+        description:
+          type: string
+          description: Description of the Sensor
+        parentLocationId:
+          type: integer
+          description: Parent Location's ID
+        parentLocationName:
+          type: string
+          description: Parent Location's Name
+          example: Default
+        parentServiceAreaId:
+          type: string
+          description: Parent Service Area's ID
+        parentServiceAreaName:
+          type: string
+          description: Parent Service Area's Name
+          example: Office
+        eyeStatus:
+          type: string
+          description: Sensor Status
+          enum:
+          - ACTIVE
+          - PASSIVE
+          - UNCONFIGURED
+          - MAINTENANCE
+        ledStatus:
+          type: string
+          description: Sensor LED Status
+          enum:
+          - NORMAL_MODE
+          - BLINKING
+          - 'OFF'
+        eyeSoftware:
+          type: string
+          description: Sensor software version
+        hardwareVersion:
+          type: string
+          description: Sensor hardware version
+        ipV4Address:
+          type: string
+          format: ipv4
+          description: IP v4 Address of the Sensor
+          example: 10.10.10.10
+        lastTestResultStoredTimestamp:
+          type: string
+          format: date-time
+        topologyType:
+          type: string
+          description: Topology type
+          enum:
+          - EYE
+        antennaArray:
+          type: boolean
+        timeZone:
+          type: string
+          description: Timezone of the Sensor
+          example: America/New_York
+        vht160Support:
+          type: boolean
+        ethernetMACAddress:
+          type: string
+          description: MAC Address of the Ethernet adapter
+        wlan24MACAddress:
+          type: string
+          description: MAC Address of the 2.4GHZ wireless adapter
+        wlan5MACAddress:
+          type: string
+          description: MAC Address of the 5GHZ wireless adapter
+    eyes.GetEyesAgentsSearchResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+          description: The number of results returned.
+          example: 1
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              agent:
+                $ref: '#/components/schemas/eyes.EyesAgentSearch'
+    eyes.PatchEyesAgentRequest:
+      type: object
+      properties:
+        isLicensed:
+          type: boolean
+          description: The license state of the agent. True is licensed and false is unlicensed.
+        nickname:
+          type: string
+          description: The nickname of an agent.
+    eyes.EyesAgent:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+          example: 10040f8d-7bf0-42bc-97fb-978cca9d15ba
+        name:
+          type: string
+          maxLength: 256
+          example: desktop-1234.company.example.com
+          description: For Linux/Mac/Windows, it is the hostname. For Android, it is the user supplied hostname or the mac address or agent ID if a user defined value is not set.
+        manufacturer:
+          type: string
+          maxLength: 256
+          example: samsung
+        model:
+          type: string
+          maxLength: 256
+          example: SM-G930V
+        platform:
+          type: string
+          maxLength: 256
+          example: android
+        version:
+          description: Device OS version
+          type: string
+          maxLength: 256
+          example: '7.0'
+        mac:
+          type: string
+          maxLength: 18
+          example: '48:49:11:46:53:30'
+        lastSeen:
+          type: integer
+          example: 1672456149773
+          description: milliseconds since the epoch
+        lastSsid:
+          type: string
+          example: foo-ssid.5G
+        lastTestSeen:
+          type: integer
+          example: 1672456149773
+          description: milliseconds since the epoch
+        lastAgentVersion:
+          type: string
+          example: 4.7.2+6217
+        remoteIpAddress:
+          type: string
+          example: 198.51.100.25
+        numberOfTxSpatialStreams:
+          type: integer
+          example: '2'
+        numberOfRxSpatialStreams:
+          type: integer
+          example: '2'
+        lastDefinedLocationId:
+          type: string
+          format: uuid
+          example: 3d44b634-653c-4b04-ac63-b1b9c65e2e73
+        locationPermissionStatus:
+          type: string
+          enum:
+          - GRANTED
+          - DENIED
+          - NOT_REQUESTED
+          description: Result of permission check to read account data. If unset, then not application for the given platform.
+        readAccountPermissionStatus:
+          type: string
+          enum:
+          - GRANTED
+          - DENIED
+          - NOT_REQUESTED
+          description: Result of permission check to read account data. If unset, then not application for the given platform.
+        backgroundLocationPermissionStatus:
+          type: string
+          enum:
+          - GRANTED
+          - DENIED
+          - NOT_REQUESTED
+          description: Result of permission check to read account data. If unset, then not application for the given platform.
+        writeExternalStoragePermissionStatus:
+          type: string
+          enum:
+          - GRANTED
+          - DENIED
+          - NOT_REQUESTED
+          description: Result of permission check to read account data. If unset, then not application for the given platform.
+        lastBssid:
+          type: string
+          example: 88:74:4E:61:8D:2D
+        localIpAddress:
+          type: string
+          example: 198.168.0.25
+        isLicensed:
+          type: boolean
+          description: Indicates if this agent licensed. True means licensed. False means not licensed.
+          default: 'false'
+        lastDefinedLocation:
+          type: string
+          description: Friendly name of the last defined location
+          example: Corporate Office
+        marketModel:
+          type: string
+          maxLength: 256
+          example: Samsung Galaxy S7 (SM-G930V)
+    eyes.PatchBatchEyesAgentRequest:
+      type: array
+      items:
+        type: object
+        required:
+        - agentId
+        properties:
+          agentId:
+            type: string
+            format: uuid
+            description: The UUID of the agent to update.
+          isLicensed:
+            type: boolean
+            description: The license state of the agent. True is licensed and false is unlicensed.
+          nickname:
+            type: string
+            description: The nickname of an agent.
+          pendingDelete:
+            type: boolean
+            description: Used in conjunction with agentId, when set and the value is true this indicates that the agent referenced will be deleted.
+          autoUninstall:
+            type: boolean
+            description: Used in conjunction with pendingDelete, when set and the value is true an attempt to auto-uninstall the agent software from the device will be made as the device is deleted. If set to false, then no attempt will be made to uninstall agent software. Auto-uninstall is not available for Android and Linux agents.
+    eyes.EyesSensorAutomatedTestRequest:
+      type: object
+      properties:
+        action:
+          type: string
+          description: The automated test action to be performed - START_AUTOMATED_TESTING or STOP_AUTOMATED_TESTING
+          enum:
+          - START_AUTOMATED_TESTING
+          - STOP_AUTOMATED_TESTING
+    eyes.PacketCaptureItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for the test
+        testKey:
+          type: string
+          format: uuid
+          description: UUID key for the test
+        testId:
+          type: integer
+          format: int64
+          description: Numeric test ID
+        testType:
+          type: string
+          enum:
+          - PacketCapture
+          - AccessPointTraffic
+          description: Type of packet capture test
+        eyeId:
+          type: integer
+          format: int64
+          description: ID of the sensor (eye) that performed the test
+        eyeUuid:
+          type: string
+          format: uuid
+          description: UUID of the sensor
+        eyeName:
+          type: string
+          description: Name of the sensor
+        orgUuid:
+          type: string
+          format: uuid
+          description: UUID of the organization
+        apId:
+          type: integer
+          description: Access point ID
+        ssid:
+          type: string
+          description: SSID of the access point
+        bssid:
+          type: string
+          description: BSSID (MAC address) of the access point
+        associatedAccessPoints:
+          type: array
+          description: Access points associated with the test, index-aligned with their SSID/BSSID/name. Only populated for AccessPointTraffic-type rows; PacketCapture-type rows use the single apId/ssid/bssid fields above instead.
+          items:
+            $ref: '#/components/schemas/eyes.AssociatedAccessPoint'
+        band:
+          type: string
+          enum:
+          - '2.4'
+          - '5'
+          - '6'
+          - N/A
+          description: Frequency band
+        channel:
+          type: integer
+          description: WiFi channel number
+        gid:
+          type: integer
+          description: Group ID
+        resultsFileS3Key:
+          type: string
+          description: S3 key for the PCAP file
+        createdAt:
+          type: string
+          format: date-time
+          description: Test creation timestamp (UTC)
+        hostname:
+          type: string
+          description: Hostname of the sensor
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    eyes.SensorsSummaryResponse:
+      type: object
+      properties:
+        deviceCount:
+          type: integer
+          example: 300
+        deviceStatusSummary:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            active: 150
+            passive: 75
+            unconfigured: 50
+            maintenance: 25
+        modelSummary:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            '6300': 10
+            '2200': 5
+            '250': 2
+    eyes.GetEyesAgentsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/eyes.EyesAgent'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    eyes.PatchEyesAgentResponse:
+      type: object
+      properties: {}
+    eyes.GetEyesSensorResponse:
+      $ref: '#/components/schemas/eyes.EyesSensor'
+    eyes.AssociatedAccessPoint:
+      type: object
+      properties:
+        apId:
+          type: integer
+          description: Access point ID
+        ssid:
+          type: string
+          description: SSID of the access point
+        bssid:
+          type: string
+          description: BSSID (MAC address) of the access point
+        apName:
+          type: string
+          description: Name of the access point
+    common.ZeroBasedPagination:
+      type: object
+      properties:
+        perPage:
+          type: integer
+          description: Number of records per page
+        page:
+          type: integer
+          description: Current page number (0-based)
+        total:
+          type: integer
+          description: Total number of records available
+        pages:
+          type: integer
+          description: Total number of pages
+    eyes.PatchEyesSensorRequest:
+      type: object
+      properties:
+        ledStatus:
+          type: string
+          description: The LED status of the sensor. NORMAL_MODE, BLINKING or OFF.
+          enum:
+          - NORMAL_MODE
+          - BLINKING
+          - 'OFF'
+    eyes.PacketCaptureListResponse:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/common.ZeroBasedPagination'
+        items:
+          type: array
+          description: List of packet capture test metadata
+          items:
+            $ref: '#/components/schemas/eyes.PacketCaptureItem'
+    eyes.AgentsSummaryResponse:
+      type: object
+      required:
+      - organizationName
+      - deviceCount
+      properties:
+        organizationName:
+          type: string
+        deviceCount:
+          type: integer
+        licenseSummary:
+          $ref: '#/components/schemas/eyes.AgentsLicenseSummary'
+        platformSummary:
+          type: object
+          additionalProperties:
+            type: integer
+          example:
+            android: 100
+            linux: 25
+            mac: 75
+            windows: 50
+    eyes.RegistrationResponse:
+      type: object
+      properties:
+        macAddress:
+          type: string
+          description: The MAC address of the Eye
+        serialNumber:
+          type: string
+          description: The Serial Number of the Eye
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    eyes.EyesSensorAutomatedTestStatus:
+      type: object
+      properties:
+        eyeName:
+          type: string
+        testProfileName:
+          type: string
+        testStatus:
+          type: string
+          enum:
+          - STOPPED
+          - PAUSED
+          - RUNNING
+          - STOPPING
+          - UNKNOWN
+        currentTestStatus:
+          type: string
+          example: Test started
+        currentAccessPoint:
+          type: string
+        currentTestRunning:
+          type: string
+    eyes.SummaryResponse:
+      type: object
+      properties:
+        agents:
+          $ref: '#/components/schemas/eyes.AgentsSummaryResponse'
+        sensors:
+          $ref: '#/components/schemas/eyes.SensorsSummaryResponse'
+    eyes.RegistrationRequestBody:
+      type: object
+      properties:
+        macAddress:
+          type: string
+          description: The MAC address of the Eye
+        serialNumber:
+          type: string
+          description: The Serial Number of the Eye
+        groupId:
+          type: string
+          format: uuid
+          description: The Group ID where the Eye should be located
+    eyes.EyesSensorAutomatedTestResponse:
+      type: object
+      properties:
+        action:
+          type: string
+          description: The automated test action to be performed - START_AUTOMATED_TESTING or STOP_AUTOMATED_TESTING
+          enum:
+          - START_AUTOMATED_TESTING
+          - STOP_AUTOMATED_TESTING
+        result:
+          type: string
+          description: The result of starting or stopping the automated test
+          example: SUCCESS
+    eyes.AgentsLicenseSummary:
+      type: object
+      required:
+      - packageName
+      - totalLicenses
+      - usedLicenses
+      - freeLicenses
+      properties:
+        packageName:
+          type: string
+          example: enterprise
+        totalLicenses:
+          type: integer
+          example: 1000
+        usedLicenses:
+          type: integer
+          example: 750
+        freeLicenses:
+          type: integer
+          example: 250
+    eyes.EyesAgentSearch:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 256
+          example: desktop-1234.company.example.com
+          description: For Linux/Mac/Windows, it is the hostname. For Android, it is the user supplied hostname or the mac address or agent ID if a user defined value is not set.
+        nickname:
+          type: string
+          maxLength: 256
+          example: desktop-1234
+          description: The nickname assigned to this agent.
+        ssid:
+          type: string
+          example: foo-ssid.5G
+        bssid:
+          type: string
+          example: 88:74:4E:61:8D:2D
+        ip:
+          type: string
+          example: 198.51.100.25
+        mac:
+          type: string
+          maxLength: 18
+          example: '48:49:11:46:53:30'
+        platform:
+          type: string
+          maxLength: 256
+          example: android
+        type:
+          type: string
+          enum:
+          - bssid
+          - client
+        uniqueId:
+          type: string
+          format: uuid
+          example: 10040f8d-7bf0-42bc-97fb-978cca9d15ba
+    eyes.GetEyesAgentResponse:
+      $ref: '#/components/schemas/eyes.EyesAgent'
+    eyes.GetEyesSensorsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/eyes.EyesSensor'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+  parameters:
+    common.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is 1.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    eyes.RequiredTestKey:
+      name: testKey
+      in: path
+      description: The test key (a UUID) identifying a single packet capture test result
+      required: true
+      schema:
+        type: string
+        format: uuid
+    eyes.PcapPageRequestParam:
+      name: page
+      in: query
+      required: false
+      description: Page number (zero-based)
+      schema:
+        type: integer
+        default: 0
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    eyes.PcapBandRequestParam:
+      name: band
+      in: query
+      required: false
+      description: Filter by frequency band (2.4, 5, or 6 GHz)
+      schema:
+        type: string
+        enum:
+        - '2.4'
+        - '5'
+        - '6'
+        - all
+    eyes.PcapSizeRequestParam:
+      name: size
+      in: query
+      required: false
+      description: Page size
+      schema:
+        type: integer
+        default: 20
+    eyes.LastSSIDRequestParam:
+      name: lastSsid
+      in: query
+      description: Filter on the the last SSID seen
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    eyes.EyesSummaryRequestParam:
+      name: eyesType
+      in: query
+      description: Filter to just the specific resource type
+      required: false
+      schema:
+        type: string
+        enum:
+        - AGENTS
+        - SENSORS
+    eyes.RequiredAgentId:
+      name: agentId
+      in: path
+      description: The ID of an agent
+      required: true
+      schema:
+        type: string
+        format: uuid
+    eyes.RequiredSensorId:
+      name: sensorId
+      in: path
+      description: The ID of a sensor
+      required: true
+      schema:
+        type: integer
+    eyes.PcapEndRequestParam:
+      name: end
+      in: query
+      required: false
+      description: End time for filtering (epoch milliseconds)
+      schema:
+        type: integer
+        format: int64
+    eyes.PcapStartRequestParam:
+      name: start
+      in: query
+      required: false
+      description: Start time for filtering (epoch milliseconds)
+      schema:
+        type: integer
+        format: int64
+    eyes.ClientNameRequestParam:
+      name: clientName
+      in: query
+      description: Filter on the the client name
+      required: false
+      schema:
+        type: string
+    eyes.PlatformRequestParam:
+      name: platform
+      in: query
+      description: Filter on the the platform (windows, linux, macos or android)
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - windows
+          - linux
+          - macos
+          - android
+    eyes.LicenseConstraintRequestParam:
+      name: licenseConstraint
+      in: query
+      description: Filter on the the license state (licensed or not licensed)
+      required: false
+      schema:
+        type: string
+        enum:
+        - licensed
+        - unlicensed
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    eyes.PcapApIdRequestParam:
+      name: apId
+      in: query
+      required: false
+      description: Filter by access point ID
+      schema:
+        type: integer
+    eyes.DeleteAgentId:
+      name: agentId
+      in: path
+      description: The agent id to delete
+      required: true
+      schema:
+        type: string
+        format: uuid
+    common.SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    eyes.NicknameRequestParam:
+      name: nickname
+      in: query
+      description: Filter on the the nickname
+      required: false
+      schema:
+        type: string
+    eyes.PcapChannelRequestParam:
+      name: channel
+      in: query
+      required: false
+      description: Filter by channel number
+      schema:
+        type: integer
+    eyes.LastLocationRequestParam:
+      name: lastLocation
+      in: query
+      description: Filter on the the last location name seen
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    eyes.AutoUninstall:
+      name: autoUninstall
+      in: query
+      description: Attempt to auto-uninstall the agent software from the device. Auto-uninstall is not available for Android and Linux agents.
+      schema:
+        type: boolean
+        default: true
+    eyes.OrganizationIdRequestParam:
+      name: organizationId
+      in: query
+      description: The ID of the organization
+      required: false
+      schema:
+        type: string
+        format: uuid
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

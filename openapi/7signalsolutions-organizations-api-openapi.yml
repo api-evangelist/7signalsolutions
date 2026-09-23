@@ -1,0 +1,255 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Organizations API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Organizations
+paths:
+  /organizations:
+    get:
+      operationId: organizations-get-q7r8
+      tags:
+      - Organizations
+      summary: List all accessible Organizations
+      parameters:
+      - name: ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+          default: []
+      - name: names
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          default: []
+      - name: mobileEyeOrgCodes
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          default: []
+      - $ref: '#/components/parameters/metadata.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadata.PageModelOrganization'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+  /organizations/{organizationId}:
+    get:
+      operationId: organizations-with-id-get-s9t0
+      tags:
+      - Organizations
+      summary: List the specific Organization identified by its UUID
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadata.Organization'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+  /organizations/{organizationId}/features:
+    get:
+      operationId: organizations-with-id-get-features-get-u1v2
+      tags:
+      - Organizations
+      summary: List all the features mapped to the Organization specified by the UUID
+      parameters:
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/metadata.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadata.PageModelFeature'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+components:
+  schemas:
+    metadata.PageModelOrganization:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Organization'
+        pagination:
+          $ref: '#/components/schemas/metadata.Pagination'
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    metadata.PageModelFeature:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Feature'
+        pagination:
+          $ref: '#/components/schemas/metadata.Pagination'
+    metadata.Pagination:
+      type: object
+      properties:
+        perPage:
+          type: integer
+          format: int32
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+          description: The current page number. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
+        total:
+          type: integer
+          format: int64
+        pages:
+          type: integer
+          format: int32
+    metadata.Organization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        connectionId:
+          type: string
+        mobileEyeOrgCode:
+          type: string
+    metadata.Feature:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        feature:
+          type: string
+        description:
+          type: string
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    common.SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    metadata.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

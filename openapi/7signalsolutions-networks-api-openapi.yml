@@ -1,0 +1,477 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Networks API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Networks
+paths:
+  /networks/agents:
+    get:
+      summary: List the Agent Networks
+      operationId: agent-networks
+      description: Page through all of the Agent Networks
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - name: networkName
+        in: query
+        description: Fetch the list of networks filtered by network name
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/networks.GetAgentNetworksResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Networks
+    post:
+      operationId: PathNetworksAgents-post-c1d2
+      summary: Creates one or many Agent Networks
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/networks.PostAgentNetworksRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/networks.GetAgentNetworksResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      security:
+      - oauth2: []
+      tags:
+      - Networks
+  /networks/agents/{networkId}:
+    get:
+      summary: Fetch the specified Network
+      operationId: agent-network
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - name: networkId
+        in: path
+        description: Fetch the specific network referenced by its id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/networks.GetAgentNetworkResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Networks
+    put:
+      operationId: PathNetworksAgent-put-e3f4
+      summary: Replace the specified Network with the details in the payload
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - name: networkId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/networks.AgentNetworkRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+      tags:
+      - Networks
+    delete:
+      operationId: PathNetworksAgent-delete-g5h6
+      summary: Delete the Network specified by the UUID
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - name: networkId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+      tags:
+      - Networks
+  /networks/sensors:
+    get:
+      summary: List the Sensor Networks
+      operationId: sensor-networks
+      description: Page through all of the Sensor Networks
+      security:
+      - oauth2: []
+      parameters:
+      - name: includeUnbound
+        in: query
+        description: List every network regardless of Service Area binding
+        required: false
+        schema:
+          type: boolean
+          default: false
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/networks.GetSensorNetworksResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Networks
+    post:
+      operationId: PathNetworksSensors-post-n1s2
+      summary: Creates a Sensor Network
+      description: 'Creates a new Sensor Network. Required fields: name, networkKeyId'
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/networks.PostSensorNetworkRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/networks.GetSensorNetworkResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      security:
+      - oauth2: []
+      tags:
+      - Networks
+  /networks/sensors/{networkId}:
+    get:
+      summary: Fetch the specified Sensor Network
+      operationId: sensor-network
+      security:
+      - oauth2: []
+      parameters:
+      - name: networkId
+        in: path
+        description: Fetch the specific network referenced by its id
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/networks.GetSensorNetworkResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Networks
+    put:
+      operationId: PathNetworksSensor-put-n3s4
+      summary: Replace the specified Sensor Network with the details in the payload
+      description: Full replace, not a patch - provide the complete desired state on every call.
+      parameters:
+      - name: networkId
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/networks.PutSensorNetworkRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/networks.GetSensorNetworkResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+      tags:
+      - Networks
+    delete:
+      operationId: PathNetworksSensor-delete-n5s6
+      summary: Delete the Sensor Network specified by the id
+      parameters:
+      - name: networkId
+        in: path
+        required: true
+        schema:
+          type: integer
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+      tags:
+      - Networks
+components:
+  schemas:
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    networks.PostSensorNetworkRequest:
+      type: object
+      required:
+      - name
+      - networkKeyId
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        networkKeyId:
+          type: integer
+    networks.GetAgentNetworksResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/networks.AgentNetwork'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    networks.AgentNetworkRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        isEnabled:
+          type: boolean
+    networks.SensorNetwork:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        networkKeyId:
+          type: integer
+        contactPerson:
+          type: string
+        allowAutomaticMacFix:
+          type: boolean
+        randomMacs:
+          type: boolean
+        autoUpdateApNames:
+          type: boolean
+        ssidHidden:
+          type: boolean
+        pmfSupportEnabled:
+          type: boolean
+        ieee80211rClientSupportEnabled2400MHz:
+          type: boolean
+        ieee80211rClientSupportEnabled5000MHz:
+          type: boolean
+        ieee80211rClientSupportEnabled6000MHz:
+          type: boolean
+    networks.GetSensorNetworkResponse:
+      $ref: '#/components/schemas/networks.SensorNetwork'
+    networks.PutSensorNetworkRequest:
+      type: object
+      required:
+      - name
+      - networkKeyId
+      - allowAutomaticMacFix
+      - randomMacs
+      - autoUpdateApNames
+      - ssidHidden
+      - pmfSupportEnabled
+      - ieee80211rClientSupportEnabled2400MHz
+      - ieee80211rClientSupportEnabled5000MHz
+      - ieee80211rClientSupportEnabled6000MHz
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        networkKeyId:
+          type: integer
+        description:
+          type: string
+        contactPerson:
+          type: string
+        allowAutomaticMacFix:
+          type: boolean
+        randomMacs:
+          type: boolean
+        autoUpdateApNames:
+          type: boolean
+        ssidHidden:
+          type: boolean
+        pmfSupportEnabled:
+          type: boolean
+        ieee80211rClientSupportEnabled2400MHz:
+          type: boolean
+        ieee80211rClientSupportEnabled5000MHz:
+          type: boolean
+        ieee80211rClientSupportEnabled6000MHz:
+          type: boolean
+    networks.GetSensorNetworksResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/networks.SensorNetwork'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    networks.PostAgentNetworksRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/networks.AgentNetworkRequest'
+    networks.AgentNetwork:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        isEnabled:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    networks.GetAgentNetworkResponse:
+      $ref: '#/components/schemas/networks.AgentNetwork'
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

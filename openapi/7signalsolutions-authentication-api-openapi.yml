@@ -1,0 +1,114 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Authentication API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Authentication
+paths:
+  /oauth2/token:
+    post:
+      summary: OAuth2 Token Endpoint
+      operationId: oauth2-token-endpoint
+      description: The API requires a JWT bearer token. To fetch one, you may use this endpoint which supports the standard OAuth2 client credentials grant flow.
+      requestBody:
+        $ref: '#/components/requestBodies/oauth2.OAuth2ClientCredentialsRequest'
+      responses:
+        '200':
+          description: Success. A JWT token has been granted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/oauth2.OAuth2AccessTokenResponse'
+        '400':
+          description: There was a [problem with the request](https://datatracker.ietf.org/doc/html/rfc6749#section-5.2).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/oauth2.OAuth2AccessTokenError'
+      security: []
+      tags:
+      - Authentication
+components:
+  requestBodies:
+    oauth2.OAuth2ClientCredentialsRequest:
+      required: true
+      content:
+        application/x-www-form-urlencoded:
+          schema:
+            type: object
+            required:
+            - grant_type
+            - client_id
+            - client_secret
+            properties:
+              grant_type:
+                type: string
+                description: OAuth2 Grant Type. Only `client_credentials` is supported.
+                default: client_credentials
+              client_id:
+                type: string
+                description: OAuth2 client ID to identify the client
+                format: password
+              client_secret:
+                type: string
+                description: OAuth2 client secret to authenticate the client
+                format: password
+          encoding:
+            scope:
+              style: spaceDelimited
+  schemas:
+    oauth2.OAuth2AccessTokenError:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+          description: error message
+          enum:
+          - invalid_request
+          - invalid_client
+          - invalid_grant
+          - unauthorized_client
+          - unsupported_grant_type
+          - invalid_scope
+        error_description:
+          type: string
+          description: Human-readable ASCII text providing additional information
+        error_uri:
+          type: string
+          description: A URI identifying a human-readable web page with information about the error
+    oauth2.OAuth2AccessTokenResponse:
+      type: object
+      required:
+      - token_type
+      - access_token
+      properties:
+        token_type:
+          type: string
+        access_token:
+          type: string
+        expires_in:
+          type: integer
+        refresh_token:
+          type: string
+        scope:
+          type: array
+          items:
+            type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

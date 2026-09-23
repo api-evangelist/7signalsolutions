@@ -1,0 +1,169 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Default Configurations API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: DefaultConfigurations
+paths:
+  /default-configurations/sensors:
+    get:
+      summary: List the Sensor Default Configurations
+      operationId: default-configurations-sensors
+      description: Lists the configuration bundles that can be referenced by a Service Area or Organization's defaultConfigurationId
+      security:
+      - oauth2: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/default-configurations.GetSensorDefaultConfigurationsResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      tags:
+      - DefaultConfigurations
+  /default-configurations/sensors/{configurationId}:
+    get:
+      summary: Fetch the specified Sensor Default Configuration
+      operationId: default-configuration-sensor
+      description: Fetch details about a single default configuration
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/default-configurations.SensorDefaultConfigurationId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/default-configurations.GetSensorDefaultConfigurationResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - DefaultConfigurations
+components:
+  schemas:
+    default-configurations.GetSensorDefaultConfigurationsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/default-configurations.SensorDefaultConfiguration'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    default-configurations.SensorDefaultConfiguration:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        testProfileTemplateId:
+          type: number
+          description: id of the Test Profile Template applied by this configuration, if any
+        otaConfigurationId:
+          type: number
+          description: id of the OTA (over-the-air) configuration applied by this configuration, if any
+        alarmGroupId:
+          type: number
+          description: id of the alarm group applied by this configuration, if any
+        sonarId:
+          type: number
+          description: id of the Sonar configuration applied by this configuration, if any
+        pingEndPointId:
+          type: number
+          description: id of the ping endpoint applied by this configuration, if any
+        webServerId:
+          type: number
+          description: id of the web server test target applied by this configuration, if any
+        slaGroupId:
+          type: number
+          description: id of the SLA group applied by this configuration, if any
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    default-configurations.GetSensorDefaultConfigurationResponse:
+      $ref: '#/components/schemas/default-configurations.SensorDefaultConfiguration'
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    default-configurations.SensorDefaultConfigurationId:
+      name: configurationId
+      in: path
+      description: Sensor Default Configuration Id
+      required: true
+      schema:
+        type: number
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

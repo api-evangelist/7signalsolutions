@@ -1,0 +1,423 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Topologies API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Topologies
+paths:
+  /topologies/agents/locations:
+    get:
+      deprecated: true
+      summary: List the Agent Topology Locations
+      operationId: agent-topology-locations
+      description: Page through all of the Agent Topology Locations. **Important:** When sorting by score and paging through results, you must retain a consistent scoreSortStart and scoreSortEnd time range from one call to the next, or results from paging will be unstable.
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - name: locationIds
+        in: query
+        description: Filter by specific location IDs. Provide a comma-separated list of location UUIDs to return only those locations.
+        schema:
+          type: string
+      - name: searchValue
+        in: query
+        description: Filter by location name where the name contains this case insensitive value
+        schema:
+          type: string
+      - name: scoreSortStart
+        in: query
+        description: Start time for score-based sorting (epoch milliseconds) - required when sorting by 'score'
+        schema:
+          type: number
+      - name: scoreSortEnd
+        in: query
+        description: End time for score-based sorting (epoch milliseconds) - required when sorting by 'score'
+        schema:
+          type: number
+      - name: sort
+        in: query
+        description: 'Sorting supports multiple properties: repeat ''sort'' param e.g. sort=name,asc&sort=createdAt,desc. Special value ''score'' sorts locations by average Experience Score. It requires scoreSortStart & scoreSortEnd (epoch millis) and cannot be combined with other sorts. Examples: sort=score,desc'
+        schema:
+          type: string
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/topologies.GetAgentTopologyLocationsResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Topologies
+  /topologies/agents/locations/{locationId}:
+    get:
+      deprecated: true
+      summary: Fetch the specified Topology Location
+      operationId: agent-topology-location
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - name: locationId
+        in: path
+        description: Fetch the specific topology location by its id
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/topologies.GetAgentTopologyLocationResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Topologies
+  /topologies/sensors/locations:
+    get:
+      deprecated: true
+      summary: List the Sensor Topology Locations
+      operationId: sensor-topology-locations
+      description: Page through all of the Sensor Topology Locations
+      security:
+      - oauth2: []
+      parameters:
+      - name: locationId
+        in: query
+        description: Filter the specific topology location by its parent location id
+        required: false
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/topologies.GetSensorTopologyLocationsResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Topologies
+  /topologies/sensors/locations/{locationId}:
+    get:
+      deprecated: true
+      summary: Fetch the specified Topology Location
+      operationId: sensor-topology-location
+      security:
+      - oauth2: []
+      parameters:
+      - name: locationId
+        in: path
+        description: Fetch the specific topology location by its id
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/topologies.GetSensorTopologyLocationResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Topologies
+  /topologies/sensors/serviceAreas:
+    get:
+      deprecated: true
+      summary: List the Sensor Topology Service Areas
+      operationId: sensor-topology-service-areas
+      description: Page through all of the Sensor Topology Service Areas
+      security:
+      - oauth2: []
+      parameters:
+      - name: locationId
+        in: query
+        description: Filter the specific topology service area by its location id
+        required: false
+        schema:
+          type: number
+      - name: excludeDefaultServiceArea
+        in: query
+        description: Exclude the default service area from the results
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/topologies.GetSensorTopologyServiceAreasResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Topologies
+  /topologies/sensors/serviceAreas/{serviceAreaId}:
+    get:
+      deprecated: true
+      summary: Fetch the specified Topology Service Area
+      operationId: sensor-topology-service-area
+      security:
+      - oauth2: []
+      parameters:
+      - name: serviceAreaId
+        in: path
+        description: Fetch the specific topology service area by its id
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/topologies.GetSensorTopologyServiceAreaResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Topologies
+  /topologies/sensors/accessPoints:
+    get:
+      deprecated: true
+      summary: List the Sensor Topology Access Points
+      operationId: sensor-topology-access-points
+      description: Page through all of the Sensor Topology Access Points
+      security:
+      - oauth2: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/topologies.GetSensorTopologyLocationsResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Topologies
+  /topologies/sensors/accessPoints/{accessPointId}:
+    get:
+      deprecated: true
+      summary: List the Sensor Topology Access Point
+      operationId: sensor-topology-access-point
+      description: Fetch the specified Topology Access Point
+      security:
+      - oauth2: []
+      parameters:
+      - name: accessPointId
+        in: path
+        description: Fetch the specific topology access point by its id
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/topologies.GetSensorTopologyLocationResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Topologies
+components:
+  schemas:
+    topologies.GetAgentTopologyLocationsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/topologies.TopologyAgentLocation'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    topologies.TopologySensorLocation:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        parentId:
+          type: number
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    topologies.GetSensorTopologyServiceAreasResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/topologies.TopologySensorServiceArea'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    topologies.TopologySensorServiceArea:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        parentLocationId:
+          type: number
+        parentLocationName:
+          type: string
+    topologies.GetSensorTopologyLocationResponse:
+      $ref: '#/components/schemas/topologies.TopologySensorLocation'
+    topologies.GetAgentTopologyLocationResponse:
+      $ref: '#/components/schemas/topologies.TopologyAgentLocation'
+    topologies.GetSensorTopologyServiceAreaResponse:
+      $ref: '#/components/schemas/topologies.TopologySensorServiceArea'
+    topologies.TopologyAgentLocation:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        address:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    topologies.GetSensorTopologyLocationsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/topologies.TopologySensorLocation'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    common.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is 1.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

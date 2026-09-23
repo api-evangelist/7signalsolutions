@@ -1,0 +1,674 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Service Areas API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Service Areas
+paths:
+  /service-areas/agents:
+    get:
+      summary: List the Agent Service Areas
+      operationId: agent-service-areas-get
+      description: Page through all of the Agent Service Areas
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - name: serviceAreaIds
+        in: query
+        description: Filter by specific service area IDs. Provide a comma-separated list of service area UUIDs to return only those service areas.
+        schema:
+          type: string
+      - name: searchValue
+        in: query
+        description: Filter by service area name where the name contains this case insensitive value
+        schema:
+          type: string
+      - name: scoreSortStart
+        in: query
+        description: Start time for score-based sorting (epoch milliseconds) - required when sorting by 'score'
+        schema:
+          type: number
+      - name: scoreSortEnd
+        in: query
+        description: End time for score-based sorting (epoch milliseconds) - required when sorting by 'score'
+        schema:
+          type: number
+      - name: sort
+        in: query
+        description: 'Sorting supports multiple properties: repeat ''sort'' param e.g. sort=name,asc&sort=createdAt,desc. Special value ''score'' sorts service areas by average Experience Score. It requires scoreSortStart & scoreSortEnd (epoch millis) and cannot be combined with other sorts. Examples: sort=score,desc'
+        schema:
+          type: string
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/service-areas.GetAgentServiceAreasResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Service Areas
+    post:
+      summary: Creates Agent Service Areas
+      operationId: agent-service-areas-post
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/service-areas.PostAgentServiceAreasRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/service-areas.GetAgentServiceAreasResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      security:
+      - oauth2: []
+      tags:
+      - Service Areas
+    put:
+      summary: Updates Agent Service Areas
+      operationId: agent-service-areas-put
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/service-areas.PutAgentServiceAreasRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/service-areas.GetAgentServiceAreasResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      security:
+      - oauth2: []
+      tags:
+      - Service Areas
+    delete:
+      summary: Deletes Agent Service Areas
+      operationId: agent-service-areas-delete
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/service-areas.DeleteAgentServiceAreaIdList'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      security:
+      - oauth2: []
+      tags:
+      - Service Areas
+  /service-areas/agents/{serviceAreaId}:
+    get:
+      summary: Fetch the specified Agent Service Area
+      operationId: agent-service-area-get
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/service-areas.AgentServiceAreaId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/service-areas.GetAgentServiceAreaResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Service Areas
+    put:
+      summary: Update the specified Agent Service Area
+      operationId: agent-service-area-put
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/service-areas.AgentServiceAreaId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/service-areas.AgentSingleUpdateServiceAreaRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/service-areas.GetAgentServiceAreaResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Service Areas
+    delete:
+      summary: Delete the specified Agent Service Area
+      operationId: agent-service-area-delete
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/service-areas.AgentServiceAreaId'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      security:
+      - oauth2: []
+      tags:
+      - Service Areas
+  /service-areas/sensors:
+    get:
+      summary: List the Sensor Service Areas
+      operationId: sensor-service-areas
+      description: Page through all of the Sensor Service Areas
+      security:
+      - oauth2: []
+      parameters:
+      - name: locationId
+        in: query
+        description: Filter the specific service area by its location id
+        required: false
+        schema:
+          type: number
+      - name: excludeDefaultServiceArea
+        in: query
+        description: Exclude the default service area from the results
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/service-areas.GetSensorServiceAreasResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Service Areas
+    post:
+      summary: Creates a Sensor Service Area
+      operationId: sensor-service-areas-post
+      description: 'Returns the new service area, required fields: name, parentLocationId'
+      security:
+      - oauth2: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/service-areas.PostSensorServiceAreaRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/service-areas.GetSensorServiceAreaResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      tags:
+      - Service Areas
+  /service-areas/sensors/{serviceAreaId}:
+    get:
+      summary: Fetch the specified Service Area
+      operationId: sensor-service-area
+      description: Fetch the specified Topology Service Area
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/service-areas.SensorServiceAreaId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/service-areas.GetSensorServiceAreaResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Service Areas
+    put:
+      summary: Update the specified Sensor Service Area
+      operationId: sensor-service-area-put
+      description: 'Returns the updated service area, required fields: name'
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/service-areas.SensorServiceAreaId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/service-areas.PutSensorServiceAreaRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/service-areas.GetSensorServiceAreaResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Service Areas
+    delete:
+      summary: Delete the specified Sensor Service Area
+      operationId: sensor-service-area-delete
+      description: Recursively removes everything under this service area (Eyes, etc.)
+      parameters:
+      - $ref: '#/components/parameters/service-areas.SensorServiceAreaId'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      security:
+      - oauth2: []
+      tags:
+      - Service Areas
+  /service-areas/sensors/{serviceAreaId}/eyes:
+    post:
+      summary: Add Eyes to a service area
+      operationId: sensor-service-area-add-eyes
+      description: Moves the given Eyes into this service area from wherever they currently are. Returns the updated service area. There is no separate "remove" endpoint - an Eye always belongs to some service area, so removing it from one only makes sense as adding it to another, which this same endpoint does
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/service-areas.SensorServiceAreaId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/service-areas.PostSensorServiceAreaSensorsRequest'
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/service-areas.GetSensorServiceAreaResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Service Areas
+  /service-areas/sensors/{serviceAreaId}/networks/{networkId}:
+    post:
+      summary: Bind a wireless network to a service area
+      operationId: sensor-service-area-bind-network
+      description: Returns the updated service area
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/service-areas.SensorServiceAreaId'
+      - $ref: '#/components/parameters/service-areas.SensorNetworkId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/service-areas.GetSensorServiceAreaResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Service Areas
+    delete:
+      summary: Unbind a wireless network from a service area
+      operationId: sensor-service-area-unbind-network
+      description: Returns the updated service area
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/service-areas.SensorServiceAreaId'
+      - $ref: '#/components/parameters/service-areas.SensorNetworkId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/service-areas.GetSensorServiceAreaResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Service Areas
+components:
+  schemas:
+    service-areas.GetAgentServiceAreaResponse:
+      $ref: '#/components/schemas/service-areas.AgentServiceArea'
+    service-areas.AgentUpdateServiceAreaRequest:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        address:
+          type: string
+    service-areas.GetAgentServiceAreasResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/service-areas.AgentServiceArea'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    service-areas.AgentCreateServiceAreaRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+    service-areas.PostSensorServiceAreaSensorsRequest:
+      type: object
+      properties:
+        sensorIds:
+          type: array
+          items:
+            type: number
+          description: ids of the sensors to move into this service area, from wherever they currently are
+    service-areas.PostAgentServiceAreasRequest:
+      type: object
+      properties:
+        serviceAreas:
+          type: array
+          items:
+            $ref: '#/components/schemas/service-areas.AgentCreateServiceAreaRequest'
+    service-areas.AgentSingleUpdateServiceAreaRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+    service-areas.GetSensorServiceAreaResponse:
+      $ref: '#/components/schemas/service-areas.SensorServiceArea'
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    service-areas.GetSensorServiceAreasResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/service-areas.SensorServiceArea'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    service-areas.SensorServiceArea:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        parentLocationId:
+          type: number
+        parentLocationName:
+          type: string
+        defaultServiceArea:
+          type: boolean
+          description: Whether this is the system-wide default service area
+        autoRebalance:
+          type: boolean
+          description: Whether automatic BSSID rebalancing is enabled for this service area's Eyes
+        otaBand:
+          type: string
+          enum:
+          - UNDEFINED
+          - BAND_2400MHZ
+          - BAND_5000MHZ
+          - BAND_6000MHZ
+          description: The WlanBand this service area's OTA (over-the-air) configuration applies to
+        defaultConfigurationId:
+          type: number
+          description: id of the DefaultConfiguration applied to this service area's Eyes, if any
+    service-areas.PostSensorServiceAreaRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        parentLocationId:
+          type: number
+          description: The parent Location's id this service area belongs to
+        defaultServiceArea:
+          type: boolean
+          description: Whether this is the system-wide default service area - setting true automatically unsets any previous default (enforced server-side); omit to leave at the domain default (false)
+        autoRebalance:
+          type: boolean
+          description: Enables automatic BSSID rebalancing for this service area's Eyes; omit to leave at the domain default (enabled for newly created service areas)
+    service-areas.PutSensorServiceAreaRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        defaultServiceArea:
+          type: boolean
+          description: Whether this is the system-wide default service area - setting true automatically unsets any previous default (enforced server-side); omit to leave unchanged
+        autoRebalance:
+          type: boolean
+          description: Enables automatic BSSID rebalancing for this service area's Eyes; omit to leave unchanged
+        otaBand:
+          type: string
+          enum:
+          - UNDEFINED
+          - BAND_2400MHZ
+          - '24'
+          - 24ghz
+          - BAND_5000MHZ
+          - '5'
+          - '50'
+          - 5ghz
+          - 50ghz
+          - BAND_6000MHZ
+          - '6'
+          - '60'
+          - 6ghz
+          - 60ghz
+          description: The WlanBand this service area's OTA (over-the-air) configuration applies to - accepts either the exact enum constant name or a friendly short form (both case-insensitive); unlike defaultServiceArea/autoRebalance above, omitting this (or sending an explicit null) resets it to UNDEFINED rather than leaving it unchanged
+          example: 5ghz
+        defaultConfigurationId:
+          type: number
+          description: id of a DefaultConfiguration to apply to this service area's Eyes (see GET /default-configurations for valid ids) - unlike defaultServiceArea/autoRebalance above, omitting this (or sending an explicit null) unsets it rather than leaving it unchanged
+    service-areas.PutAgentServiceAreasRequest:
+      type: object
+      properties:
+        serviceAreas:
+          type: array
+          items:
+            $ref: '#/components/schemas/service-areas.AgentUpdateServiceAreaRequest'
+    service-areas.AgentServiceArea:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        address:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        locationId:
+          type: string
+          format: uuid
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    common.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is 1.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    service-areas.SensorServiceAreaId:
+      name: serviceAreaId
+      in: path
+      description: Sensor Service Area Id
+      required: true
+      schema:
+        type: number
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    service-areas.AgentServiceAreaId:
+      name: serviceAreaId
+      in: path
+      description: Agent Service Area Id
+      required: true
+      schema:
+        type: string
+        format: uuid
+    service-areas.DeleteAgentServiceAreaIdList:
+      name: ids
+      in: query
+      description: One or more service area ids to delete
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: uuid
+    service-areas.SensorNetworkId:
+      name: networkId
+      in: path
+      description: Sensor Wireless Network Id
+      required: true
+      schema:
+        type: number
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

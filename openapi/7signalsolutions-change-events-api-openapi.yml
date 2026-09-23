@@ -1,0 +1,170 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Change Events API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Change Events
+paths:
+  /change-events/sensors:
+    get:
+      summary: List the change events for the specified element
+      operationId: sensor-change-events
+      description: 'Retrieves change events for the specified sensor or network element. Valid combinations include: Access Point only, Eye only, Access Point with Eye, Network only, or Network with Service Area'
+      security:
+      - oauth2: []
+      parameters:
+      - name: sensorId
+        in: query
+        description: Filter the change events for element referenced by its sensor id
+        required: false
+        schema:
+          type: number
+      - name: accessPointId
+        in: query
+        description: Filter the change events for element referenced by its access point
+        required: false
+        schema:
+          type: number
+      - name: networkId
+        in: query
+        description: Filter the change events for element referenced by its network
+        required: false
+        schema:
+          type: number
+      - name: serviceAreaId
+        in: query
+        description: Filter the change events for element referenced by its networkId and serviceAreaId
+        required: false
+        schema:
+          type: number
+      - name: from
+        in: query
+        description: The time in milliseconds from the epoch from which change events are fetched (the lower bound). Defaults to the previous 24 hours.
+        required: false
+        schema:
+          type: integer
+          format: int64
+      - name: to
+        in: query
+        description: The time in milliseconds from the epoch up to which change events are fetched (the upper bound). Defaults to the present now.
+        required: false
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/change-events.GetChangeEventsSensorResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Change Events
+components:
+  schemas:
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    change-events.ChangeEventsSensor:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+          description: Timestamp in milliseconds since epoch (Unix time)
+          example: 1750821376000
+        name:
+          type: string
+          description: Name of the change event
+        element:
+          type: string
+          description: Name of the element
+        parentElement:
+          type: string
+          description: Name of the parent element
+        description:
+          type: string
+          description: Description of the change event
+    change-events.GetChangeEventsSensorResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/change-events.ChangeEventsSensor'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

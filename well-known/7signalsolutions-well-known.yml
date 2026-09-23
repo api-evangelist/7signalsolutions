@@ -1,17 +1,16 @@
-generated: '2026-09-05'
+generated: '2026-09-19'
 method: probed
 source: live GET probes of /.well-known/* on every host in this record
 summary:
   hosts_probed: 8
   paths_probed_per_host: 6
   real_documents_found: 3
-  note: >-
-    Three real machine-readable documents were served: the MCP server's RFC 8414 authorization-server
-    metadata and RFC 9728 protected-resource metadata on mcp-v2.7signal.com, and an OpenID Connect
-    discovery document on info.7signal.com (the Salesforce Experience Cloud community portal that hosts
-    7SIGNAL's support articles — it describes that portal's identity provider, NOT the 7SIGNAL Platform
-    API's authorization server, which is https://api-v2.7signal.com/oauth2/token). No security.txt and
-    no api-catalog is served anywhere.
+  note: 'Three real machine-readable documents were served: the MCP server''s RFC 8414 authorization-server
+    metadata and RFC 9728 protected-resource metadata on mcp-v2.7signal.com, and an OpenID Connect discovery
+    document on info.7signal.com (the Salesforce Experience Cloud community portal that hosts 7SIGNAL''s
+    support articles — it describes that portal''s identity provider, NOT the 7SIGNAL Platform API''s
+    authorization server, which is https://api-v2.7signal.com/oauth2/token). No security.txt and no api-catalog
+    is served anywhere.'
 hosts:
 - host: 7signal.com
   documents:
@@ -42,10 +41,8 @@ hosts:
   - path: /.well-known/ai-plugin.json
     status: 404
 - host: api-v2.7signal.com
-  note: >-
-    The REST gateway answers 401 to every path outside the static /swagger-ui/ tree, so these are gated
-    rather than absent. The OpenAPI itself is the exception and is served anonymously at
-    /api/gateway-v2.json.
+  note: The REST gateway answers 401 to every path outside the static /swagger-ui/ tree, so these are
+    gated rather than absent. The OpenAPI itself is the exception and is served anonymously at /api/gateway-v2.json.
   documents:
   - path: /.well-known/security.txt
     status: 401
@@ -79,12 +76,12 @@ hosts:
   - path: /.well-known/oauth-authorization-server
     status: 200
     content_type: application/json
-    file: well-known/7signalsolutions-mcp-oauth-authorization-server.json
+    file: 7signalsolutions-mcp-oauth-authorization-server.json
     rfc: RFC 8414
   - path: /.well-known/oauth-protected-resource
     status: 200
     content_type: application/json
-    file: well-known/7signalsolutions-mcp-oauth-protected-resource.json
+    file: 7signalsolutions-mcp-oauth-protected-resource.json
     rfc: RFC 9728
   - path: /.well-known/security.txt
     status: 404
@@ -94,15 +91,23 @@ hosts:
     status: 404
   - path: /.well-known/ai-plugin.json
     status: 404
+  - path: /.well-known/oauth-protected-resource
+    status: 200
+    file: 7signalsolutions-mcp-v2-oauth-protected-resource.json
+    bytes: 491
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: 7signalsolutions-mcp-v2-oauth-authorization-server.json
+    bytes: 843
+  path_echo_control: passed
 - host: info.7signal.com
-  note: >-
-    Salesforce Experience Cloud community portal hosting 7SIGNAL's support and API articles. It serves a
-    real OIDC discovery document for the portal's own identity provider; every other path returns 401.
+  note: Salesforce Experience Cloud community portal hosting 7SIGNAL's support and API articles. It serves
+    a real OIDC discovery document for the portal's own identity provider; every other path returns 401.
   documents:
   - path: /.well-known/openid-configuration
     status: 200
     content_type: application/json
-    file: well-known/7signalsolutions-info-openid-configuration.json
+    file: 7signalsolutions-info-openid-configuration.json
   - path: /.well-known/security.txt
     status: 401
   - path: /.well-known/oauth-authorization-server
@@ -114,9 +119,8 @@ hosts:
   - path: /.well-known/ai-plugin.json
     status: 401
 - host: start.7signal.com
-  note: >-
-    FALSE POSITIVE GUARD — the platform dashboard is a single-page app whose catch-all returns HTTP 200
-    with the identical 789-byte HTML shell for EVERY /.well-known/ path. None of these are documents;
+  note: FALSE POSITIVE GUARD — the platform dashboard is a single-page app whose catch-all returns HTTP
+    200 with the identical 789-byte HTML shell for EVERY /.well-known/ path. None of these are documents;
     all six are recorded as misses.
   documents:
   - path: /.well-known/security.txt
@@ -138,8 +142,7 @@ hosts:
     status: 200
     result: spa-shell
 - host: login.7signal.com
-  note: >-
-    Named in the MCP scope URIs (https://login.7signal.com/scopes/*) but publishes no discovery document
+  note: Named in the MCP scope URIs (https://login.7signal.com/scopes/*) but publishes no discovery document
     of its own; returns a JSON 404 envelope on every path.
   documents:
   - path: /.well-known/security.txt
@@ -154,3 +157,19 @@ hosts:
     status: 404
   - path: /.well-known/ai-plugin.json
     status: 404
+x-mcp-probe:
+  probed: '2026-09-19'
+  issue: roadmap#321, roadmap#337
+  documents:
+  - host: https://mcp-v2.7signal.com
+    path: /.well-known/oauth-protected-resource
+    file: 7signalsolutions-mcp-v2-oauth-protected-resource.json
+  - host: https://mcp-v2.7signal.com
+    path: /.well-known/oauth-authorization-server
+    file: 7signalsolutions-mcp-v2-oauth-authorization-server.json
+  validated_on: resource (RFC 9728) / issuer (RFC 8414, OIDC)
+  negative_control: one per host; a 2xx JSON object at an impossible path discards the host
+note: 'MCP-host OAuth discovery added 2026-09-19 (roadmap#321/#337): the harvest visits a provider''s
+  primary hosts, and RFC 9728 protected-resource metadata lives on the MCP host, so these documents existed
+  and were invisible to the scorer. Fetched live and validated on `resource`/`issuer`; one negative control
+  per host.'

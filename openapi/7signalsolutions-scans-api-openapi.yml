@@ -1,0 +1,357 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Scans API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Scans
+paths:
+  /scans/agents:
+    get:
+      summary: Retrieve scan data for an agent
+      operationId: scans-agents
+      description: Fetch paginated scan data collected by a specific agent
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/scans.AgentIdRequestParam'
+      - $ref: '#/components/parameters/scans.StartTimeRequestParam'
+      - $ref: '#/components/parameters/scans.EndTimeRequestParam'
+      - $ref: '#/components/parameters/scans.PageRequestParam'
+      - $ref: '#/components/parameters/scans.SizeRequestParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/scans.AgentsScanDataResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Scans
+  /scans/sensors:
+    get:
+      summary: Retrieve scan data for a sensor
+      operationId: scans-sensors
+      description: Fetch paginated scan data collected by a specific sensor (eye)
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/scans.SensorIdRequestParam'
+      - $ref: '#/components/parameters/scans.StartTimeRequestParam'
+      - $ref: '#/components/parameters/scans.EndTimeRequestParam'
+      - $ref: '#/components/parameters/scans.PageRequestParam'
+      - $ref: '#/components/parameters/scans.SizeRequestParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/scans.SensorsScanDataResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Scans
+components:
+  parameters:
+    scans.SensorIdRequestParam:
+      name: sensorId
+      in: query
+      description: The ID of the sensor (eye)
+      required: true
+      schema:
+        type: integer
+    scans.PageRequestParam:
+      name: page
+      in: query
+      description: Page number for pagination (0-based)
+      required: false
+      schema:
+        type: integer
+        default: 0
+        minimum: 0
+    scans.StartTimeRequestParam:
+      name: start
+      in: query
+      description: Start time for scan data in epoch milliseconds (UTC)
+      required: true
+      schema:
+        type: integer
+        format: int64
+    scans.AgentIdRequestParam:
+      name: agentId
+      in: query
+      description: The UUID of the agent
+      required: true
+      schema:
+        type: string
+        format: uuid
+    scans.SizeRequestParam:
+      name: size
+      in: query
+      description: Number of records per page
+      required: false
+      schema:
+        type: integer
+        default: 20
+        minimum: 1
+        maximum: 1000
+    scans.EndTimeRequestParam:
+      name: end
+      in: query
+      description: End time for scan data in epoch milliseconds (UTC)
+      required: true
+      schema:
+        type: integer
+        format: int64
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+  schemas:
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    scans.SensorsScanDataResponse:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/common.ZeroBasedPagination'
+        scans:
+          type: array
+          description: Array of sensor scan records grouped by timestamp
+          items:
+            $ref: '#/components/schemas/scans.SensorScanTimestamp'
+    scans.AgentsScanDataResponse:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/common.ZeroBasedPagination'
+        scans:
+          type: array
+          description: Array of agent scan records grouped by timestamp
+          items:
+            $ref: '#/components/schemas/scans.AgentScanTimestamp'
+    scans.AgentScanAp:
+      type: object
+      properties:
+        bssid:
+          type: string
+          description: MAC address (BSSID) of the access point
+        ssid:
+          type: string
+          description: SSID (network name) of the access point
+        signalStrength:
+          type: integer
+          description: Signal strength in dBm
+        channel:
+          type: string
+          description: WiFi channel number
+        channelWidth:
+          type:
+          - integer
+          - 'null'
+          description: Channel width in MHz (e.g., 20, 40, 80, 160)
+        band:
+          type: number
+          format: float
+          description: WiFi band frequency in GHz (2.4, 5, or 6)
+        channelUtilization:
+          type:
+          - integer
+          - 'null'
+          description: Channel utilization percentage (0-100)
+        stationCount:
+          type:
+          - integer
+          - 'null'
+          description: Number of stations/clients connected to the access point
+        apName:
+          type:
+          - string
+          - 'null'
+          description: Access point name or identifier
+        beaconInterval:
+          type:
+          - integer
+          - 'null'
+          description: Beacon interval in Time Units (TU), typically 100 TU = 102.4ms
+        centerChannel:
+          type:
+          - integer
+          - 'null'
+          description: Center channel number for wide channels
+        frequency:
+          type:
+          - integer
+          - 'null'
+          description: Operating frequency in MHz
+        bssidSupportedStandards:
+          type:
+          - string
+          - 'null'
+          description: WiFi standards supported by the AP (e.g., 802.11n, 802.11ac, 802.11ax)
+        lowestSupportedDataRate:
+          type:
+          - number
+          - 'null'
+          format: float
+          description: Lowest supported data rate in Mbps
+        mldMacAddress:
+          type:
+          - string
+          - 'null'
+          description: Multi-Link Device MAC address (WiFi 7/802.11be)
+        splitChannel:
+          type:
+          - integer
+          - 'null'
+          description: Split channel information for advanced channel configurations
+    scans.SensorScanAp:
+      type: object
+      properties:
+        bssid:
+          type: string
+          description: MAC address (BSSID) of the access point
+        ssid:
+          type: string
+          description: SSID (network name) of the access point
+        signalStrength:
+          type: integer
+          description: Signal strength in dBm
+        noise:
+          type:
+          - integer
+          - 'null'
+          description: Noise level in dBm
+        channel:
+          type: string
+          description: WiFi channel number
+        channelWidth:
+          type:
+          - integer
+          - 'null'
+          description: Channel width in MHz (e.g., 20, 40, 80, 160)
+        band:
+          type: number
+          format: float
+          description: WiFi band frequency in GHz (2.4, 5, or 6)
+        channelUtilization:
+          type:
+          - integer
+          - 'null'
+          description: Channel utilization percentage (0-100)
+        stationCount:
+          type:
+          - integer
+          - 'null'
+          description: Number of stations/clients connected to the access point
+    common.ZeroBasedPagination:
+      type: object
+      properties:
+        perPage:
+          type: integer
+          description: Number of records per page
+        page:
+          type: integer
+          description: Current page number (0-based)
+        total:
+          type: integer
+          description: Total number of records available
+        pages:
+          type: integer
+          description: Total number of pages
+    scans.AgentScanTimestamp:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+          description: Scan timestamp in epoch milliseconds (UTC)
+        agentId:
+          type: string
+          description: UUID of the agent that performed the scan
+        agentConnectedBssid:
+          type:
+          - string
+          - 'null'
+          description: BSSID of the access point the agent was connected to during the scan
+        agentConnectedSsid:
+          type:
+          - string
+          - 'null'
+          description: SSID of the access point the agent was connected to during the scan
+        data:
+          type: array
+          description: Access points detected in this scan
+          items:
+            $ref: '#/components/schemas/scans.AgentScanAp'
+    scans.SensorScanTimestamp:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+          description: Scan timestamp in epoch milliseconds (UTC)
+        data:
+          type: array
+          description: Access points detected in this scan
+          items:
+            $ref: '#/components/schemas/scans.SensorScanAp'
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

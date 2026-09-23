@@ -1,0 +1,261 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Adapter Driver Report API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Adapter Driver Report
+paths:
+  /adapter-driver-report:
+    get:
+      summary: Retrieve Adapter/Driver Report
+      operationId: adapter-driver-report-list
+      description: Fetch a paginated report of adapter/driver pairs and their roaming performance, aggregated across all organizations.
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/adapter-driver-report.SearchValueParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/adapter-driver-report.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adapter-driver-report.AdapterDriverReportListResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Adapter Driver Report
+  /adapter-driver-report/summary:
+    get:
+      summary: Retrieve Adapter/Driver Report Summary
+      operationId: adapter-driver-report-summary
+      description: Fetch summary statistics for the adapter/driver report, aggregated across all organizations.
+      security:
+      - oauth2: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adapter-driver-report.AdapterDriverReportSummary'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Adapter Driver Report
+  /adapter-driver-report/org:
+    get:
+      summary: Retrieve Adapter/Driver Report by Organization
+      operationId: adapter-driver-report-org-list
+      description: Fetch a paginated report of adapter/driver pairs and their roaming performance for a single organization.
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/adapter-driver-report.SearchValueParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/adapter-driver-report.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adapter-driver-report.AdapterDriverReportListResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Adapter Driver Report
+  /adapter-driver-report/org/summary:
+    get:
+      summary: Retrieve Adapter/Driver Report Summary by Organization
+      operationId: adapter-driver-report-org-summary
+      description: Fetch summary statistics for the adapter/driver report for a single organization.
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/adapter-driver-report.AdapterDriverReportSummary'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Adapter Driver Report
+components:
+  schemas:
+    adapter-driver-report.AdapterDriverReportListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/adapter-driver-report.AdapterDriverEntry'
+        pagination:
+          $ref: '#/components/schemas/common.ZeroBasedPagination'
+    adapter-driver-report.AdapterDriverEntry:
+      type: object
+      properties:
+        driverProvider:
+          type: string
+        driverVersion:
+          type: string
+        totalRoamingSamples:
+          type: integer
+          format: int64
+        goodRoamingSamples:
+          type: integer
+          format: int64
+        goodRoamingPct:
+          type: number
+        vintageDate:
+          type: string
+          format: date-time
+        deviceCount:
+          type: integer
+          format: int64
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    adapter-driver-report.AdapterDriverReportSummary:
+      type: object
+      properties:
+        totalSamples:
+          type: integer
+          format: int64
+        uniquePairs:
+          type: integer
+          format: int64
+        deviceCount:
+          type: integer
+          format: int64
+    common.ZeroBasedPagination:
+      type: object
+      properties:
+        perPage:
+          type: integer
+          description: Number of records per page
+        page:
+          type: integer
+          description: Current page number (0-based)
+        total:
+          type: integer
+          description: Total number of records available
+        pages:
+          type: integer
+          description: Total number of pages
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    common.SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    adapter-driver-report.PageRequestParam:
+      name: page
+      in: query
+      description: Page number to fetch (0-based). Defaults to 0.
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    adapter-driver-report.SearchValueParam:
+      name: searchValue
+      in: query
+      description: Filter results to adapter/driver pairs matching this search value.
+      required: false
+      schema:
+        type: string
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

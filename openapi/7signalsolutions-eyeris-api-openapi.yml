@@ -1,0 +1,271 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Eyeris API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Eyeris
+paths:
+  /eyeris/analysis/stream:
+    post:
+      tags:
+      - Eyeris
+      summary: Request Eyeris Analysis with Streaming Response
+      description: Use this endpoint to initiate an analysis using Eyeris with a streaming response. This endpoint will remain connected and stream the response from Eyeris back to the client until it is finished. The response uses the Server Sent Events format.
+      operationId: eyeris-stream-qp5E
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/eyeris.EyerisCreateStreamRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+          headers:
+            Eyeris-Request-Id:
+              schema:
+                type: string
+              description: Request ID
+            Eyeris-Request-Queue-Id:
+              schema:
+                type: string
+              description: Request Queue ID
+            Eyeris-Response-Id:
+              schema:
+                type: string
+              description: Response ID
+          content:
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/eyeris.EyerisSseEmitter'
+      security:
+      - oauth2: []
+  /eyeris/agents/client-analysis:
+    post:
+      operationId: eyeris-client-analysis-post-y7z8
+      tags:
+      - Eyeris
+      summary: Request Eyeris Analysis
+      description: Use this endpoint to initiate an analysis using Eyeris. This endpoint will respond as soon as the request for analysis has been received by Eyeris. Analysis can take a little time though, so you need to poll the `GET /eyeris/agents/client-analysis/{requestId}` endpoint using the Request ID received with the response from the POST request. The response from the GET request will include the Eyeris analysis when it is ready. For more information, refer to Request Eyeris Analysis Results.
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/eyeris.EyerisAnalysisRequest'
+            examples:
+              roaming-analysis:
+                summary: Eyeris Roaming Analysis
+                value:
+                  agentId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  type: ROAMING
+                  from: '1740106800000'
+                  to: '1740114000000'
+              congestion-analysis:
+                summary: Eyeris Congestion Analysis
+                value:
+                  agentId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  type: CONGESTION
+                  from: '1740106800000'
+                  to: '1740114000000'
+              coverage-analysis:
+                summary: Eyeris Coverage Analysis
+                value:
+                  agentId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  type: COVERAGE
+                  from: '1740106800000'
+                  to: '1740114000000'
+              interference-analysis:
+                summary: Eyeris Interference Analysis
+                value:
+                  agentId: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+                  type: INTERFERENCE
+                  from: '1740106800000'
+                  to: '1740114000000'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyeris.EyerisAnalysisResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      security:
+      - oauth2: []
+  /eyeris/agents/client-analysis/{requestId}:
+    get:
+      operationId: eyeris-client-analysis-with-id-get-a9b0
+      tags:
+      - Eyeris
+      summary: Request Eyeris Analysis Results
+      description: Poll this endpoint to get the result of the analysis using the `requestId` obtained from the `POST /eyeris/agents/start-analysis` endpoint. For more information, refer to Request Eyeris Analysis.
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - name: requestId
+        in: path
+        description: Fetch the specific analysis result referenced by its id.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: requestQueueId
+        in: query
+        description: ID of the request in the internal queue supplied by the analysis request.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: responseId
+        in: query
+        description: Sometimes supplied by the analysis request. This is available when the response has been cached and the ID is immediately available. When clients supply this value, the server can find the response more directly.
+        required: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Success. The response from the LLM. This response may include formatted date strings which will be in ISO-8601 format and UTC as the timezone, for example, 2007-03-01T13:00:00Z.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/eyeris.EyerisAnalysisRequestResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+components:
+  schemas:
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    eyeris.EyerisAnalysisRequest:
+      required:
+      - agentId
+      - type
+      - from
+      - to
+      type: object
+      properties:
+        agentId:
+          type: string
+          format: uuid
+        type:
+          type: string
+          enum:
+          - ROAMING
+          - CONGESTION
+          - COVERAGE
+          - INTERFERENCE
+        from:
+          description: The time in milliseconds from the epoch from which the analysis should start
+          type: string
+          format: datetime
+        to:
+          description: The time in milliseconds from the epoch till which the analysis should be done.
+          type: string
+          format: datetime
+    eyeris.EyerisSseEmitter:
+      type: array
+      items:
+        type: string
+        description: Chunk of the response message
+      example:
+      - data:# Wi-Fi Network Analysis
+      - 'data:'
+      - data:## SUMMARY
+      - data:The device experienced a brief 2-minute connectivity problem
+      - 'data:'
+      - data:## RECOMMENDATIONS
+      - 'data:'
+      - data:No device-side changes are recommended. The brief disruption followed by sustained 100% SLA indicates normal operation was quickly established and maintained.
+    eyeris.EyerisCreateStreamRequest:
+      type: object
+      properties:
+        promptTypeKey:
+          type: string
+        inputData:
+          type: object
+    eyeris.EyerisAnalysisResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+          format: uuid
+        requestQueueId:
+          type: string
+          format: uuid
+        responseId:
+          type: string
+          format: uuid
+    eyeris.EyerisAnalysisRequestResponse:
+      type: object
+      properties:
+        response:
+          type: string
+        requestId:
+          type: string
+          format: uuid
+        responseId:
+          type: string
+          format: uuid
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

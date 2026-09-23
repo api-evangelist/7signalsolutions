@@ -1,0 +1,407 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Targets API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Targets
+paths:
+  /targets/sensors:
+    get:
+      summary: List the Sensor Targets
+      operationId: sensor-targets
+      description: Page through all of the Sensor Targets
+      security:
+      - oauth2: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/targets.GetSensorTargetsResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Targets
+    post:
+      summary: Creates a Sensor Target
+      operationId: sensor-targets-create
+      description: 'Returns the new target. Required fields: targetType, name. dnsName is additionally required for WEB_SERVER/IPERF3_SERVER; for SONAR/PING_ENDPOINT, at least one of dnsName/ipV4Address/ipV6Address is required'
+      security:
+      - oauth2: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/targets.PostSensorTargetRequest'
+            examples:
+              sonar-dns-name:
+                summary: Sonar - addressed by DNS name
+                value:
+                  targetType: SONAR
+                  name: sonar-east-1
+                  description: East coast monitoring sonar
+                  dnsName: sonar-east-1.internal.7signal.com
+                  tcpPort: 80
+              sonar-ipv4:
+                summary: Sonar - addressed by IPv4
+                value:
+                  targetType: SONAR
+                  name: sonar-east-1
+                  description: East coast monitoring sonar
+                  ipV4Address: 10.0.1.25
+                  tcpPort: 80
+              sonar-ipv6:
+                summary: Sonar - addressed by IPv6
+                value:
+                  targetType: SONAR
+                  name: sonar-east-1
+                  description: East coast monitoring sonar
+                  ipV6Address: 2001:db8::1
+                  tcpPort: 80
+              web-server:
+                summary: Web URL
+                value:
+                  targetType: WEB_SERVER
+                  name: web-url-1
+                  description: Company intranet portal
+                  dnsName: https://intranet.example.com
+              ping-endpoint-dns-name:
+                summary: Ping Endpoint Server - addressed by DNS name
+                value:
+                  targetType: PING_ENDPOINT
+                  name: ping-endpoint-1
+                  description: Datacenter gateway ping target
+                  dnsName: gateway.internal.example.com
+              ping-endpoint-ipv4:
+                summary: Ping Endpoint Server - addressed by IPv4
+                value:
+                  targetType: PING_ENDPOINT
+                  name: ping-endpoint-1
+                  description: Datacenter gateway ping target
+                  ipV4Address: 10.0.2.1
+              ping-endpoint-ipv6:
+                summary: Ping Endpoint Server - addressed by IPv6
+                value:
+                  targetType: PING_ENDPOINT
+                  name: ping-endpoint-1
+                  description: Datacenter gateway ping target
+                  ipV6Address: 2001:db8::2
+              iperf3-server-default-port:
+                summary: Iperf3 Server - default port (5201) when tcpPort is omitted
+                value:
+                  targetType: IPERF3_SERVER
+                  name: iperf3-server-1
+                  description: Throughput test target
+                  dnsName: iperf3.example.com
+              iperf3-server-custom-port:
+                summary: Iperf3 Server - explicit custom port
+                value:
+                  targetType: IPERF3_SERVER
+                  name: iperf3-server-1
+                  description: Throughput test target
+                  dnsName: iperf3.example.com
+                  tcpPort: 5202
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/targets.GetSensorTargetResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      tags:
+      - Targets
+  /targets/sensors/{targetId}:
+    get:
+      summary: Fetch the specified Sensor Target
+      operationId: sensor-target
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/targets.SensorTargetId'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/targets.GetSensorTargetResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Targets
+    put:
+      summary: Update the specified Sensor Target
+      operationId: sensor-target-update
+      description: 'Returns the updated target, required fields: name. dnsName/ipV4Address/ipV6Address fully replace the existing values (omitting one clears it) - dnsName is required for WEB_SERVER/IPERF3_SERVER; for SONAR/PING_ENDPOINT, at least one of dnsName/ipV4Address/ipV6Address is required. tcpPort is left unchanged when omitted'
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/targets.SensorTargetId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/targets.PutSensorTargetRequest'
+            examples:
+              sonar-dns-name:
+                summary: Sonar - re-addressed by DNS name, port changed
+                value:
+                  name: sonar-east-1
+                  description: East coast monitoring sonar (updated)
+                  dnsName: sonar-east-1.internal.7signal.com
+                  tcpPort: 8080
+              sonar-ipv4:
+                summary: Sonar - re-addressed by IPv4, port changed
+                value:
+                  name: sonar-east-1
+                  description: East coast monitoring sonar (updated)
+                  ipV4Address: 10.0.1.26
+                  tcpPort: 8080
+              sonar-ipv6:
+                summary: Sonar - re-addressed by IPv6, port changed
+                value:
+                  name: sonar-east-1
+                  description: East coast monitoring sonar (updated)
+                  ipV6Address: 2001:db8::1
+                  tcpPort: 8080
+              web-server:
+                summary: Web URL
+                value:
+                  name: web-url-1
+                  description: Company intranet portal (updated)
+                  dnsName: https://intranet.example.com/portal
+              ping-endpoint-dns-name:
+                summary: Ping Endpoint Server - re-addressed by DNS name
+                value:
+                  name: ping-endpoint-1
+                  description: Datacenter gateway ping target (updated)
+                  dnsName: gateway.internal.example.com
+              ping-endpoint-ipv4:
+                summary: Ping Endpoint Server - re-addressed by IPv4
+                value:
+                  name: ping-endpoint-1
+                  description: Datacenter gateway ping target (updated)
+                  ipV4Address: 10.0.2.2
+              ping-endpoint-ipv6:
+                summary: Ping Endpoint Server - re-addressed by IPv6
+                value:
+                  name: ping-endpoint-1
+                  description: Datacenter gateway ping target (updated)
+                  ipV6Address: 2001:db8::2
+              iperf3-server-port-unchanged:
+                summary: Iperf3 Server - name/description only, tcpPort omitted so it's left unchanged
+                value:
+                  name: iperf3-server-1
+                  description: Throughput test target (updated)
+                  dnsName: iperf3.example.com
+              iperf3-server-custom-port:
+                summary: Iperf3 Server - port explicitly changed
+                value:
+                  name: iperf3-server-1
+                  description: Throughput test target (updated)
+                  dnsName: iperf3.example.com
+                  tcpPort: 5202
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/targets.GetSensorTargetResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - Targets
+    delete:
+      summary: Delete the specified Sensor Target
+      operationId: sensor-target-delete
+      description: Fails if the target is still referenced by a Test Profile
+      parameters:
+      - $ref: '#/components/parameters/targets.SensorTargetId'
+      responses:
+        '204':
+          description: No Content
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      security:
+      - oauth2: []
+      tags:
+      - Targets
+components:
+  parameters:
+    targets.SensorTargetId:
+      name: targetId
+      in: path
+      description: Sensor Target Id
+      required: true
+      schema:
+        type: number
+  schemas:
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    targets.PostSensorTargetRequest:
+      type: object
+      properties:
+        targetType:
+          type: string
+          enum:
+          - SONAR
+          - WEB_SERVER
+          - PING_ENDPOINT
+          - IPERF3_SERVER
+          description: Which kind of test endpoint to create - cannot be changed after creation
+        name:
+          type: string
+        description:
+          type: string
+        dnsName:
+          type: string
+          description: Required for WEB_SERVER/IPERF3_SERVER; for SONAR/PING_ENDPOINT, at least one of dnsName/ipV4Address/ipV6Address is required
+        ipV4Address:
+          type: string
+        ipV6Address:
+          type: string
+        tcpPort:
+          type: number
+          description: Only applicable to SONAR (defaults to 80 if omitted) and IPERF3_SERVER (defaults to 5201 if omitted); ignored for WEB_SERVER/PING_ENDPOINT
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    targets.PutSensorTargetRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        dnsName:
+          type: string
+          description: Fully replaces the existing value - omitting it clears it. Required for WEB_SERVER/IPERF3_SERVER; for SONAR/PING_ENDPOINT, at least one of dnsName/ipV4Address/ipV6Address is required
+        ipV4Address:
+          type: string
+          description: Fully replaces the existing value - omitting it clears it
+        ipV6Address:
+          type: string
+          description: Fully replaces the existing value - omitting it clears it
+        tcpPort:
+          type: number
+          description: Only applicable to SONAR/IPERF3_SERVER; omit to leave unchanged
+    targets.GetSensorTargetResponse:
+      $ref: '#/components/schemas/targets.SensorTarget'
+    targets.GetSensorTargetsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/targets.SensorTarget'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    targets.SensorTarget:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        targetType:
+          type: string
+          enum:
+          - SONAR
+          - WEB_SERVER
+          - PING_ENDPOINT
+          - IPERF3_SERVER
+        tcpPort:
+          type: number
+          description: Only applicable to SONAR/IPERF3_SERVER targets
+        dnsName:
+          type: string
+          description: The URL/DNS name for this target
+        ipV4Address:
+          type: string
+          description: Only applicable to SONAR/PING_ENDPOINT targets
+        ipV6Address:
+          type: string
+          description: Only applicable to SONAR/PING_ENDPOINT targets
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

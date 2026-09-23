@@ -1,0 +1,848 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL KP Is API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: KPIs
+paths:
+  /kpis/agents:
+    get:
+      deprecated: true
+      summary: Retrieve KPI data for all agents
+      operationId: agent-kpis-all
+      description: Page through KPI data for all agents by location
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/kpis.FromRequestParam'
+      - $ref: '#/components/parameters/kpis.ToRequestParam'
+      - $ref: '#/components/parameters/kpis.EventTypeFilter'
+      - $ref: '#/components/parameters/kpis.SSIDFilter'
+      - $ref: '#/components/parameters/kpis.BandFilter'
+      - $ref: '#/components/parameters/kpis.IncludeClientCount'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/kpis.GetAgentKPIsGlobalResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - KPIs
+  /kpis/agents/access-points:
+    get:
+      deprecated: true
+      summary: Retrieve KPI data for all agents by access point
+      operationId: agent-kpis-by-access-point
+      description: Page through KPI data for all agents by access point
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/kpis.FromRequestParam'
+      - $ref: '#/components/parameters/kpis.ToRequestParam'
+      - $ref: '#/components/parameters/kpis.EventTypeFilter'
+      - $ref: '#/components/parameters/kpis.SSIDFilter'
+      - $ref: '#/components/parameters/kpis.LocationFilter'
+      - $ref: '#/components/parameters/kpis.BandFilter'
+      - $ref: '#/components/parameters/kpis.IncludeClientCount'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/kpis.GetAgentKPIsAccessPointsResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - KPIs
+  /kpis/agents/adapter-drivers:
+    get:
+      deprecated: true
+      summary: Retrieve KPI data for all agents by adapter and driver
+      operationId: agent-kpis-by-adapter-drivers
+      description: Page through KPI data for all agents by adapter and driver
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/kpis.FromRequestParam'
+      - $ref: '#/components/parameters/kpis.ToRequestParam'
+      - $ref: '#/components/parameters/kpis.EventTypeFilter'
+      - $ref: '#/components/parameters/kpis.SSIDFilter'
+      - $ref: '#/components/parameters/kpis.LocationFilter'
+      - $ref: '#/components/parameters/kpis.BandFilter'
+      - $ref: '#/components/parameters/kpis.IncludeClientCount'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/kpis.GetAgentKPIsAdapterDriversResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - KPIs
+  /kpis/agents/locations:
+    get:
+      deprecated: true
+      summary: Retrieve KPI data for all agents by location
+      operationId: agent-kpis-by-location
+      description: Page through KPI data for all agents by location
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/kpis.FromRequestParam'
+      - $ref: '#/components/parameters/kpis.ToRequestParam'
+      - $ref: '#/components/parameters/kpis.EventTypeFilter'
+      - $ref: '#/components/parameters/kpis.SSIDFilter'
+      - $ref: '#/components/parameters/kpis.LocationFilter'
+      - $ref: '#/components/parameters/kpis.BandFilter'
+      - $ref: '#/components/parameters/kpis.IncludeClientCount'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/kpis.GetAgentKPIsLocationsResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - KPIs
+  /kpis/agents/client-capabilities:
+    get:
+      deprecated: true
+      summary: Retrieve KPI data for all agents by client capabilities
+      operationId: agent-kpis-by-client-capability
+      description: Page through KPI data for all agents by client capability
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/kpis.ClientCapabilityType'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/kpis.GetAgentKPIsClientCapabilitiesResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - KPIs
+  /kpis/sensors/organizations:
+    get:
+      deprecated: true
+      summary: Retrieve KPI data for all sensors by organization
+      operationId: sensor-kpis-by-organization
+      description: Page through KPI data for all sensors by organization
+      security:
+      - oauth2:
+        - read
+      parameters:
+      - $ref: '#/components/parameters/kpis.OrgKpiCodes'
+      - $ref: '#/components/parameters/kpis.FromRequestParam'
+      - $ref: '#/components/parameters/kpis.ToRequestParam'
+      - $ref: '#/components/parameters/kpis.NetworkIdFilter'
+      - $ref: '#/components/parameters/kpis.ClientMac'
+      - $ref: '#/components/parameters/kpis.BandFilter'
+      - $ref: '#/components/parameters/kpis.Averaging'
+      - $ref: '#/components/parameters/kpis.TimeLimit'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/kpis.GetSensorsKPIsTopologiesResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - KPIs
+  /kpis/sensors/access-points/{accessPointId}:
+    get:
+      deprecated: true
+      summary: Retrieve KPI data for all sensors by access point
+      operationId: sensor-kpis-by-access-point
+      description: Page through KPI data for all sensors by access point
+      security:
+      - oauth2:
+        - read
+      parameters:
+      - $ref: '#/components/parameters/kpis.AccessPointId'
+      - $ref: '#/components/parameters/kpis.APKpiCodes'
+      - $ref: '#/components/parameters/kpis.FromRequestParam'
+      - $ref: '#/components/parameters/kpis.ToRequestParam'
+      - $ref: '#/components/parameters/kpis.NetworkIdFilter'
+      - $ref: '#/components/parameters/kpis.ClientMac'
+      - $ref: '#/components/parameters/kpis.BandFilter'
+      - $ref: '#/components/parameters/kpis.Averaging'
+      - $ref: '#/components/parameters/kpis.TimeLimit'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/kpis.GetSensorsKPIsTopologiesResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - KPIs
+  /kpis/sensors/dest-nw-band-loc/{targetId}:
+    get:
+      deprecated: true
+      summary: Retrieve KPI data for all sensors by destination, network, band, and location
+      operationId: sensor-kpis-by-destination-network-band-location
+      description: Page through KPI data for all sensors by destination network, band, and location
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/kpis.TargetId'
+      - $ref: '#/components/parameters/kpis.LocationIdFilter'
+      - $ref: '#/components/parameters/kpis.NetworkIdFilter'
+      - $ref: '#/components/parameters/kpis.KpiCodes'
+      - $ref: '#/components/parameters/kpis.FromRequestParam'
+      - $ref: '#/components/parameters/kpis.ToRequestParam'
+      - $ref: '#/components/parameters/kpis.Averaging'
+      - $ref: '#/components/parameters/kpis.TimeLimit'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/kpis.GetSensorsKPIsTopologiesResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - KPIs
+  /kpis/sensors/locations/{locationId}:
+    get:
+      deprecated: true
+      summary: Retrieve KPI data for all sensors by location
+      operationId: sensor-kpis-by-location
+      description: Page through KPI data for all sensors by location
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/kpis.LocationId'
+      - $ref: '#/components/parameters/kpis.KpiCodes'
+      - $ref: '#/components/parameters/kpis.FromRequestParam'
+      - $ref: '#/components/parameters/kpis.ToRequestParam'
+      - $ref: '#/components/parameters/kpis.NetworkIdFilter'
+      - $ref: '#/components/parameters/kpis.ClientMac'
+      - $ref: '#/components/parameters/kpis.BandFilter'
+      - $ref: '#/components/parameters/kpis.Averaging'
+      - $ref: '#/components/parameters/kpis.TimeLimit'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/kpis.GetSensorsKPIsTopologiesResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - KPIs
+  /kpis/sensors/eyes/{sensorId}:
+    get:
+      deprecated: true
+      summary: Retrieve KPI data for a specific sensor
+      operationId: sensor-kpis-by-eye
+      description: Page through KPI data for a specific sensor
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/kpis.SensorId'
+      - $ref: '#/components/parameters/kpis.KpiCodes'
+      - $ref: '#/components/parameters/kpis.FromRequestParam'
+      - $ref: '#/components/parameters/kpis.ToRequestParam'
+      - $ref: '#/components/parameters/kpis.NetworkIdFilter'
+      - $ref: '#/components/parameters/kpis.ClientMac'
+      - $ref: '#/components/parameters/kpis.BandFilter'
+      - $ref: '#/components/parameters/kpis.Averaging'
+      - $ref: '#/components/parameters/kpis.TimeLimit'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/kpis.GetSensorsKPIsTopologiesResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - KPIs
+  /kpis/sensors/service-areas/{serviceAreaId}:
+    get:
+      deprecated: true
+      summary: Retrieve KPI data for all sensors by service area
+      operationId: sensor-kpis-by-service-area
+      description: Page through KPI data for all sensors by service area
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/kpis.ServiceAreaId'
+      - $ref: '#/components/parameters/kpis.KpiCodes'
+      - $ref: '#/components/parameters/kpis.FromRequestParam'
+      - $ref: '#/components/parameters/kpis.ToRequestParam'
+      - $ref: '#/components/parameters/kpis.NetworkIdFilter'
+      - $ref: '#/components/parameters/kpis.ClientMac'
+      - $ref: '#/components/parameters/kpis.BandFilter'
+      - $ref: '#/components/parameters/kpis.Averaging'
+      - $ref: '#/components/parameters/kpis.TimeLimit'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/kpis.GetSensorsKPIsTopologiesResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      tags:
+      - KPIs
+components:
+  parameters:
+    kpis.SensorId:
+      name: sensorId
+      in: path
+      description: Fetch KPIs for a specific sensor.
+      required: true
+      schema:
+        type: string
+    kpis.LocationIdFilter:
+      name: locationId
+      in: query
+      description: Filter data returned by a location ID
+      required: false
+      schema:
+        type: number
+    kpis.APKpiCodes:
+      name: kpiCodes
+      in: query
+      description: Return data for one or more KPI codes. Common examples include HC005, HC006, HC007, HC008, AV008, AC001, RA103, AC002, DN002, QURT007, QUAP008, QUAP009, QURT004, QUAP005, QUAP006, QURS004, QURS007, QURS002, TR062, DR001, DR002, DR003, DR004, DR005, DR006, DR007, DR008, DR009, DR010, DR011, DR012, DR013, DR014, DR015, DR016, DR017, DR018. For the full list of KPI codes, see the [Time Series Sensors Metric Types endpoint](/swagger-ui/index.html#/TimeSeries/time-series-sensors-metric-types).
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+    kpis.TimeLimit:
+      name: timelimit
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+        - TENMINUTES
+        - ONEHOUR
+        - TWELVEHOURS
+        - ONEDAY
+        - ONEWEEK
+        - ONEMONTH
+        - THREEMONTHS
+    kpis.SSIDFilter:
+      name: ssid
+      in: query
+      description: Filter data returned by one or more SSIDs
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    kpis.ClientMac:
+      name: clientMac
+      in: query
+      description: Fetch KPIs for a specific client.
+      required: false
+      schema:
+        type: string
+    kpis.BandFilter:
+      name: band
+      in: query
+      description: Filter data returned by a band.
+      required: false
+      schema:
+        type: string
+        enum:
+        - '2.4'
+        - '5'
+        - '6'
+    kpis.EventTypeFilter:
+      name: type
+      in: query
+      description: Filter data returned by one or more event type
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          enum:
+          - DOWNLOAD_MOS_SCORE
+          - DOWNLOAD_THROUGHPUT
+          - GATEWAY_PING_RTT
+          - GATEWAY_PING_SUCCESS_RATE
+          - PING_RTT
+          - PING_SUCCESS_RATE
+          - ROAMING
+          - SIGNAL_STRENGTH
+          - UPLOAD_MOS_SCORE
+          - UPLOAD_THROUGHPUT
+          - WEB_DOWNLOAD_DURATION
+          - WEB_DOWNLOAD_SUCCESS_RATE
+          - ADJACENT_CHANNEL_INTERFERENCE
+          - CO_CHANNEL_INTERFERENCE
+          - RF_PROBLEM
+          - CONGESTION
+          - COVERAGE
+          - SEVEN_MCS
+          default: SEVEN_MCS
+    kpis.FromRequestParam:
+      name: from
+      in: query
+      description: The time in milliseconds from the epoch after which incidents are fetched (the lower bound). Defaults to the previous 24 hours.
+      required: false
+      schema:
+        type: number
+        format: datetime
+    kpis.OrgKpiCodes:
+      name: kpiCodes
+      in: query
+      description: Return data for one or more KPI codes. Common examples include HC005, HC006, HC007, HC008. For the full list of KPI codes, see the [Time Series Sensors Metric Types endpoint](/swagger-ui/index.html#/TimeSeries/time-series-sensors-metric-types).
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+    kpis.LocationId:
+      name: locationId
+      in: path
+      description: Fetch KPIs for a specific location.
+      required: true
+      schema:
+        type: string
+    kpis.NetworkIdFilter:
+      name: networkId
+      in: query
+      description: Filter data returned by a network ID
+      required: false
+      schema:
+        type: number
+    kpis.ServiceAreaId:
+      name: serviceAreaId
+      in: path
+      description: Fetch KPIs for a specific service area.
+      required: true
+      schema:
+        type: string
+    kpis.TargetId:
+      name: targetId
+      in: path
+      description: Fetch KPIs for a specific target.
+      required: true
+      schema:
+        type: string
+    kpis.Averaging:
+      name: averaging
+      in: query
+      description: Filter data returned by a network IDs
+      required: false
+      schema:
+        type: string
+        default: HOUR
+        enum:
+        - RAW
+        - ONEMIN
+        - TENMIN
+        - HOUR
+        - DAY
+        - MONTH
+        - ALL
+        - NONE
+    kpis.ToRequestParam:
+      name: to
+      in: query
+      description: The time in milliseconds from the epoch up to which events are fetched (the upper bound). Defaults to the present now.
+      required: false
+      schema:
+        type: number
+        format: datetime
+    kpis.ClientCapabilityType:
+      name: type
+      in: query
+      description: Filter data returned by one or more type
+      required: true
+      schema:
+        type: string
+        enum:
+        - CONNECTION
+        - BAND
+    kpis.LocationFilter:
+      name: location
+      in: query
+      description: Filter data returned by one or more location ids
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    kpis.AccessPointId:
+      name: accessPointId
+      in: path
+      description: Fetch KPIs for a specific access point.
+      required: true
+      schema:
+        type: string
+    kpis.IncludeClientCount:
+      name: includeClientCount
+      in: query
+      description: 'Deprecated: Client count will always be returned going forward.'
+      required: false
+      schema:
+        type: boolean
+        default: true
+      deprecated: true
+    kpis.KpiCodes:
+      name: kpiCodes
+      in: query
+      description: Return data for one or more KPI codes. Common examples include HC005, HC006, HC007, HC008, AV008, AC001, RA103, AC002, DN002, QURT007, QUAP008, QUAP009, QURT004, QUAP005, QUAP006, QURS004, QURS007, QURS002, TR062, DR013, DR014, DR015, DR016, DR017, DR018. For the full list of KPI codes, see the [Time Series Sensors Metric Types endpoint](/swagger-ui/index.html#/TimeSeries/time-series-sensors-metric-types).
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  schemas:
+    common.Range:
+      type: object
+      required:
+      - to
+      - toAsDateString
+      - from
+      - fromAsDateString
+      - total
+      - duration
+      - durationAsString
+      properties:
+        to:
+          type: integer
+          example: 1674055815825
+        toAsDateString:
+          type: string
+          format: date-time
+          example: 2023-01-18T15:51:20.437Z[UTC]
+        from:
+          type: integer
+          example: 1674055815825
+        fromAsDateString:
+          type: string
+          format: date-time
+          example: 2023-01-17T15:51:20.438Z[UTC]
+        total:
+          type: integer
+          example: 5
+        duration:
+          type: integer
+          example: 60000
+        durationAsString:
+          type: string
+          example: 60 seconds
+    kpis.GetAgentKPIsClientCapabilitiesResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.AgentKPIClientCapability'
+        range:
+          $ref: '#/components/schemas/common.Range'
+    kpis.AgentKPILocation:
+      type: object
+      properties:
+        location:
+          type: string
+        locationName:
+          type: string
+        clientCount:
+          type: number
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.AgentKPIType'
+    kpis.KPITopology:
+      type: object
+      properties:
+        kpiCode:
+          type: string
+          description: The KPI code for this result
+        name:
+          type: string
+          description: The name of the report
+        description:
+          type: string
+          description: The description of the report
+        measurements24GHz:
+          type: array
+          description: The list of measurements for the 2.4GHz band
+          items:
+            type: object
+            properties:
+              kpiValue:
+                type: number
+              status:
+                type: string
+              created_at:
+                type: string
+                format: datetime
+        measurements5GHz:
+          type: array
+          description: The list of measurements for the 5GHz band
+          items:
+            type: object
+            properties:
+              kpiValue:
+                type: number
+              status:
+                type: string
+              created_at:
+                type: string
+                format: datetime
+        measurements6GHz:
+          type: array
+          description: The list of measurements for the 5GHz band
+          items:
+            type: object
+            properties:
+              kpiValue:
+                type: number
+              status:
+                type: string
+              created_at:
+                type: string
+                format: datetime
+        units:
+          type: string
+          description: The units of the KPI
+        slaTargetValue:
+          type: number
+          description: The SLA target value for the KPI
+        topologyObject:
+          type: object
+          properties:
+            id:
+              type: number
+            name:
+              type: string
+            topologyType:
+              type: string
+            parentLocationId:
+              type: number
+            description:
+              type: string
+        reportedWirelessNetwork:
+          type: object
+          description: The reported wireless network for the KPI
+        status:
+          type: number
+          description: The SLA target value for the KPI
+        slaParameters:
+          type: object
+          description: The SLA parameters for the KPI
+    kpis.AgentKPIType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: string
+        criticalSum:
+          type: number
+        warningSum:
+          type: number
+        goodSum:
+          type: number
+    kpis.AgentKPIAccessPoint:
+      type: object
+      properties:
+        bssid:
+          type: string
+        clientCount:
+          type: number
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.AgentKPIType'
+    kpis.GetAgentKPIsLocationsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.AgentKPILocation'
+        range:
+          $ref: '#/components/schemas/common.Range'
+    kpis.GetSensorsKPIsTopologiesResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.KPITopology'
+        range:
+          $ref: '#/components/schemas/common.Range'
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    kpis.GetAgentKPIsGlobalResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.AgentKPIGlobal'
+        range:
+          $ref: '#/components/schemas/common.Range'
+    kpis.AgentKPIAdapterDriver:
+      type: object
+      properties:
+        driverProvider:
+          type: string
+        driverVersion:
+          type: string
+        clientCount:
+          type: number
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.AgentKPIType'
+    kpis.GetAgentKPIsAdapterDriversResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.AgentKPIAdapterDriver'
+        range:
+          $ref: '#/components/schemas/common.Range'
+    kpis.AgentKPIClientCapability:
+      type: object
+      properties:
+        clientCount30Days:
+          type: number
+        clientCount90Days:
+          type: number
+        clientPercent30Days:
+          type: number
+        clientPercent90Days:
+          type: number
+        licensedClientCount30Days:
+          type: number
+        licensedClientCount90Days:
+          type: number
+        licensedClientPercent30Days:
+          type: number
+        licensedClientPercent90Days:
+          type: number
+    kpis.AgentKPIGlobal:
+      type: object
+      properties:
+        clientCount:
+          type: number
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.AgentKPIType'
+    kpis.GetAgentKPIsAccessPointsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.AgentKPIAccessPoint'
+        range:
+          $ref: '#/components/schemas/common.Range'
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

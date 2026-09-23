@@ -1,0 +1,156 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Access API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Access
+paths:
+  /access/{userId}/summary:
+    get:
+      operationId: access-summary-get-a1b2
+      tags:
+      - Access
+      summary: List the access summary for the given user
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadata.AccessSummaryResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+components:
+  schemas:
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    metadata.SapphireApplication:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        instances:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Instance'
+    metadata.AccessSummaryResponse:
+      type: object
+      properties:
+        sapphireApplication:
+          $ref: '#/components/schemas/metadata.SapphireApplication'
+        mobileEyeApplication:
+          $ref: '#/components/schemas/metadata.MobileEyeApplication'
+        userManagementApplication:
+          $ref: '#/components/schemas/metadata.UserManagementApplication'
+        sapphireReDirectorApplication:
+          $ref: '#/components/schemas/metadata.SapphireReDirectorApplication'
+        userNotifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.UserNotifications'
+    metadata.Instance:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+    metadata.Organization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        connectionId:
+          type: string
+        mobileEyeOrgCode:
+          type: string
+    metadata.UserNotifications:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        text:
+          type: string
+    metadata.MobileEyeApplication:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        organizations:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Organization'
+    metadata.UserManagementApplication:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+    metadata.SapphireReDirectorApplication:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

@@ -1,0 +1,241 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Audit API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Audit
+paths:
+  /audit/agents:
+    get:
+      summary: Agent Audit Entries
+      operationId: agent-audits
+      description: Fetch Agent Audit record entries
+      security:
+      - oauth2: []
+      parameters:
+      - $ref: '#/components/parameters/common.OrganizationRequestParam'
+      - $ref: '#/components/parameters/audits.StartTimeRangeParam'
+      - $ref: '#/components/parameters/audits.EndTimeRangeParam'
+      - $ref: '#/components/parameters/audits.ActorParam'
+      - $ref: '#/components/parameters/audits.ActionParam'
+      - $ref: '#/components/parameters/audits.SourceParam'
+      - $ref: '#/components/parameters/audits.InitiatedParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/audits.AuditsAgentsResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+        '403':
+          $ref: '#/components/responses/common.403Forbidden'
+      tags:
+      - Audit
+components:
+  schemas:
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    audits.AuditsAgentsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/audits.AuditAgentRecord'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    audits.AuditAgentRecord:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        timestamp:
+          type: string
+          format: date-time
+        organizationName:
+          type: string
+        actor:
+          type: string
+          description: User or system component responsible for the record
+        action:
+          type: string
+          description: The action take. i.e. what happened
+        details:
+          type: object
+          description: Details about the event. This is a free form object that can vary based on the action and source
+        source:
+          type: string
+          description: The area of the system from which the event originated
+        initiated:
+          type: string
+          description: How this event was initiated
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    common.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is 1.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    common.SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    audits.SourceParam:
+      name: source
+      in: query
+      description: The area of the system from which the event originated
+      required: false
+      schema:
+        type: string
+    audits.ActorParam:
+      name: actor
+      in: query
+      description: User or system component responsible for the events
+      required: false
+      schema:
+        type: string
+    audits.StartTimeRangeParam:
+      name: startTimeRange
+      in: query
+      description: The start time range of the events to fetch
+      required: false
+      schema:
+        type: string
+        format: date-time
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
+    audits.InitiatedParam:
+      name: initiated
+      in: query
+      description: How the event was initiated
+      required: false
+      schema:
+        type: string
+    audits.EndTimeRangeParam:
+      name: endTimeRange
+      in: query
+      description: The end time range of the events to fetch
+      required: false
+      schema:
+        type: string
+        format: date-time
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    audits.ActionParam:
+      name: action
+      in: query
+      description: The action taken
+      required: false
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}

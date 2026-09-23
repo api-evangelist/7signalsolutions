@@ -1,0 +1,888 @@
+openapi: 3.2.0
+info:
+  title: 7SIGNAL Users API
+  description: This is the 7SIGNAL public API for interacting with the 7SIGNAL Platform
+  version: 2.21.1
+  contact:
+    email: info@7signal.com
+  license:
+    name: All Rights Reserved
+    url: https://www.7signal.com/contact
+servers:
+- url: https://api-v2.7signal.com
+  description: 7SIGNAL API Gateway (production)
+tags:
+- name: Users
+paths:
+  /users:
+    get:
+      operationId: users-get-e1f2
+      tags:
+      - Users
+      summary: List all accessible Users
+      parameters:
+      - name: ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+          default: []
+      - name: roles
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          default: []
+      - name: permissions
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          default: []
+      - name: emails
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          default: []
+      - name: firstNames
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          default: []
+      - name: lastNames
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          default: []
+      - name: auth0Ids
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+          default: []
+      - name: organizationIds
+        in: query
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+          default: []
+      - $ref: '#/components/parameters/metadata.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadata.PageModelUser'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+    post:
+      operationId: users-post-g3h4
+      tags:
+      - Users
+      summary: Create a User in Metadata service and mark it as 'invited'.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/metadata.UserRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadata.UserResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      security:
+      - oauth2: []
+  /users/{userId}:
+    get:
+      operationId: users-with-id-get-i5j6
+      tags:
+      - Users
+      summary: List the specific User identified by its UUID
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadata.UserResponse'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+    delete:
+      operationId: users-with-id-delete-k7l8
+      tags:
+      - Users
+      summary: Delete the User specified by the UUID
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+  /users/{userId}/groups:
+    get:
+      operationId: users-with-id-get-groups-get-c5d6
+      tags:
+      - Users
+      summary: List all the groups mapped to the User specified by the UUID
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/metadata.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadata.PageModelGroup'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+    put:
+      operationId: users-with-id-get-groups-put-e7f8
+      tags:
+      - Users
+      summary: Replace User mapping with one or more Groups in the given payload
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/metadata.UsersGroupsRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+    post:
+      operationId: users-with-id-get-groups-post-g9h0
+      tags:
+      - Users
+      summary: Map User to one or more Groups
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/metadata.UsersGroupsRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      security:
+      - oauth2: []
+  /users/{userId}/groups/{groupId}:
+    delete:
+      operationId: users-with-id-get-groups-with-id-delete-m5n6
+      tags:
+      - Users
+      summary: Unmap Group from the User
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: groupId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+  /users/{userId}/organizations:
+    get:
+      operationId: users-with-id-get-organizations-get-w9x0
+      tags:
+      - Users
+      summary: List all the organizations mapped to the User specified by the UUID
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: primary
+        in: query
+        description: Filter by primary. True will return the mapped primary organization or else return all the mapped organizations.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - name: mobileEyeEnabled
+        in: query
+        description: Filter by mobile eye enabled. True will return mapped mobile eye enabled organizations or else return all the mapped organizations.
+        required: false
+        schema:
+          type: boolean
+          default: false
+      - $ref: '#/components/parameters/metadata.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadata.PageModelUserOrganization'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+    put:
+      operationId: users-with-id-get-organizations-put-y1z2
+      tags:
+      - Users
+      summary: Replace User mapping with one or more Organizations in the given payload
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/metadata.OrganizationsUsersRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+    post:
+      operationId: users-with-id-get-organizations-post-a3b4
+      tags:
+      - Users
+      summary: Map User to one or more Organizations
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/metadata.OrganizationsUsersRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      security:
+      - oauth2: []
+  /users/{userId}/organization/{organizationId}:
+    delete:
+      operationId: users-with-id-get-organizations-with-id-delete-k3l4
+      tags:
+      - Users
+      summary: Unmap organization from the User
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: organizationId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+  /users/{userId}/permissions:
+    get:
+      operationId: users-with-id-get-permissions-get-q3r4
+      tags:
+      - Users
+      summary: List all the permissions(assigned via the role and directly) mapped to the User…
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - $ref: '#/components/parameters/metadata.PageRequestParam'
+      - $ref: '#/components/parameters/common.PerPageRequestParam'
+      - $ref: '#/components/parameters/common.SortOrderParam'
+      - $ref: '#/components/parameters/common.SortFieldParam'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/metadata.PageModelPermission'
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+    put:
+      operationId: users-with-id-get-permissions-put-s5t6
+      tags:
+      - Users
+      summary: Replace User mapping with one or more Permissions in the given payload
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/metadata.UsersPermissionsRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+    post:
+      operationId: users-with-id-get-permissions-post-u7v8
+      tags:
+      - Users
+      summary: Map User to one or more Permissions
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/metadata.UsersPermissionsRequest'
+        required: true
+      responses:
+        '201':
+          description: Created
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+      security:
+      - oauth2: []
+  /users/{userId}/permission/{permissionId}:
+    delete:
+      operationId: users-with-id-get-permissions-with-id-delete-i1j2
+      tags:
+      - Users
+      summary: Unmap Permission from the User
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: permissionId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+  /users/{userId}/role:
+    put:
+      operationId: users-with-id-get-role-put-m9n0
+      tags:
+      - Users
+      summary: Update user's Role and Synchronize in Auth0
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/metadata.UsersRoleRequest'
+        required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          $ref: '#/components/responses/common.400BadRequestResponse'
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+    delete:
+      operationId: users-with-id-get-role-delete-o1p2
+      tags:
+      - Users
+      summary: Remove user's Role and Synchronize in Auth0
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '204':
+          description: No Content
+        '404':
+          $ref: '#/components/responses/common.404NotFoundResponse'
+      security:
+      - oauth2: []
+components:
+  schemas:
+    metadata.AggregateReferenceRoleUUID:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    metadata.AggregateReferenceInstanceUUID:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    metadata.Role:
+      required:
+      - auth0Id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        key:
+          type: string
+        description:
+          type: string
+        auth0Id:
+          type: string
+        isPublic:
+          type: boolean
+    metadata.PageModelPermission:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Permission'
+        pagination:
+          $ref: '#/components/schemas/metadata.Pagination'
+    metadata.PageModelUser:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.User'
+        pagination:
+          $ref: '#/components/schemas/metadata.Pagination'
+    metadata.PageModelGroup:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Group'
+        pagination:
+          $ref: '#/components/schemas/metadata.Pagination'
+    metadata.UsersRoleRequest:
+      required:
+      - roleId
+      type: object
+      properties:
+        roleId:
+          type: string
+          format: uuid
+    metadata.OrganizationInfo:
+      required:
+      - organizationId
+      type: object
+      properties:
+        organizationId:
+          type: string
+          format: uuid
+        isPrimary:
+          type: boolean
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    metadata.Pagination:
+      type: object
+      properties:
+        perPage:
+          type: integer
+          format: int32
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+          description: The current page number. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
+        total:
+          type: integer
+          format: int64
+        pages:
+          type: integer
+          format: int32
+    metadata.UserOrganization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        connectionId:
+          type: string
+        isPrimary:
+          type: boolean
+        mobileEyeOrgCode:
+          type: string
+    metadata.User:
+      type: object
+      properties:
+        role:
+          $ref: '#/components/schemas/metadata.AggregateReferenceRoleUUID'
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        auth0Id:
+          type: string
+        lastLogin:
+          type: string
+          format: date-time
+    metadata.Group:
+      type: object
+      properties:
+        organization:
+          $ref: '#/components/schemas/metadata.AggregateReferenceOrganizationUUID'
+        instance:
+          $ref: '#/components/schemas/metadata.AggregateReferenceInstanceUUID'
+        id:
+          type: string
+          format: uuid
+        key:
+          type: string
+        displayName:
+          type: string
+    metadata.UserRequest:
+      required:
+      - email
+      - organizationId
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        roleId:
+          type: string
+          format: uuid
+        organizationId:
+          type: string
+          format: uuid
+        permissionIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        permissionNames:
+          type: array
+          items:
+            type: string
+    metadata.Permission:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        key:
+          type: string
+        description:
+          type: string
+        isPublic:
+          type: boolean
+    metadata.AggregateReferenceOrganizationUUID:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    metadata.UsersPermissionsRequest:
+      type: object
+      properties:
+        permissionIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        permissionNames:
+          type: array
+          items:
+            type: string
+    metadata.PageModelUserOrganization:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.UserOrganization'
+        pagination:
+          $ref: '#/components/schemas/metadata.Pagination'
+    metadata.OrganizationsUsersRequest:
+      required:
+      - organizations
+      type: object
+      properties:
+        organizations:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.OrganizationInfo'
+    metadata.UsersGroupsRequest:
+      required:
+      - groupIds
+      type: object
+      properties:
+        groupIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+    metadata.UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        auth0Id:
+          type: string
+        lastLogin:
+          type: string
+          format: date-time
+        role:
+          $ref: '#/components/schemas/metadata.Role'
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Permission'
+        organizations:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.UserOrganization'
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Group'
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    common.SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    metadata.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        clientCredentials:
+          tokenUrl: /oauth2/token
+          scopes: {}
