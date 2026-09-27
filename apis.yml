@@ -28,7 +28,7 @@ tags:
 - Endpoint Monitoring
 - Time Series
 - MCP
-- agent-native
+- Agent-Native
 - Company
 tags_raw:
 - wireless-network-monitoring
@@ -55,7 +55,7 @@ apis:
   baseURL: https://mcp-v2.7signal.com/mcp
   tags:
   - MCP
-  - agent-native
+  - Agent-Native
   - AIOps
   - Wi-Fi Experience Monitoring
   tags_raw:

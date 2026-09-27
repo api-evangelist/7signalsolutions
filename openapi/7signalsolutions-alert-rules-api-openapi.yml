@@ -288,14 +288,6 @@ paths:
       - Alert Rules
 components:
   parameters:
-    common.PageRequestParam:
-      name: page
-      in: query
-      description: Fetch a particular page of data. The first page is 1.
-      required: false
-      schema:
-        type: integer
-        minimum: 1
     common.OrganizationRequestParam:
       name: organization
       in: query
@@ -317,6 +309,28 @@ components:
       required: false
       schema:
         type: string
+    alert-rules.EnabledFilterParam:
+      name: enabled
+      in: query
+      description: Filter the alert rules by their enabled state
+      required: false
+      schema:
+        type: boolean
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
+    common.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is 1.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
     common.SortOrderParam:
       name: order
       in: query
@@ -334,63 +348,7 @@ components:
       required: false
       schema:
         type: string
-    common.SortFieldParam:
-      name: sortField
-      in: query
-      description: The field on which to sort the results
-      required: false
-      schema:
-        type: string
-    alert-rules.EnabledFilterParam:
-      name: enabled
-      in: query
-      description: Filter the alert rules by their enabled state
-      required: false
-      schema:
-        type: boolean
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
-    alert-rules.EnabledRequest:
-      type: object
-      required:
-      - enabled
-      properties:
-        enabled:
-          type: boolean
-    alert-rules.WebhookFormat:
-      type: string
-      description: Per-destination payload shape for a webhook delivery. Defaults to generic when omitted.
-      enum:
-      - generic
-      - slack
-    alert-rules.Dimension:
-      type: string
-      description: A dimension the metric can be grouped/keyed by
-      enum:
-      - device_id
-      - bssid
-      - network
-      - band
-      - location_id
-      - target
     alert-rules.AlertRulesSummary:
       type: object
       properties:
@@ -403,13 +361,71 @@ components:
         disabledCount:
           type: integer
           format: int64
-    alert-rules.AggregationFunction:
-      type: string
-      description: How matching samples are aggregated before the threshold comparison
-      enum:
-      - avg
-      - min
-      - max
+    alert-rules.EnabledRequest:
+      type: object
+      required:
+      - enabled
+      properties:
+        enabled:
+          type: boolean
+    alert-rules.Delivery:
+      type: object
+      description: A single notification target, discriminated by `kind`
+      required:
+      - kind
+      discriminator:
+        propertyName: kind
+      oneOf:
+      - type: object
+        required:
+        - kind
+        - url
+        - auth
+        properties:
+          kind:
+            type: string
+            enum:
+            - webhook
+          name:
+            type: string
+          url:
+            type: string
+            description: http or https URL with no spaces
+            pattern: ^https?://\S+$
+          auth:
+            $ref: '#/components/schemas/alert-rules.WebhookAuth'
+          format:
+            $ref: '#/components/schemas/alert-rules.WebhookFormat'
+      - type: object
+        required:
+        - kind
+        - address
+        properties:
+          kind:
+            type: string
+            enum:
+            - email
+          name:
+            type: string
+          address:
+            type: string
+            format: email
+      - type: object
+        required:
+        - kind
+        - mdsConfigId
+        - organizationName
+        properties:
+          kind:
+            type: string
+            enum:
+            - servicenow
+          name:
+            type: string
+          mdsConfigId:
+            type: string
+          organizationName:
+            type: string
     alert-rules.AlertRuleRequest:
       type: object
       description: Body for creating (POST) or replacing (PUT) an alert rule. Enum fields use their wire values exactly as listed (e.g. ">", "avg", "ignore" in lowercase), not the uppercase names.
@@ -495,28 +511,6 @@ components:
           - kind: servicenow
             mdsConfigId: abc-123
             organizationName: globalcorp
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
     common.Pagination:
       type: object
       required:
@@ -539,6 +533,105 @@ components:
         pages:
           type: integer
           example: 5
+    alert-rules.WebhookFormat:
+      type: string
+      description: Per-destination payload shape for a webhook delivery. Defaults to generic when omitted.
+      enum:
+      - generic
+      - slack
+    alert-rules.AlertRuleResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        metric:
+          type: string
+        dimensionSet:
+          type: array
+          items:
+            $ref: '#/components/schemas/alert-rules.Dimension'
+        dimensionFilters:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+        aggregationFunction:
+          $ref: '#/components/schemas/alert-rules.AggregationFunction'
+        thresholdValue:
+          type: number
+          format: double
+        thresholdOperator:
+          $ref: '#/components/schemas/alert-rules.ThresholdOperator'
+        pendingPeriodSeconds:
+          type: integer
+        missingDataPolicy:
+          $ref: '#/components/schemas/alert-rules.MissingDataPolicy'
+        notificationConfig:
+          $ref: '#/components/schemas/alert-rules.NotificationConfig'
+        enabled:
+          type: boolean
+        locationSelection:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    alert-rules.NotificationConfig:
+      type: object
+      required:
+      - deliveries
+      properties:
+        deliveries:
+          type: array
+          items:
+            $ref: '#/components/schemas/alert-rules.Delivery'
+    alert-rules.Dimension:
+      type: string
+      description: A dimension the metric can be grouped/keyed by
+      enum:
+      - device_id
+      - bssid
+      - network
+      - band
+      - location_id
+      - target
+    alert-rules.AggregationFunction:
+      type: string
+      description: How matching samples are aggregated before the threshold comparison
+      enum:
+      - avg
+      - min
+      - max
     alert-rules.WebhookAuth:
       type: object
       description: Authentication mode for a webhook delivery, discriminated by `type`. Credentials are referenced by Secrets Manager ARN; the secret value is never stored here.
@@ -592,64 +685,6 @@ components:
       - <=
       - '>'
       - '>='
-    alert-rules.Delivery:
-      type: object
-      description: A single notification target, discriminated by `kind`
-      required:
-      - kind
-      discriminator:
-        propertyName: kind
-      oneOf:
-      - type: object
-        required:
-        - kind
-        - url
-        - auth
-        properties:
-          kind:
-            type: string
-            enum:
-            - webhook
-          name:
-            type: string
-          url:
-            type: string
-            description: http or https URL with no spaces
-            pattern: ^https?://\S+$
-          auth:
-            $ref: '#/components/schemas/alert-rules.WebhookAuth'
-          format:
-            $ref: '#/components/schemas/alert-rules.WebhookFormat'
-      - type: object
-        required:
-        - kind
-        - address
-        properties:
-          kind:
-            type: string
-            enum:
-            - email
-          name:
-            type: string
-          address:
-            type: string
-            format: email
-      - type: object
-        required:
-        - kind
-        - mdsConfigId
-        - organizationName
-        properties:
-          kind:
-            type: string
-            enum:
-            - servicenow
-          name:
-            type: string
-          mdsConfigId:
-            type: string
-          organizationName:
-            type: string
     alert-rules.MissingDataPolicy:
       type: string
       description: How missing data is treated while evaluating the rule
@@ -657,51 +692,6 @@ components:
       - ignore
       - good
       - bad
-    alert-rules.AlertRuleResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        metric:
-          type: string
-        dimensionSet:
-          type: array
-          items:
-            $ref: '#/components/schemas/alert-rules.Dimension'
-        dimensionFilters:
-          type:
-          - object
-          - 'null'
-          additionalProperties: true
-        aggregationFunction:
-          $ref: '#/components/schemas/alert-rules.AggregationFunction'
-        thresholdValue:
-          type: number
-          format: double
-        thresholdOperator:
-          $ref: '#/components/schemas/alert-rules.ThresholdOperator'
-        pendingPeriodSeconds:
-          type: integer
-        missingDataPolicy:
-          $ref: '#/components/schemas/alert-rules.MissingDataPolicy'
-        notificationConfig:
-          $ref: '#/components/schemas/alert-rules.NotificationConfig'
-        enabled:
-          type: boolean
-        locationSelection:
-          type:
-          - object
-          - 'null'
-          additionalProperties: true
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
     alert-rules.GetAlertRulesResponse:
       type: object
       required:
@@ -714,15 +704,25 @@ components:
             $ref: '#/components/schemas/alert-rules.AlertRuleResponse'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
-    alert-rules.NotificationConfig:
-      type: object
-      required:
-      - deliveries
-      properties:
-        deliveries:
-          type: array
-          items:
-            $ref: '#/components/schemas/alert-rules.Delivery'
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

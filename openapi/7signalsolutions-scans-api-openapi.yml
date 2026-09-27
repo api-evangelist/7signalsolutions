@@ -69,38 +69,14 @@ paths:
       - Scans
 components:
   parameters:
-    scans.SensorIdRequestParam:
-      name: sensorId
+    scans.EndTimeRequestParam:
+      name: end
       in: query
-      description: The ID of the sensor (eye)
-      required: true
-      schema:
-        type: integer
-    scans.PageRequestParam:
-      name: page
-      in: query
-      description: Page number for pagination (0-based)
-      required: false
-      schema:
-        type: integer
-        default: 0
-        minimum: 0
-    scans.StartTimeRequestParam:
-      name: start
-      in: query
-      description: Start time for scan data in epoch milliseconds (UTC)
+      description: End time for scan data in epoch milliseconds (UTC)
       required: true
       schema:
         type: integer
         format: int64
-    scans.AgentIdRequestParam:
-      name: agentId
-      in: query
-      description: The UUID of the agent
-      required: true
-      schema:
-        type: string
-        format: uuid
     scans.SizeRequestParam:
       name: size
       in: query
@@ -111,14 +87,6 @@ components:
         default: 20
         minimum: 1
         maximum: 1000
-    scans.EndTimeRequestParam:
-      name: end
-      in: query
-      description: End time for scan data in epoch milliseconds (UTC)
-      required: true
-      schema:
-        type: integer
-        format: int64
     common.OrganizationRequestParam:
       name: organization
       in: query
@@ -126,7 +94,90 @@ components:
       required: false
       schema:
         type: string
+    scans.StartTimeRequestParam:
+      name: start
+      in: query
+      description: Start time for scan data in epoch milliseconds (UTC)
+      required: true
+      schema:
+        type: integer
+        format: int64
+    scans.PageRequestParam:
+      name: page
+      in: query
+      description: Page number for pagination (0-based)
+      required: false
+      schema:
+        type: integer
+        default: 0
+        minimum: 0
+    scans.SensorIdRequestParam:
+      name: sensorId
+      in: query
+      description: The ID of the sensor (eye)
+      required: true
+      schema:
+        type: integer
+    scans.AgentIdRequestParam:
+      name: agentId
+      in: query
+      description: The UUID of the agent
+      required: true
+      schema:
+        type: string
+        format: uuid
   schemas:
+    scans.SensorScanTimestamp:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+          description: Scan timestamp in epoch milliseconds (UTC)
+        data:
+          type: array
+          description: Access points detected in this scan
+          items:
+            $ref: '#/components/schemas/scans.SensorScanAp'
+    scans.SensorScanAp:
+      type: object
+      properties:
+        bssid:
+          type: string
+          description: MAC address (BSSID) of the access point
+        ssid:
+          type: string
+          description: SSID (network name) of the access point
+        signalStrength:
+          type: integer
+          description: Signal strength in dBm
+        noise:
+          type:
+          - integer
+          - 'null'
+          description: Noise level in dBm
+        channel:
+          type: string
+          description: WiFi channel number
+        channelWidth:
+          type:
+          - integer
+          - 'null'
+          description: Channel width in MHz (e.g., 20, 40, 80, 160)
+        band:
+          type: number
+          format: float
+          description: WiFi band frequency in GHz (2.4, 5, or 6)
+        channelUtilization:
+          type:
+          - integer
+          - 'null'
+          description: Channel utilization percentage (0-100)
+        stationCount:
+          type:
+          - integer
+          - 'null'
+          description: Number of stations/clients connected to the access point
     common.ResponseStatusException:
       type: object
       required:
@@ -159,16 +210,46 @@ components:
           description: Array of sensor scan records grouped by timestamp
           items:
             $ref: '#/components/schemas/scans.SensorScanTimestamp'
-    scans.AgentsScanDataResponse:
+    scans.AgentScanTimestamp:
       type: object
       properties:
-        pagination:
-          $ref: '#/components/schemas/common.ZeroBasedPagination'
-        scans:
+        timestamp:
+          type: integer
+          format: int64
+          description: Scan timestamp in epoch milliseconds (UTC)
+        agentId:
+          type: string
+          description: UUID of the agent that performed the scan
+        agentConnectedBssid:
+          type:
+          - string
+          - 'null'
+          description: BSSID of the access point the agent was connected to during the scan
+        agentConnectedSsid:
+          type:
+          - string
+          - 'null'
+          description: SSID of the access point the agent was connected to during the scan
+        data:
           type: array
-          description: Array of agent scan records grouped by timestamp
+          description: Access points detected in this scan
           items:
-            $ref: '#/components/schemas/scans.AgentScanTimestamp'
+            $ref: '#/components/schemas/scans.AgentScanAp'
+    common.ZeroBasedPagination:
+      type: object
+      properties:
+        perPage:
+          type: integer
+          description: Number of records per page
+        page:
+          type: integer
+          description: Current page number (0-based)
+        total:
+          type: integer
+          description: Total number of records available
+        pages:
+          type: integer
+          description: Total number of pages
     scans.AgentScanAp:
       type: object
       properties:
@@ -244,97 +325,16 @@ components:
           - integer
           - 'null'
           description: Split channel information for advanced channel configurations
-    scans.SensorScanAp:
+    scans.AgentsScanDataResponse:
       type: object
       properties:
-        bssid:
-          type: string
-          description: MAC address (BSSID) of the access point
-        ssid:
-          type: string
-          description: SSID (network name) of the access point
-        signalStrength:
-          type: integer
-          description: Signal strength in dBm
-        noise:
-          type:
-          - integer
-          - 'null'
-          description: Noise level in dBm
-        channel:
-          type: string
-          description: WiFi channel number
-        channelWidth:
-          type:
-          - integer
-          - 'null'
-          description: Channel width in MHz (e.g., 20, 40, 80, 160)
-        band:
-          type: number
-          format: float
-          description: WiFi band frequency in GHz (2.4, 5, or 6)
-        channelUtilization:
-          type:
-          - integer
-          - 'null'
-          description: Channel utilization percentage (0-100)
-        stationCount:
-          type:
-          - integer
-          - 'null'
-          description: Number of stations/clients connected to the access point
-    common.ZeroBasedPagination:
-      type: object
-      properties:
-        perPage:
-          type: integer
-          description: Number of records per page
-        page:
-          type: integer
-          description: Current page number (0-based)
-        total:
-          type: integer
-          description: Total number of records available
-        pages:
-          type: integer
-          description: Total number of pages
-    scans.AgentScanTimestamp:
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-          description: Scan timestamp in epoch milliseconds (UTC)
-        agentId:
-          type: string
-          description: UUID of the agent that performed the scan
-        agentConnectedBssid:
-          type:
-          - string
-          - 'null'
-          description: BSSID of the access point the agent was connected to during the scan
-        agentConnectedSsid:
-          type:
-          - string
-          - 'null'
-          description: SSID of the access point the agent was connected to during the scan
-        data:
+        pagination:
+          $ref: '#/components/schemas/common.ZeroBasedPagination'
+        scans:
           type: array
-          description: Access points detected in this scan
+          description: Array of agent scan records grouped by timestamp
           items:
-            $ref: '#/components/schemas/scans.AgentScanAp'
-    scans.SensorScanTimestamp:
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-          description: Scan timestamp in epoch milliseconds (UTC)
-        data:
-          type: array
-          description: Access points detected in this scan
-          items:
-            $ref: '#/components/schemas/scans.SensorScanAp'
+            $ref: '#/components/schemas/scans.AgentScanTimestamp'
   responses:
     common.400BadRequestResponse:
       description: Bad Request

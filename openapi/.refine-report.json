@@ -39,7 +39,7 @@
     "7signalsolutions-users-api-openapi.yml"
   ],
   "archived": [
-    "deleted 2 superseded output(s) from the previous generation"
+    "deleted 4 superseded output(s) from the previous generation"
   ],
   "errors": [],
   "warnings": [],
@@ -80,8 +80,8 @@
     "7signalsolutions-openapi.json: declared missing tag: TimeSeries",
     "7signalsolutions-openapi.json: declared missing tag: Topologies",
     "7signalsolutions-openapi.json: declared missing tag: Users",
-    "superseded outputs removed: 7signalsolutions-access-points-api-openapi.yml, 7signalsolutions-time-series-api-openapi.yml",
-    "apis.yml register: written (+2 apis, 33 total)"
+    "superseded outputs removed: 7signalsolutions-access-points-api-openapi.yml, 7signalsolutions-change-events-api-openapi.yml, 7signalsolutions-service-areas-api-openapi.yml, 7signalsolutions-time-series-api-openapi.yml",
+    "apis.yml register: written (+4 apis, 33 total)"
   ],
   "skipped": [
     "_original/7signalsolutions-openapi_2.json: archived document superseded by a larger archived document",
@@ -92,7 +92,7 @@
     "7signalsolutions-api-keys-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "7signalsolutions-audit-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "7signalsolutions-authentication-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "7signalsolutions-changeevents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "7signalsolutions-change-events-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "7signalsolutions-clients-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "7signalsolutions-defaultconfigurations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "7signalsolutions-eyeris-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -111,7 +111,7 @@
     "7signalsolutions-permissions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "7signalsolutions-roles-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "7signalsolutions-scans-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "7signalsolutions-serviceareas-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "7signalsolutions-service-areas-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "7signalsolutions-summaries-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "7signalsolutions-targets-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "7signalsolutions-time-series-api-openapi.yml: previously refined output, superseded by openapi/_original/",

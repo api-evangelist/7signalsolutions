@@ -75,28 +75,6 @@ paths:
       - Change Events
 components:
   schemas:
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
     change-events.ChangeEventsSensor:
       type: object
       properties:
@@ -148,6 +126,28 @@ components:
         pages:
           type: integer
           example: 5
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
   responses:
     common.400BadRequestResponse:
       description: Bad Request

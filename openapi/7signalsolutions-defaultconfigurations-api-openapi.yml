@@ -56,37 +56,6 @@ paths:
       - DefaultConfigurations
 components:
   schemas:
-    default-configurations.GetSensorDefaultConfigurationsResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/default-configurations.SensorDefaultConfiguration'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
     default-configurations.SensorDefaultConfiguration:
       type: object
       properties:
@@ -115,6 +84,17 @@ components:
         slaGroupId:
           type: number
           description: id of the SLA group applied by this configuration, if any
+    default-configurations.GetSensorDefaultConfigurationResponse:
+      $ref: '#/components/schemas/default-configurations.SensorDefaultConfiguration'
+    default-configurations.GetSensorDefaultConfigurationsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/default-configurations.SensorDefaultConfiguration'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
     common.Pagination:
       type: object
       required:
@@ -137,8 +117,28 @@ components:
         pages:
           type: integer
           example: 5
-    default-configurations.GetSensorDefaultConfigurationResponse:
-      $ref: '#/components/schemas/default-configurations.SensorDefaultConfiguration'
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
   responses:
     common.400BadRequestResponse:
       description: Bad Request

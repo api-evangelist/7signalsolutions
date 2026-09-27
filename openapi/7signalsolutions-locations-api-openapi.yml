@@ -295,7 +295,532 @@ paths:
       tags:
       - Locations
 components:
+  parameters:
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    locations.DeleteSensorLocationIds:
+      name: id
+      in: query
+      description: One or more location ids to delete
+      required: true
+      schema:
+        type: array
+        items:
+          type: number
+    locations.SensorLocationId:
+      name: locationId
+      in: path
+      description: Sensor Location Id
+      required: true
+      schema:
+        type: number
   schemas:
+    locations.CountryCodeName:
+      type: string
+      description: A CountryCode enum constant name. The ISO 3166-1 alpha-2 code (e.g. "US") is also accepted on write, case-insensitively, but is not reflected in this enum list
+      enum:
+      - WORLD
+      - ANDORRA
+      - UAE
+      - AFGHANISTAN
+      - ANTIGUA_AND_BARBUDA
+      - ALBANIA
+      - ANGUILLA
+      - ARMENIA
+      - NETHERLANDS_ANTILLES
+      - ARGENTINA
+      - AMERICAN_SAMOA
+      - AUSTRIA
+      - ANGOLA
+      - AUSTRALIA
+      - ARUBA
+      - ALAND_ISLANDS
+      - AZERBAIJAN
+      - ANTARCTICA
+      - BOSNIA_HERZ
+      - BARBADOS
+      - BANGLADESH
+      - BELGIUM
+      - BURKINA_FASO
+      - BULGARIA
+      - BAHRAIN
+      - BURUNDI
+      - BENIN
+      - SAINT_BARTHELEMY
+      - BERMUDA
+      - BRUNEI_DARUSSALAM
+      - BOLIVIA
+      - BONAIRE
+      - BRAZIL
+      - BAHAMAS
+      - BHUTAN
+      - BOTSWANA
+      - BOUVET_ISLAND
+      - BELARUS
+      - BELIZE
+      - CANADA
+      - COCOS_ISLANDS
+      - CONGO_DEMOCRATIC_REPUBLIC
+      - CENTRAL_AFRICAN_REPUBLIC
+      - CONGO
+      - SWITZERLAND
+      - COTE_DLVOIRE
+      - COOK_ISLANDS
+      - CHILE
+      - CAMEROON
+      - CHINA
+      - COLOMBIA
+      - EQUATORIAL_GUINEA
+      - COSTA_RICA
+      - CHRISTMAS_ISLAND
+      - CUBA
+      - CAP_VERDE
+      - CURACAO
+      - CYPRUS
+      - CZECH
+      - GERMANY
+      - DJIBOUTI
+      - DENMARK
+      - DOMINICA
+      - DOMINICAN_REPUBLIC
+      - ALGERIA
+      - ECUADOR
+      - ESTONIA
+      - EGYPT
+      - WESTERN_SAHARA
+      - ERITREA
+      - SPAIN
+      - ETHIOPIA
+      - FINLAND
+      - FIJI
+      - FALKLAND_ISLANDS
+      - MICRONESIA
+      - FAROE_ISLANDS
+      - FRANCE
+      - GABON
+      - GEORGIA
+      - UNITED_KINGDOM
+      - GRENEDA
+      - FRENCH_GUIANA
+      - GUERNSEY
+      - GHANA
+      - GIBRALTAR
+      - GUINEA
+      - GAMBIA
+      - GREENLAND
+      - GUADELOUPE
+      - GREECE
+      - SOUTH_GEORGIA_AND_THE_SOUTH_SANDWICH_ISLANDS
+      - GUATEMALA
+      - GUAM
+      - GUINEA_BISSAU
+      - GUYANA
+      - HEARD_AND_MCDONALD_ISLANDS
+      - HONDURAS
+      - HONG_KONG
+      - CROATIA
+      - HAITI
+      - HUNGARY
+      - INDONESIA
+      - IRELAND
+      - ISRAEL
+      - ISLE_OF_MAN
+      - INDIA
+      - BRITISH_INDIAN_OCEAN_TERRITORY
+      - IRAQ
+      - ICELAND
+      - IRAN
+      - ITALY
+      - JERSEY
+      - JAMAICA
+      - JAPAN
+      - JORDAN
+      - KENYA
+      - KYRGYZSTAN
+      - CAMBODIA
+      - KIRIBATI
+      - KOREA_NORTH
+      - COMOROS
+      - ST_KITTS_AND_NEVIS
+      - KOREA_ROC
+      - KUWAIT
+      - CAYMAN_ISLANDS
+      - KAZAKHSTAN
+      - LAOS
+      - LEBANON
+      - SAINT_LUCIA
+      - LIECHTENSTEIN
+      - SRI_LANKA
+      - LIBERIA
+      - LESOTHO
+      - LITHUANIA
+      - LUXEMBOURG
+      - LATVIA
+      - LIBYA
+      - MONACO
+      - MOLDOVA
+      - MOROCCO
+      - MONTENEGRO
+      - SAINT_MARTIN
+      - MADAGASCAR
+      - MARSHALL_ISLANDS
+      - MACAU
+      - MACEDONIA
+      - MALI
+      - MYANMAR
+      - MONGOLIA
+      - NORTHERN_MARIANA_ISLANDS
+      - MARTINIQUE
+      - MAURITANIA
+      - MONTSERRAT
+      - MALTA
+      - MAURITIUS
+      - MALDIVES
+      - MALAWI
+      - MEXICO
+      - MALAYSIA
+      - MOZAMBIQUE
+      - NAMIBIA
+      - NEW_CALEDONIA
+      - NIGER
+      - NORFOLK_ISLAND
+      - NIGERIA
+      - NICARAGUA
+      - NETHERLANDS
+      - NORWAY
+      - NEPAL
+      - NAURU
+      - NIUE
+      - NEW_ZEALAND
+      - OMAN
+      - PANAMA
+      - FRENCH_POLYNESIA
+      - PERU
+      - PAPUA_NEW_GUINEA
+      - PHILIPPINES
+      - PAKISTAN
+      - POLAND
+      - SAINT_PIERRE_AND_MIQUELON
+      - PITCAIRN
+      - PORTUGAL
+      - PUERTO_RICO
+      - PALESTINE
+      - PALAU
+      - PARAGUAY
+      - QATAR
+      - REUNION
+      - ROMANIA
+      - SERBIA
+      - RUSSIA
+      - RWANDA
+      - SAUDI_ARABIA
+      - SOLOMON_ISLANDS
+      - SEYCHELLES
+      - SUDAN
+      - SWEDEN
+      - SINGAPORE
+      - SAINT_HELENA
+      - SLOVENIA
+      - SVALBARD_AND_JAN_MAYEN
+      - SLOVAKIA
+      - SIERRA_LEONE
+      - SAN_MARINO
+      - SENEGAL
+      - SOMALIA
+      - SURINAME
+      - SOUTH_SUDAN
+      - SAO_TOME_AND_PRINCIPE
+      - EL_SALVADOR
+      - SINT_MAARTEN
+      - SYRIA
+      - SWAZILAND
+      - TURKS_AND_CAICOS_ISLANDS
+      - CHAD
+      - FRENCH_SOUTHERN_TERRITORIES
+      - TOGO
+      - TAIWAN
+      - TAJIKISTAN
+      - THAILAND
+      - TRINIDAD_Y_TOBAGO
+      - TUNISIA
+      - TOKELAU
+      - TIMOR_LESTE
+      - TURKMENISTAN
+      - TONGA
+      - TURKEY
+      - TANZANIA
+      - TUVULU
+      - UKRAINE
+      - UGANDA
+      - UNITED_STATES_MINOR_OUTLYING_ISLANDS
+      - UNITED_STATES
+      - URUGUAY
+      - UZBEKISTAN
+      - HOLY_SEE
+      - SAINT_VINCENT_AND_THE_GRENADINES
+      - VENEZUELA
+      - VIRGIN_ISLANDS
+      - VIRGIN_ISLANDS_BRITISH
+      - VIETNAM
+      - VANUATU
+      - WALLIS_AND_FUTUNA
+      - SAMOA
+      - YEMEN
+      - MAYOTTE
+      - SOUTH_AFRICA
+      - ZAMBIA
+      - ZIMBABWE
+      - UNKNOWN
+      - UNDEFINED
+    locations.SensorUpdateLocationRequest:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        locationType:
+          type: string
+          enum:
+          - UNDEFINED
+          - REGION
+          - COUNTRY
+          - STATE
+          - CITY
+          - DISTRICT
+          - BUILDING
+        timeZone:
+          description: A java.util.TimeZone id, "INHERIT" to inherit from the parent location, or omit to leave unchanged. "INHERIT" only resolves to a real ancestor's timezone if this location has a parent Location (was created with parentLocationId) - a top-level location under an Organization has no parent Location to inherit from, so it falls back to the Carat server's own default timezone instead
+          example: America/New_York
+          oneOf:
+          - $ref: '#/components/schemas/locations.TimeZoneId'
+          - type: string
+            enum:
+            - INHERIT
+        countryCode:
+          $ref: '#/components/schemas/locations.CountryCodeName'
+    locations.GetSensorLocationResponse:
+      $ref: '#/components/schemas/locations.SensorLocation'
+    locations.AgentLocationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        parent:
+          type: string
+          format: uuid
+    locations.SensorCreateLocationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        locationType:
+          type: string
+          enum:
+          - UNDEFINED
+          - REGION
+          - COUNTRY
+          - STATE
+          - CITY
+          - DISTRICT
+          - BUILDING
+        parentOrganizationId:
+          type: number
+          example: '123'
+          description: The parent Organization's id, to create this as a top-level location under an Organization - exactly one of parentOrganizationId/parentLocationId must be provided
+        parentLocationId:
+          type: number
+          example: '42'
+          description: The parent Location's id, to create this as a sub-location under another Location instead - exactly one of parentOrganizationId/parentLocationId must be provided
+        timeZone:
+          description: A java.util.TimeZone id, or "INHERIT"/omit to leave it unset. "INHERIT" only resolves to a real ancestor's timezone when created with parentLocationId - under parentOrganizationId there's no parent Location to inherit from, so it falls back to the Carat server's own default timezone instead
+          example: America/New_York
+          oneOf:
+          - $ref: '#/components/schemas/locations.TimeZoneId'
+          - type: string
+            enum:
+            - INHERIT
+        countryCode:
+          $ref: '#/components/schemas/locations.CountryCodeName'
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    locations.SensorLocation:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        parentId:
+          type: number
+          description: The parent Location's id - null if this is a top-level location under an Organization rather than a sub-location of another Location
+        parentOrganizationId:
+          type: number
+          description: The parent Organization's id - always present, even for a sub-location of another Location (derived from that parent Location's own organization)
+        countryCode:
+          $ref: '#/components/schemas/locations.CountryCodeName'
+        timeZone:
+          $ref: '#/components/schemas/locations.TimeZoneId'
+        inheritedTimeZone:
+          $ref: '#/components/schemas/locations.TimeZoneId'
+        timeZoneLocation:
+          type: string
+          example: hm1
+          description: Name of the ancestor Location where the inherited timezone came from - only meaningful when timeZone is null
+    locations.AgentLocationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        organization:
+          type: string
+        parent:
+          type: string
+          format: uuid
+    locations.PostSensorLocationsRequest:
+      type: object
+      properties:
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/locations.SensorCreateLocationRequest'
+    locations.PutSensorLocationsRequest:
+      type: object
+      properties:
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/locations.SensorUpdateLocationRequest'
+    service-areas.AgentServiceArea:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        address:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        locationId:
+          type: string
+          format: uuid
+    locations.GetAgentLocationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        organization:
+          type: string
+        parent:
+          type: string
+          format: uuid
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/locations.AgentLocationResponse'
+        serviceAreas:
+          type: array
+          items:
+            $ref: '#/components/schemas/service-areas.AgentServiceArea'
+    locations.SensorSingleUpdateLocationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        locationType:
+          type: string
+          enum:
+          - UNDEFINED
+          - REGION
+          - COUNTRY
+          - STATE
+          - CITY
+          - DISTRICT
+          - BUILDING
+        timeZone:
+          description: A java.util.TimeZone id, "INHERIT" to inherit from the parent location, or omit to leave unchanged. "INHERIT" only resolves to a real ancestor's timezone if this location has a parent Location (was created with parentLocationId) - a top-level location under an Organization has no parent Location to inherit from, so it falls back to the Carat server's own default timezone instead
+          example: America/New_York
+          oneOf:
+          - $ref: '#/components/schemas/locations.TimeZoneId'
+          - type: string
+            enum:
+            - INHERIT
+        countryCode:
+          $ref: '#/components/schemas/locations.CountryCodeName'
+    locations.GetAgentLocationsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/locations.AgentLocationResponse'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
     locations.TimeZoneId:
       type: string
       description: A valid TimeZone identifier
@@ -928,204 +1453,6 @@ components:
       - W-SU
       - WET
       - Zulu
-    locations.GetAgentLocationResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        organization:
-          type: string
-        parent:
-          type: string
-          format: uuid
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/locations.AgentLocationResponse'
-        serviceAreas:
-          type: array
-          items:
-            $ref: '#/components/schemas/service-areas.AgentServiceArea'
-    locations.SensorCreateLocationRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        locationType:
-          type: string
-          enum:
-          - UNDEFINED
-          - REGION
-          - COUNTRY
-          - STATE
-          - CITY
-          - DISTRICT
-          - BUILDING
-        parentOrganizationId:
-          type: number
-          example: '123'
-          description: The parent Organization's id, to create this as a top-level location under an Organization - exactly one of parentOrganizationId/parentLocationId must be provided
-        parentLocationId:
-          type: number
-          example: '42'
-          description: The parent Location's id, to create this as a sub-location under another Location instead - exactly one of parentOrganizationId/parentLocationId must be provided
-        timeZone:
-          description: A java.util.TimeZone id, or "INHERIT"/omit to leave it unset. "INHERIT" only resolves to a real ancestor's timezone when created with parentLocationId - under parentOrganizationId there's no parent Location to inherit from, so it falls back to the Carat server's own default timezone instead
-          example: America/New_York
-          oneOf:
-          - $ref: '#/components/schemas/locations.TimeZoneId'
-          - type: string
-            enum:
-            - INHERIT
-        countryCode:
-          $ref: '#/components/schemas/locations.CountryCodeName'
-    locations.AgentLocationResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        organization:
-          type: string
-        parent:
-          type: string
-          format: uuid
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
-    locations.PostSensorLocationsRequest:
-      type: object
-      properties:
-        locations:
-          type: array
-          items:
-            $ref: '#/components/schemas/locations.SensorCreateLocationRequest'
-    common.Pagination:
-      type: object
-      required:
-      - perPage
-      - page
-      - total
-      - pages
-      properties:
-        perPage:
-          type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
-    locations.AgentLocationRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        parent:
-          type: string
-          format: uuid
-    locations.GetAgentLocationsResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/locations.AgentLocationResponse'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    locations.PutSensorLocationsRequest:
-      type: object
-      properties:
-        locations:
-          type: array
-          items:
-            $ref: '#/components/schemas/locations.SensorUpdateLocationRequest'
-    locations.SensorUpdateLocationRequest:
-      type: object
-      properties:
-        id:
-          type: number
-        name:
-          type: string
-        description:
-          type: string
-        locationType:
-          type: string
-          enum:
-          - UNDEFINED
-          - REGION
-          - COUNTRY
-          - STATE
-          - CITY
-          - DISTRICT
-          - BUILDING
-        timeZone:
-          description: A java.util.TimeZone id, "INHERIT" to inherit from the parent location, or omit to leave unchanged. "INHERIT" only resolves to a real ancestor's timezone if this location has a parent Location (was created with parentLocationId) - a top-level location under an Organization has no parent Location to inherit from, so it falls back to the Carat server's own default timezone instead
-          example: America/New_York
-          oneOf:
-          - $ref: '#/components/schemas/locations.TimeZoneId'
-          - type: string
-            enum:
-            - INHERIT
-        countryCode:
-          $ref: '#/components/schemas/locations.CountryCodeName'
-    locations.SensorLocation:
-      type: object
-      properties:
-        id:
-          type: number
-        name:
-          type: string
-        description:
-          type: string
-        parentId:
-          type: number
-          description: The parent Location's id - null if this is a top-level location under an Organization rather than a sub-location of another Location
-        parentOrganizationId:
-          type: number
-          description: The parent Organization's id - always present, even for a sub-location of another Location (derived from that parent Location's own organization)
-        countryCode:
-          $ref: '#/components/schemas/locations.CountryCodeName'
-        timeZone:
-          $ref: '#/components/schemas/locations.TimeZoneId'
-        inheritedTimeZone:
-          $ref: '#/components/schemas/locations.TimeZoneId'
-        timeZoneLocation:
-          type: string
-          example: hm1
-          description: Name of the ancestor Location where the inherited timezone came from - only meaningful when timeZone is null
-    locations.GetSensorLocationResponse:
-      $ref: '#/components/schemas/locations.SensorLocation'
     locations.GetSensorLocationsResponse:
       type: object
       properties:
@@ -1135,309 +1462,6 @@ components:
             $ref: '#/components/schemas/locations.SensorLocation'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
-    locations.SensorSingleUpdateLocationRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        description:
-          type: string
-        locationType:
-          type: string
-          enum:
-          - UNDEFINED
-          - REGION
-          - COUNTRY
-          - STATE
-          - CITY
-          - DISTRICT
-          - BUILDING
-        timeZone:
-          description: A java.util.TimeZone id, "INHERIT" to inherit from the parent location, or omit to leave unchanged. "INHERIT" only resolves to a real ancestor's timezone if this location has a parent Location (was created with parentLocationId) - a top-level location under an Organization has no parent Location to inherit from, so it falls back to the Carat server's own default timezone instead
-          example: America/New_York
-          oneOf:
-          - $ref: '#/components/schemas/locations.TimeZoneId'
-          - type: string
-            enum:
-            - INHERIT
-        countryCode:
-          $ref: '#/components/schemas/locations.CountryCodeName'
-    locations.CountryCodeName:
-      type: string
-      description: A CountryCode enum constant name. The ISO 3166-1 alpha-2 code (e.g. "US") is also accepted on write, case-insensitively, but is not reflected in this enum list
-      enum:
-      - WORLD
-      - ANDORRA
-      - UAE
-      - AFGHANISTAN
-      - ANTIGUA_AND_BARBUDA
-      - ALBANIA
-      - ANGUILLA
-      - ARMENIA
-      - NETHERLANDS_ANTILLES
-      - ARGENTINA
-      - AMERICAN_SAMOA
-      - AUSTRIA
-      - ANGOLA
-      - AUSTRALIA
-      - ARUBA
-      - ALAND_ISLANDS
-      - AZERBAIJAN
-      - ANTARCTICA
-      - BOSNIA_HERZ
-      - BARBADOS
-      - BANGLADESH
-      - BELGIUM
-      - BURKINA_FASO
-      - BULGARIA
-      - BAHRAIN
-      - BURUNDI
-      - BENIN
-      - SAINT_BARTHELEMY
-      - BERMUDA
-      - BRUNEI_DARUSSALAM
-      - BOLIVIA
-      - BONAIRE
-      - BRAZIL
-      - BAHAMAS
-      - BHUTAN
-      - BOTSWANA
-      - BOUVET_ISLAND
-      - BELARUS
-      - BELIZE
-      - CANADA
-      - COCOS_ISLANDS
-      - CONGO_DEMOCRATIC_REPUBLIC
-      - CENTRAL_AFRICAN_REPUBLIC
-      - CONGO
-      - SWITZERLAND
-      - COTE_DLVOIRE
-      - COOK_ISLANDS
-      - CHILE
-      - CAMEROON
-      - CHINA
-      - COLOMBIA
-      - EQUATORIAL_GUINEA
-      - COSTA_RICA
-      - CHRISTMAS_ISLAND
-      - CUBA
-      - CAP_VERDE
-      - CURACAO
-      - CYPRUS
-      - CZECH
-      - GERMANY
-      - DJIBOUTI
-      - DENMARK
-      - DOMINICA
-      - DOMINICAN_REPUBLIC
-      - ALGERIA
-      - ECUADOR
-      - ESTONIA
-      - EGYPT
-      - WESTERN_SAHARA
-      - ERITREA
-      - SPAIN
-      - ETHIOPIA
-      - FINLAND
-      - FIJI
-      - FALKLAND_ISLANDS
-      - MICRONESIA
-      - FAROE_ISLANDS
-      - FRANCE
-      - GABON
-      - GEORGIA
-      - UNITED_KINGDOM
-      - GRENEDA
-      - FRENCH_GUIANA
-      - GUERNSEY
-      - GHANA
-      - GIBRALTAR
-      - GUINEA
-      - GAMBIA
-      - GREENLAND
-      - GUADELOUPE
-      - GREECE
-      - SOUTH_GEORGIA_AND_THE_SOUTH_SANDWICH_ISLANDS
-      - GUATEMALA
-      - GUAM
-      - GUINEA_BISSAU
-      - GUYANA
-      - HEARD_AND_MCDONALD_ISLANDS
-      - HONDURAS
-      - HONG_KONG
-      - CROATIA
-      - HAITI
-      - HUNGARY
-      - INDONESIA
-      - IRELAND
-      - ISRAEL
-      - ISLE_OF_MAN
-      - INDIA
-      - BRITISH_INDIAN_OCEAN_TERRITORY
-      - IRAQ
-      - ICELAND
-      - IRAN
-      - ITALY
-      - JERSEY
-      - JAMAICA
-      - JAPAN
-      - JORDAN
-      - KENYA
-      - KYRGYZSTAN
-      - CAMBODIA
-      - KIRIBATI
-      - KOREA_NORTH
-      - COMOROS
-      - ST_KITTS_AND_NEVIS
-      - KOREA_ROC
-      - KUWAIT
-      - CAYMAN_ISLANDS
-      - KAZAKHSTAN
-      - LAOS
-      - LEBANON
-      - SAINT_LUCIA
-      - LIECHTENSTEIN
-      - SRI_LANKA
-      - LIBERIA
-      - LESOTHO
-      - LITHUANIA
-      - LUXEMBOURG
-      - LATVIA
-      - LIBYA
-      - MONACO
-      - MOLDOVA
-      - MOROCCO
-      - MONTENEGRO
-      - SAINT_MARTIN
-      - MADAGASCAR
-      - MARSHALL_ISLANDS
-      - MACAU
-      - MACEDONIA
-      - MALI
-      - MYANMAR
-      - MONGOLIA
-      - NORTHERN_MARIANA_ISLANDS
-      - MARTINIQUE
-      - MAURITANIA
-      - MONTSERRAT
-      - MALTA
-      - MAURITIUS
-      - MALDIVES
-      - MALAWI
-      - MEXICO
-      - MALAYSIA
-      - MOZAMBIQUE
-      - NAMIBIA
-      - NEW_CALEDONIA
-      - NIGER
-      - NORFOLK_ISLAND
-      - NIGERIA
-      - NICARAGUA
-      - NETHERLANDS
-      - NORWAY
-      - NEPAL
-      - NAURU
-      - NIUE
-      - NEW_ZEALAND
-      - OMAN
-      - PANAMA
-      - FRENCH_POLYNESIA
-      - PERU
-      - PAPUA_NEW_GUINEA
-      - PHILIPPINES
-      - PAKISTAN
-      - POLAND
-      - SAINT_PIERRE_AND_MIQUELON
-      - PITCAIRN
-      - PORTUGAL
-      - PUERTO_RICO
-      - PALESTINE
-      - PALAU
-      - PARAGUAY
-      - QATAR
-      - REUNION
-      - ROMANIA
-      - SERBIA
-      - RUSSIA
-      - RWANDA
-      - SAUDI_ARABIA
-      - SOLOMON_ISLANDS
-      - SEYCHELLES
-      - SUDAN
-      - SWEDEN
-      - SINGAPORE
-      - SAINT_HELENA
-      - SLOVENIA
-      - SVALBARD_AND_JAN_MAYEN
-      - SLOVAKIA
-      - SIERRA_LEONE
-      - SAN_MARINO
-      - SENEGAL
-      - SOMALIA
-      - SURINAME
-      - SOUTH_SUDAN
-      - SAO_TOME_AND_PRINCIPE
-      - EL_SALVADOR
-      - SINT_MAARTEN
-      - SYRIA
-      - SWAZILAND
-      - TURKS_AND_CAICOS_ISLANDS
-      - CHAD
-      - FRENCH_SOUTHERN_TERRITORIES
-      - TOGO
-      - TAIWAN
-      - TAJIKISTAN
-      - THAILAND
-      - TRINIDAD_Y_TOBAGO
-      - TUNISIA
-      - TOKELAU
-      - TIMOR_LESTE
-      - TURKMENISTAN
-      - TONGA
-      - TURKEY
-      - TANZANIA
-      - TUVULU
-      - UKRAINE
-      - UGANDA
-      - UNITED_STATES_MINOR_OUTLYING_ISLANDS
-      - UNITED_STATES
-      - URUGUAY
-      - UZBEKISTAN
-      - HOLY_SEE
-      - SAINT_VINCENT_AND_THE_GRENADINES
-      - VENEZUELA
-      - VIRGIN_ISLANDS
-      - VIRGIN_ISLANDS_BRITISH
-      - VIETNAM
-      - VANUATU
-      - WALLIS_AND_FUTUNA
-      - SAMOA
-      - YEMEN
-      - MAYOTTE
-      - SOUTH_AFRICA
-      - ZAMBIA
-      - ZIMBABWE
-      - UNKNOWN
-      - UNDEFINED
-    service-areas.AgentServiceArea:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        address:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        locationId:
-          type: string
-          format: uuid
   responses:
     common.400BadRequestResponse:
       description: Bad Request
@@ -1451,30 +1475,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
-  parameters:
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
-    locations.SensorLocationId:
-      name: locationId
-      in: path
-      description: Sensor Location Id
-      required: true
-      schema:
-        type: number
-    locations.DeleteSensorLocationIds:
-      name: id
-      in: query
-      description: One or more location ids to delete
-      required: true
-      schema:
-        type: array
-        items:
-          type: number
   securitySchemes:
     oauth2:
       type: oauth2

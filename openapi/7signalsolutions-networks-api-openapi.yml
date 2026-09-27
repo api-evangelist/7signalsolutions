@@ -270,7 +270,31 @@ paths:
       tags:
       - Networks
 components:
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
+    networks.GetSensorNetworkResponse:
+      $ref: '#/components/schemas/networks.SensorNetwork'
+    networks.GetSensorNetworksResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/networks.SensorNetwork'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
     common.ResponseStatusException:
       type: object
       required:
@@ -293,56 +317,12 @@ components:
           type: string
         requestId:
           type: string
-    networks.PostSensorNetworkRequest:
-      type: object
-      required:
-      - name
-      - networkKeyId
-      properties:
-        name:
-          type: string
-        displayName:
-          type: string
-        networkKeyId:
-          type: integer
-    networks.GetAgentNetworksResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/networks.AgentNetwork'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    common.Pagination:
-      type: object
-      required:
-      - perPage
-      - page
-      - total
-      - pages
-      properties:
-        perPage:
-          type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
-    networks.AgentNetworkRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        isEnabled:
-          type: boolean
+    networks.GetAgentNetworkResponse:
+      $ref: '#/components/schemas/networks.AgentNetwork'
+    networks.PostAgentNetworksRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/networks.AgentNetworkRequest'
     networks.SensorNetwork:
       type: object
       properties:
@@ -374,8 +354,63 @@ components:
           type: boolean
         ieee80211rClientSupportEnabled6000MHz:
           type: boolean
-    networks.GetSensorNetworkResponse:
-      $ref: '#/components/schemas/networks.SensorNetwork'
+    networks.AgentNetwork:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        isEnabled:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    networks.AgentNetworkRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        isEnabled:
+          type: boolean
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    networks.PostSensorNetworkRequest:
+      type: object
+      required:
+      - name
+      - networkKeyId
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        networkKeyId:
+          type: integer
     networks.PutSensorNetworkRequest:
       type: object
       required:
@@ -416,50 +451,15 @@ components:
           type: boolean
         ieee80211rClientSupportEnabled6000MHz:
           type: boolean
-    networks.GetSensorNetworksResponse:
+    networks.GetAgentNetworksResponse:
       type: object
       properties:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/networks.SensorNetwork'
+            $ref: '#/components/schemas/networks.AgentNetwork'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
-    networks.PostAgentNetworksRequest:
-      type: array
-      items:
-        $ref: '#/components/schemas/networks.AgentNetworkRequest'
-    networks.AgentNetwork:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        isEnabled:
-          type: boolean
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    networks.GetAgentNetworkResponse:
-      $ref: '#/components/schemas/networks.AgentNetwork'
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   parameters:
     common.OrganizationRequestParam:
       name: organization

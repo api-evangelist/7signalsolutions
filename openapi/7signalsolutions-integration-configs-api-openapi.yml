@@ -366,61 +366,13 @@ paths:
       security:
       - oauth2: []
 components:
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
-    metadata.MerakiIntegrationConfig:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        runOption:
-          type: string
-        scheduledOption:
-          type: string
-        agentsEnabled:
-          type: boolean
-        agentsFullSynchronization:
-          type: boolean
-        sensorsEnabled:
-          type: boolean
-        createdBy:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        organization:
-          $ref: '#/components/schemas/metadata.AggregateReferenceOrganizationUUID'
-        apiKeyId:
-          $ref: '#/components/schemas/metadata.AggregateReferenceApiKeyUUID'
-        group:
-          $ref: '#/components/schemas/metadata.AggregateReferenceGroupUUID'
-    metadata.PageModelMerakiIntegrationConfig:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/metadata.MerakiIntegrationConfig'
-        pagination:
-          $ref: '#/components/schemas/metadata.Pagination'
-    metadata.ServiceNowIntegrationConfigUpdateRequest:
+    metadata.ServiceNowIntegrationConfigCreateRequest:
       type: object
       required:
       - serviceNowUrl
       - authTypeEnabled
+      - organizationId
       properties:
         serviceNowUrl:
           type: string
@@ -442,44 +394,152 @@ components:
           type: string
         apiKeyHeader:
           type: string
+          description: Defaults to 'x-sn-apikey' if blank or null
         apiKeyKey:
           type: string
-    metadata.ServiceNowIntegrationConfig:
+        organizationId:
+          type: string
+          format: uuid
+    metadata.MerakiIntegrationConfigResponse:
       type: object
       properties:
         id:
           type: string
           format: uuid
-        serviceNowUrl:
+        merakiApiKey:
           type: string
-        authTypeEnabled:
+        clientId:
           type: string
-          enum:
-          - BASIC_AUTH
-          - OAUTH2
-          - API_KEY
-          - NONE
-        basicAuthUsername:
+        clientSecret:
           type: string
-        oauth2ClientId:
+        runOption:
           type: string
-        apiKeyHeader:
+        scheduledOption:
           type: string
+        agentsEnabled:
+          type: boolean
+        agentsFullSynchronization:
+          type: boolean
+        sensorsEnabled:
+          type: boolean
+        scheduledDayOfWeek:
+          type: integer
+        scheduledWeekOfMonth:
+          type: integer
         createdBy:
           type: string
         createdAt:
           type: string
           format: date-time
         organization:
-          $ref: '#/components/schemas/metadata.AggregateReferenceOrganization'
-    metadata.AggregateReferenceOrganization:
+          $ref: '#/components/schemas/metadata.AggregateReferenceOrganizationUUID'
+        apiKey:
+          $ref: '#/components/schemas/metadata.AggregateReferenceApiKeyUUID'
+        group:
+          $ref: '#/components/schemas/metadata.AggregateReferenceGroupUUID'
+    metadata.MerakiIntegrationConfigPutRequest:
+      required:
+      - runOption
+      - scheduledOption
+      type: object
+      properties:
+        runOption:
+          type: string
+          enum:
+          - ONE_TIME
+          - SCHEDULED
+        scheduledOption:
+          type: string
+          enum:
+          - DISABLED
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+        agentsEnabled:
+          type: boolean
+        agentsFullSynchronization:
+          type: boolean
+        sensorsEnabled:
+          type: boolean
+        scheduledDayOfWeek:
+          type: integer
+        scheduledWeekOfMonth:
+          type: integer
+    metadata.MerakiIntegrationConfigRequest:
+      required:
+      - apiKey
+      - runOption
+      - scheduledOption
+      type: object
+      properties:
+        apiKey:
+          type: string
+        runOption:
+          type: string
+          enum:
+          - ONE_TIME
+          - SCHEDULED
+        scheduledOption:
+          type: string
+          enum:
+          - DISABLED
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+        agentsEnabled:
+          type: boolean
+        agentsFullSynchronization:
+          type: boolean
+        sensorsEnabled:
+          type: boolean
+        scheduledDayOfWeek:
+          type: integer
+        scheduledWeekOfMonth:
+          type: integer
+        organizationId:
+          type: string
+          format: uuid
+        sapphireGroupId:
+          type: string
+          format: uuid
+    metadata.AggregateReferenceApiKeyUUID:
       type: object
       properties:
         id:
           type: string
           format: uuid
-        name:
+    metadata.AggregateReferenceOrganizationUUID:
+      type: object
+      properties:
+        id:
           type: string
+          format: uuid
+    metadata.Pagination:
+      type: object
+      properties:
+        perPage:
+          type: integer
+          format: int32
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+          description: The current page number. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
+        total:
+          type: integer
+          format: int64
+        pages:
+          type: integer
+          format: int32
+    metadata.PageModelMerakiIntegrationConfig:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.MerakiIntegrationConfig'
+        pagination:
+          $ref: '#/components/schemas/metadata.Pagination'
     metadata.ServiceNowIntegrationConfigPatchRequest:
       type: object
       properties:
@@ -521,128 +581,6 @@ components:
           type:
           - string
           - 'null'
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
-    metadata.AggregateReferenceGroupUUID:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    metadata.Pagination:
-      type: object
-      properties:
-        perPage:
-          type: integer
-          format: int32
-        page:
-          type: integer
-          format: int32
-          minimum: 0
-          description: The current page number. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
-        total:
-          type: integer
-          format: int64
-        pages:
-          type: integer
-          format: int32
-    metadata.AggregateReferenceApiKeyUUID:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    metadata.MerakiIntegrationConfigResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        merakiApiKey:
-          type: string
-        clientId:
-          type: string
-        clientSecret:
-          type: string
-        runOption:
-          type: string
-        scheduledOption:
-          type: string
-        agentsEnabled:
-          type: boolean
-        agentsFullSynchronization:
-          type: boolean
-        sensorsEnabled:
-          type: boolean
-        scheduledDayOfWeek:
-          type: integer
-        scheduledWeekOfMonth:
-          type: integer
-        createdBy:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        organization:
-          $ref: '#/components/schemas/metadata.AggregateReferenceOrganizationUUID'
-        apiKey:
-          $ref: '#/components/schemas/metadata.AggregateReferenceApiKeyUUID'
-        group:
-          $ref: '#/components/schemas/metadata.AggregateReferenceGroupUUID'
-    metadata.AggregateReferenceOrganizationUUID:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    metadata.MerakiIntegrationConfigPutRequest:
-      required:
-      - runOption
-      - scheduledOption
-      type: object
-      properties:
-        runOption:
-          type: string
-          enum:
-          - ONE_TIME
-          - SCHEDULED
-        scheduledOption:
-          type: string
-          enum:
-          - DISABLED
-          - DAILY
-          - WEEKLY
-          - MONTHLY
-        agentsEnabled:
-          type: boolean
-        agentsFullSynchronization:
-          type: boolean
-        sensorsEnabled:
-          type: boolean
-        scheduledDayOfWeek:
-          type: integer
-        scheduledWeekOfMonth:
-          type: integer
     metadata.ServiceNowIntegrationConfigWithOrgId:
       type: object
       properties:
@@ -671,12 +609,102 @@ components:
           format: date-time
         organization:
           $ref: '#/components/schemas/metadata.AggregateReferenceOrganizationUUID'
-    metadata.ServiceNowIntegrationConfigCreateRequest:
+    metadata.AggregateReferenceGroupUUID:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    metadata.ServiceNowIntegrationConfig:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        serviceNowUrl:
+          type: string
+        authTypeEnabled:
+          type: string
+          enum:
+          - BASIC_AUTH
+          - OAUTH2
+          - API_KEY
+          - NONE
+        basicAuthUsername:
+          type: string
+        oauth2ClientId:
+          type: string
+        apiKeyHeader:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        organization:
+          $ref: '#/components/schemas/metadata.AggregateReferenceOrganization'
+    metadata.AggregateReferenceOrganization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    metadata.MerakiIntegrationConfig:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        runOption:
+          type: string
+        scheduledOption:
+          type: string
+        agentsEnabled:
+          type: boolean
+        agentsFullSynchronization:
+          type: boolean
+        sensorsEnabled:
+          type: boolean
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        organization:
+          $ref: '#/components/schemas/metadata.AggregateReferenceOrganizationUUID'
+        apiKeyId:
+          $ref: '#/components/schemas/metadata.AggregateReferenceApiKeyUUID'
+        group:
+          $ref: '#/components/schemas/metadata.AggregateReferenceGroupUUID'
+    metadata.ServiceNowIntegrationConfigUpdateRequest:
       type: object
       required:
       - serviceNowUrl
       - authTypeEnabled
-      - organizationId
       properties:
         serviceNowUrl:
           type: string
@@ -698,49 +726,8 @@ components:
           type: string
         apiKeyHeader:
           type: string
-          description: Defaults to 'x-sn-apikey' if blank or null
         apiKeyKey:
           type: string
-        organizationId:
-          type: string
-          format: uuid
-    metadata.MerakiIntegrationConfigRequest:
-      required:
-      - apiKey
-      - runOption
-      - scheduledOption
-      type: object
-      properties:
-        apiKey:
-          type: string
-        runOption:
-          type: string
-          enum:
-          - ONE_TIME
-          - SCHEDULED
-        scheduledOption:
-          type: string
-          enum:
-          - DISABLED
-          - DAILY
-          - WEEKLY
-          - MONTHLY
-        agentsEnabled:
-          type: boolean
-        agentsFullSynchronization:
-          type: boolean
-        sensorsEnabled:
-          type: boolean
-        scheduledDayOfWeek:
-          type: integer
-        scheduledWeekOfMonth:
-          type: integer
-        organizationId:
-          type: string
-          format: uuid
-        sapphireGroupId:
-          type: string
-          format: uuid
     metadata.PageModelServiceNowIntegrationConfig:
       type: object
       properties:
@@ -758,6 +745,13 @@ components:
       required: false
       schema:
         type: integer
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
     common.SortOrderParam:
       name: order
       in: query
@@ -776,13 +770,19 @@ components:
       schema:
         type: integer
         minimum: 0
-    common.SortFieldParam:
-      name: sortField
-      in: query
-      description: The field on which to sort the results
-      required: false
-      schema:
-        type: string
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

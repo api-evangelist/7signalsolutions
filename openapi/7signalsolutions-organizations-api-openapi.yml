@@ -121,6 +121,16 @@ paths:
       - oauth2: []
 components:
   schemas:
+    metadata.Feature:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        feature:
+          type: string
+        description:
+          type: string
     metadata.PageModelOrganization:
       type: object
       properties:
@@ -152,6 +162,18 @@ components:
           type: string
         requestId:
           type: string
+    metadata.Organization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        connectionId:
+          type: string
+        mobileEyeOrgCode:
+          type: string
     metadata.PageModelFeature:
       type: object
       properties:
@@ -178,28 +200,6 @@ components:
         pages:
           type: integer
           format: int32
-    metadata.Organization:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        connectionId:
-          type: string
-        mobileEyeOrgCode:
-          type: string
-    metadata.Feature:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        feature:
-          type: string
-        description:
-          type: string
   responses:
     common.400BadRequestResponse:
       description: Bad Request
@@ -232,13 +232,6 @@ components:
       schema:
         type: integer
         minimum: 0
-    common.SortFieldParam:
-      name: sortField
-      in: query
-      description: The field on which to sort the results
-      required: false
-      schema:
-        type: string
     common.PerPageRequestParam:
       name: perPage
       in: query
@@ -246,6 +239,13 @@ components:
       required: false
       schema:
         type: integer
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
   securitySchemes:
     oauth2:
       type: oauth2

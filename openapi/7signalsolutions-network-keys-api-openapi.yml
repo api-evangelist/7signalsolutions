@@ -1010,26 +1010,52 @@ paths:
       - Network Keys
 components:
   schemas:
-    network-keys.ScepKeySize:
+    network-keys.TlsVersion:
       type: string
-      description: WPA_EAP_SCEP only - RSA key size for the Eye-generated keypair. Optional, defaults to RSA_2048 when omitted.
+      description: EAP_FAST only - optional, defaults to TLS_1_0 when omitted or explicitly ANY
       enum:
-      - RSA_2048
-      - RSA_3072
-      - RSA_4096
+      - ANY
+      - TLS_1_0
+      - TLS_1_1
+      - TLS_1_2
+      - TLS_1_3
+      - TLS_1_0_AND_TLS_1_1
+      - TLS_1_0_AND_TLS_1_1_AND_TLS_1_2
+      - TLS_1_0_AND_TLS_1_1_AND_TLS_1_2_AND_TLS_1_3
+    network-keys.InnerAuthenticationMethod:
+      type: string
+      description: EAP_TTLS only (WPA_EAP or IEEE_802_1X) - a separate, larger enum than PEAP's own PEAPInnerAuthenticationMethod. The caCertificate/clientCertificate/privateKey/privateKeyPassword fields on TtlsInnerAuthentication only apply when this is EAP_TLS
+      enum:
+      - NOT_SET
+      - MSCHAP
+      - MSCHAPV2
+      - PAP
+      - CHAP
+      - EAP_MSCHAPV2
+      - EAP_TLS
+      - EAP_GTC
+      - EAP_OTP
+      - EAP_MD5
     network-keys.PEAPLabel:
       type: string
       description: EAP_PEAP only (WPA_EAP or IEEE_802_1X) - optional, defaults to CLIENT_EAP_ENCRYPTION when omitted
       enum:
       - CLIENT_EAP_ENCRYPTION
       - CLIENT_PEAP_ENCRYPTION
-    network-keys.WpaVersion:
-      type: string
-      description: The WPA generation a WPA_EAP key is used with - distinct from the top-level 'type' WPA1/WPA2/WPA3 values, which instead select a WPA-PSK request shape.
-      enum:
-      - WPA1
-      - WPA2
-      - WPA3
+    network-keys.PeapInnerAuthentication:
+      type: object
+      description: EAP_PEAP only (WPA_EAP or IEEE_802_1X) - the "Inner Authentication" panel. caCertificate/clientCertificate/privateKey/privateKeyPassword only apply when method is TLS; clientCertificate is required in that case.
+      properties:
+        method:
+          $ref: '#/components/schemas/network-keys.PEAPInnerAuthenticationMethod'
+        caCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        clientCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        privateKey:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        privateKeyPassword:
+          type: string
     network-keys.EapMethod:
       type: string
       description: Determines which WPA_EAP or IEEE_802_1X request shape applies - see the request examples for each. IEEE_802_1X only supports 5 of these 7 values - EAP_PSK and EAP_FAST are WPA_EAP only.
@@ -1041,16 +1067,99 @@ components:
       - EAP_FAST
       - LEAP
       - EAP_MSCHAP_V2
-    network-keys.HttpAuthenticationPage:
+    network-keys.CertificateFile:
       type: object
-      description: HTTP_AUTHENTICATION only - one step in a multi-step login/logout sequence. Configurator's own UI keys pages by a page number, but that number is purely a transient UI grouping aid never actually persisted - only the resulting order survives, which is why this shape is just a plain ordered list of pages with no page-number field.
+      description: A certificate/private-key/PAC file. certificateBytes is the raw file content, base64-encoded.
       properties:
-        fields:
+        fileName:
+          type: string
+        certificateBytes:
+          type: string
+          format: byte
+    network-keys.CustomFieldEntry:
+      type: object
+      properties:
+        scope:
+          type: string
+          enum:
+          - GLOBAL
+          - NETWORK
+        name:
+          type: string
+        value:
+          type: string
+    network-keys.GetNetworkKeysResponse:
+      type: object
+      properties:
+        results:
           type: array
           items:
-            $ref: '#/components/schemas/network-keys.HttpAuthenticationField'
-    network-keys.PutNetworkKeyRequest:
-      $ref: '#/components/schemas/network-keys.PostNetworkKeyRequest'
+            $ref: '#/components/schemas/network-keys.NetworkKey'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    network-keys.PEAPInnerAuthenticationMethod:
+      type: string
+      description: EAP_PEAP only (WPA_EAP or IEEE_802_1X) - the caCertificate/clientCertificate/privateKey/privateKeyPassword fields on PeapInnerAuthentication only apply when this is TLS
+      enum:
+      - NOT_SET
+      - MSCHAPV2
+      - TLS
+      - GTC
+      - OTP
+      - MD5
+    network-keys.PEAPVersion:
+      type: string
+      description: EAP_PEAP only (WPA_EAP or IEEE_802_1X) - optional, defaults to V0 when omitted
+      enum:
+      - V0
+      - V1
+    network-keys.HttpAuthenticationField:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    network-keys.SecureProtocol:
+      type: string
+      description: HTTP_AUTHENTICATION only - optional, defaults to AUTOMATIC when omitted
+      enum:
+      - AUTOMATIC
+      - SSLv2
+      - SSLv3
+      - TLSv1
+      - TLSv1_1
+      - TLSv1_2
+      - PFS
+    network-keys.ScepKeySize:
+      type: string
+      description: WPA_EAP_SCEP only - RSA key size for the Eye-generated keypair. Optional, defaults to RSA_2048 when omitted.
+      enum:
+      - RSA_2048
+      - RSA_3072
+      - RSA_4096
     network-keys.PostNetworkKeyRequest:
       type: object
       description: Request shape is resolved from 'type' (and, for WPA_EAP/IEEE_802_1X, further resolved from 'eapMethod') - see their own descriptions for which values are documented. WPA_EAP_SCEP, OPEN_HTTP, and HTTP_AUTHENTICATION are top-level shapes in their own right, with no 'eapMethod'. See the request examples for concrete payloads.
@@ -1192,66 +1301,91 @@ components:
           $ref: '#/components/schemas/network-keys.TlsVersion'
         pacFile:
           $ref: '#/components/schemas/network-keys.CertificateFile'
-    network-keys.TlsVersion:
-      type: string
-      description: EAP_FAST only - optional, defaults to TLS_1_0 when omitted or explicitly ANY
-      enum:
-      - ANY
-      - TLS_1_0
-      - TLS_1_1
-      - TLS_1_2
-      - TLS_1_3
-      - TLS_1_0_AND_TLS_1_1
-      - TLS_1_0_AND_TLS_1_1_AND_TLS_1_2
-      - TLS_1_0_AND_TLS_1_1_AND_TLS_1_2_AND_TLS_1_3
-    network-keys.PEAPVersion:
-      type: string
-      description: EAP_PEAP only (WPA_EAP or IEEE_802_1X) - optional, defaults to V0 when omitted
-      enum:
-      - V0
-      - V1
-    network-keys.PEAPInnerAuthenticationMethod:
-      type: string
-      description: EAP_PEAP only (WPA_EAP or IEEE_802_1X) - the caCertificate/clientCertificate/privateKey/privateKeyPassword fields on PeapInnerAuthentication only apply when this is TLS
-      enum:
-      - NOT_SET
-      - MSCHAPV2
-      - TLS
-      - GTC
-      - OTP
-      - MD5
-    network-keys.CustomFieldEntry:
+    network-keys.GetNetworkKeyResponse:
+      $ref: '#/components/schemas/network-keys.NetworkKey'
+    network-keys.HttpAuthenticationPage:
       type: object
+      description: HTTP_AUTHENTICATION only - one step in a multi-step login/logout sequence. Configurator's own UI keys pages by a page number, but that number is purely a transient UI grouping aid never actually persisted - only the resulting order survives, which is why this shape is just a plain ordered list of pages with no page-number field.
       properties:
-        scope:
-          type: string
-          enum:
-          - GLOBAL
-          - NETWORK
-        name:
-          type: string
-        value:
-          type: string
-    network-keys.CertificateFile:
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/network-keys.HttpAuthenticationField'
+    network-keys.TtlsInnerAuthentication:
       type: object
-      description: A certificate/private-key/PAC file. certificateBytes is the raw file content, base64-encoded.
+      description: EAP_TTLS only (WPA_EAP or IEEE_802_1X) - the "Inner Authentication" panel. caCertificate/clientCertificate/privateKey/privateKeyPassword only apply when method is EAP_TLS; clientCertificate is required in that case.
       properties:
-        fileName:
+        method:
+          $ref: '#/components/schemas/network-keys.InnerAuthenticationMethod'
+        caCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        clientCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        privateKey:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        privateKeyPassword:
           type: string
-        certificateBytes:
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
           type: string
-          format: byte
-    network-keys.SecureProtocol:
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    network-keys.NetworkKeyType:
       type: string
-      description: HTTP_AUTHENTICATION only - optional, defaults to AUTOMATIC when omitted
+      description: Determines which other fields are meaningful on a NetworkKey/NetworkKeyRequest. Every value is now documented with request/response fields and examples.
       enum:
-      - AUTOMATIC
-      - SSLv2
-      - SSLv3
-      - TLSv1
-      - TLSv1_1
-      - TLSv1_2
-      - PFS
+      - WPA1
+      - WPA2
+      - WPA3
+      - WPA3_OWE
+      - WPA_EAP
+      - WPA_EAP_SCEP
+      - IEEE_802_1X
+      - OPEN_HTTP
+      - HTTP_AUTHENTICATION
+      - RAW
+    network-keys.CertificateProperties:
+      type: object
+      description: EAP_TLS only (WPA_EAP or IEEE_802_1X) - the outer "Certificate Properties" panel. All fields optional; omitting the whole object, or any certificate within it, on update leaves it untouched rather than clearing it.
+      properties:
+        caCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        clientCertificate:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        privateKey:
+          $ref: '#/components/schemas/network-keys.CertificateFile'
+        privateKeyPassword:
+          type: string
+    network-keys.WpaVersion:
+      type: string
+      description: The WPA generation a WPA_EAP key is used with - distinct from the top-level 'type' WPA1/WPA2/WPA3 values, which instead select a WPA-PSK request shape.
+      enum:
+      - WPA1
+      - WPA2
+      - WPA3
+    network-keys.CertificateType:
+      type: string
+      description: OPEN_HTTP and HTTP_AUTHENTICATION only - PEM vs DER for clientCertificate/privateKey. Required whenever the corresponding certificate is provided; there's no safe default since it's a fact about the uploaded bytes, not a preference.
+      enum:
+      - PEM
+      - DER
     network-keys.NetworkKey:
       type: object
       description: 'The set of properties present depends on the key''s type - every type is now documented: WPA1/WPA2 (WPA-PSK), WPA3, WPA3_OWE, WPA_EAP (all 7 eapMethod variants), WPA_EAP_SCEP, IEEE_802_1X (all 5 eapMethod variants), OPEN_HTTP, HTTP_AUTHENTICATION, and RAW.'
@@ -1404,84 +1538,6 @@ components:
         innerPrivateKeyPassword:
           type: string
           description: WPA_EAP or IEEE_802_1X, eapMethod EAP_PEAP or EAP_TTLS of either with their inner method set to TLS/EAP_TLS - masked to "********" when set
-    network-keys.NetworkKeyType:
-      type: string
-      description: Determines which other fields are meaningful on a NetworkKey/NetworkKeyRequest. Every value is now documented with request/response fields and examples.
-      enum:
-      - WPA1
-      - WPA2
-      - WPA3
-      - WPA3_OWE
-      - WPA_EAP
-      - WPA_EAP_SCEP
-      - IEEE_802_1X
-      - OPEN_HTTP
-      - HTTP_AUTHENTICATION
-      - RAW
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
-    common.Pagination:
-      type: object
-      required:
-      - perPage
-      - page
-      - total
-      - pages
-      properties:
-        perPage:
-          type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
-    network-keys.InnerAuthenticationMethod:
-      type: string
-      description: EAP_TTLS only (WPA_EAP or IEEE_802_1X) - a separate, larger enum than PEAP's own PEAPInnerAuthenticationMethod. The caCertificate/clientCertificate/privateKey/privateKeyPassword fields on TtlsInnerAuthentication only apply when this is EAP_TLS
-      enum:
-      - NOT_SET
-      - MSCHAP
-      - MSCHAPV2
-      - PAP
-      - CHAP
-      - EAP_MSCHAPV2
-      - EAP_TLS
-      - EAP_GTC
-      - EAP_OTP
-      - EAP_MD5
-    network-keys.CertificateType:
-      type: string
-      description: OPEN_HTTP and HTTP_AUTHENTICATION only - PEM vs DER for clientCertificate/privateKey. Required whenever the corresponding certificate is provided; there's no safe default since it's a fact about the uploaded bytes, not a preference.
-      enum:
-      - PEM
-      - DER
     network-keys.EapolVersion:
       type: string
       description: Optional on every WPA_EAP variant.
@@ -1489,64 +1545,8 @@ components:
       - EAPOL_VERSION_1
       - EAPOL_VERSION_2
       - EAPOL_VERSION_3
-    network-keys.GetNetworkKeyResponse:
-      $ref: '#/components/schemas/network-keys.NetworkKey'
-    network-keys.TtlsInnerAuthentication:
-      type: object
-      description: EAP_TTLS only (WPA_EAP or IEEE_802_1X) - the "Inner Authentication" panel. caCertificate/clientCertificate/privateKey/privateKeyPassword only apply when method is EAP_TLS; clientCertificate is required in that case.
-      properties:
-        method:
-          $ref: '#/components/schemas/network-keys.InnerAuthenticationMethod'
-        caCertificate:
-          $ref: '#/components/schemas/network-keys.CertificateFile'
-        clientCertificate:
-          $ref: '#/components/schemas/network-keys.CertificateFile'
-        privateKey:
-          $ref: '#/components/schemas/network-keys.CertificateFile'
-        privateKeyPassword:
-          type: string
-    network-keys.PeapInnerAuthentication:
-      type: object
-      description: EAP_PEAP only (WPA_EAP or IEEE_802_1X) - the "Inner Authentication" panel. caCertificate/clientCertificate/privateKey/privateKeyPassword only apply when method is TLS; clientCertificate is required in that case.
-      properties:
-        method:
-          $ref: '#/components/schemas/network-keys.PEAPInnerAuthenticationMethod'
-        caCertificate:
-          $ref: '#/components/schemas/network-keys.CertificateFile'
-        clientCertificate:
-          $ref: '#/components/schemas/network-keys.CertificateFile'
-        privateKey:
-          $ref: '#/components/schemas/network-keys.CertificateFile'
-        privateKeyPassword:
-          type: string
-    network-keys.HttpAuthenticationField:
-      type: object
-      properties:
-        name:
-          type: string
-        value:
-          type: string
-    network-keys.GetNetworkKeysResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/network-keys.NetworkKey'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    network-keys.CertificateProperties:
-      type: object
-      description: EAP_TLS only (WPA_EAP or IEEE_802_1X) - the outer "Certificate Properties" panel. All fields optional; omitting the whole object, or any certificate within it, on update leaves it untouched rather than clearing it.
-      properties:
-        caCertificate:
-          $ref: '#/components/schemas/network-keys.CertificateFile'
-        clientCertificate:
-          $ref: '#/components/schemas/network-keys.CertificateFile'
-        privateKey:
-          $ref: '#/components/schemas/network-keys.CertificateFile'
-        privateKeyPassword:
-          type: string
+    network-keys.PutNetworkKeyRequest:
+      $ref: '#/components/schemas/network-keys.PostNetworkKeyRequest'
   responses:
     common.400BadRequestResponse:
       description: Bad Request

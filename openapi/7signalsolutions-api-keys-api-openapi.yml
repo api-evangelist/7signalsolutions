@@ -140,13 +140,20 @@ paths:
       security:
       - oauth2: []
 components:
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
-    metadata.AggregateReferenceOrganizationUUID:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
     common.ResponseStatusException:
       type: object
       required:
@@ -178,73 +185,6 @@ components:
             $ref: '#/components/schemas/metadata.ApiKey'
         pagination:
           $ref: '#/components/schemas/metadata.Pagination'
-    metadata.AggregateReferenceGroupUUID:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    metadata.Pagination:
-      type: object
-      properties:
-        perPage:
-          type: integer
-          format: int32
-        page:
-          type: integer
-          format: int32
-          minimum: 0
-          description: The current page number. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
-        total:
-          type: integer
-          format: int64
-        pages:
-          type: integer
-          format: int32
-    metadata.ApiKeyRequest:
-      required:
-      - organizationId
-      type: object
-      properties:
-        organizationId:
-          type: string
-          format: uuid
-        sapphireGroupId:
-          type: string
-          format: uuid
-        roleId:
-          type: string
-          format: uuid
-        permissionIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        description:
-          type: string
-    metadata.ApiKey:
-      required:
-      - organization
-      type: object
-      properties:
-        organization:
-          $ref: '#/components/schemas/metadata.AggregateReferenceOrganizationUUID'
-        group:
-          $ref: '#/components/schemas/metadata.AggregateReferenceGroupUUID'
-        id:
-          type: string
-          format: uuid
-        apiKey:
-          type: string
-        createdBy:
-          type: string
-        description:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        isSystem:
-          type: boolean
     metadata.ApiKeyResponse:
       type: object
       properties:
@@ -272,6 +212,79 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/metadata.Permission'
+    metadata.AggregateReferenceGroupUUID:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    metadata.AggregateReferenceOrganizationUUID:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    metadata.ApiKeyRequest:
+      required:
+      - organizationId
+      type: object
+      properties:
+        organizationId:
+          type: string
+          format: uuid
+        sapphireGroupId:
+          type: string
+          format: uuid
+        roleId:
+          type: string
+          format: uuid
+        permissionIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description:
+          type: string
+    metadata.Pagination:
+      type: object
+      properties:
+        perPage:
+          type: integer
+          format: int32
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+          description: The current page number. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
+        total:
+          type: integer
+          format: int64
+        pages:
+          type: integer
+          format: int32
+    metadata.ApiKey:
+      required:
+      - organization
+      type: object
+      properties:
+        organization:
+          $ref: '#/components/schemas/metadata.AggregateReferenceOrganizationUUID'
+        group:
+          $ref: '#/components/schemas/metadata.AggregateReferenceGroupUUID'
+        id:
+          type: string
+          format: uuid
+        apiKey:
+          type: string
+        createdBy:
+          type: string
+        description:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        isSystem:
+          type: boolean
     metadata.Permission:
       type: object
       properties:
@@ -284,19 +297,6 @@ components:
           type: string
         isPublic:
           type: boolean
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   parameters:
     common.SortOrderParam:
       name: order
@@ -316,13 +316,6 @@ components:
       schema:
         type: integer
         minimum: 0
-    common.SortFieldParam:
-      name: sortField
-      in: query
-      description: The field on which to sort the results
-      required: false
-      schema:
-        type: string
     common.PerPageRequestParam:
       name: perPage
       in: query
@@ -330,6 +323,13 @@ components:
       required: false
       schema:
         type: integer
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
   securitySchemes:
     oauth2:
       type: oauth2

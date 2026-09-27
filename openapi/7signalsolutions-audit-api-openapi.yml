@@ -49,60 +49,110 @@ paths:
       tags:
       - Audit
 components:
+  parameters:
+    audits.ActorParam:
+      name: actor
+      in: query
+      description: User or system component responsible for the events
+      required: false
+      schema:
+        type: string
+    common.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is 1.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    audits.InitiatedParam:
+      name: initiated
+      in: query
+      description: How the event was initiated
+      required: false
+      schema:
+        type: string
+    common.SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    audits.EndTimeRangeParam:
+      name: endTimeRange
+      in: query
+      description: The end time range of the events to fetch
+      required: false
+      schema:
+        type: string
+        format: date-time
+    audits.StartTimeRangeParam:
+      name: startTimeRange
+      in: query
+      description: The start time range of the events to fetch
+      required: false
+      schema:
+        type: string
+        format: date-time
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    audits.SourceParam:
+      name: source
+      in: query
+      description: The area of the system from which the event originated
+      required: false
+      schema:
+        type: string
+    audits.ActionParam:
+      name: action
+      in: query
+      description: The action taken
+      required: false
+      schema:
+        type: string
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
-    audits.AuditsAgentsResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/audits.AuditAgentRecord'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    common.Pagination:
-      type: object
-      required:
-      - perPage
-      - page
-      - total
-      - pages
-      properties:
-        perPage:
-          type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
     audits.AuditAgentRecord:
       type: object
       properties:
@@ -129,109 +179,59 @@ components:
         initiated:
           type: string
           description: How this event was initiated
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-  parameters:
-    common.PageRequestParam:
-      name: page
-      in: query
-      description: Fetch a particular page of data. The first page is 1.
-      required: false
-      schema:
-        type: integer
-        minimum: 1
-    common.SortOrderParam:
-      name: order
-      in: query
-      description: Sort order
-      required: false
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-    audits.SourceParam:
-      name: source
-      in: query
-      description: The area of the system from which the event originated
-      required: false
-      schema:
-        type: string
-    audits.ActorParam:
-      name: actor
-      in: query
-      description: User or system component responsible for the events
-      required: false
-      schema:
-        type: string
-    audits.StartTimeRangeParam:
-      name: startTimeRange
-      in: query
-      description: The start time range of the events to fetch
-      required: false
-      schema:
-        type: string
-        format: date-time
-    common.SortFieldParam:
-      name: sortField
-      in: query
-      description: The field on which to sort the results
-      required: false
-      schema:
-        type: string
-    audits.InitiatedParam:
-      name: initiated
-      in: query
-      description: How the event was initiated
-      required: false
-      schema:
-        type: string
-    audits.EndTimeRangeParam:
-      name: endTimeRange
-      in: query
-      description: The end time range of the events to fetch
-      required: false
-      schema:
-        type: string
-        format: date-time
-    common.PerPageRequestParam:
-      name: perPage
-      in: query
-      description: Fetch a specific number of records per page
-      required: false
-      schema:
-        type: integer
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
-    audits.ActionParam:
-      name: action
-      in: query
-      description: The action taken
-      required: false
-      schema:
-        type: string
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    audits.AuditsAgentsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/audits.AuditAgentRecord'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
   securitySchemes:
     oauth2:
       type: oauth2

@@ -249,15 +249,44 @@ paths:
       tags:
       - Targets
 components:
-  parameters:
-    targets.SensorTargetId:
-      name: targetId
-      in: path
-      description: Sensor Target Id
-      required: true
-      schema:
-        type: number
   schemas:
+    targets.GetSensorTargetsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/targets.SensorTarget'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    targets.SensorTarget:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        targetType:
+          type: string
+          enum:
+          - SONAR
+          - WEB_SERVER
+          - PING_ENDPOINT
+          - IPERF3_SERVER
+        tcpPort:
+          type: number
+          description: Only applicable to SONAR/IPERF3_SERVER targets
+        dnsName:
+          type: string
+          description: The URL/DNS name for this target
+        ipV4Address:
+          type: string
+          description: Only applicable to SONAR/PING_ENDPOINT targets
+        ipV6Address:
+          type: string
+          description: Only applicable to SONAR/PING_ENDPOINT targets
     common.ResponseStatusException:
       type: object
       required:
@@ -348,43 +377,6 @@ components:
           description: Only applicable to SONAR/IPERF3_SERVER; omit to leave unchanged
     targets.GetSensorTargetResponse:
       $ref: '#/components/schemas/targets.SensorTarget'
-    targets.GetSensorTargetsResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/targets.SensorTarget'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    targets.SensorTarget:
-      type: object
-      properties:
-        id:
-          type: number
-        name:
-          type: string
-        description:
-          type: string
-        targetType:
-          type: string
-          enum:
-          - SONAR
-          - WEB_SERVER
-          - PING_ENDPOINT
-          - IPERF3_SERVER
-        tcpPort:
-          type: number
-          description: Only applicable to SONAR/IPERF3_SERVER targets
-        dnsName:
-          type: string
-          description: The URL/DNS name for this target
-        ipV4Address:
-          type: string
-          description: Only applicable to SONAR/PING_ENDPOINT targets
-        ipV6Address:
-          type: string
-          description: Only applicable to SONAR/PING_ENDPOINT targets
   responses:
     common.400BadRequestResponse:
       description: Bad Request
@@ -398,6 +390,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    targets.SensorTargetId:
+      name: targetId
+      in: path
+      description: Sensor Target Id
+      required: true
+      schema:
+        type: number
   securitySchemes:
     oauth2:
       type: oauth2

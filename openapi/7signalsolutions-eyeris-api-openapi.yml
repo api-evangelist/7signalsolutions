@@ -148,29 +148,72 @@ paths:
         '404':
           $ref: '#/components/responses/common.404NotFoundResponse'
 components:
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
   schemas:
-    common.ResponseStatusException:
+    eyeris.EyerisAnalysisRequestResponse:
       type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
       properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
+        response:
           type: string
         requestId:
           type: string
+          format: uuid
+        responseId:
+          type: string
+          format: uuid
+    eyeris.EyerisAnalysisResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+          format: uuid
+        requestQueueId:
+          type: string
+          format: uuid
+        responseId:
+          type: string
+          format: uuid
+    eyeris.EyerisCreateStreamRequest:
+      type: object
+      properties:
+        promptTypeKey:
+          type: string
+        inputData:
+          type: object
+    eyeris.EyerisSseEmitter:
+      type: array
+      items:
+        type: string
+        description: Chunk of the response message
+      example:
+      - data:# Wi-Fi Network Analysis
+      - 'data:'
+      - data:## SUMMARY
+      - data:The device experienced a brief 2-minute connectivity problem
+      - 'data:'
+      - data:## RECOMMENDATIONS
+      - 'data:'
+      - data:No device-side changes are recommended. The brief disruption followed by sustained 100% SLA indicates normal operation was quickly established and maintained.
     eyeris.EyerisAnalysisRequest:
       required:
       - agentId
@@ -197,71 +240,28 @@ components:
           description: The time in milliseconds from the epoch till which the analysis should be done.
           type: string
           format: datetime
-    eyeris.EyerisSseEmitter:
-      type: array
-      items:
-        type: string
-        description: Chunk of the response message
-      example:
-      - data:# Wi-Fi Network Analysis
-      - 'data:'
-      - data:## SUMMARY
-      - data:The device experienced a brief 2-minute connectivity problem
-      - 'data:'
-      - data:## RECOMMENDATIONS
-      - 'data:'
-      - data:No device-side changes are recommended. The brief disruption followed by sustained 100% SLA indicates normal operation was quickly established and maintained.
-    eyeris.EyerisCreateStreamRequest:
+    common.ResponseStatusException:
       type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
       properties:
-        promptTypeKey:
+        timestamp:
           type: string
-        inputData:
-          type: object
-    eyeris.EyerisAnalysisResponse:
-      type: object
-      properties:
-        requestId:
+          format: date-time
+        status:
+          type: integer
+        error:
           type: string
-          format: uuid
-        requestQueueId:
+        message:
           type: string
-          format: uuid
-        responseId:
-          type: string
-          format: uuid
-    eyeris.EyerisAnalysisRequestResponse:
-      type: object
-      properties:
-        response:
+        path:
           type: string
         requestId:
           type: string
-          format: uuid
-        responseId:
-          type: string
-          format: uuid
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-  parameters:
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
   securitySchemes:
     oauth2:
       type: oauth2

@@ -87,6 +87,19 @@ paths:
       security:
       - oauth2: []
 components:
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
     common.ResponseStatusException:
       type: object
@@ -110,6 +123,15 @@ components:
           type: string
         requestId:
           type: string
+    metadata.PageModelPermission:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Permission'
+        pagination:
+          $ref: '#/components/schemas/metadata.Pagination'
     metadata.Pagination:
       type: object
       properties:
@@ -127,15 +149,6 @@ components:
         pages:
           type: integer
           format: int32
-    metadata.PageModelPermission:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/metadata.Permission'
-        pagination:
-          $ref: '#/components/schemas/metadata.Pagination'
     metadata.Permission:
       type: object
       properties:
@@ -148,19 +161,6 @@ components:
           type: string
         isPublic:
           type: boolean
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   parameters:
     common.SortOrderParam:
       name: order
@@ -180,13 +180,6 @@ components:
       schema:
         type: integer
         minimum: 0
-    common.SortFieldParam:
-      name: sortField
-      in: query
-      description: The field on which to sort the results
-      required: false
-      schema:
-        type: string
     common.PerPageRequestParam:
       name: perPage
       in: query
@@ -194,6 +187,13 @@ components:
       required: false
       schema:
         type: integer
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
   securitySchemes:
     oauth2:
       type: oauth2

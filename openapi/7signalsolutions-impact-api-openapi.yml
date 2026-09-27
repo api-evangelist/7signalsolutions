@@ -148,28 +148,6 @@ paths:
       - Impact
 components:
   parameters:
-    impact.ToRequestParam:
-      name: to
-      in: query
-      description: End time in milliseconds from the epoch.
-      required: true
-      schema:
-        type: integer
-    impact.FromRequestParam:
-      name: from
-      in: query
-      description: Start time in milliseconds from the epoch.
-      required: true
-      schema:
-        type: integer
-    common.PageRequestParam:
-      name: page
-      in: query
-      description: Fetch a particular page of data. The first page is 1.
-      required: false
-      schema:
-        type: integer
-        minimum: 1
     common.OrganizationRequestParam:
       name: organization
       in: query
@@ -184,14 +162,6 @@ components:
       required: false
       schema:
         type: string
-    impact.MinImpactedMinutesParam:
-      name: minImpactedMinutes
-      in: query
-      description: Filter agents with at least this many impacted minutes.
-      required: false
-      schema:
-        type: integer
-        format: int64
     common.PerPageRequestParam:
       name: perPage
       in: query
@@ -207,6 +177,36 @@ components:
       schema:
         type: integer
         format: int64
+    impact.ToRequestParam:
+      name: to
+      in: query
+      description: End time in milliseconds from the epoch.
+      required: true
+      schema:
+        type: integer
+    impact.FromRequestParam:
+      name: from
+      in: query
+      description: Start time in milliseconds from the epoch.
+      required: true
+      schema:
+        type: integer
+    impact.MinImpactedMinutesParam:
+      name: minImpactedMinutes
+      in: query
+      description: Filter agents with at least this many impacted minutes.
+      required: false
+      schema:
+        type: integer
+        format: int64
+    common.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is 1.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
     impact.GranularityParam:
       name: granularity
       in: query
@@ -219,13 +219,13 @@ components:
         - DAY
         - MONTH
   schemas:
-    impact.GetAgentSummaryResponse:
+    impact.GetLocationImpactResponse:
       type: object
       properties:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/impact.AgentSummary'
+            $ref: '#/components/schemas/impact.LocationImpactRow'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
     impact.AgentImpactRow:
@@ -258,15 +258,94 @@ components:
         minutesMonitored:
           type: integer
           format: int64
-    impact.GetLocationImpactResponse:
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    impact.AgentSummary:
+      type: object
+      properties:
+        minutesImpactedExperienceScore:
+          type: integer
+          format: int64
+        minutesImpactedRoaming:
+          type: integer
+          format: int64
+        minutesImpactedCoverage:
+          type: integer
+          format: int64
+        minutesImpactedCongestion:
+          type: integer
+          format: int64
+        minutesImpactedInterference:
+          type: integer
+          format: int64
+        minutesImpactedConnectivity:
+          type: integer
+          format: int64
+        minutesMonitored:
+          type: integer
+          format: int64
+        deviceCount:
+          type: integer
+          format: int64
+    impact.GetAgentSummaryResponse:
       type: object
       properties:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/impact.LocationImpactRow'
+            $ref: '#/components/schemas/impact.AgentSummary'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
+    impact.LocationImpactRow:
+      type: object
+      properties:
+        locationId:
+          type: string
+        locationName:
+          type:
+          - string
+          - 'null'
+        minutesImpactedExperienceScore:
+          type: integer
+          format: int64
+        minutesImpactedRoaming:
+          type: integer
+          format: int64
+        minutesImpactedCoverage:
+          type: integer
+          format: int64
+        minutesImpactedCongestion:
+          type: integer
+          format: int64
+        minutesImpactedInterference:
+          type: integer
+          format: int64
+        minutesImpactedConnectivity:
+          type: integer
+          format: int64
+        minutesMonitored:
+          type: integer
+          format: int64
     impact.GetAgentImpactResponse:
       type: object
       properties:
@@ -274,6 +353,37 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/impact.AgentImpactRow'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    impact.GetAgentTimeSeriesResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/impact.AgentTimeSeriesRow'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
     impact.AgentTimeSeriesRow:
@@ -306,116 +416,6 @@ components:
         deviceCount:
           type: integer
           format: int64
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
-    impact.AgentSummary:
-      type: object
-      properties:
-        minutesImpactedExperienceScore:
-          type: integer
-          format: int64
-        minutesImpactedRoaming:
-          type: integer
-          format: int64
-        minutesImpactedCoverage:
-          type: integer
-          format: int64
-        minutesImpactedCongestion:
-          type: integer
-          format: int64
-        minutesImpactedInterference:
-          type: integer
-          format: int64
-        minutesImpactedConnectivity:
-          type: integer
-          format: int64
-        minutesMonitored:
-          type: integer
-          format: int64
-        deviceCount:
-          type: integer
-          format: int64
-    common.Pagination:
-      type: object
-      required:
-      - perPage
-      - page
-      - total
-      - pages
-      properties:
-        perPage:
-          type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
-    impact.LocationImpactRow:
-      type: object
-      properties:
-        locationId:
-          type: string
-        locationName:
-          type:
-          - string
-          - 'null'
-        minutesImpactedExperienceScore:
-          type: integer
-          format: int64
-        minutesImpactedRoaming:
-          type: integer
-          format: int64
-        minutesImpactedCoverage:
-          type: integer
-          format: int64
-        minutesImpactedCongestion:
-          type: integer
-          format: int64
-        minutesImpactedInterference:
-          type: integer
-          format: int64
-        minutesImpactedConnectivity:
-          type: integer
-          format: int64
-        minutesMonitored:
-          type: integer
-          format: int64
-    impact.GetAgentTimeSeriesResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/impact.AgentTimeSeriesRow'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
   responses:
     common.400BadRequestResponse:
       description: Bad Request
