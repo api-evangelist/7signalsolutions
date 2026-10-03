@@ -261,6 +261,30 @@ paths:
       - Topologies
 components:
   schemas:
+    topologies.GetAgentTopologyLocationResponse:
+      $ref: '#/components/schemas/topologies.TopologyAgentLocation'
+    topologies.GetAgentTopologyLocationsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/topologies.TopologyAgentLocation'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    topologies.TopologySensorServiceArea:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        parentLocationId:
+          type: number
+        parentLocationName:
+          type: string
     topologies.TopologyAgentLocation:
       type: object
       properties:
@@ -277,15 +301,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    topologies.GetSensorTopologyLocationsResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/topologies.TopologySensorLocation'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
     topologies.GetSensorTopologyServiceAreasResponse:
       type: object
       properties:
@@ -295,43 +310,6 @@ components:
             $ref: '#/components/schemas/topologies.TopologySensorServiceArea'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
-    topologies.TopologySensorLocation:
-      type: object
-      properties:
-        id:
-          type: number
-        name:
-          type: string
-        description:
-          type: string
-        parentId:
-          type: number
-    topologies.GetAgentTopologyLocationResponse:
-      $ref: '#/components/schemas/topologies.TopologyAgentLocation'
-    topologies.TopologySensorServiceArea:
-      type: object
-      properties:
-        id:
-          type: number
-        name:
-          type: string
-        description:
-          type: string
-        parentLocationId:
-          type: number
-        parentLocationName:
-          type: string
-    topologies.GetAgentTopologyLocationsResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/topologies.TopologyAgentLocation'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    topologies.GetSensorTopologyLocationResponse:
-      $ref: '#/components/schemas/topologies.TopologySensorLocation'
     common.Pagination:
       type: object
       required:
@@ -354,8 +332,30 @@ components:
         pages:
           type: integer
           example: 5
+    topologies.GetSensorTopologyLocationResponse:
+      $ref: '#/components/schemas/topologies.TopologySensorLocation'
     topologies.GetSensorTopologyServiceAreaResponse:
       $ref: '#/components/schemas/topologies.TopologySensorServiceArea'
+    topologies.TopologySensorLocation:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        parentId:
+          type: number
+    topologies.GetSensorTopologyLocationsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/topologies.TopologySensorLocation'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
     common.ResponseStatusException:
       type: object
       required:
@@ -379,6 +379,13 @@ components:
         requestId:
           type: string
   parameters:
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
     common.PageRequestParam:
       name: page
       in: query
@@ -394,22 +401,15 @@ components:
       required: false
       schema:
         type: string
-    common.PerPageRequestParam:
-      name: perPage
-      in: query
-      description: Fetch a specific number of records per page
-      required: false
-      schema:
-        type: integer
   responses:
-    common.400BadRequestResponse:
-      description: Bad Request
+    common.404NotFoundResponse:
+      description: Resource Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
+    common.400BadRequestResponse:
+      description: Bad Request
       content:
         application/json:
           schema:

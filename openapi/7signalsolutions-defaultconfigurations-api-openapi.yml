@@ -84,8 +84,6 @@ components:
         slaGroupId:
           type: number
           description: id of the SLA group applied by this configuration, if any
-    default-configurations.GetSensorDefaultConfigurationResponse:
-      $ref: '#/components/schemas/default-configurations.SensorDefaultConfiguration'
     default-configurations.GetSensorDefaultConfigurationsResponse:
       type: object
       properties:
@@ -117,6 +115,8 @@ components:
         pages:
           type: integer
           example: 5
+    default-configurations.GetSensorDefaultConfigurationResponse:
+      $ref: '#/components/schemas/default-configurations.SensorDefaultConfiguration'
     common.ResponseStatusException:
       type: object
       required:
@@ -139,19 +139,6 @@ components:
           type: string
         requestId:
           type: string
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   parameters:
     default-configurations.SensorDefaultConfigurationId:
       name: configurationId
@@ -160,6 +147,19 @@ components:
       required: true
       schema:
         type: number
+  responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

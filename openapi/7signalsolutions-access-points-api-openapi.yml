@@ -287,6 +287,81 @@ paths:
       - Access Points
 components:
   schemas:
+    access-points.AgentAccessPointRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        controller:
+          type: string
+        locationId:
+          type: string
+          format: uuid
+        bssids:
+          type: array
+          items:
+            $ref: '#/components/schemas/access-points.AgentAccessPointBssidRequest'
+    access-points.AgentAccessPoint:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        controller:
+          type: string
+        overTheAirName:
+          type: string
+        modifiedBy:
+          type: string
+        macAddress:
+          type: string
+        locationId:
+          deprecated: true
+          type: string
+          format: uuid
+          description: 'Deprecated: use serviceAreaId instead.'
+        serviceAreaId:
+          type: string
+          format: uuid
+        bssids:
+          type: array
+          items:
+            $ref: '#/components/schemas/access-points.AgentAccessPointBssid'
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    access-points.AgentAccessPointBssidRequest:
+      type: object
+      properties:
+        bssid:
+          type: string
+        band:
+          type: string
+    access-points.PostAgentAccessPointsRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/access-points.AgentAccessPointRequest'
     access-points.GetAgentAccessPointsResponse:
       type: object
       properties:
@@ -296,15 +371,11 @@ components:
             $ref: '#/components/schemas/access-points.AgentAccessPoint'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
-    access-points.AgentAccessPointBssidRequest:
+    access-points.SensorAccessPointPatchRequest:
       type: object
       properties:
-        bssid:
+        accessPointAlias:
           type: string
-        band:
-          type: string
-    access-points.GetAgentAccessPointResponse:
-      $ref: '#/components/schemas/access-points.AgentAccessPoint'
     access-points.SensorAccessPoint:
       type: object
       properties:
@@ -339,71 +410,6 @@ components:
           type: string
         accessPointStatus:
           type: string
-    access-points.GetSensorAccessPointsResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/access-points.SensorAccessPoint'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    access-points.AgentAccessPointRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        controller:
-          type: string
-        locationId:
-          type: string
-          format: uuid
-        bssids:
-          type: array
-          items:
-            $ref: '#/components/schemas/access-points.AgentAccessPointBssidRequest'
-    access-points.PostAgentAccessPointsRequest:
-      type: array
-      items:
-        $ref: '#/components/schemas/access-points.AgentAccessPointRequest'
-    access-points.AgentAccessPoint:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        controller:
-          type: string
-        overTheAirName:
-          type: string
-        modifiedBy:
-          type: string
-        macAddress:
-          type: string
-        locationId:
-          deprecated: true
-          type: string
-          format: uuid
-          description: 'Deprecated: use serviceAreaId instead.'
-        serviceAreaId:
-          type: string
-          format: uuid
-        bssids:
-          type: array
-          items:
-            $ref: '#/components/schemas/access-points.AgentAccessPointBssid'
-    access-points.AgentAccessPointBssid:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        bssid:
-          type: string
-        band:
-          type: string
     common.Pagination:
       type: object
       required:
@@ -426,48 +432,29 @@ components:
         pages:
           type: integer
           example: 5
+    access-points.GetSensorAccessPointsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/access-points.SensorAccessPoint'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    access-points.GetAgentAccessPointResponse:
+      $ref: '#/components/schemas/access-points.AgentAccessPoint'
+    access-points.AgentAccessPointBssid:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        bssid:
+          type: string
+        band:
+          type: string
     access-points.GetSensorAccessPointResponse:
       $ref: '#/components/schemas/access-points.SensorAccessPoint'
-    access-points.SensorAccessPointPatchRequest:
-      type: object
-      properties:
-        accessPointAlias:
-          type: string
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   parameters:
     common.OrganizationRequestParam:
       name: organization
@@ -476,6 +463,19 @@ components:
       required: false
       schema:
         type: string
+  responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

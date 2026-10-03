@@ -100,7 +100,63 @@ paths:
       security:
       - oauth2: []
 components:
+  parameters:
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    common.SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    metadata.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
   schemas:
+    metadata.Pagination:
+      type: object
+      properties:
+        perPage:
+          type: integer
+          format: int32
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+          description: The current page number. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
+        total:
+          type: integer
+          format: int64
+        pages:
+          type: integer
+          format: int32
+    metadata.AggregateReferenceOrganizationUUID:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
     metadata.PageModelGroup:
       type: object
       properties:
@@ -116,6 +172,20 @@ components:
         id:
           type: string
           format: uuid
+    metadata.Group:
+      type: object
+      properties:
+        organization:
+          $ref: '#/components/schemas/metadata.AggregateReferenceOrganizationUUID'
+        instance:
+          $ref: '#/components/schemas/metadata.AggregateReferenceInstanceUUID'
+        id:
+          type: string
+          format: uuid
+        key:
+          type: string
+        displayName:
+          type: string
     common.ResponseStatusException:
       type: object
       required:
@@ -138,89 +208,19 @@ components:
           type: string
         requestId:
           type: string
-    metadata.Group:
-      type: object
-      properties:
-        organization:
-          $ref: '#/components/schemas/metadata.AggregateReferenceOrganizationUUID'
-        instance:
-          $ref: '#/components/schemas/metadata.AggregateReferenceInstanceUUID'
-        id:
-          type: string
-          format: uuid
-        key:
-          type: string
-        displayName:
-          type: string
-    metadata.AggregateReferenceOrganizationUUID:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    metadata.Pagination:
-      type: object
-      properties:
-        perPage:
-          type: integer
-          format: int32
-        page:
-          type: integer
-          format: int32
-          minimum: 0
-          description: The current page number. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
-        total:
-          type: integer
-          format: int64
-        pages:
-          type: integer
-          format: int32
   responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
     common.404NotFoundResponse:
       description: Resource Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
-  parameters:
-    common.SortOrderParam:
-      name: order
-      in: query
-      description: Sort order
-      required: false
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-    metadata.PageRequestParam:
-      name: page
-      in: query
-      description: Fetch a particular page of data. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
-      required: false
-      schema:
-        type: integer
-        minimum: 0
-    common.PerPageRequestParam:
-      name: perPage
-      in: query
-      description: Fetch a specific number of records per page
-      required: false
-      schema:
-        type: integer
-    common.SortFieldParam:
-      name: sortField
-      in: query
-      description: The field on which to sort the results
-      required: false
-      schema:
-        type: string
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

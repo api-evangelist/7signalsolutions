@@ -76,6 +76,49 @@ paths:
       - Incidents
 components:
   schemas:
+    common.Range:
+      type: object
+      required:
+      - to
+      - toAsDateString
+      - from
+      - fromAsDateString
+      - total
+      - duration
+      - durationAsString
+      properties:
+        to:
+          type: integer
+          example: 1674055815825
+        toAsDateString:
+          type: string
+          format: date-time
+          example: 2023-01-18T15:51:20.437Z[UTC]
+        from:
+          type: integer
+          example: 1674055815825
+        fromAsDateString:
+          type: string
+          format: date-time
+          example: 2023-01-17T15:51:20.438Z[UTC]
+        total:
+          type: integer
+          example: 5
+        duration:
+          type: integer
+          example: 60000
+        durationAsString:
+          type: string
+          example: 60 seconds
+    incidents.GetIncidentsResponse:
+      type: object
+      properties:
+        range:
+          $ref: '#/components/schemas/common.Range'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/incidents.NestedIncident'
     incidents.FlatIncident:
       type: object
       properties:
@@ -128,40 +171,6 @@ components:
           type: number
         locationName:
           type: string
-    common.Range:
-      type: object
-      required:
-      - to
-      - toAsDateString
-      - from
-      - fromAsDateString
-      - total
-      - duration
-      - durationAsString
-      properties:
-        to:
-          type: integer
-          example: 1674055815825
-        toAsDateString:
-          type: string
-          format: date-time
-          example: 2023-01-18T15:51:20.437Z[UTC]
-        from:
-          type: integer
-          example: 1674055815825
-        fromAsDateString:
-          type: string
-          format: date-time
-          example: 2023-01-17T15:51:20.438Z[UTC]
-        total:
-          type: integer
-          example: 5
-        duration:
-          type: integer
-          example: 60000
-        durationAsString:
-          type: string
-          example: 60 seconds
     incidents.NestedIncident:
       type: object
       properties:
@@ -217,15 +226,6 @@ components:
               type: number
         locationName:
           type: string
-    incidents.GetIncidentsResponse:
-      type: object
-      properties:
-        range:
-          $ref: '#/components/schemas/common.Range'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/incidents.NestedIncident'
     incidents.GetIncidentResponse:
       $ref: '#/components/schemas/incidents.FlatIncident'
     common.ResponseStatusException:
@@ -251,13 +251,6 @@ components:
         requestId:
           type: string
   parameters:
-    incidents.ToRequestParam:
-      name: to
-      in: query
-      description: The time in milliseconds from the epoch up to which incidents are fetched (the upper bound). Defaults to the present now.
-      required: false
-      schema:
-        type: integer
     common.SortOrderParam:
       name: order
       in: query
@@ -268,6 +261,13 @@ components:
         enum:
         - asc
         - desc
+    incidents.ToRequestParam:
+      name: to
+      in: query
+      description: The time in milliseconds from the epoch up to which incidents are fetched (the upper bound). Defaults to the present now.
+      required: false
+      schema:
+        type: integer
     common.OrganizationRequestParam:
       name: organization
       in: query
@@ -283,14 +283,14 @@ components:
       schema:
         type: integer
   responses:
-    common.400BadRequestResponse:
-      description: Bad Request
+    common.404NotFoundResponse:
+      description: Resource Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
+    common.400BadRequestResponse:
+      description: Bad Request
       content:
         application/json:
           schema:

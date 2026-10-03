@@ -75,26 +75,28 @@ paths:
       - Change Events
 components:
   schemas:
-    change-events.ChangeEventsSensor:
+    common.ResponseStatusException:
       type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
       properties:
         timestamp:
+          type: string
+          format: date-time
+        status:
           type: integer
-          format: int64
-          description: Timestamp in milliseconds since epoch (Unix time)
-          example: 1750821376000
-        name:
+        error:
           type: string
-          description: Name of the change event
-        element:
+        message:
           type: string
-          description: Name of the element
-        parentElement:
+        path:
           type: string
-          description: Name of the parent element
-        description:
+        requestId:
           type: string
-          description: Description of the change event
     change-events.GetChangeEventsSensorResponse:
       type: object
       properties:
@@ -126,37 +128,35 @@ components:
         pages:
           type: integer
           example: 5
-    common.ResponseStatusException:
+    change-events.ChangeEventsSensor:
       type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
       properties:
         timestamp:
-          type: string
-          format: date-time
-        status:
           type: integer
-        error:
+          format: int64
+          description: Timestamp in milliseconds since epoch (Unix time)
+          example: 1750821376000
+        name:
           type: string
-        message:
+          description: Name of the change event
+        element:
           type: string
-        path:
+          description: Name of the element
+        parentElement:
           type: string
-        requestId:
+          description: Name of the parent element
+        description:
           type: string
+          description: Description of the change event
   responses:
-    common.400BadRequestResponse:
-      description: Bad Request
+    common.404NotFoundResponse:
+      description: Resource Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
+    common.400BadRequestResponse:
+      description: Bad Request
       content:
         application/json:
           schema:

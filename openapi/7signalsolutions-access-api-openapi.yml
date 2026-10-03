@@ -41,6 +41,54 @@ paths:
       - oauth2: []
 components:
   schemas:
+    metadata.Organization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        connectionId:
+          type: string
+        mobileEyeOrgCode:
+          type: string
+    metadata.SapphireReDirectorApplication:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+    metadata.UserManagementApplication:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+    metadata.MobileEyeApplication:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        organizations:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Organization'
+    metadata.SapphireApplication:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        instances:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Instance'
+    metadata.UserNotifications:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        text:
+          type: string
     metadata.Instance:
       type: object
       properties:
@@ -49,11 +97,6 @@ components:
           format: uuid
         url:
           type: string
-    metadata.UserManagementApplication:
-      type: object
-      properties:
-        enabled:
-          type: boolean
     metadata.AccessSummaryResponse:
       type: object
       properties:
@@ -69,49 +112,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/metadata.UserNotifications'
-    metadata.SapphireReDirectorApplication:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-    metadata.MobileEyeApplication:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        organizations:
-          type: array
-          items:
-            $ref: '#/components/schemas/metadata.Organization'
-    metadata.Organization:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        connectionId:
-          type: string
-        mobileEyeOrgCode:
-          type: string
-    metadata.UserNotifications:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        text:
-          type: string
-    metadata.SapphireApplication:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        instances:
-          type: array
-          items:
-            $ref: '#/components/schemas/metadata.Instance'
     common.ResponseStatusException:
       type: object
       required:
@@ -135,14 +135,14 @@ components:
         requestId:
           type: string
   responses:
-    common.400BadRequestResponse:
-      description: Bad Request
+    common.404NotFoundResponse:
+      description: Resource Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
+    common.400BadRequestResponse:
+      description: Bad Request
       content:
         application/json:
           schema:

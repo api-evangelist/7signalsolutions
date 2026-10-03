@@ -288,13 +288,6 @@ paths:
       - Alert Rules
 components:
   parameters:
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
     common.PerPageRequestParam:
       name: perPage
       in: query
@@ -302,20 +295,6 @@ components:
       required: false
       schema:
         type: integer
-    alert-rules.NameFilterParam:
-      name: name
-      in: query
-      description: Filter the alert rules by name using a case-insensitive partial match
-      required: false
-      schema:
-        type: string
-    alert-rules.EnabledFilterParam:
-      name: enabled
-      in: query
-      description: Filter the alert rules by their enabled state
-      required: false
-      schema:
-        type: boolean
     common.SortFieldParam:
       name: sortField
       in: query
@@ -331,6 +310,13 @@ components:
       schema:
         type: integer
         minimum: 1
+    alert-rules.MetricFilterParam:
+      name: metric
+      in: query
+      description: Filter the alert rules by metric name
+      required: false
+      schema:
+        type: string
     common.SortOrderParam:
       name: order
       in: query
@@ -341,26 +327,105 @@ components:
         enum:
         - asc
         - desc
-    alert-rules.MetricFilterParam:
-      name: metric
+    alert-rules.EnabledFilterParam:
+      name: enabled
       in: query
-      description: Filter the alert rules by metric name
+      description: Filter the alert rules by their enabled state
+      required: false
+      schema:
+        type: boolean
+    alert-rules.NameFilterParam:
+      name: name
+      in: query
+      description: Filter the alert rules by name using a case-insensitive partial match
+      required: false
+      schema:
+        type: string
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
       required: false
       schema:
         type: string
   schemas:
-    alert-rules.AlertRulesSummary:
+    alert-rules.GetAlertRulesResponse:
+      type: object
+      required:
+      - results
+      - pagination
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/alert-rules.AlertRuleResponse'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    alert-rules.MissingDataPolicy:
+      type: string
+      description: How missing data is treated while evaluating the rule
+      enum:
+      - ignore
+      - good
+      - bad
+    alert-rules.WebhookFormat:
+      type: string
+      description: Per-destination payload shape for a webhook delivery. Defaults to generic when omitted.
+      enum:
+      - generic
+      - slack
+    alert-rules.AlertRuleResponse:
       type: object
       properties:
-        totalCount:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        metric:
+          type: string
+        dimensionSet:
+          type: array
+          items:
+            $ref: '#/components/schemas/alert-rules.Dimension'
+        dimensionFilters:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+        aggregationFunction:
+          $ref: '#/components/schemas/alert-rules.AggregationFunction'
+        thresholdValue:
+          type: number
+          format: double
+        thresholdOperator:
+          $ref: '#/components/schemas/alert-rules.ThresholdOperator'
+        pendingPeriodSeconds:
           type: integer
-          format: int64
-        activeCount:
-          type: integer
-          format: int64
-        disabledCount:
-          type: integer
-          format: int64
+        missingDataPolicy:
+          $ref: '#/components/schemas/alert-rules.MissingDataPolicy'
+        notificationConfig:
+          $ref: '#/components/schemas/alert-rules.NotificationConfig'
+        enabled:
+          type: boolean
+        locationSelection:
+          type:
+          - object
+          - 'null'
+          additionalProperties: true
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    alert-rules.AggregationFunction:
+      type: string
+      description: How matching samples are aggregated before the threshold comparison
+      enum:
+      - avg
+      - min
+      - max
     alert-rules.EnabledRequest:
       type: object
       required:
@@ -368,64 +433,6 @@ components:
       properties:
         enabled:
           type: boolean
-    alert-rules.Delivery:
-      type: object
-      description: A single notification target, discriminated by `kind`
-      required:
-      - kind
-      discriminator:
-        propertyName: kind
-      oneOf:
-      - type: object
-        required:
-        - kind
-        - url
-        - auth
-        properties:
-          kind:
-            type: string
-            enum:
-            - webhook
-          name:
-            type: string
-          url:
-            type: string
-            description: http or https URL with no spaces
-            pattern: ^https?://\S+$
-          auth:
-            $ref: '#/components/schemas/alert-rules.WebhookAuth'
-          format:
-            $ref: '#/components/schemas/alert-rules.WebhookFormat'
-      - type: object
-        required:
-        - kind
-        - address
-        properties:
-          kind:
-            type: string
-            enum:
-            - email
-          name:
-            type: string
-          address:
-            type: string
-            format: email
-      - type: object
-        required:
-        - kind
-        - mdsConfigId
-        - organizationName
-        properties:
-          kind:
-            type: string
-            enum:
-            - servicenow
-          name:
-            type: string
-          mdsConfigId:
-            type: string
-          organizationName:
-            type: string
     alert-rules.AlertRuleRequest:
       type: object
       description: Body for creating (POST) or replacing (PUT) an alert rule. Enum fields use their wire values exactly as listed (e.g. ">", "avg", "ignore" in lowercase), not the uppercase names.
@@ -511,79 +518,76 @@ components:
           - kind: servicenow
             mdsConfigId: abc-123
             organizationName: globalcorp
-    common.Pagination:
+    alert-rules.Delivery:
       type: object
+      description: A single notification target, discriminated by `kind`
       required:
-      - perPage
-      - page
-      - total
-      - pages
-      properties:
-        perPage:
-          type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
-    alert-rules.WebhookFormat:
-      type: string
-      description: Per-destination payload shape for a webhook delivery. Defaults to generic when omitted.
-      enum:
-      - generic
-      - slack
-    alert-rules.AlertRuleResponse:
+      - kind
+      discriminator:
+        propertyName: kind
+      oneOf:
+      - type: object
+        required:
+        - kind
+        - url
+        - auth
+        properties:
+          kind:
+            type: string
+            enum:
+            - webhook
+          name:
+            type: string
+          url:
+            type: string
+            description: http or https URL with no spaces
+            pattern: ^https?://\S+$
+          auth:
+            $ref: '#/components/schemas/alert-rules.WebhookAuth'
+          format:
+            $ref: '#/components/schemas/alert-rules.WebhookFormat'
+      - type: object
+        required:
+        - kind
+        - address
+        properties:
+          kind:
+            type: string
+            enum:
+            - email
+          name:
+            type: string
+          address:
+            type: string
+            format: email
+      - type: object
+        required:
+        - kind
+        - mdsConfigId
+        - organizationName
+        properties:
+          kind:
+            type: string
+            enum:
+            - servicenow
+          name:
+            type: string
+          mdsConfigId:
+            type: string
+          organizationName:
+            type: string
+    alert-rules.AlertRulesSummary:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        metric:
-          type: string
-        dimensionSet:
-          type: array
-          items:
-            $ref: '#/components/schemas/alert-rules.Dimension'
-        dimensionFilters:
-          type:
-          - object
-          - 'null'
-          additionalProperties: true
-        aggregationFunction:
-          $ref: '#/components/schemas/alert-rules.AggregationFunction'
-        thresholdValue:
-          type: number
-          format: double
-        thresholdOperator:
-          $ref: '#/components/schemas/alert-rules.ThresholdOperator'
-        pendingPeriodSeconds:
+        totalCount:
           type: integer
-        missingDataPolicy:
-          $ref: '#/components/schemas/alert-rules.MissingDataPolicy'
-        notificationConfig:
-          $ref: '#/components/schemas/alert-rules.NotificationConfig'
-        enabled:
-          type: boolean
-        locationSelection:
-          type:
-          - object
-          - 'null'
-          additionalProperties: true
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
+          format: int64
+        activeCount:
+          type: integer
+          format: int64
+        disabledCount:
+          type: integer
+          format: int64
     common.ResponseStatusException:
       type: object
       required:
@@ -606,15 +610,14 @@ components:
           type: string
         requestId:
           type: string
-    alert-rules.NotificationConfig:
-      type: object
-      required:
-      - deliveries
-      properties:
-        deliveries:
-          type: array
-          items:
-            $ref: '#/components/schemas/alert-rules.Delivery'
+    alert-rules.ThresholdOperator:
+      type: string
+      description: The comparison operator applied between the aggregated value and the threshold
+      enum:
+      - <
+      - <=
+      - '>'
+      - '>='
     alert-rules.Dimension:
       type: string
       description: A dimension the metric can be grouped/keyed by
@@ -625,13 +628,37 @@ components:
       - band
       - location_id
       - target
-    alert-rules.AggregationFunction:
-      type: string
-      description: How matching samples are aggregated before the threshold comparison
-      enum:
-      - avg
-      - min
-      - max
+    alert-rules.NotificationConfig:
+      type: object
+      required:
+      - deliveries
+      properties:
+        deliveries:
+          type: array
+          items:
+            $ref: '#/components/schemas/alert-rules.Delivery'
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
     alert-rules.WebhookAuth:
       type: object
       description: Authentication mode for a webhook delivery, discriminated by `type`. Credentials are referenced by Secrets Manager ARN; the secret value is never stored here.
@@ -677,34 +704,13 @@ components:
             type: string
             description: Secrets Manager ARN holding the token
             pattern: ^arn:aws:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:.+
-    alert-rules.ThresholdOperator:
-      type: string
-      description: The comparison operator applied between the aggregated value and the threshold
-      enum:
-      - <
-      - <=
-      - '>'
-      - '>='
-    alert-rules.MissingDataPolicy:
-      type: string
-      description: How missing data is treated while evaluating the rule
-      enum:
-      - ignore
-      - good
-      - bad
-    alert-rules.GetAlertRulesResponse:
-      type: object
-      required:
-      - results
-      - pagination
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/alert-rules.AlertRuleResponse'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
   responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
     common.400BadRequestResponse:
       description: Bad Request
       content:
@@ -713,12 +719,6 @@ components:
             $ref: '#/components/schemas/common.ResponseStatusException'
     common.403Forbidden:
       description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
       content:
         application/json:
           schema:

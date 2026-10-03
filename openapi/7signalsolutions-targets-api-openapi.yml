@@ -287,28 +287,6 @@ components:
         ipV6Address:
           type: string
           description: Only applicable to SONAR/PING_ENDPOINT targets
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
     targets.PostSensorTargetRequest:
       type: object
       properties:
@@ -375,6 +353,28 @@ components:
         tcpPort:
           type: number
           description: Only applicable to SONAR/IPERF3_SERVER; omit to leave unchanged
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
     targets.GetSensorTargetResponse:
       $ref: '#/components/schemas/targets.SensorTarget'
   responses:

@@ -121,16 +121,6 @@ paths:
       - oauth2: []
 components:
   schemas:
-    metadata.Feature:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        feature:
-          type: string
-        description:
-          type: string
     metadata.PageModelOrganization:
       type: object
       properties:
@@ -140,28 +130,6 @@ components:
             $ref: '#/components/schemas/metadata.Organization'
         pagination:
           $ref: '#/components/schemas/metadata.Pagination'
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
     metadata.Organization:
       type: object
       properties:
@@ -200,20 +168,54 @@ components:
         pages:
           type: integer
           format: int32
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
+    metadata.Feature:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        feature:
+          type: string
+        description:
+          type: string
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
   parameters:
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    metadata.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
+      required: false
+      schema:
+        type: integer
+        minimum: 0
     common.SortOrderParam:
       name: order
       in: query
@@ -224,21 +226,6 @@ components:
         enum:
         - asc
         - desc
-    metadata.PageRequestParam:
-      name: page
-      in: query
-      description: Fetch a particular page of data. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
-      required: false
-      schema:
-        type: integer
-        minimum: 0
-    common.PerPageRequestParam:
-      name: perPage
-      in: query
-      description: Fetch a specific number of records per page
-      required: false
-      schema:
-        type: integer
     common.SortFieldParam:
       name: sortField
       in: query
@@ -246,6 +233,19 @@ components:
       required: false
       schema:
         type: string
+  responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

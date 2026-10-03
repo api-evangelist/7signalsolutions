@@ -148,39 +148,14 @@ paths:
         '404':
           $ref: '#/components/responses/common.404NotFoundResponse'
 components:
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-  parameters:
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
   schemas:
-    eyeris.EyerisAnalysisRequestResponse:
+    eyeris.EyerisCreateStreamRequest:
       type: object
       properties:
-        response:
+        promptTypeKey:
           type: string
-        requestId:
-          type: string
-          format: uuid
-        responseId:
-          type: string
-          format: uuid
+        inputData:
+          type: object
     eyeris.EyerisAnalysisResponse:
       type: object
       properties:
@@ -193,13 +168,6 @@ components:
         responseId:
           type: string
           format: uuid
-    eyeris.EyerisCreateStreamRequest:
-      type: object
-      properties:
-        promptTypeKey:
-          type: string
-        inputData:
-          type: object
     eyeris.EyerisSseEmitter:
       type: array
       items:
@@ -240,6 +208,17 @@ components:
           description: The time in milliseconds from the epoch till which the analysis should be done.
           type: string
           format: datetime
+    eyeris.EyerisAnalysisRequestResponse:
+      type: object
+      properties:
+        response:
+          type: string
+        requestId:
+          type: string
+          format: uuid
+        responseId:
+          type: string
+          format: uuid
     common.ResponseStatusException:
       type: object
       required:
@@ -262,6 +241,27 @@ components:
           type: string
         requestId:
           type: string
+  parameters:
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+  responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

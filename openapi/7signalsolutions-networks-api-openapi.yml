@@ -270,89 +270,27 @@ paths:
       tags:
       - Networks
 components:
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
-    networks.GetSensorNetworkResponse:
-      $ref: '#/components/schemas/networks.SensorNetwork'
-    networks.GetSensorNetworksResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/networks.SensorNetwork'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    common.ResponseStatusException:
+    networks.PostSensorNetworkRequest:
       type: object
       required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
+      - name
+      - networkKeyId
       properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
-    networks.GetAgentNetworkResponse:
-      $ref: '#/components/schemas/networks.AgentNetwork'
-    networks.PostAgentNetworksRequest:
-      type: array
-      items:
-        $ref: '#/components/schemas/networks.AgentNetworkRequest'
-    networks.SensorNetwork:
-      type: object
-      properties:
-        id:
-          type: integer
         name:
-          type: string
-        description:
           type: string
         displayName:
           type: string
         networkKeyId:
           type: integer
-        contactPerson:
+    networks.GetSensorNetworkResponse:
+      $ref: '#/components/schemas/networks.SensorNetwork'
+    networks.AgentNetworkRequest:
+      type: object
+      properties:
+        name:
           type: string
-        allowAutomaticMacFix:
-          type: boolean
-        randomMacs:
-          type: boolean
-        autoUpdateApNames:
-          type: boolean
-        ssidHidden:
-          type: boolean
-        pmfSupportEnabled:
-          type: boolean
-        ieee80211rClientSupportEnabled2400MHz:
-          type: boolean
-        ieee80211rClientSupportEnabled5000MHz:
-          type: boolean
-        ieee80211rClientSupportEnabled6000MHz:
+        isEnabled:
           type: boolean
     networks.AgentNetwork:
       type: object
@@ -370,47 +308,8 @@ components:
         updatedAt:
           type: string
           format: date-time
-    networks.AgentNetworkRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        isEnabled:
-          type: boolean
-    common.Pagination:
-      type: object
-      required:
-      - perPage
-      - page
-      - total
-      - pages
-      properties:
-        perPage:
-          type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
-    networks.PostSensorNetworkRequest:
-      type: object
-      required:
-      - name
-      - networkKeyId
-      properties:
-        name:
-          type: string
-        displayName:
-          type: string
-        networkKeyId:
-          type: integer
+    networks.GetAgentNetworkResponse:
+      $ref: '#/components/schemas/networks.AgentNetwork'
     networks.PutSensorNetworkRequest:
       type: object
       required:
@@ -451,6 +350,41 @@ components:
           type: boolean
         ieee80211rClientSupportEnabled6000MHz:
           type: boolean
+    networks.PostAgentNetworksRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/networks.AgentNetworkRequest'
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    networks.GetSensorNetworksResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/networks.SensorNetwork'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
     networks.GetAgentNetworksResponse:
       type: object
       properties:
@@ -460,6 +394,59 @@ components:
             $ref: '#/components/schemas/networks.AgentNetwork'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
+    networks.SensorNetwork:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        displayName:
+          type: string
+        networkKeyId:
+          type: integer
+        contactPerson:
+          type: string
+        allowAutomaticMacFix:
+          type: boolean
+        randomMacs:
+          type: boolean
+        autoUpdateApNames:
+          type: boolean
+        ssidHidden:
+          type: boolean
+        pmfSupportEnabled:
+          type: boolean
+        ieee80211rClientSupportEnabled2400MHz:
+          type: boolean
+        ieee80211rClientSupportEnabled5000MHz:
+          type: boolean
+        ieee80211rClientSupportEnabled6000MHz:
+          type: boolean
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
   parameters:
     common.OrganizationRequestParam:
       name: organization
@@ -468,6 +455,19 @@ components:
       required: false
       schema:
         type: string
+  responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

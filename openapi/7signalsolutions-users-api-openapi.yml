@@ -591,34 +591,6 @@ components:
         type: integer
         minimum: 0
   schemas:
-    metadata.Role:
-      required:
-      - auth0Id
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        key:
-          type: string
-        description:
-          type: string
-        auth0Id:
-          type: string
-        isPublic:
-          type: boolean
-    metadata.Permission:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        key:
-          type: string
-        description:
-          type: string
-        isPublic:
-          type: boolean
     metadata.User:
       type: object
       properties:
@@ -669,6 +641,126 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/metadata.Group'
+    metadata.OrganizationInfo:
+      required:
+      - organizationId
+      type: object
+      properties:
+        organizationId:
+          type: string
+          format: uuid
+        isPrimary:
+          type: boolean
+    metadata.OrganizationsUsersRequest:
+      required:
+      - organizations
+      type: object
+      properties:
+        organizations:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.OrganizationInfo'
+    metadata.Pagination:
+      type: object
+      properties:
+        perPage:
+          type: integer
+          format: int32
+        page:
+          type: integer
+          format: int32
+          minimum: 0
+          description: The current page number. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
+        total:
+          type: integer
+          format: int64
+        pages:
+          type: integer
+          format: int32
+    metadata.AggregateReferenceOrganizationUUID:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+    metadata.UsersGroupsRequest:
+      required:
+      - groupIds
+      type: object
+      properties:
+        groupIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+    metadata.PageModelUserOrganization:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.UserOrganization'
+        pagination:
+          $ref: '#/components/schemas/metadata.Pagination'
+    metadata.Permission:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        key:
+          type: string
+        description:
+          type: string
+        isPublic:
+          type: boolean
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    metadata.PageModelPermission:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Permission'
+        pagination:
+          $ref: '#/components/schemas/metadata.Pagination'
+    metadata.Role:
+      required:
+      - auth0Id
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        key:
+          type: string
+        description:
+          type: string
+        auth0Id:
+          type: string
+        isPublic:
+          type: boolean
     metadata.UserRequest:
       required:
       - email
@@ -696,122 +788,12 @@ components:
           type: array
           items:
             type: string
-    metadata.PageModelUser:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/metadata.User'
-        pagination:
-          $ref: '#/components/schemas/metadata.Pagination'
-    metadata.AggregateReferenceOrganizationUUID:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    metadata.UsersGroupsRequest:
-      required:
-      - groupIds
-      type: object
-      properties:
-        groupIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-    metadata.Pagination:
-      type: object
-      properties:
-        perPage:
-          type: integer
-          format: int32
-        page:
-          type: integer
-          format: int32
-          minimum: 0
-          description: The current page number. The first page is supposed to be 1, but some endpoints mistakenly treat the first page as 0. This is a known issue and will be fixed in the next major API release.
-        total:
-          type: integer
-          format: int64
-        pages:
-          type: integer
-          format: int32
-    metadata.OrganizationsUsersRequest:
-      required:
-      - organizations
-      type: object
-      properties:
-        organizations:
-          type: array
-          items:
-            $ref: '#/components/schemas/metadata.OrganizationInfo'
-    metadata.UsersPermissionsRequest:
-      type: object
-      properties:
-        permissionIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        permissionNames:
-          type: array
-          items:
-            type: string
-    metadata.AggregateReferenceInstanceUUID:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
     metadata.AggregateReferenceRoleUUID:
       type: object
       properties:
         id:
           type: string
           format: uuid
-    metadata.OrganizationInfo:
-      required:
-      - organizationId
-      type: object
-      properties:
-        organizationId:
-          type: string
-          format: uuid
-        isPrimary:
-          type: boolean
-    metadata.PageModelUserOrganization:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/metadata.UserOrganization'
-        pagination:
-          $ref: '#/components/schemas/metadata.Pagination'
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
     metadata.PageModelGroup:
       type: object
       properties:
@@ -821,37 +803,12 @@ components:
             $ref: '#/components/schemas/metadata.Group'
         pagination:
           $ref: '#/components/schemas/metadata.Pagination'
-    metadata.UsersRoleRequest:
-      required:
-      - roleId
-      type: object
-      properties:
-        roleId:
-          type: string
-          format: uuid
-    metadata.UserOrganization:
+    metadata.AggregateReferenceInstanceUUID:
       type: object
       properties:
         id:
           type: string
           format: uuid
-        name:
-          type: string
-        connectionId:
-          type: string
-        isPrimary:
-          type: boolean
-        mobileEyeOrgCode:
-          type: string
-    metadata.PageModelPermission:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/metadata.Permission'
-        pagination:
-          $ref: '#/components/schemas/metadata.Pagination'
     metadata.Group:
       type: object
       properties:
@@ -866,15 +823,58 @@ components:
           type: string
         displayName:
           type: string
+    metadata.UsersRoleRequest:
+      required:
+      - roleId
+      type: object
+      properties:
+        roleId:
+          type: string
+          format: uuid
+    metadata.UsersPermissionsRequest:
+      type: object
+      properties:
+        permissionIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        permissionNames:
+          type: array
+          items:
+            type: string
+    metadata.PageModelUser:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.User'
+        pagination:
+          $ref: '#/components/schemas/metadata.Pagination'
+    metadata.UserOrganization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        connectionId:
+          type: string
+        isPrimary:
+          type: boolean
+        mobileEyeOrgCode:
+          type: string
   responses:
-    common.400BadRequestResponse:
-      description: Bad Request
+    common.404NotFoundResponse:
+      description: Resource Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
+    common.400BadRequestResponse:
+      description: Bad Request
       content:
         application/json:
           schema:

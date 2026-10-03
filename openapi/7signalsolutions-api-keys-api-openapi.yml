@@ -140,51 +140,13 @@ paths:
       security:
       - oauth2: []
 components:
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
-    metadata.PageModelApiKey:
+    metadata.AggregateReferenceGroupUUID:
       type: object
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/metadata.ApiKey'
-        pagination:
-          $ref: '#/components/schemas/metadata.Pagination'
+        id:
+          type: string
+          format: uuid
     metadata.ApiKeyResponse:
       type: object
       properties:
@@ -212,39 +174,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/metadata.Permission'
-    metadata.AggregateReferenceGroupUUID:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    metadata.AggregateReferenceOrganizationUUID:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-    metadata.ApiKeyRequest:
-      required:
-      - organizationId
-      type: object
-      properties:
-        organizationId:
-          type: string
-          format: uuid
-        sapphireGroupId:
-          type: string
-          format: uuid
-        roleId:
-          type: string
-          format: uuid
-        permissionIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        description:
-          type: string
     metadata.Pagination:
       type: object
       properties:
@@ -262,6 +191,12 @@ components:
         pages:
           type: integer
           format: int32
+    metadata.AggregateReferenceOrganizationUUID:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
     metadata.ApiKey:
       required:
       - organization
@@ -297,7 +232,79 @@ components:
           type: string
         isPublic:
           type: boolean
+    metadata.ApiKeyRequest:
+      required:
+      - organizationId
+      type: object
+      properties:
+        organizationId:
+          type: string
+          format: uuid
+        sapphireGroupId:
+          type: string
+          format: uuid
+        roleId:
+          type: string
+          format: uuid
+        permissionIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        description:
+          type: string
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    metadata.PageModelApiKey:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.ApiKey'
+        pagination:
+          $ref: '#/components/schemas/metadata.Pagination'
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   parameters:
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
     common.SortOrderParam:
       name: order
       in: query
@@ -316,13 +323,6 @@ components:
       schema:
         type: integer
         minimum: 0
-    common.PerPageRequestParam:
-      name: perPage
-      in: query
-      description: Fetch a specific number of records per page
-      required: false
-      schema:
-        type: integer
     common.SortFieldParam:
       name: sortField
       in: query

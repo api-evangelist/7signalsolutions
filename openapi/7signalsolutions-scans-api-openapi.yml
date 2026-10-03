@@ -69,6 +69,22 @@ paths:
       - Scans
 components:
   parameters:
+    scans.SensorIdRequestParam:
+      name: sensorId
+      in: query
+      description: The ID of the sensor (eye)
+      required: true
+      schema:
+        type: integer
+    scans.PageRequestParam:
+      name: page
+      in: query
+      description: Page number for pagination (0-based)
+      required: false
+      schema:
+        type: integer
+        default: 0
+        minimum: 0
     scans.EndTimeRequestParam:
       name: end
       in: query
@@ -87,6 +103,14 @@ components:
         default: 20
         minimum: 1
         maximum: 1000
+    scans.AgentIdRequestParam:
+      name: agentId
+      in: query
+      description: The UUID of the agent
+      required: true
+      schema:
+        type: string
+        format: uuid
     common.OrganizationRequestParam:
       name: organization
       in: query
@@ -102,30 +126,6 @@ components:
       schema:
         type: integer
         format: int64
-    scans.PageRequestParam:
-      name: page
-      in: query
-      description: Page number for pagination (0-based)
-      required: false
-      schema:
-        type: integer
-        default: 0
-        minimum: 0
-    scans.SensorIdRequestParam:
-      name: sensorId
-      in: query
-      description: The ID of the sensor (eye)
-      required: true
-      schema:
-        type: integer
-    scans.AgentIdRequestParam:
-      name: agentId
-      in: query
-      description: The UUID of the agent
-      required: true
-      schema:
-        type: string
-        format: uuid
   schemas:
     scans.SensorScanTimestamp:
       type: object
@@ -178,63 +178,16 @@ components:
           - integer
           - 'null'
           description: Number of stations/clients connected to the access point
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
-    scans.SensorsScanDataResponse:
+    scans.AgentsScanDataResponse:
       type: object
       properties:
         pagination:
           $ref: '#/components/schemas/common.ZeroBasedPagination'
         scans:
           type: array
-          description: Array of sensor scan records grouped by timestamp
+          description: Array of agent scan records grouped by timestamp
           items:
-            $ref: '#/components/schemas/scans.SensorScanTimestamp'
-    scans.AgentScanTimestamp:
-      type: object
-      properties:
-        timestamp:
-          type: integer
-          format: int64
-          description: Scan timestamp in epoch milliseconds (UTC)
-        agentId:
-          type: string
-          description: UUID of the agent that performed the scan
-        agentConnectedBssid:
-          type:
-          - string
-          - 'null'
-          description: BSSID of the access point the agent was connected to during the scan
-        agentConnectedSsid:
-          type:
-          - string
-          - 'null'
-          description: SSID of the access point the agent was connected to during the scan
-        data:
-          type: array
-          description: Access points detected in this scan
-          items:
-            $ref: '#/components/schemas/scans.AgentScanAp'
+            $ref: '#/components/schemas/scans.AgentScanTimestamp'
     common.ZeroBasedPagination:
       type: object
       properties:
@@ -325,25 +278,72 @@ components:
           - integer
           - 'null'
           description: Split channel information for advanced channel configurations
-    scans.AgentsScanDataResponse:
+    scans.AgentScanTimestamp:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+          description: Scan timestamp in epoch milliseconds (UTC)
+        agentId:
+          type: string
+          description: UUID of the agent that performed the scan
+        agentConnectedBssid:
+          type:
+          - string
+          - 'null'
+          description: BSSID of the access point the agent was connected to during the scan
+        agentConnectedSsid:
+          type:
+          - string
+          - 'null'
+          description: SSID of the access point the agent was connected to during the scan
+        data:
+          type: array
+          description: Access points detected in this scan
+          items:
+            $ref: '#/components/schemas/scans.AgentScanAp'
+    scans.SensorsScanDataResponse:
       type: object
       properties:
         pagination:
           $ref: '#/components/schemas/common.ZeroBasedPagination'
         scans:
           type: array
-          description: Array of agent scan records grouped by timestamp
+          description: Array of sensor scan records grouped by timestamp
           items:
-            $ref: '#/components/schemas/scans.AgentScanTimestamp'
+            $ref: '#/components/schemas/scans.SensorScanTimestamp'
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
   responses:
-    common.400BadRequestResponse:
-      description: Bad Request
+    common.404NotFoundResponse:
+      description: Resource Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
+    common.400BadRequestResponse:
+      description: Bad Request
       content:
         application/json:
           schema:

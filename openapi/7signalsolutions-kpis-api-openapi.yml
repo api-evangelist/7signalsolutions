@@ -345,6 +345,15 @@ paths:
       - KPIs
 components:
   parameters:
+    kpis.OrgKpiCodes:
+      name: kpiCodes
+      in: query
+      description: Return data for one or more KPI codes. Common examples include HC005, HC006, HC007, HC008. For the full list of KPI codes, see the [Time Series Sensors Metric Types endpoint](/swagger-ui/index.html#/TimeSeries/time-series-sensors-metric-types).
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
     kpis.ClientMac:
       name: clientMac
       in: query
@@ -352,18 +361,53 @@ components:
       required: false
       schema:
         type: string
+    kpis.FromRequestParam:
+      name: from
+      in: query
+      description: The time in milliseconds from the epoch after which incidents are fetched (the lower bound). Defaults to the previous 24 hours.
+      required: false
+      schema:
+        type: number
+        format: datetime
+    kpis.KpiCodes:
+      name: kpiCodes
+      in: query
+      description: Return data for one or more KPI codes. Common examples include HC005, HC006, HC007, HC008, AV008, AC001, RA103, AC002, DN002, QURT007, QUAP008, QUAP009, QURT004, QUAP005, QUAP006, QURS004, QURS007, QURS002, TR062, DR013, DR014, DR015, DR016, DR017, DR018. For the full list of KPI codes, see the [Time Series Sensors Metric Types endpoint](/swagger-ui/index.html#/TimeSeries/time-series-sensors-metric-types).
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+    kpis.SSIDFilter:
+      name: ssid
+      in: query
+      description: Filter data returned by one or more SSIDs
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+    kpis.AccessPointId:
+      name: accessPointId
+      in: path
+      description: Fetch KPIs for a specific access point.
+      required: true
+      schema:
+        type: string
+    kpis.IncludeClientCount:
+      name: includeClientCount
+      in: query
+      description: 'Deprecated: Client count will always be returned going forward.'
+      required: false
+      schema:
+        type: boolean
+        default: true
+      deprecated: true
     kpis.ServiceAreaId:
       name: serviceAreaId
       in: path
       description: Fetch KPIs for a specific service area.
       required: true
-      schema:
-        type: string
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
       schema:
         type: string
     kpis.TimeLimit:
@@ -380,11 +424,91 @@ components:
         - ONEWEEK
         - ONEMONTH
         - THREEMONTHS
+    kpis.SensorId:
+      name: sensorId
+      in: path
+      description: Fetch KPIs for a specific sensor.
+      required: true
+      schema:
+        type: string
+    kpis.ToRequestParam:
+      name: to
+      in: query
+      description: The time in milliseconds from the epoch up to which events are fetched (the upper bound). Defaults to the present now.
+      required: false
+      schema:
+        type: number
+        format: datetime
+    kpis.BandFilter:
+      name: band
+      in: query
+      description: Filter data returned by a band.
+      required: false
+      schema:
+        type: string
+        enum:
+        - '2.4'
+        - '5'
+        - '6'
+    kpis.NetworkIdFilter:
+      name: networkId
+      in: query
+      description: Filter data returned by a network ID
+      required: false
+      schema:
+        type: number
+    kpis.Averaging:
+      name: averaging
+      in: query
+      description: Filter data returned by a network IDs
+      required: false
+      schema:
+        type: string
+        default: HOUR
+        enum:
+        - RAW
+        - ONEMIN
+        - TENMIN
+        - HOUR
+        - DAY
+        - MONTH
+        - ALL
+        - NONE
+    kpis.LocationId:
+      name: locationId
+      in: path
+      description: Fetch KPIs for a specific location.
+      required: true
+      schema:
+        type: string
     kpis.TargetId:
       name: targetId
       in: path
       description: Fetch KPIs for a specific target.
       required: true
+      schema:
+        type: string
+    kpis.LocationIdFilter:
+      name: locationId
+      in: query
+      description: Filter data returned by a location ID
+      required: false
+      schema:
+        type: number
+    kpis.APKpiCodes:
+      name: kpiCodes
+      in: query
+      description: Return data for one or more KPI codes. Common examples include HC005, HC006, HC007, HC008, AV008, AC001, RA103, AC002, DN002, QURT007, QUAP008, QUAP009, QURT004, QUAP005, QUAP006, QURS004, QURS007, QURS002, TR062, DR001, DR002, DR003, DR004, DR005, DR006, DR007, DR008, DR009, DR010, DR011, DR012, DR013, DR014, DR015, DR016, DR017, DR018. For the full list of KPI codes, see the [Time Series Sensors Metric Types endpoint](/swagger-ui/index.html#/TimeSeries/time-series-sensors-metric-types).
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
       schema:
         type: string
     kpis.EventTypeFilter:
@@ -435,131 +559,16 @@ components:
         enum:
         - CONNECTION
         - BAND
-    kpis.LocationId:
-      name: locationId
-      in: path
-      description: Fetch KPIs for a specific location.
-      required: true
-      schema:
-        type: string
-    kpis.ToRequestParam:
-      name: to
-      in: query
-      description: The time in milliseconds from the epoch up to which events are fetched (the upper bound). Defaults to the present now.
-      required: false
-      schema:
-        type: number
-        format: datetime
-    kpis.LocationIdFilter:
-      name: locationId
-      in: query
-      description: Filter data returned by a location ID
-      required: false
-      schema:
-        type: number
-    kpis.SSIDFilter:
-      name: ssid
-      in: query
-      description: Filter data returned by one or more SSIDs
-      required: false
-      schema:
-        type: array
-        items:
-          type: string
-    kpis.OrgKpiCodes:
-      name: kpiCodes
-      in: query
-      description: Return data for one or more KPI codes. Common examples include HC005, HC006, HC007, HC008. For the full list of KPI codes, see the [Time Series Sensors Metric Types endpoint](/swagger-ui/index.html#/TimeSeries/time-series-sensors-metric-types).
-      required: true
-      schema:
-        type: array
-        items:
-          type: string
-    kpis.APKpiCodes:
-      name: kpiCodes
-      in: query
-      description: Return data for one or more KPI codes. Common examples include HC005, HC006, HC007, HC008, AV008, AC001, RA103, AC002, DN002, QURT007, QUAP008, QUAP009, QURT004, QUAP005, QUAP006, QURS004, QURS007, QURS002, TR062, DR001, DR002, DR003, DR004, DR005, DR006, DR007, DR008, DR009, DR010, DR011, DR012, DR013, DR014, DR015, DR016, DR017, DR018. For the full list of KPI codes, see the [Time Series Sensors Metric Types endpoint](/swagger-ui/index.html#/TimeSeries/time-series-sensors-metric-types).
-      required: true
-      schema:
-        type: array
-        items:
-          type: string
-    kpis.BandFilter:
-      name: band
-      in: query
-      description: Filter data returned by a band.
-      required: false
-      schema:
-        type: string
-        enum:
-        - '2.4'
-        - '5'
-        - '6'
-    kpis.AccessPointId:
-      name: accessPointId
-      in: path
-      description: Fetch KPIs for a specific access point.
-      required: true
-      schema:
-        type: string
-    kpis.Averaging:
-      name: averaging
-      in: query
-      description: Filter data returned by a network IDs
-      required: false
-      schema:
-        type: string
-        default: HOUR
-        enum:
-        - RAW
-        - ONEMIN
-        - TENMIN
-        - HOUR
-        - DAY
-        - MONTH
-        - ALL
-        - NONE
-    kpis.NetworkIdFilter:
-      name: networkId
-      in: query
-      description: Filter data returned by a network ID
-      required: false
-      schema:
-        type: number
-    kpis.IncludeClientCount:
-      name: includeClientCount
-      in: query
-      description: 'Deprecated: Client count will always be returned going forward.'
-      required: false
-      schema:
-        type: boolean
-        default: true
-      deprecated: true
-    kpis.FromRequestParam:
-      name: from
-      in: query
-      description: The time in milliseconds from the epoch after which incidents are fetched (the lower bound). Defaults to the previous 24 hours.
-      required: false
-      schema:
-        type: number
-        format: datetime
-    kpis.KpiCodes:
-      name: kpiCodes
-      in: query
-      description: Return data for one or more KPI codes. Common examples include HC005, HC006, HC007, HC008, AV008, AC001, RA103, AC002, DN002, QURT007, QUAP008, QUAP009, QURT004, QUAP005, QUAP006, QURS004, QURS007, QURS002, TR062, DR013, DR014, DR015, DR016, DR017, DR018. For the full list of KPI codes, see the [Time Series Sensors Metric Types endpoint](/swagger-ui/index.html#/TimeSeries/time-series-sensors-metric-types).
-      required: true
-      schema:
-        type: array
-        items:
-          type: string
-    kpis.SensorId:
-      name: sensorId
-      in: path
-      description: Fetch KPIs for a specific sensor.
-      required: true
-      schema:
-        type: string
   schemas:
+    kpis.GetAgentKPIsClientCapabilitiesResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.AgentKPIClientCapability'
+        range:
+          $ref: '#/components/schemas/common.Range'
     kpis.AgentKPIClientCapability:
       type: object
       properties:
@@ -579,36 +588,15 @@ components:
           type: number
         licensedClientPercent90Days:
           type: number
-    kpis.AgentKPIType:
+    kpis.AgentKPIGlobal:
       type: object
       properties:
-        id:
-          type: string
-          format: string
-        criticalSum:
+        clientCount:
           type: number
-        warningSum:
-          type: number
-        goodSum:
-          type: number
-    kpis.GetAgentKPIsAdapterDriversResponse:
-      type: object
-      properties:
-        results:
+        types:
           type: array
           items:
-            $ref: '#/components/schemas/kpis.AgentKPIAdapterDriver'
-        range:
-          $ref: '#/components/schemas/common.Range'
-    kpis.GetAgentKPIsAccessPointsResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/kpis.AgentKPIAccessPoint'
-        range:
-          $ref: '#/components/schemas/common.Range'
+            $ref: '#/components/schemas/kpis.AgentKPIType'
     kpis.KPITopology:
       type: object
       properties:
@@ -688,6 +676,59 @@ components:
         slaParameters:
           type: object
           description: The SLA parameters for the KPI
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    kpis.GetAgentKPIsLocationsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.AgentKPILocation'
+        range:
+          $ref: '#/components/schemas/common.Range'
+    kpis.AgentKPIAdapterDriver:
+      type: object
+      properties:
+        driverProvider:
+          type: string
+        driverVersion:
+          type: string
+        clientCount:
+          type: number
+        types:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.AgentKPIType'
+    kpis.GetAgentKPIsAdapterDriversResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.AgentKPIAdapterDriver'
+        range:
+          $ref: '#/components/schemas/common.Range'
     kpis.AgentKPIAccessPoint:
       type: object
       properties:
@@ -699,6 +740,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/kpis.AgentKPIType'
+    kpis.AgentKPIType:
+      type: object
+      properties:
+        id:
+          type: string
+          format: string
+        criticalSum:
+          type: number
+        warningSum:
+          type: number
+        goodSum:
+          type: number
+    kpis.GetAgentKPIsAccessPointsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/kpis.AgentKPIAccessPoint'
+        range:
+          $ref: '#/components/schemas/common.Range'
     kpis.AgentKPILocation:
       type: object
       properties:
@@ -730,68 +792,6 @@ components:
             $ref: '#/components/schemas/kpis.KPITopology'
         range:
           $ref: '#/components/schemas/common.Range'
-    kpis.AgentKPIAdapterDriver:
-      type: object
-      properties:
-        driverProvider:
-          type: string
-        driverVersion:
-          type: string
-        clientCount:
-          type: number
-        types:
-          type: array
-          items:
-            $ref: '#/components/schemas/kpis.AgentKPIType'
-    kpis.GetAgentKPIsClientCapabilitiesResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/kpis.AgentKPIClientCapability'
-        range:
-          $ref: '#/components/schemas/common.Range'
-    kpis.AgentKPIGlobal:
-      type: object
-      properties:
-        clientCount:
-          type: number
-        types:
-          type: array
-          items:
-            $ref: '#/components/schemas/kpis.AgentKPIType'
-    kpis.GetAgentKPIsLocationsResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/kpis.AgentKPILocation'
-        range:
-          $ref: '#/components/schemas/common.Range'
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
     common.Range:
       type: object
       required:
@@ -827,14 +827,14 @@ components:
           type: string
           example: 60 seconds
   responses:
-    common.400BadRequestResponse:
-      description: Bad Request
+    common.404NotFoundResponse:
+      description: Resource Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
+    common.400BadRequestResponse:
+      description: Bad Request
       content:
         application/json:
           schema:

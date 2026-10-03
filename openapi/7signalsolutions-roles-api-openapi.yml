@@ -87,69 +87,7 @@ paths:
       security:
       - oauth2: []
 components:
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
-    metadata.PageModelRole:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/metadata.Role'
-        pagination:
-          $ref: '#/components/schemas/metadata.Pagination'
-    metadata.RoleResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        key:
-          type: string
-        description:
-          type: string
-        auth0Id:
-          type: string
-        isPublic:
-          type: boolean
-        permissions:
-          type: array
-          items:
-            $ref: '#/components/schemas/metadata.Permission'
     metadata.Role:
       required:
       - auth0Id
@@ -183,6 +121,33 @@ components:
         pages:
           type: integer
           format: int32
+    metadata.PageModelRole:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Role'
+        pagination:
+          $ref: '#/components/schemas/metadata.Pagination'
+    metadata.RoleResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        key:
+          type: string
+        description:
+          type: string
+        auth0Id:
+          type: string
+        isPublic:
+          type: boolean
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Permission'
     metadata.Permission:
       type: object
       properties:
@@ -195,7 +160,36 @@ components:
           type: string
         isPublic:
           type: boolean
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
   parameters:
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
     common.SortOrderParam:
       name: order
       in: query
@@ -214,13 +208,6 @@ components:
       schema:
         type: integer
         minimum: 0
-    common.PerPageRequestParam:
-      name: perPage
-      in: query
-      description: Fetch a specific number of records per page
-      required: false
-      schema:
-        type: integer
     common.SortFieldParam:
       name: sortField
       in: query
@@ -228,6 +215,19 @@ components:
       required: false
       schema:
         type: string
+  responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

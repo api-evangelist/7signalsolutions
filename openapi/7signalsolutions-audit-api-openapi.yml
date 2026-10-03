@@ -49,7 +49,57 @@ paths:
       tags:
       - Audit
 components:
+  responses:
+    common.403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   parameters:
+    audits.ActionParam:
+      name: action
+      in: query
+      description: The action taken
+      required: false
+      schema:
+        type: string
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    common.SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    audits.SourceParam:
+      name: source
+      in: query
+      description: The area of the system from which the event originated
+      required: false
+      schema:
+        type: string
     audits.ActorParam:
       name: actor
       in: query
@@ -65,30 +115,6 @@ components:
       schema:
         type: integer
         minimum: 1
-    audits.InitiatedParam:
-      name: initiated
-      in: query
-      description: How the event was initiated
-      required: false
-      schema:
-        type: string
-    common.SortOrderParam:
-      name: order
-      in: query
-      description: Sort order
-      required: false
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
     audits.EndTimeRangeParam:
       name: endTimeRange
       in: query
@@ -97,6 +123,20 @@ components:
       schema:
         type: string
         format: date-time
+    audits.InitiatedParam:
+      name: initiated
+      in: query
+      description: How the event was initiated
+      required: false
+      schema:
+        type: string
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
     audits.StartTimeRangeParam:
       name: startTimeRange
       in: query
@@ -105,27 +145,6 @@ components:
       schema:
         type: string
         format: date-time
-    common.PerPageRequestParam:
-      name: perPage
-      in: query
-      description: Fetch a specific number of records per page
-      required: false
-      schema:
-        type: integer
-    audits.SourceParam:
-      name: source
-      in: query
-      description: The area of the system from which the event originated
-      required: false
-      schema:
-        type: string
-    audits.ActionParam:
-      name: action
-      in: query
-      description: The action taken
-      required: false
-      schema:
-        type: string
     common.SortFieldParam:
       name: sortField
       in: query
@@ -133,25 +152,6 @@ components:
       required: false
       schema:
         type: string
-  responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
     audits.AuditAgentRecord:
       type: object
@@ -179,28 +179,6 @@ components:
         initiated:
           type: string
           description: How this event was initiated
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
     common.Pagination:
       type: object
       required:
@@ -232,6 +210,28 @@ components:
             $ref: '#/components/schemas/audits.AuditAgentRecord'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
   securitySchemes:
     oauth2:
       type: oauth2

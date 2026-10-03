@@ -39,24 +39,6 @@ paths:
       - Authentication
 components:
   schemas:
-    oauth2.OAuth2AccessTokenResponse:
-      type: object
-      required:
-      - token_type
-      - access_token
-      properties:
-        token_type:
-          type: string
-        access_token:
-          type: string
-        expires_in:
-          type: integer
-        refresh_token:
-          type: string
-        scope:
-          type: array
-          items:
-            type: string
     oauth2.OAuth2AccessTokenError:
       type: object
       required:
@@ -78,6 +60,24 @@ components:
         error_uri:
           type: string
           description: A URI identifying a human-readable web page with information about the error
+    oauth2.OAuth2AccessTokenResponse:
+      type: object
+      required:
+      - token_type
+      - access_token
+      properties:
+        token_type:
+          type: string
+        access_token:
+          type: string
+        expires_in:
+          type: integer
+        refresh_token:
+          type: string
+        scope:
+          type: array
+          items:
+            type: string
   requestBodies:
     oauth2.OAuth2ClientCredentialsRequest:
       required: true

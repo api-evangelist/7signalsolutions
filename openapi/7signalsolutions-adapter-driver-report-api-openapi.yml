@@ -111,7 +111,91 @@ paths:
       tags:
       - Adapter Driver Report
 components:
+  parameters:
+    adapter-driver-report.PageRequestParam:
+      name: page
+      in: query
+      description: Page number to fetch (0-based). Defaults to 0.
+      required: false
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    common.SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    adapter-driver-report.SearchValueParam:
+      name: searchValue
+      in: query
+      description: Filter results to adapter/driver pairs matching this search value.
+      required: false
+      schema:
+        type: string
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
   schemas:
+    adapter-driver-report.AdapterDriverReportListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/adapter-driver-report.AdapterDriverEntry'
+        pagination:
+          $ref: '#/components/schemas/common.ZeroBasedPagination'
+    common.ZeroBasedPagination:
+      type: object
+      properties:
+        perPage:
+          type: integer
+          description: Number of records per page
+        page:
+          type: integer
+          description: Current page number (0-based)
+        total:
+          type: integer
+          description: Total number of records available
+        pages:
+          type: integer
+          description: Total number of pages
+    adapter-driver-report.AdapterDriverReportSummary:
+      type: object
+      properties:
+        totalSamples:
+          type: integer
+          format: int64
+        uniquePairs:
+          type: integer
+          format: int64
+        deviceCount:
+          type: integer
+          format: int64
     adapter-driver-report.AdapterDriverEntry:
       type: object
       properties:
@@ -155,103 +239,19 @@ components:
           type: string
         requestId:
           type: string
-    common.ZeroBasedPagination:
-      type: object
-      properties:
-        perPage:
-          type: integer
-          description: Number of records per page
-        page:
-          type: integer
-          description: Current page number (0-based)
-        total:
-          type: integer
-          description: Total number of records available
-        pages:
-          type: integer
-          description: Total number of pages
-    adapter-driver-report.AdapterDriverReportListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/adapter-driver-report.AdapterDriverEntry'
-        pagination:
-          $ref: '#/components/schemas/common.ZeroBasedPagination'
-    adapter-driver-report.AdapterDriverReportSummary:
-      type: object
-      properties:
-        totalSamples:
-          type: integer
-          format: int64
-        uniquePairs:
-          type: integer
-          format: int64
-        deviceCount:
-          type: integer
-          format: int64
   responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
     common.404NotFoundResponse:
       description: Resource Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
-  parameters:
-    adapter-driver-report.SearchValueParam:
-      name: searchValue
-      in: query
-      description: Filter results to adapter/driver pairs matching this search value.
-      required: false
-      schema:
-        type: string
-    adapter-driver-report.PageRequestParam:
-      name: page
-      in: query
-      description: Page number to fetch (0-based). Defaults to 0.
-      required: false
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
-    common.SortOrderParam:
-      name: order
-      in: query
-      description: Sort order
-      required: false
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-    common.PerPageRequestParam:
-      name: perPage
-      in: query
-      description: Fetch a specific number of records per page
-      required: false
-      schema:
-        type: integer
-    common.SortFieldParam:
-      name: sortField
-      in: query
-      description: The field on which to sort the results
-      required: false
-      schema:
-        type: string
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2
