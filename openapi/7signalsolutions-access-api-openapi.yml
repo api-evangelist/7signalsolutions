@@ -41,23 +41,6 @@ paths:
       - oauth2: []
 components:
   schemas:
-    metadata.Organization:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        connectionId:
-          type: string
-        mobileEyeOrgCode:
-          type: string
-    metadata.SapphireReDirectorApplication:
-      type: object
-      properties:
-        enabled:
-          type: boolean
     metadata.UserManagementApplication:
       type: object
       properties:
@@ -72,46 +55,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/metadata.Organization'
-    metadata.SapphireApplication:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-        instances:
-          type: array
-          items:
-            $ref: '#/components/schemas/metadata.Instance'
-    metadata.UserNotifications:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        text:
-          type: string
-    metadata.Instance:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        url:
-          type: string
-    metadata.AccessSummaryResponse:
-      type: object
-      properties:
-        sapphireApplication:
-          $ref: '#/components/schemas/metadata.SapphireApplication'
-        mobileEyeApplication:
-          $ref: '#/components/schemas/metadata.MobileEyeApplication'
-        userManagementApplication:
-          $ref: '#/components/schemas/metadata.UserManagementApplication'
-        sapphireReDirectorApplication:
-          $ref: '#/components/schemas/metadata.SapphireReDirectorApplication'
-        userNotifications:
-          type: array
-          items:
-            $ref: '#/components/schemas/metadata.UserNotifications'
     common.ResponseStatusException:
       type: object
       required:
@@ -134,6 +77,63 @@ components:
           type: string
         requestId:
           type: string
+    metadata.AccessSummaryResponse:
+      type: object
+      properties:
+        sapphireApplication:
+          $ref: '#/components/schemas/metadata.SapphireApplication'
+        mobileEyeApplication:
+          $ref: '#/components/schemas/metadata.MobileEyeApplication'
+        userManagementApplication:
+          $ref: '#/components/schemas/metadata.UserManagementApplication'
+        sapphireReDirectorApplication:
+          $ref: '#/components/schemas/metadata.SapphireReDirectorApplication'
+        userNotifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.UserNotifications'
+    metadata.SapphireApplication:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+        instances:
+          type: array
+          items:
+            $ref: '#/components/schemas/metadata.Instance'
+    metadata.Instance:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        url:
+          type: string
+    metadata.UserNotifications:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        text:
+          type: string
+    metadata.Organization:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        connectionId:
+          type: string
+        mobileEyeOrgCode:
+          type: string
+    metadata.SapphireReDirectorApplication:
+      type: object
+      properties:
+        enabled:
+          type: boolean
   responses:
     common.404NotFoundResponse:
       description: Resource Not Found

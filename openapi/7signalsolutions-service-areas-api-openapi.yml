@@ -385,97 +385,41 @@ paths:
       - Service Areas
 components:
   schemas:
-    service-areas.PostSensorServiceAreaSensorsRequest:
-      type: object
-      properties:
-        sensorIds:
-          type: array
-          items:
-            type: number
-          description: ids of the sensors to move into this service area, from wherever they currently are
-    service-areas.GetSensorServiceAreasResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/service-areas.SensorServiceArea'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    service-areas.PostAgentServiceAreasRequest:
-      type: object
-      properties:
-        serviceAreas:
-          type: array
-          items:
-            $ref: '#/components/schemas/service-areas.AgentCreateServiceAreaRequest'
-    service-areas.AgentSingleUpdateServiceAreaRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        address:
-          type: string
-    service-areas.GetSensorServiceAreaResponse:
-      $ref: '#/components/schemas/service-areas.SensorServiceArea'
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
-    service-areas.AgentServiceArea:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        address:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        locationId:
-          type: string
-          format: uuid
-    service-areas.GetAgentServiceAreaResponse:
-      $ref: '#/components/schemas/service-areas.AgentServiceArea'
-    service-areas.GetAgentServiceAreasResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/service-areas.AgentServiceArea'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
     service-areas.AgentUpdateServiceAreaRequest:
       type: object
       properties:
         id:
           type: string
           format: uuid
+        name:
+          type: string
+        address:
+          type: string
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    service-areas.AgentCreateServiceAreaRequest:
+      type: object
+      properties:
         name:
           type: string
         address:
@@ -503,13 +447,64 @@ components:
         autoRebalance:
           type: boolean
           description: Enables automatic BSSID rebalancing for this service area's Eyes; omit to leave at the domain default (enabled for newly created service areas)
-    service-areas.AgentCreateServiceAreaRequest:
+    service-areas.GetAgentServiceAreasResponse:
       type: object
       properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/service-areas.AgentServiceArea'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    service-areas.PostSensorServiceAreaSensorsRequest:
+      type: object
+      properties:
+        sensorIds:
+          type: array
+          items:
+            type: number
+          description: ids of the sensors to move into this service area, from wherever they currently are
+    service-areas.GetAgentServiceAreaResponse:
+      $ref: '#/components/schemas/service-areas.AgentServiceArea'
+    service-areas.SensorServiceArea:
+      type: object
+      properties:
+        id:
+          type: number
         name:
           type: string
-        address:
+        description:
           type: string
+        parentLocationId:
+          type: number
+        parentLocationName:
+          type: string
+        defaultServiceArea:
+          type: boolean
+          description: Whether this is the system-wide default service area
+        autoRebalance:
+          type: boolean
+          description: Whether automatic BSSID rebalancing is enabled for this service area's Eyes
+        otaBand:
+          type: string
+          enum:
+          - UNDEFINED
+          - BAND_2400MHZ
+          - BAND_5000MHZ
+          - BAND_6000MHZ
+          description: The WlanBand this service area's OTA (over-the-air) configuration applies to
+        defaultConfigurationId:
+          type: number
+          description: id of the DefaultConfiguration applied to this service area's Eyes, if any
+    service-areas.GetSensorServiceAreasResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/service-areas.SensorServiceArea'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
     service-areas.PutSensorServiceAreaRequest:
       type: object
       properties:
@@ -545,113 +540,63 @@ components:
         defaultConfigurationId:
           type: number
           description: id of a DefaultConfiguration to apply to this service area's Eyes (see GET /default-configurations for valid ids) - unlike defaultServiceArea/autoRebalance above, omitting this (or sending an explicit null) unsets it rather than leaving it unchanged
-    service-areas.SensorServiceArea:
+    service-areas.AgentSingleUpdateServiceAreaRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+    service-areas.AgentServiceArea:
       type: object
       properties:
         id:
-          type: number
-        name:
-          type: string
-        description:
-          type: string
-        parentLocationId:
-          type: number
-        parentLocationName:
-          type: string
-        defaultServiceArea:
-          type: boolean
-          description: Whether this is the system-wide default service area
-        autoRebalance:
-          type: boolean
-          description: Whether automatic BSSID rebalancing is enabled for this service area's Eyes
-        otaBand:
-          type: string
-          enum:
-          - UNDEFINED
-          - BAND_2400MHZ
-          - BAND_5000MHZ
-          - BAND_6000MHZ
-          description: The WlanBand this service area's OTA (over-the-air) configuration applies to
-        defaultConfigurationId:
-          type: number
-          description: id of the DefaultConfiguration applied to this service area's Eyes, if any
-    common.Pagination:
-      type: object
-      required:
-      - perPage
-      - page
-      - total
-      - pages
-      properties:
-        perPage:
-          type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
-  parameters:
-    service-areas.SensorNetworkId:
-      name: networkId
-      in: path
-      description: Sensor Wireless Network Id
-      required: true
-      schema:
-        type: number
-    common.PerPageRequestParam:
-      name: perPage
-      in: query
-      description: Fetch a specific number of records per page
-      required: false
-      schema:
-        type: integer
-    service-areas.AgentServiceAreaId:
-      name: serviceAreaId
-      in: path
-      description: Agent Service Area Id
-      required: true
-      schema:
-        type: string
-        format: uuid
-    common.PageRequestParam:
-      name: page
-      in: query
-      description: Fetch a particular page of data. The first page is 1.
-      required: false
-      schema:
-        type: integer
-        minimum: 1
-    service-areas.SensorServiceAreaId:
-      name: serviceAreaId
-      in: path
-      description: Sensor Service Area Id
-      required: true
-      schema:
-        type: number
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
-    service-areas.DeleteAgentServiceAreaIdList:
-      name: ids
-      in: query
-      description: One or more service area ids to delete
-      required: true
-      schema:
-        type: array
-        items:
           type: string
           format: uuid
+        name:
+          type: string
+        address:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        locationId:
+          type: string
+          format: uuid
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    service-areas.GetSensorServiceAreaResponse:
+      $ref: '#/components/schemas/service-areas.SensorServiceArea'
+    service-areas.PostAgentServiceAreasRequest:
+      type: object
+      properties:
+        serviceAreas:
+          type: array
+          items:
+            $ref: '#/components/schemas/service-areas.AgentCreateServiceAreaRequest'
   responses:
     common.404NotFoundResponse:
       description: Resource Not Found
@@ -665,6 +610,61 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    service-areas.DeleteAgentServiceAreaIdList:
+      name: ids
+      in: query
+      description: One or more service area ids to delete
+      required: true
+      schema:
+        type: array
+        items:
+          type: string
+          format: uuid
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    service-areas.SensorNetworkId:
+      name: networkId
+      in: path
+      description: Sensor Wireless Network Id
+      required: true
+      schema:
+        type: number
+    common.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is 1.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    service-areas.AgentServiceAreaId:
+      name: serviceAreaId
+      in: path
+      description: Agent Service Area Id
+      required: true
+      schema:
+        type: string
+        format: uuid
+    service-areas.SensorServiceAreaId:
+      name: serviceAreaId
+      in: path
+      description: Sensor Service Area Id
+      required: true
+      schema:
+        type: number
   securitySchemes:
     oauth2:
       type: oauth2

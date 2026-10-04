@@ -112,6 +112,27 @@ paths:
       - Adapter Driver Report
 components:
   parameters:
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
+      required: false
+      schema:
+        type: string
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
     adapter-driver-report.PageRequestParam:
       name: page
       in: query
@@ -131,20 +152,6 @@ components:
         enum:
         - asc
         - desc
-    common.PerPageRequestParam:
-      name: perPage
-      in: query
-      description: Fetch a specific number of records per page
-      required: false
-      schema:
-        type: integer
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
     adapter-driver-report.SearchValueParam:
       name: searchValue
       in: query
@@ -152,23 +159,19 @@ components:
       required: false
       schema:
         type: string
-    common.SortFieldParam:
-      name: sortField
-      in: query
-      description: The field on which to sort the results
-      required: false
-      schema:
-        type: string
   schemas:
-    adapter-driver-report.AdapterDriverReportListResponse:
+    adapter-driver-report.AdapterDriverReportSummary:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/adapter-driver-report.AdapterDriverEntry'
-        pagination:
-          $ref: '#/components/schemas/common.ZeroBasedPagination'
+        totalSamples:
+          type: integer
+          format: int64
+        uniquePairs:
+          type: integer
+          format: int64
+        deviceCount:
+          type: integer
+          format: int64
     common.ZeroBasedPagination:
       type: object
       properties:
@@ -184,18 +187,6 @@ components:
         pages:
           type: integer
           description: Total number of pages
-    adapter-driver-report.AdapterDriverReportSummary:
-      type: object
-      properties:
-        totalSamples:
-          type: integer
-          format: int64
-        uniquePairs:
-          type: integer
-          format: int64
-        deviceCount:
-          type: integer
-          format: int64
     adapter-driver-report.AdapterDriverEntry:
       type: object
       properties:
@@ -239,6 +230,15 @@ components:
           type: string
         requestId:
           type: string
+    adapter-driver-report.AdapterDriverReportListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/adapter-driver-report.AdapterDriverEntry'
+        pagination:
+          $ref: '#/components/schemas/common.ZeroBasedPagination'
   responses:
     common.404NotFoundResponse:
       description: Resource Not Found

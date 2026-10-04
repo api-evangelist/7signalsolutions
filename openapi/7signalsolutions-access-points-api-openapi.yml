@@ -287,48 +287,19 @@ paths:
       - Access Points
 components:
   schemas:
-    access-points.AgentAccessPointRequest:
+    access-points.GetSensorAccessPointsResponse:
       type: object
       properties:
-        name:
-          type: string
-        controller:
-          type: string
-        locationId:
-          type: string
-          format: uuid
-        bssids:
+        results:
           type: array
           items:
-            $ref: '#/components/schemas/access-points.AgentAccessPointBssidRequest'
-    access-points.AgentAccessPoint:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        controller:
-          type: string
-        overTheAirName:
-          type: string
-        modifiedBy:
-          type: string
-        macAddress:
-          type: string
-        locationId:
-          deprecated: true
-          type: string
-          format: uuid
-          description: 'Deprecated: use serviceAreaId instead.'
-        serviceAreaId:
-          type: string
-          format: uuid
-        bssids:
-          type: array
-          items:
-            $ref: '#/components/schemas/access-points.AgentAccessPointBssid'
+            $ref: '#/components/schemas/access-points.SensorAccessPoint'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    access-points.GetSensorAccessPointResponse:
+      $ref: '#/components/schemas/access-points.SensorAccessPoint'
+    access-points.GetAgentAccessPointResponse:
+      $ref: '#/components/schemas/access-points.AgentAccessPoint'
     common.ResponseStatusException:
       type: object
       required:
@@ -351,26 +322,38 @@ components:
           type: string
         requestId:
           type: string
-    access-points.AgentAccessPointBssidRequest:
+    access-points.AgentAccessPointBssid:
       type: object
       properties:
+        id:
+          type: string
+          format: uuid
         bssid:
           type: string
         band:
           type: string
-    access-points.PostAgentAccessPointsRequest:
-      type: array
-      items:
-        $ref: '#/components/schemas/access-points.AgentAccessPointRequest'
-    access-points.GetAgentAccessPointsResponse:
+    common.Pagination:
       type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/access-points.AgentAccessPoint'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
     access-points.SensorAccessPointPatchRequest:
       type: object
       properties:
@@ -410,51 +393,68 @@ components:
           type: string
         accessPointStatus:
           type: string
-    common.Pagination:
+    access-points.PostAgentAccessPointsRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/access-points.AgentAccessPointRequest'
+    access-points.AgentAccessPointRequest:
       type: object
-      required:
-      - perPage
-      - page
-      - total
-      - pages
       properties:
-        perPage:
-          type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
-    access-points.GetSensorAccessPointsResponse:
+        name:
+          type: string
+        controller:
+          type: string
+        locationId:
+          type: string
+          format: uuid
+        bssids:
+          type: array
+          items:
+            $ref: '#/components/schemas/access-points.AgentAccessPointBssidRequest'
+    access-points.GetAgentAccessPointsResponse:
       type: object
       properties:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/access-points.SensorAccessPoint'
+            $ref: '#/components/schemas/access-points.AgentAccessPoint'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
-    access-points.GetAgentAccessPointResponse:
-      $ref: '#/components/schemas/access-points.AgentAccessPoint'
-    access-points.AgentAccessPointBssid:
+    access-points.AgentAccessPoint:
       type: object
       properties:
         id:
           type: string
           format: uuid
+        name:
+          type: string
+        controller:
+          type: string
+        overTheAirName:
+          type: string
+        modifiedBy:
+          type: string
+        macAddress:
+          type: string
+        locationId:
+          deprecated: true
+          type: string
+          format: uuid
+          description: 'Deprecated: use serviceAreaId instead.'
+        serviceAreaId:
+          type: string
+          format: uuid
+        bssids:
+          type: array
+          items:
+            $ref: '#/components/schemas/access-points.AgentAccessPointBssid'
+    access-points.AgentAccessPointBssidRequest:
+      type: object
+      properties:
         bssid:
           type: string
         band:
           type: string
-    access-points.GetSensorAccessPointResponse:
-      $ref: '#/components/schemas/access-points.SensorAccessPoint'
   parameters:
     common.OrganizationRequestParam:
       name: organization

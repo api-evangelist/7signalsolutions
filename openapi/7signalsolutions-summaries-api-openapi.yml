@@ -41,20 +41,19 @@ paths:
       security:
       - oauth2: []
 components:
-  responses:
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
+    summaries.UserSummaryResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+        loginLast30Days:
+          type: integer
+          format: int64
+        loginLast90Days:
+          type: integer
+          format: int64
     common.ResponseStatusException:
       type: object
       required:
@@ -77,18 +76,19 @@ components:
           type: string
         requestId:
           type: string
-    summaries.UserSummaryResponse:
-      type: object
-      properties:
-        total:
-          type: integer
-          format: int64
-        loginLast30Days:
-          type: integer
-          format: int64
-        loginLast90Days:
-          type: integer
-          format: int64
+  responses:
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

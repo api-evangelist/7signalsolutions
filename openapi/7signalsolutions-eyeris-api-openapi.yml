@@ -149,39 +149,6 @@ paths:
           $ref: '#/components/responses/common.404NotFoundResponse'
 components:
   schemas:
-    eyeris.EyerisCreateStreamRequest:
-      type: object
-      properties:
-        promptTypeKey:
-          type: string
-        inputData:
-          type: object
-    eyeris.EyerisAnalysisResponse:
-      type: object
-      properties:
-        requestId:
-          type: string
-          format: uuid
-        requestQueueId:
-          type: string
-          format: uuid
-        responseId:
-          type: string
-          format: uuid
-    eyeris.EyerisSseEmitter:
-      type: array
-      items:
-        type: string
-        description: Chunk of the response message
-      example:
-      - data:# Wi-Fi Network Analysis
-      - 'data:'
-      - data:## SUMMARY
-      - data:The device experienced a brief 2-minute connectivity problem
-      - 'data:'
-      - data:## RECOMMENDATIONS
-      - 'data:'
-      - data:No device-side changes are recommended. The brief disruption followed by sustained 100% SLA indicates normal operation was quickly established and maintained.
     eyeris.EyerisAnalysisRequest:
       required:
       - agentId
@@ -208,17 +175,20 @@ components:
           description: The time in milliseconds from the epoch till which the analysis should be done.
           type: string
           format: datetime
-    eyeris.EyerisAnalysisRequestResponse:
-      type: object
-      properties:
-        response:
-          type: string
-        requestId:
-          type: string
-          format: uuid
-        responseId:
-          type: string
-          format: uuid
+    eyeris.EyerisSseEmitter:
+      type: array
+      items:
+        type: string
+        description: Chunk of the response message
+      example:
+      - data:# Wi-Fi Network Analysis
+      - 'data:'
+      - data:## SUMMARY
+      - data:The device experienced a brief 2-minute connectivity problem
+      - 'data:'
+      - data:## RECOMMENDATIONS
+      - 'data:'
+      - data:No device-side changes are recommended. The brief disruption followed by sustained 100% SLA indicates normal operation was quickly established and maintained.
     common.ResponseStatusException:
       type: object
       required:
@@ -241,6 +211,36 @@ components:
           type: string
         requestId:
           type: string
+    eyeris.EyerisAnalysisResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+          format: uuid
+        requestQueueId:
+          type: string
+          format: uuid
+        responseId:
+          type: string
+          format: uuid
+    eyeris.EyerisAnalysisRequestResponse:
+      type: object
+      properties:
+        response:
+          type: string
+        requestId:
+          type: string
+          format: uuid
+        responseId:
+          type: string
+          format: uuid
+    eyeris.EyerisCreateStreamRequest:
+      type: object
+      properties:
+        promptTypeKey:
+          type: string
+        inputData:
+          type: object
   parameters:
     common.OrganizationRequestParam:
       name: organization

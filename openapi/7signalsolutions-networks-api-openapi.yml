@@ -271,45 +271,37 @@ paths:
       - Networks
 components:
   schemas:
-    networks.PostSensorNetworkRequest:
+    networks.SensorNetwork:
       type: object
-      required:
-      - name
-      - networkKeyId
       properties:
+        id:
+          type: integer
         name:
+          type: string
+        description:
           type: string
         displayName:
           type: string
         networkKeyId:
           type: integer
-    networks.GetSensorNetworkResponse:
-      $ref: '#/components/schemas/networks.SensorNetwork'
-    networks.AgentNetworkRequest:
-      type: object
-      properties:
-        name:
+        contactPerson:
           type: string
-        isEnabled:
+        allowAutomaticMacFix:
           type: boolean
-    networks.AgentNetwork:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        isEnabled:
+        randomMacs:
           type: boolean
-        createdAt:
-          type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-    networks.GetAgentNetworkResponse:
-      $ref: '#/components/schemas/networks.AgentNetwork'
+        autoUpdateApNames:
+          type: boolean
+        ssidHidden:
+          type: boolean
+        pmfSupportEnabled:
+          type: boolean
+        ieee80211rClientSupportEnabled2400MHz:
+          type: boolean
+        ieee80211rClientSupportEnabled5000MHz:
+          type: boolean
+        ieee80211rClientSupportEnabled6000MHz:
+          type: boolean
     networks.PutSensorNetworkRequest:
       type: object
       required:
@@ -350,41 +342,8 @@ components:
           type: boolean
         ieee80211rClientSupportEnabled6000MHz:
           type: boolean
-    networks.PostAgentNetworksRequest:
-      type: array
-      items:
-        $ref: '#/components/schemas/networks.AgentNetworkRequest'
-    common.Pagination:
-      type: object
-      required:
-      - perPage
-      - page
-      - total
-      - pages
-      properties:
-        perPage:
-          type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
-    networks.GetSensorNetworksResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/networks.SensorNetwork'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
+    networks.GetAgentNetworkResponse:
+      $ref: '#/components/schemas/networks.AgentNetwork'
     networks.GetAgentNetworksResponse:
       type: object
       properties:
@@ -394,36 +353,12 @@ components:
             $ref: '#/components/schemas/networks.AgentNetwork'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
-    networks.SensorNetwork:
+    networks.AgentNetworkRequest:
       type: object
       properties:
-        id:
-          type: integer
         name:
           type: string
-        description:
-          type: string
-        displayName:
-          type: string
-        networkKeyId:
-          type: integer
-        contactPerson:
-          type: string
-        allowAutomaticMacFix:
-          type: boolean
-        randomMacs:
-          type: boolean
-        autoUpdateApNames:
-          type: boolean
-        ssidHidden:
-          type: boolean
-        pmfSupportEnabled:
-          type: boolean
-        ieee80211rClientSupportEnabled2400MHz:
-          type: boolean
-        ieee80211rClientSupportEnabled5000MHz:
-          type: boolean
-        ieee80211rClientSupportEnabled6000MHz:
+        isEnabled:
           type: boolean
     common.ResponseStatusException:
       type: object
@@ -447,6 +382,71 @@ components:
           type: string
         requestId:
           type: string
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    networks.PostSensorNetworkRequest:
+      type: object
+      required:
+      - name
+      - networkKeyId
+      properties:
+        name:
+          type: string
+        displayName:
+          type: string
+        networkKeyId:
+          type: integer
+    networks.AgentNetwork:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        isEnabled:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    networks.PostAgentNetworksRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/networks.AgentNetworkRequest'
+    networks.GetSensorNetworksResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/networks.SensorNetwork'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    networks.GetSensorNetworkResponse:
+      $ref: '#/components/schemas/networks.SensorNetwork'
   parameters:
     common.OrganizationRequestParam:
       name: organization

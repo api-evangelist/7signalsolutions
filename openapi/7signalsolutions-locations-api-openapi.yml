@@ -296,111 +296,6 @@ paths:
       - Locations
 components:
   schemas:
-    locations.AgentLocationResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        organization:
-          type: string
-        parent:
-          type: string
-          format: uuid
-    locations.SensorLocation:
-      type: object
-      properties:
-        id:
-          type: number
-        name:
-          type: string
-        description:
-          type: string
-        parentId:
-          type: number
-          description: The parent Location's id - null if this is a top-level location under an Organization rather than a sub-location of another Location
-        parentOrganizationId:
-          type: number
-          description: The parent Organization's id - always present, even for a sub-location of another Location (derived from that parent Location's own organization)
-        countryCode:
-          $ref: '#/components/schemas/locations.CountryCodeName'
-        timeZone:
-          $ref: '#/components/schemas/locations.TimeZoneId'
-        inheritedTimeZone:
-          $ref: '#/components/schemas/locations.TimeZoneId'
-        timeZoneLocation:
-          type: string
-          example: hm1
-          description: Name of the ancestor Location where the inherited timezone came from - only meaningful when timeZone is null
-    locations.GetSensorLocationResponse:
-      $ref: '#/components/schemas/locations.SensorLocation'
-    locations.GetAgentLocationResponse:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        organization:
-          type: string
-        parent:
-          type: string
-          format: uuid
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/locations.AgentLocationResponse'
-        serviceAreas:
-          type: array
-          items:
-            $ref: '#/components/schemas/service-areas.AgentServiceArea'
-    locations.SensorUpdateLocationRequest:
-      type: object
-      properties:
-        id:
-          type: number
-        name:
-          type: string
-        description:
-          type: string
-        locationType:
-          type: string
-          enum:
-          - UNDEFINED
-          - REGION
-          - COUNTRY
-          - STATE
-          - CITY
-          - DISTRICT
-          - BUILDING
-        timeZone:
-          description: A java.util.TimeZone id, "INHERIT" to inherit from the parent location, or omit to leave unchanged. "INHERIT" only resolves to a real ancestor's timezone if this location has a parent Location (was created with parentLocationId) - a top-level location under an Organization has no parent Location to inherit from, so it falls back to the Carat server's own default timezone instead
-          example: America/New_York
-          oneOf:
-          - $ref: '#/components/schemas/locations.TimeZoneId'
-          - type: string
-            enum:
-            - INHERIT
-        countryCode:
-          $ref: '#/components/schemas/locations.CountryCodeName'
-    locations.AgentLocationRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        parent:
-          type: string
-          format: uuid
-    locations.PutSensorLocationsRequest:
-      type: object
-      properties:
-        locations:
-          type: array
-          items:
-            $ref: '#/components/schemas/locations.SensorUpdateLocationRequest'
     locations.CountryCodeName:
       type: string
       description: A CountryCode enum constant name. The ISO 3166-1 alpha-2 code (e.g. "US") is also accepted on write, case-insensitively, but is not reflected in this enum list
@@ -658,47 +553,130 @@ components:
       - ZIMBABWE
       - UNKNOWN
       - UNDEFINED
-    common.ResponseStatusException:
+    locations.SensorCreateLocationRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        locationType:
+          type: string
+          enum:
+          - UNDEFINED
+          - REGION
+          - COUNTRY
+          - STATE
+          - CITY
+          - DISTRICT
+          - BUILDING
+        parentOrganizationId:
+          type: number
+          example: '123'
+          description: The parent Organization's id, to create this as a top-level location under an Organization - exactly one of parentOrganizationId/parentLocationId must be provided
+        parentLocationId:
+          type: number
+          example: '42'
+          description: The parent Location's id, to create this as a sub-location under another Location instead - exactly one of parentOrganizationId/parentLocationId must be provided
+        timeZone:
+          description: A java.util.TimeZone id, or "INHERIT"/omit to leave it unset. "INHERIT" only resolves to a real ancestor's timezone when created with parentLocationId - under parentOrganizationId there's no parent Location to inherit from, so it falls back to the Carat server's own default timezone instead
+          example: America/New_York
+          oneOf:
+          - $ref: '#/components/schemas/locations.TimeZoneId'
+          - type: string
+            enum:
+            - INHERIT
+        countryCode:
+          $ref: '#/components/schemas/locations.CountryCodeName'
+    common.Pagination:
       type: object
       required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
+      - perPage
+      - page
+      - total
+      - pages
       properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
+        perPage:
           type: integer
-        error:
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    locations.AgentLocationRequest:
+      type: object
+      properties:
+        name:
           type: string
-        message:
+        parent:
           type: string
-        path:
+          format: uuid
+    locations.PostSensorLocationsRequest:
+      type: object
+      properties:
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/locations.SensorCreateLocationRequest'
+    locations.SensorSingleUpdateLocationRequest:
+      type: object
+      properties:
+        name:
           type: string
-        requestId:
+        description:
           type: string
-    service-areas.AgentServiceArea:
+        locationType:
+          type: string
+          enum:
+          - UNDEFINED
+          - REGION
+          - COUNTRY
+          - STATE
+          - CITY
+          - DISTRICT
+          - BUILDING
+        timeZone:
+          description: A java.util.TimeZone id, "INHERIT" to inherit from the parent location, or omit to leave unchanged. "INHERIT" only resolves to a real ancestor's timezone if this location has a parent Location (was created with parentLocationId) - a top-level location under an Organization has no parent Location to inherit from, so it falls back to the Carat server's own default timezone instead
+          example: America/New_York
+          oneOf:
+          - $ref: '#/components/schemas/locations.TimeZoneId'
+          - type: string
+            enum:
+            - INHERIT
+        countryCode:
+          $ref: '#/components/schemas/locations.CountryCodeName'
+    locations.SensorLocation:
       type: object
       properties:
         id:
-          type: string
-          format: uuid
+          type: number
         name:
           type: string
-        address:
+        description:
           type: string
-        createdAt:
+        parentId:
+          type: number
+          description: The parent Location's id - null if this is a top-level location under an Organization rather than a sub-location of another Location
+        parentOrganizationId:
+          type: number
+          description: The parent Organization's id - always present, even for a sub-location of another Location (derived from that parent Location's own organization)
+        countryCode:
+          $ref: '#/components/schemas/locations.CountryCodeName'
+        timeZone:
+          $ref: '#/components/schemas/locations.TimeZoneId'
+        inheritedTimeZone:
+          $ref: '#/components/schemas/locations.TimeZoneId'
+        timeZoneLocation:
           type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        locationId:
-          type: string
-          format: uuid
+          example: hm1
+          description: Name of the ancestor Location where the inherited timezone came from - only meaningful when timeZone is null
+    locations.GetSensorLocationResponse:
+      $ref: '#/components/schemas/locations.SensorLocation'
     locations.TimeZoneId:
       type: string
       description: A valid TimeZone identifier
@@ -1331,16 +1309,11 @@ components:
       - W-SU
       - WET
       - Zulu
-    locations.PostSensorLocationsRequest:
+    locations.SensorUpdateLocationRequest:
       type: object
       properties:
-        locations:
-          type: array
-          items:
-            $ref: '#/components/schemas/locations.SensorCreateLocationRequest'
-    locations.SensorSingleUpdateLocationRequest:
-      type: object
-      properties:
+        id:
+          type: number
         name:
           type: string
         description:
@@ -1365,39 +1338,6 @@ components:
             - INHERIT
         countryCode:
           $ref: '#/components/schemas/locations.CountryCodeName'
-    locations.SensorCreateLocationRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        locationType:
-          type: string
-          enum:
-          - UNDEFINED
-          - REGION
-          - COUNTRY
-          - STATE
-          - CITY
-          - DISTRICT
-          - BUILDING
-        parentOrganizationId:
-          type: number
-          example: '123'
-          description: The parent Organization's id, to create this as a top-level location under an Organization - exactly one of parentOrganizationId/parentLocationId must be provided
-        parentLocationId:
-          type: number
-          example: '42'
-          description: The parent Location's id, to create this as a sub-location under another Location instead - exactly one of parentOrganizationId/parentLocationId must be provided
-        timeZone:
-          description: A java.util.TimeZone id, or "INHERIT"/omit to leave it unset. "INHERIT" only resolves to a real ancestor's timezone when created with parentLocationId - under parentOrganizationId there's no parent Location to inherit from, so it falls back to the Carat server's own default timezone instead
-          example: America/New_York
-          oneOf:
-          - $ref: '#/components/schemas/locations.TimeZoneId'
-          - type: string
-            enum:
-            - INHERIT
-        countryCode:
-          $ref: '#/components/schemas/locations.CountryCodeName'
     locations.GetAgentLocationsResponse:
       type: object
       properties:
@@ -1407,6 +1347,53 @@ components:
             $ref: '#/components/schemas/locations.AgentLocationResponse'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
+    locations.PutSensorLocationsRequest:
+      type: object
+      properties:
+        locations:
+          type: array
+          items:
+            $ref: '#/components/schemas/locations.SensorUpdateLocationRequest'
+    service-areas.AgentServiceArea:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        address:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        locationId:
+          type: string
+          format: uuid
+    locations.GetAgentLocationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        organization:
+          type: string
+        parent:
+          type: string
+          format: uuid
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/locations.AgentLocationResponse'
+        serviceAreas:
+          type: array
+          items:
+            $ref: '#/components/schemas/service-areas.AgentServiceArea'
     locations.GetSensorLocationsResponse:
       type: object
       properties:
@@ -1416,28 +1403,41 @@ components:
             $ref: '#/components/schemas/locations.SensorLocation'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
-    common.Pagination:
+    common.ResponseStatusException:
       type: object
       required:
-      - perPage
-      - page
-      - total
-      - pages
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
       properties:
-        perPage:
+        timestamp:
+          type: string
+          format: date-time
+        status:
           type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    locations.AgentLocationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        organization:
+          type: string
+        parent:
+          type: string
+          format: uuid
   responses:
     common.404NotFoundResponse:
       description: Resource Not Found
@@ -1452,15 +1452,6 @@ components:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
   parameters:
-    locations.DeleteSensorLocationIds:
-      name: id
-      in: query
-      description: One or more location ids to delete
-      required: true
-      schema:
-        type: array
-        items:
-          type: number
     locations.SensorLocationId:
       name: locationId
       in: path
@@ -1475,6 +1466,15 @@ components:
       required: false
       schema:
         type: string
+    locations.DeleteSensorLocationIds:
+      name: id
+      in: query
+      description: One or more location ids to delete
+      required: true
+      schema:
+        type: array
+        items:
+          type: number
   securitySchemes:
     oauth2:
       type: oauth2

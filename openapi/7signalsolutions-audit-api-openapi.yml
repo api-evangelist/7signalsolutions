@@ -49,33 +49,7 @@ paths:
       tags:
       - Audit
 components:
-  responses:
-    common.403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   parameters:
-    audits.ActionParam:
-      name: action
-      in: query
-      description: The action taken
-      required: false
-      schema:
-        type: string
     common.PerPageRequestParam:
       name: perPage
       in: query
@@ -83,60 +57,6 @@ components:
       required: false
       schema:
         type: integer
-    common.SortOrderParam:
-      name: order
-      in: query
-      description: Sort order
-      required: false
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-    audits.SourceParam:
-      name: source
-      in: query
-      description: The area of the system from which the event originated
-      required: false
-      schema:
-        type: string
-    audits.ActorParam:
-      name: actor
-      in: query
-      description: User or system component responsible for the events
-      required: false
-      schema:
-        type: string
-    common.PageRequestParam:
-      name: page
-      in: query
-      description: Fetch a particular page of data. The first page is 1.
-      required: false
-      schema:
-        type: integer
-        minimum: 1
-    audits.EndTimeRangeParam:
-      name: endTimeRange
-      in: query
-      description: The end time range of the events to fetch
-      required: false
-      schema:
-        type: string
-        format: date-time
-    audits.InitiatedParam:
-      name: initiated
-      in: query
-      description: How the event was initiated
-      required: false
-      schema:
-        type: string
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
     audits.StartTimeRangeParam:
       name: startTimeRange
       in: query
@@ -152,33 +72,90 @@ components:
       required: false
       schema:
         type: string
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    audits.InitiatedParam:
+      name: initiated
+      in: query
+      description: How the event was initiated
+      required: false
+      schema:
+        type: string
+    audits.SourceParam:
+      name: source
+      in: query
+      description: The area of the system from which the event originated
+      required: false
+      schema:
+        type: string
+    common.SortOrderParam:
+      name: order
+      in: query
+      description: Sort order
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+    audits.ActorParam:
+      name: actor
+      in: query
+      description: User or system component responsible for the events
+      required: false
+      schema:
+        type: string
+    common.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is 1.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    audits.ActionParam:
+      name: action
+      in: query
+      description: The action taken
+      required: false
+      schema:
+        type: string
+    audits.EndTimeRangeParam:
+      name: endTimeRange
+      in: query
+      description: The end time range of the events to fetch
+      required: false
+      schema:
+        type: string
+        format: date-time
   schemas:
-    audits.AuditAgentRecord:
+    common.ResponseStatusException:
       type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
       properties:
-        id:
-          type: string
-          format: uuid
         timestamp:
           type: string
           format: date-time
-        organizationName:
+        status:
+          type: integer
+        error:
           type: string
-        actor:
+        message:
           type: string
-          description: User or system component responsible for the record
-        action:
+        path:
           type: string
-          description: The action take. i.e. what happened
-        details:
-          type: object
-          description: Details about the event. This is a free form object that can vary based on the action and source
-        source:
+        requestId:
           type: string
-          description: The area of the system from which the event originated
-        initiated:
-          type: string
-          description: How this event was initiated
     common.Pagination:
       type: object
       required:
@@ -210,28 +187,51 @@ components:
             $ref: '#/components/schemas/audits.AuditAgentRecord'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
-    common.ResponseStatusException:
+    audits.AuditAgentRecord:
       type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
       properties:
+        id:
+          type: string
+          format: uuid
         timestamp:
           type: string
           format: date-time
-        status:
-          type: integer
-        error:
+        organizationName:
           type: string
-        message:
+        actor:
           type: string
-        path:
+          description: User or system component responsible for the record
+        action:
           type: string
-        requestId:
+          description: The action take. i.e. what happened
+        details:
+          type: object
+          description: Details about the event. This is a free form object that can vary based on the action and source
+        source:
           type: string
+          description: The area of the system from which the event originated
+        initiated:
+          type: string
+          description: How this event was initiated
+  responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

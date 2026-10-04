@@ -288,13 +288,13 @@ paths:
       - Alert Rules
 components:
   parameters:
-    common.PerPageRequestParam:
-      name: perPage
+    alert-rules.EnabledFilterParam:
+      name: enabled
       in: query
-      description: Fetch a specific number of records per page
+      description: Filter the alert rules by their enabled state
       required: false
       schema:
-        type: integer
+        type: boolean
     common.SortFieldParam:
       name: sortField
       in: query
@@ -302,6 +302,13 @@ components:
       required: false
       schema:
         type: string
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
     common.PageRequestParam:
       name: page
       in: query
@@ -310,10 +317,24 @@ components:
       schema:
         type: integer
         minimum: 1
+    alert-rules.NameFilterParam:
+      name: name
+      in: query
+      description: Filter the alert rules by name using a case-insensitive partial match
+      required: false
+      schema:
+        type: string
     alert-rules.MetricFilterParam:
       name: metric
       in: query
       description: Filter the alert rules by metric name
+      required: false
+      schema:
+        type: string
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
       required: false
       schema:
         type: string
@@ -327,53 +348,29 @@ components:
         enum:
         - asc
         - desc
-    alert-rules.EnabledFilterParam:
-      name: enabled
-      in: query
-      description: Filter the alert rules by their enabled state
-      required: false
-      schema:
-        type: boolean
-    alert-rules.NameFilterParam:
-      name: name
-      in: query
-      description: Filter the alert rules by name using a case-insensitive partial match
-      required: false
-      schema:
-        type: string
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
   schemas:
-    alert-rules.GetAlertRulesResponse:
+    common.Pagination:
       type: object
       required:
-      - results
-      - pagination
+      - perPage
+      - page
+      - total
+      - pages
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/alert-rules.AlertRuleResponse'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    alert-rules.MissingDataPolicy:
-      type: string
-      description: How missing data is treated while evaluating the rule
-      enum:
-      - ignore
-      - good
-      - bad
-    alert-rules.WebhookFormat:
-      type: string
-      description: Per-destination payload shape for a webhook delivery. Defaults to generic when omitted.
-      enum:
-      - generic
-      - slack
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
     alert-rules.AlertRuleResponse:
       type: object
       properties:
@@ -419,6 +416,64 @@ components:
         updatedAt:
           type: string
           format: date-time
+    alert-rules.Delivery:
+      type: object
+      description: A single notification target, discriminated by `kind`
+      required:
+      - kind
+      discriminator:
+        propertyName: kind
+      oneOf:
+      - type: object
+        required:
+        - kind
+        - url
+        - auth
+        properties:
+          kind:
+            type: string
+            enum:
+            - webhook
+          name:
+            type: string
+          url:
+            type: string
+            description: http or https URL with no spaces
+            pattern: ^https?://\S+$
+          auth:
+            $ref: '#/components/schemas/alert-rules.WebhookAuth'
+          format:
+            $ref: '#/components/schemas/alert-rules.WebhookFormat'
+      - type: object
+        required:
+        - kind
+        - address
+        properties:
+          kind:
+            type: string
+            enum:
+            - email
+          name:
+            type: string
+          address:
+            type: string
+            format: email
+      - type: object
+        required:
+        - kind
+        - mdsConfigId
+        - organizationName
+        properties:
+          kind:
+            type: string
+            enum:
+            - servicenow
+          name:
+            type: string
+          mdsConfigId:
+            type: string
+          organizationName:
+            type: string
     alert-rules.AggregationFunction:
       type: string
       description: How matching samples are aggregated before the threshold comparison
@@ -426,13 +481,100 @@ components:
       - avg
       - min
       - max
-    alert-rules.EnabledRequest:
+    alert-rules.MissingDataPolicy:
+      type: string
+      description: How missing data is treated while evaluating the rule
+      enum:
+      - ignore
+      - good
+      - bad
+    alert-rules.Dimension:
+      type: string
+      description: A dimension the metric can be grouped/keyed by
+      enum:
+      - device_id
+      - bssid
+      - network
+      - band
+      - location_id
+      - target
+    alert-rules.ThresholdOperator:
+      type: string
+      description: The comparison operator applied between the aggregated value and the threshold
+      enum:
+      - <
+      - <=
+      - '>'
+      - '>='
+    alert-rules.GetAlertRulesResponse:
       type: object
       required:
-      - enabled
+      - results
+      - pagination
       properties:
-        enabled:
-          type: boolean
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/alert-rules.AlertRuleResponse'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    alert-rules.AlertRulesSummary:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+          format: int64
+        activeCount:
+          type: integer
+          format: int64
+        disabledCount:
+          type: integer
+          format: int64
+    alert-rules.WebhookAuth:
+      type: object
+      description: Authentication mode for a webhook delivery, discriminated by `type`. Credentials are referenced by Secrets Manager ARN; the secret value is never stored here.
+      required:
+      - type
+      discriminator:
+        propertyName: type
+      oneOf:
+      - type: object
+        required:
+        - type
+        properties:
+          type:
+            type: string
+            enum:
+            - NONE
+      - type: object
+        required:
+        - type
+        - username
+        - passwordSecretArn
+        properties:
+          type:
+            type: string
+            enum:
+            - BASIC
+          username:
+            type: string
+          passwordSecretArn:
+            type: string
+            description: Secrets Manager ARN holding the password
+            pattern: ^arn:aws:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:.+
+      - type: object
+        required:
+        - type
+        - tokenSecretArn
+        properties:
+          type:
+            type: string
+            enum:
+            - TOKEN
+          tokenSecretArn:
+            type: string
+            description: Secrets Manager ARN holding the token
+            pattern: ^arn:aws:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:.+
     alert-rules.AlertRuleRequest:
       type: object
       description: Body for creating (POST) or replacing (PUT) an alert rule. Enum fields use their wire values exactly as listed (e.g. ">", "avg", "ignore" in lowercase), not the uppercase names.
@@ -518,76 +660,19 @@ components:
           - kind: servicenow
             mdsConfigId: abc-123
             organizationName: globalcorp
-    alert-rules.Delivery:
+    alert-rules.EnabledRequest:
       type: object
-      description: A single notification target, discriminated by `kind`
       required:
-      - kind
-      discriminator:
-        propertyName: kind
-      oneOf:
-      - type: object
-        required:
-        - kind
-        - url
-        - auth
-        properties:
-          kind:
-            type: string
-            enum:
-            - webhook
-          name:
-            type: string
-          url:
-            type: string
-            description: http or https URL with no spaces
-            pattern: ^https?://\S+$
-          auth:
-            $ref: '#/components/schemas/alert-rules.WebhookAuth'
-          format:
-            $ref: '#/components/schemas/alert-rules.WebhookFormat'
-      - type: object
-        required:
-        - kind
-        - address
-        properties:
-          kind:
-            type: string
-            enum:
-            - email
-          name:
-            type: string
-          address:
-            type: string
-            format: email
-      - type: object
-        required:
-        - kind
-        - mdsConfigId
-        - organizationName
-        properties:
-          kind:
-            type: string
-            enum:
-            - servicenow
-          name:
-            type: string
-          mdsConfigId:
-            type: string
-          organizationName:
-            type: string
-    alert-rules.AlertRulesSummary:
-      type: object
+      - enabled
       properties:
-        totalCount:
-          type: integer
-          format: int64
-        activeCount:
-          type: integer
-          format: int64
-        disabledCount:
-          type: integer
-          format: int64
+        enabled:
+          type: boolean
+    alert-rules.WebhookFormat:
+      type: string
+      description: Per-destination payload shape for a webhook delivery. Defaults to generic when omitted.
+      enum:
+      - generic
+      - slack
     common.ResponseStatusException:
       type: object
       required:
@@ -610,24 +695,6 @@ components:
           type: string
         requestId:
           type: string
-    alert-rules.ThresholdOperator:
-      type: string
-      description: The comparison operator applied between the aggregated value and the threshold
-      enum:
-      - <
-      - <=
-      - '>'
-      - '>='
-    alert-rules.Dimension:
-      type: string
-      description: A dimension the metric can be grouped/keyed by
-      enum:
-      - device_id
-      - bssid
-      - network
-      - band
-      - location_id
-      - target
     alert-rules.NotificationConfig:
       type: object
       required:
@@ -637,73 +704,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/alert-rules.Delivery'
-    common.Pagination:
-      type: object
-      required:
-      - perPage
-      - page
-      - total
-      - pages
-      properties:
-        perPage:
-          type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
-    alert-rules.WebhookAuth:
-      type: object
-      description: Authentication mode for a webhook delivery, discriminated by `type`. Credentials are referenced by Secrets Manager ARN; the secret value is never stored here.
-      required:
-      - type
-      discriminator:
-        propertyName: type
-      oneOf:
-      - type: object
-        required:
-        - type
-        properties:
-          type:
-            type: string
-            enum:
-            - NONE
-      - type: object
-        required:
-        - type
-        - username
-        - passwordSecretArn
-        properties:
-          type:
-            type: string
-            enum:
-            - BASIC
-          username:
-            type: string
-          passwordSecretArn:
-            type: string
-            description: Secrets Manager ARN holding the password
-            pattern: ^arn:aws:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:.+
-      - type: object
-        required:
-        - type
-        - tokenSecretArn
-        properties:
-          type:
-            type: string
-            enum:
-            - TOKEN
-          tokenSecretArn:
-            type: string
-            description: Secrets Manager ARN holding the token
-            pattern: ^arn:aws:secretsmanager:[a-z0-9-]+:[0-9]{12}:secret:.+
   responses:
     common.404NotFoundResponse:
       description: Resource Not Found

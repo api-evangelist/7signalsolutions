@@ -261,17 +261,6 @@ paths:
       - Topologies
 components:
   schemas:
-    topologies.GetAgentTopologyLocationResponse:
-      $ref: '#/components/schemas/topologies.TopologyAgentLocation'
-    topologies.GetAgentTopologyLocationsResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/topologies.TopologyAgentLocation'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
     topologies.TopologySensorServiceArea:
       type: object
       properties:
@@ -285,6 +274,28 @@ components:
           type: number
         parentLocationName:
           type: string
+    topologies.GetSensorTopologyLocationResponse:
+      $ref: '#/components/schemas/topologies.TopologySensorLocation'
+    topologies.GetAgentTopologyLocationsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/topologies.TopologyAgentLocation'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    topologies.TopologySensorLocation:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        parentId:
+          type: number
     topologies.TopologyAgentLocation:
       type: object
       properties:
@@ -301,61 +312,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    topologies.GetSensorTopologyServiceAreasResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/topologies.TopologySensorServiceArea'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    common.Pagination:
-      type: object
-      required:
-      - perPage
-      - page
-      - total
-      - pages
-      properties:
-        perPage:
-          type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
-    topologies.GetSensorTopologyLocationResponse:
-      $ref: '#/components/schemas/topologies.TopologySensorLocation'
-    topologies.GetSensorTopologyServiceAreaResponse:
-      $ref: '#/components/schemas/topologies.TopologySensorServiceArea'
-    topologies.TopologySensorLocation:
-      type: object
-      properties:
-        id:
-          type: number
-        name:
-          type: string
-        description:
-          type: string
-        parentId:
-          type: number
-    topologies.GetSensorTopologyLocationsResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/topologies.TopologySensorLocation'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
     common.ResponseStatusException:
       type: object
       required:
@@ -378,6 +334,50 @@ components:
           type: string
         requestId:
           type: string
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    topologies.GetAgentTopologyLocationResponse:
+      $ref: '#/components/schemas/topologies.TopologyAgentLocation'
+    topologies.GetSensorTopologyServiceAreasResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/topologies.TopologySensorServiceArea'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    topologies.GetSensorTopologyLocationsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/topologies.TopologySensorLocation'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    topologies.GetSensorTopologyServiceAreaResponse:
+      $ref: '#/components/schemas/topologies.TopologySensorServiceArea'
   parameters:
     common.PerPageRequestParam:
       name: perPage
@@ -386,6 +386,13 @@ components:
       required: false
       schema:
         type: integer
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
     common.PageRequestParam:
       name: page
       in: query
@@ -394,13 +401,6 @@ components:
       schema:
         type: integer
         minimum: 1
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
   responses:
     common.404NotFoundResponse:
       description: Resource Not Found

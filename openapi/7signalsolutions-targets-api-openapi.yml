@@ -249,16 +249,15 @@ paths:
       tags:
       - Targets
 components:
+  parameters:
+    targets.SensorTargetId:
+      name: targetId
+      in: path
+      description: Sensor Target Id
+      required: true
+      schema:
+        type: number
   schemas:
-    targets.GetSensorTargetsResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/targets.SensorTarget'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
     targets.SensorTarget:
       type: object
       properties:
@@ -287,53 +286,15 @@ components:
         ipV6Address:
           type: string
           description: Only applicable to SONAR/PING_ENDPOINT targets
-    targets.PostSensorTargetRequest:
+    targets.GetSensorTargetsResponse:
       type: object
       properties:
-        targetType:
-          type: string
-          enum:
-          - SONAR
-          - WEB_SERVER
-          - PING_ENDPOINT
-          - IPERF3_SERVER
-          description: Which kind of test endpoint to create - cannot be changed after creation
-        name:
-          type: string
-        description:
-          type: string
-        dnsName:
-          type: string
-          description: Required for WEB_SERVER/IPERF3_SERVER; for SONAR/PING_ENDPOINT, at least one of dnsName/ipV4Address/ipV6Address is required
-        ipV4Address:
-          type: string
-        ipV6Address:
-          type: string
-        tcpPort:
-          type: number
-          description: Only applicable to SONAR (defaults to 80 if omitted) and IPERF3_SERVER (defaults to 5201 if omitted); ignored for WEB_SERVER/PING_ENDPOINT
-    common.Pagination:
-      type: object
-      required:
-      - perPage
-      - page
-      - total
-      - pages
-      properties:
-        perPage:
-          type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/targets.SensorTarget'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
     targets.PutSensorTargetRequest:
       type: object
       properties:
@@ -375,29 +336,68 @@ components:
           type: string
         requestId:
           type: string
+    common.Pagination:
+      type: object
+      required:
+      - perPage
+      - page
+      - total
+      - pages
+      properties:
+        perPage:
+          type: integer
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    targets.PostSensorTargetRequest:
+      type: object
+      properties:
+        targetType:
+          type: string
+          enum:
+          - SONAR
+          - WEB_SERVER
+          - PING_ENDPOINT
+          - IPERF3_SERVER
+          description: Which kind of test endpoint to create - cannot be changed after creation
+        name:
+          type: string
+        description:
+          type: string
+        dnsName:
+          type: string
+          description: Required for WEB_SERVER/IPERF3_SERVER; for SONAR/PING_ENDPOINT, at least one of dnsName/ipV4Address/ipV6Address is required
+        ipV4Address:
+          type: string
+        ipV6Address:
+          type: string
+        tcpPort:
+          type: number
+          description: Only applicable to SONAR (defaults to 80 if omitted) and IPERF3_SERVER (defaults to 5201 if omitted); ignored for WEB_SERVER/PING_ENDPOINT
     targets.GetSensorTargetResponse:
       $ref: '#/components/schemas/targets.SensorTarget'
   responses:
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
     common.404NotFoundResponse:
       description: Resource Not Found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
-  parameters:
-    targets.SensorTargetId:
-      name: targetId
-      in: path
-      description: Sensor Target Id
-      required: true
-      schema:
-        type: number
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

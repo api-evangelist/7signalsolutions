@@ -38,46 +38,6 @@ paths:
       tags:
       - Authentication
 components:
-  schemas:
-    oauth2.OAuth2AccessTokenError:
-      type: object
-      required:
-      - error
-      properties:
-        error:
-          type: string
-          description: error message
-          enum:
-          - invalid_request
-          - invalid_client
-          - invalid_grant
-          - unauthorized_client
-          - unsupported_grant_type
-          - invalid_scope
-        error_description:
-          type: string
-          description: Human-readable ASCII text providing additional information
-        error_uri:
-          type: string
-          description: A URI identifying a human-readable web page with information about the error
-    oauth2.OAuth2AccessTokenResponse:
-      type: object
-      required:
-      - token_type
-      - access_token
-      properties:
-        token_type:
-          type: string
-        access_token:
-          type: string
-        expires_in:
-          type: integer
-        refresh_token:
-          type: string
-        scope:
-          type: array
-          items:
-            type: string
   requestBodies:
     oauth2.OAuth2ClientCredentialsRequest:
       required: true
@@ -105,6 +65,46 @@ components:
           encoding:
             scope:
               style: spaceDelimited
+  schemas:
+    oauth2.OAuth2AccessTokenResponse:
+      type: object
+      required:
+      - token_type
+      - access_token
+      properties:
+        token_type:
+          type: string
+        access_token:
+          type: string
+        expires_in:
+          type: integer
+        refresh_token:
+          type: string
+        scope:
+          type: array
+          items:
+            type: string
+    oauth2.OAuth2AccessTokenError:
+      type: object
+      required:
+      - error
+      properties:
+        error:
+          type: string
+          description: error message
+          enum:
+          - invalid_request
+          - invalid_client
+          - invalid_grant
+          - unauthorized_client
+          - unsupported_grant_type
+          - invalid_scope
+        error_description:
+          type: string
+          description: Human-readable ASCII text providing additional information
+        error_uri:
+          type: string
+          description: A URI identifying a human-readable web page with information about the error
   securitySchemes:
     oauth2:
       type: oauth2

@@ -68,77 +68,17 @@ paths:
       tags:
       - Scans
 components:
-  parameters:
-    scans.SensorIdRequestParam:
-      name: sensorId
-      in: query
-      description: The ID of the sensor (eye)
-      required: true
-      schema:
-        type: integer
-    scans.PageRequestParam:
-      name: page
-      in: query
-      description: Page number for pagination (0-based)
-      required: false
-      schema:
-        type: integer
-        default: 0
-        minimum: 0
-    scans.EndTimeRequestParam:
-      name: end
-      in: query
-      description: End time for scan data in epoch milliseconds (UTC)
-      required: true
-      schema:
-        type: integer
-        format: int64
-    scans.SizeRequestParam:
-      name: size
-      in: query
-      description: Number of records per page
-      required: false
-      schema:
-        type: integer
-        default: 20
-        minimum: 1
-        maximum: 1000
-    scans.AgentIdRequestParam:
-      name: agentId
-      in: query
-      description: The UUID of the agent
-      required: true
-      schema:
-        type: string
-        format: uuid
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
-    scans.StartTimeRequestParam:
-      name: start
-      in: query
-      description: Start time for scan data in epoch milliseconds (UTC)
-      required: true
-      schema:
-        type: integer
-        format: int64
   schemas:
-    scans.SensorScanTimestamp:
+    scans.SensorsScanDataResponse:
       type: object
       properties:
-        timestamp:
-          type: integer
-          format: int64
-          description: Scan timestamp in epoch milliseconds (UTC)
-        data:
+        pagination:
+          $ref: '#/components/schemas/common.ZeroBasedPagination'
+        scans:
           type: array
-          description: Access points detected in this scan
+          description: Array of sensor scan records grouped by timestamp
           items:
-            $ref: '#/components/schemas/scans.SensorScanAp'
+            $ref: '#/components/schemas/scans.SensorScanTimestamp'
     scans.SensorScanAp:
       type: object
       properties:
@@ -178,31 +118,6 @@ components:
           - integer
           - 'null'
           description: Number of stations/clients connected to the access point
-    scans.AgentsScanDataResponse:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/common.ZeroBasedPagination'
-        scans:
-          type: array
-          description: Array of agent scan records grouped by timestamp
-          items:
-            $ref: '#/components/schemas/scans.AgentScanTimestamp'
-    common.ZeroBasedPagination:
-      type: object
-      properties:
-        perPage:
-          type: integer
-          description: Number of records per page
-        page:
-          type: integer
-          description: Current page number (0-based)
-        total:
-          type: integer
-          description: Total number of records available
-        pages:
-          type: integer
-          description: Total number of pages
     scans.AgentScanAp:
       type: object
       properties:
@@ -278,6 +193,65 @@ components:
           - integer
           - 'null'
           description: Split channel information for advanced channel configurations
+    common.ZeroBasedPagination:
+      type: object
+      properties:
+        perPage:
+          type: integer
+          description: Number of records per page
+        page:
+          type: integer
+          description: Current page number (0-based)
+        total:
+          type: integer
+          description: Total number of records available
+        pages:
+          type: integer
+          description: Total number of pages
+    scans.AgentsScanDataResponse:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/common.ZeroBasedPagination'
+        scans:
+          type: array
+          description: Array of agent scan records grouped by timestamp
+          items:
+            $ref: '#/components/schemas/scans.AgentScanTimestamp'
+    scans.SensorScanTimestamp:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+          format: int64
+          description: Scan timestamp in epoch milliseconds (UTC)
+        data:
+          type: array
+          description: Access points detected in this scan
+          items:
+            $ref: '#/components/schemas/scans.SensorScanAp'
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
     scans.AgentScanTimestamp:
       type: object
       properties:
@@ -303,38 +277,64 @@ components:
           description: Access points detected in this scan
           items:
             $ref: '#/components/schemas/scans.AgentScanAp'
-    scans.SensorsScanDataResponse:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/common.ZeroBasedPagination'
-        scans:
-          type: array
-          description: Array of sensor scan records grouped by timestamp
-          items:
-            $ref: '#/components/schemas/scans.SensorScanTimestamp'
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
+  parameters:
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    scans.EndTimeRequestParam:
+      name: end
+      in: query
+      description: End time for scan data in epoch milliseconds (UTC)
+      required: true
+      schema:
+        type: integer
+        format: int64
+    scans.SensorIdRequestParam:
+      name: sensorId
+      in: query
+      description: The ID of the sensor (eye)
+      required: true
+      schema:
+        type: integer
+    scans.SizeRequestParam:
+      name: size
+      in: query
+      description: Number of records per page
+      required: false
+      schema:
+        type: integer
+        default: 20
+        minimum: 1
+        maximum: 1000
+    scans.StartTimeRequestParam:
+      name: start
+      in: query
+      description: Start time for scan data in epoch milliseconds (UTC)
+      required: true
+      schema:
+        type: integer
+        format: int64
+    scans.AgentIdRequestParam:
+      name: agentId
+      in: query
+      description: The UUID of the agent
+      required: true
+      schema:
+        type: string
+        format: uuid
+    scans.PageRequestParam:
+      name: page
+      in: query
+      description: Page number for pagination (0-based)
+      required: false
+      schema:
+        type: integer
+        default: 0
+        minimum: 0
   responses:
     common.404NotFoundResponse:
       description: Resource Not Found

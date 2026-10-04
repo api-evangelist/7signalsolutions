@@ -1360,104 +1360,63 @@ paths:
       tags:
       - OnDemandTests
 components:
-  parameters:
-    on-demand-tests.SensorIdFilterForRunTest:
-      name: sensorId
-      in: path
-      description: Trigger test for the sensor referenced by its id.
-      required: true
-      schema:
-        type: integer
-    on-demand-tests.SensorIdFilter:
-      name: sensorId
-      in: path
-      description: Get test status for the sensor referenced by its ID
-      required: true
-      schema:
-        type: integer
-    on-demand-tests.TestIdFilter:
-      name: testId
-      in: path
-      description: Get test status for the test referenced by its ID
-      required: true
-      schema:
-        type: string
-        format: uuid
   schemas:
-    on-demand-tests.TcpResultsEntry:
-      type: object
-      properties:
-        testNumber:
-          type: number
-          description: The test number.
-        timeMilliseconds:
-          type: integer
-          format: int64
-          description: Duration of the test in milliseconds
-        throughputMbps:
-          type: number
-          description: The throughput achieved during the test in Mbps.
-        qosCategory:
-          type: number
-          description: The QoS category for the test.
-    on-demand-tests.ActiveTestsListResponse:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/common.ZeroBasedPagination'
-        items:
-          type: array
-          description: List of active on-demand test metadata
-          items:
-            $ref: '#/components/schemas/on-demand-tests.ActiveTestsItem'
-    on-demand-tests.SpeedtestInterface:
-      type: object
-      properties:
-        internalIp:
-          type: string
-        interfaceName:
-          type: string
-        macAddress:
-          type: string
-        isVPN:
-          type: boolean
-        externalIp:
-          type: string
-    on-demand-tests.TcpUploadTestRequest:
+    on-demand-tests.TracerouteTestRequest:
       allOf:
-      - $ref: '#/components/schemas/on-demand-tests.TcpTestRequest'
+      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequest'
       - type: object
+        required:
+        - testEndpoint
         properties:
-          uploadMegabytes:
-            type: string
-            default: FOUR
-            enum:
-            - ONE
-            - FOUR
-            - TEN
-            - HUNDRED
-            - TWOHUNDRED
-            - FIVEHUNDRED
-            description: Upload payload size in megabytes
-    on-demand-tests.UdpResultsEntry:
+          testEndpoint:
+            $ref: '#/components/schemas/on-demand-tests.TestEndpointSettings'
+          minimumTtl:
+            type: integer
+            default: 1
+            description: Minimum TTL (hop count) to start the traceroute
+          maximumTtl:
+            type: integer
+            default: 255
+            description: Maximum TTL (hop count) for the traceroute
+          queriesPerHop:
+            type: integer
+            default: 5
+            description: Number of probe packets sent per hop
+          timeoutMilliseconds:
+            type: integer
+            default: 2000
+            description: Timeout in milliseconds for each probe
+          testTimeoutSeconds:
+            type: integer
+            default: 20
+            description: Overall timeout for the traceroute test
+          qosCategory:
+            $ref: '#/components/schemas/on-demand-tests.QosCategoryInRequest'
+    on-demand-tests.OnDemandTestStatusBase:
       type: object
+      required:
+      - testId
+      - runStatus
       properties:
-        testNumber:
-          type: number
-          description: The test number.
-        packetLoss:
-          type: integer
-          description: Number of packets lost during the test
-        timeMilliseconds:
-          type: integer
-          format: int64
-          description: Duration of the test in milliseconds
-        throughputMbps:
-          type: number
-          description: The throughput achieved during the test in Mbps.
-        qosCategory:
-          type: number
-          description: The QoS category for the test.
+        testId:
+          type: string
+          description: The test ID which was used to trigger the test.
+        runStatus:
+          type: string
+          description: The overall status of the test which was triggered earlier
+          enum:
+          - IN_PROGRESS
+          - COMPLETE
+          - ERROR
+        errorMessage:
+          type: string
+          description: The error message if any that occurred during test.
+        errorCode:
+          type: string
+          description: The error code if any that occurred during test.
+        testStatus:
+          type: string
+          description: Additional indicator in case of test failures.
     on-demand-tests.SpeedtestPing:
       type: object
       properties:
@@ -1481,93 +1440,6 @@ components:
         endTime:
           type: string
           format: date-time
-    on-demand-tests.ActiveTestRequestBase:
-      type: object
-      required:
-      - accessPointId
-      - ipAddress
-      properties:
-        testType:
-          type: string
-          description: Network interface used for the test
-          default: WLAN
-          enum:
-          - WLAN
-          - Ethernet
-        accessPointId:
-          type: integer
-          minimum: 1
-          description: Access point ID on which the test is executed
-        maxAttachTimeoutMilliseconds:
-          type: integer
-          default: 20000
-          description: Maximum time to wait for network attach
-        maxIpAddressWaitTimeMilliseconds:
-          type: integer
-          default: 60000
-          description: Maximum time to wait for IP address assignment
-        customMacAddress:
-          type: string
-          default: 00:00:00:00:00:00
-          description: Optional custom MAC address
-    on-demand-tests.UdpUploadTestStatusResponse:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
-      - type: object
-        properties:
-          results:
-            $ref: '#/components/schemas/on-demand-tests.UdpUploadTestResults'
-    on-demand-tests.SpeedtestRequest:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequest'
-      - type: object
-        properties:
-          testServerId:
-            type: integer
-            description: Specific Ookla speedtest server ID to use
-          downloadConnectionRangeMin:
-            type: integer
-            example: 0
-            description: Minimum number of parallel connections for download test
-          downloadConnectionRangeMax:
-            type: integer
-            example: 0
-            description: Maximum number of parallel connections for download test
-          uploadConnectionRangeMin:
-            type: integer
-            example: 0
-            description: Minimum number of parallel connections for upload test
-          uploadConnectionRangeMax:
-            type: integer
-            example: 0
-            description: Maximum number of parallel connections for upload test
-    on-demand-tests.TcpDownloadTestStatusResponse:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
-      - type: object
-        properties:
-          results:
-            $ref: '#/components/schemas/on-demand-tests.TcpDownloadTestResults'
-    on-demand-tests.MosTestSender:
-      type: object
-      description: Sender configuration (no IP or port exposure)
-      properties:
-        packetSizeBytes:
-          type: integer
-          default: 188
-          description: Packet size in bytes
-        sendTimeSeconds:
-          type: integer
-          default: 30
-          description: Total send time in seconds
-        streamIntervalMilliseconds:
-          type: integer
-          default: 20
-          description: Stream interval in milliseconds
-        samplingIntervalSeconds:
-          type: integer
-          default: 5
-          description: Sampling interval in seconds
     on-demand-tests.ActiveTestsItem:
       type: object
       properties:
@@ -1643,72 +1515,221 @@ components:
         hostname:
           type: string
           description: Hostname of the sensor
-    on-demand-tests.QosCategoryInRequest:
+    on-demand-tests.PacketCaptureItem:
       type: object
-      description: QoS configuration for the test traffic
       properties:
-        qosCategory:
+        id:
           type: string
-          default: BEST_EFFORT_0
+          format: uuid
+          description: Unique identifier for the test
+        testKey:
+          type: string
+          format: uuid
+          description: UUID key for the test
+        testId:
+          type: integer
+          format: int64
+          description: Numeric test ID
+        testType:
+          type: string
           enum:
-          - BEST_EFFORT_0
-          - BACKGROUND_1
-          - VIDEO_5
-          - VOICE_6
-          description: QoS category index used for the test (Best Effort, Background, Video, Voice)
-    on-demand-tests.MosTestRequest:
+          - PacketCapture
+          - AccessPointTraffic
+          description: Type of packet capture test
+        eyeId:
+          type: integer
+          format: int64
+          description: ID of the sensor (eye) that performed the test
+        eyeUuid:
+          type: string
+          format: uuid
+          description: UUID of the sensor
+        eyeName:
+          type: string
+          description: Name of the sensor
+        orgUuid:
+          type: string
+          format: uuid
+          description: UUID of the organization
+        apId:
+          type: integer
+          description: Access point ID
+        ssid:
+          type: string
+          description: SSID of the access point
+        bssid:
+          type: string
+          description: BSSID (MAC address) of the access point
+        band:
+          type: string
+          enum:
+          - '2.4'
+          - '5'
+          - '6'
+          - N/A
+          description: Frequency band
+        channel:
+          type: integer
+          description: WiFi channel number
+        gid:
+          type: integer
+          description: Group ID
+        resultsFileS3Key:
+          type: string
+          description: S3 key for the PCAP file
+        runStatus:
+          type: string
+          enum:
+          - IN_PROGRESS
+          - COMPLETE
+          - ERROR
+          description: Overall run status of the test
+        errorCode:
+          type: integer
+          format: int64
+          description: Error code if the test failed (0 means no error)
+        errorMessage:
+          type: string
+          description: Human-readable error message if the test failed
+        testStatus:
+          type: string
+          description: Additional indicator in case of test failures
+        captureStatus:
+          type: string
+          description: Packet capture specific status indicator
+        createdAt:
+          type: string
+          format: date-time
+          description: Test creation timestamp (UTC)
+        hostname:
+          type: string
+          description: Hostname of the sensor
+    on-demand-tests.TcpUploadTestResults:
       allOf:
-      - $ref: '#/components/schemas/on-demand-tests.TestEndpointSettings'
+      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
       - type: object
         properties:
-          direction:
-            type: string
-            default: DOWNLINK
-            enum:
-            - UPLINK
-            - DOWNLINK
-            description: Direction of the MOS test
-          codec:
-            type: string
-            default: PCM_LINEAR_16
-            enum:
-            - PCM_LINEAR_16
-            - GSM
-            description: VOIP codec. Packet size defaults to 188 bytes for PCM_LINEAR_16 and 48 bytes for GSM.
-          fec:
-            type: string
-            default: NO_FEC
-            enum:
-            - NO_FEC
-            - GSM_PIGGYBACK_OFFSET_1
-            - GSM_PIGGYBACK_OFFSET_2
-            - GSM_PIGGYBACK_OFFSET_3
-            description: Forward error correction mode for the MOS stream
-          qosCategory:
-            $ref: '#/components/schemas/on-demand-tests.QosCategoryInRequest'
-          sonarDSCP:
+          udpUploadResults:
+            type: array
+            items:
+              $ref: '#/components/schemas/on-demand-tests.TcpResultsEntry'
+    on-demand-tests.TraceRouteResultsEntry:
+      type: object
+      properties:
+        hop:
+          type: integer
+          minimum: 1
+          description: Hop number
+        ipAddress:
+          type: string
+          description: IP address of the responding hop
+        timeMilliseconds:
+          type: array
+          description: Round-trip times in milliseconds for each probe attempt
+          items:
             type: integer
-            default: 0
-            description: DSCP value for Sonar traffic
-          sender:
-            $ref: '#/components/schemas/on-demand-tests.MosTestSender'
-          receiver:
-            $ref: '#/components/schemas/on-demand-tests.MosTestReceiver'
-    on-demand-tests.ActiveTestRequest:
+        ttl:
+          type: array
+          description: TTL values used for each probe attempt
+          items:
+            type: integer
+    on-demand-tests.UdpDownloadTestStatusResponse:
       allOf:
-      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequestBase'
+      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
       - type: object
-        required:
-        - ipAddress
         properties:
-          ipAddress:
-            $ref: '#/components/schemas/on-demand-tests.IpAddressSettings'
+          results:
+            $ref: '#/components/schemas/on-demand-tests.UdpDownloadTestResults'
+    on-demand-tests.HttpDownloadTestStatusResponse:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
+      - type: object
+        properties:
+          results:
+            $ref: '#/components/schemas/on-demand-tests.HttpDownloadTestResults'
     on-demand-tests.SpeedtestAttribution:
       type: object
       properties:
         poweredBy:
           type: string
           example: Speedtest.net - http://speedtest.net
+    on-demand-tests.Iperf3TestResults:
+      type: object
+      properties:
+        transferredBytes:
+          type: integer
+          format: int64
+          description: Total number of bytes transferred during the test
+        throughputMbps:
+          type: number
+          format: double
+          description: Measured throughput in megabits per second
+        rawIperf3Output:
+          type: object
+          description: Raw iperf3 JSON output (raw large payload)
+    on-demand-tests.UdpUploadTestStatusResponse:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
+      - type: object
+        properties:
+          results:
+            $ref: '#/components/schemas/on-demand-tests.UdpUploadTestResults'
+    on-demand-tests.PingTestStatusResponse:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
+      - type: object
+        properties:
+          results:
+            $ref: '#/components/schemas/on-demand-tests.PingTestResults'
+    on-demand-tests.UdpUploadTestRequest:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.UdpTestRequest'
+      - type: object
+        properties:
+          uploadMegabytes:
+            type: string
+            default: FOUR
+            enum:
+            - ONE
+            - FOUR
+            - TEN
+            - HUNDRED
+            - TWOHUNDRED
+            - FIVEHUNDRED
+            description: Upload payload size in megabytes
+    on-demand-tests.TestEndpointSettings:
+      type: object
+      description: Base endpoint configuration for active tests
+      properties:
+        testHost:
+          type: string
+          description: Hostname or IP address of the test endpoint
+        testPort:
+          type: integer
+          description: Port used for the test endpoint (ignored for ping tests)
+        sonarId:
+          type: integer
+          minimum: 1
+          description: Sonar ID of the endpoint
+        resolveDNSOnSensor:
+          type: boolean
+          description: Whether DNS resolution should occur on the sensor
+    on-demand-tests.UdpUploadTestResults:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
+      - type: object
+        properties:
+          udpUploadResults:
+            type: array
+            items:
+              $ref: '#/components/schemas/on-demand-tests.UdpResultsEntry'
+    on-demand-tests.Iperf3TestStatusResponse:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
+      - type: object
+        properties:
+          results:
+            $ref: '#/components/schemas/on-demand-tests.Iperf3TestResults'
     on-demand-tests.MosTestReceiver:
       type: object
       description: Receiver configuration
@@ -1733,229 +1754,6 @@ components:
           type: integer
           default: 30
           description: Receiver timeout in seconds
-    on-demand-tests.SpeedtestStatusResponse:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
-      - type: object
-        properties:
-          results:
-            $ref: '#/components/schemas/on-demand-tests.SpeedtestResults'
-    on-demand-tests.HttpUploadTestResults:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
-      - type: object
-        properties:
-          httpUploadResults:
-            type: array
-            items:
-              $ref: '#/components/schemas/on-demand-tests.HttpResultsEntry'
-    on-demand-tests.MosResultsEntry:
-      type: object
-      description: MOS measurement results for a sampling interval
-      properties:
-        mos:
-          type: number
-          description: Mean Opinion Score value
-        elapsedSeconds:
-          type: number
-          description: Elapsed time since start of the test in seconds
-        estimatedPacketCount:
-          type: integer
-          description: Estimated number of packets processed
-        lossRatePercentage:
-          type: number
-          description: Packet loss rate as a percentage
-        averageBurstSize:
-          type: number
-          description: Average burst size of lost packets
-        averageJitterMilliseconds:
-          type: number
-          description: Average jitter in milliseconds
-    on-demand-tests.UdpTestRequest:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequest'
-      - type: object
-        required:
-        - testEndpoint
-        properties:
-          testEndpoint:
-            $ref: '#/components/schemas/on-demand-tests.TestEndpointSettings'
-          packetSize:
-            type: string
-            enum:
-            - SMALL_PACKET_SIZE
-            - MEDIUM_PACKET_SIZE
-            - LARGE_PACKET_SIZE
-            default: SMALL_PACKET_SIZE
-            description: 'UDP payload size:
-
-              - SMALL_PACKET_SIZE = 256 bytes
-
-              - MEDIUM_PACKET_SIZE = 1024 bytes
-
-              - LARGE_PACKET_SIZE = 32768 bytes'
-          testCount:
-            type: integer
-            default: 1
-            minimum: 1
-            description: Number of UDP throughput tests to perform
-          senderPort:
-            type: integer
-            default: 0
-            description: UDP sender port (0 = auto-assign)
-          receiverPort:
-            type: integer
-            default: 0
-            description: UDP receiver port (0 = auto-assign)
-          qosCategory:
-            $ref: '#/components/schemas/on-demand-tests.QosCategoryInRequest'
-          sonarDSCP:
-            type: integer
-            default: 0
-            description: DSCP value for Sonar traffic
-    on-demand-tests.PingTestResults:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
-      - type: object
-        properties:
-          pingResults:
-            type: array
-            items:
-              $ref: '#/components/schemas/on-demand-tests.PingResultsEntry'
-    on-demand-tests.HttpDownloadTestResults:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
-      - type: object
-        properties:
-          httpDownloadResults:
-            type: array
-            items:
-              $ref: '#/components/schemas/on-demand-tests.HttpResultsEntry'
-    on-demand-tests.TcpDownloadTestResults:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
-      - type: object
-        properties:
-          tcpDownloadResults:
-            type: array
-            items:
-              $ref: '#/components/schemas/on-demand-tests.TcpResultsEntry'
-    on-demand-tests.HttpTestRequest:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequest'
-      - type: object
-        required:
-        - testEndpoint
-        properties:
-          testEndpoint:
-            $ref: '#/components/schemas/on-demand-tests.TestEndpointSettings'
-          durationSeconds:
-            type: integer
-            default: 2
-            description: Duration of the http download test in seconds
-          testCount:
-            type: integer
-            default: 1
-            description: Number of download tests to perform
-          qosCategory:
-            $ref: '#/components/schemas/on-demand-tests.QosCategoryInRequest'
-          sonarDSCP:
-            type: integer
-            default: 0
-            description: DSCP value for Sonar traffic
-    on-demand-tests.SpeedtestServerCandidate:
-      type: object
-      properties:
-        id:
-          type: integer
-        latency:
-          type: number
-          format: double
-        name:
-          type: string
-        host:
-          type: string
-        port:
-          type: integer
-        location:
-          type: string
-        country:
-          type: string
-    on-demand-tests.IpAddressSettingsWithDns:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.IpAddressSettings'
-      - type: object
-        description: IP addressing configuration with optional DNS server overrides
-        properties:
-          dnsIpv4Server:
-            type: string
-            example: 0.0.0.0
-            description: DNS IPv4 server address to be used during the test
-          dnsIpv6Server:
-            type: string
-            example: '::'
-            description: DNS IPv6 server address to be used during the test
-    on-demand-tests.TcpTestRequest:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequest'
-      - type: object
-        required:
-        - testEndpoint
-        properties:
-          testEndpoint:
-            $ref: '#/components/schemas/on-demand-tests.TestEndpointSettings'
-          testCount:
-            type: integer
-            default: 1
-            minimum: 1
-            description: Number of TCP throughput tests to perform
-          qosCategory:
-            $ref: '#/components/schemas/on-demand-tests.QosCategoryInRequest'
-          sonarDSCP:
-            type: integer
-            default: 0
-            description: DSCP value for Sonar traffic
-    on-demand-tests.TracerouteTestStatusResponse:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
-      - type: object
-        properties:
-          results:
-            $ref: '#/components/schemas/on-demand-tests.TracerouteTestResults'
-    on-demand-tests.TracerouteTestResults:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
-      - type: object
-        properties:
-          traceRouteResults:
-            type: array
-            items:
-              $ref: '#/components/schemas/on-demand-tests.TraceRouteResultsEntry'
-    on-demand-tests.OnDemandTestStatusBase:
-      type: object
-      required:
-      - testId
-      - runStatus
-      properties:
-        testId:
-          type: string
-          description: The test ID which was used to trigger the test.
-        runStatus:
-          type: string
-          description: The overall status of the test which was triggered earlier
-          enum:
-          - IN_PROGRESS
-          - COMPLETE
-          - ERROR
-        errorMessage:
-          type: string
-          description: The error message if any that occurred during test.
-        errorCode:
-          type: string
-          description: The error code if any that occurred during test.
-        testStatus:
-          type: string
-          description: Additional indicator in case of test failures.
     on-demand-tests.MosTestResults:
       allOf:
       - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
@@ -1965,41 +1763,183 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/on-demand-tests.MosResultsEntry'
-    on-demand-tests.ActiveTestRequestWithDns:
+    on-demand-tests.SpeedtestInterface:
+      type: object
+      properties:
+        internalIp:
+          type: string
+        interfaceName:
+          type: string
+        macAddress:
+          type: string
+        isVPN:
+          type: boolean
+        externalIp:
+          type: string
+    common.ZeroBasedPagination:
+      type: object
+      properties:
+        perPage:
+          type: integer
+          description: Number of records per page
+        page:
+          type: integer
+          description: Current page number (0-based)
+        total:
+          type: integer
+          description: Total number of records available
+        pages:
+          type: integer
+          description: Total number of pages
+    on-demand-tests.PingGatewayTestRequest:
       allOf:
-      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequestBase'
+      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequest'
       - type: object
-        required:
-        - ipAddress
         properties:
-          ipAddress:
-            $ref: '#/components/schemas/on-demand-tests.IpAddressSettingsWithDns'
-    on-demand-tests.HttpDownloadTestStatusResponse:
+          payloadSizeBytes:
+            type: integer
+            default: 32
+            enum:
+            - 32
+            - 150
+            - 1450
+            - 9600
+            - 64000
+            description: Ping payload size in bytes
+          intervalMilliseconds:
+            type: integer
+            default: 1000
+            description: Interval between ping packets
+          timeoutMilliseconds:
+            type: integer
+            default: 1000
+            description: Timeout for each ping request
+          testCount:
+            type: integer
+            default: 10
+            description: Number of ping requests to send
+          qosCategory:
+            $ref: '#/components/schemas/on-demand-tests.QosCategoryInRequest'
+    on-demand-tests.TracerouteTestStatusResponse:
       allOf:
       - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
       - type: object
         properties:
           results:
-            $ref: '#/components/schemas/on-demand-tests.HttpDownloadTestResults'
-    on-demand-tests.PingResultsEntry:
+            $ref: '#/components/schemas/on-demand-tests.TracerouteTestResults'
+    on-demand-tests.HttpDownloadTestResults:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
+      - type: object
+        properties:
+          httpDownloadResults:
+            type: array
+            items:
+              $ref: '#/components/schemas/on-demand-tests.HttpResultsEntry'
+    on-demand-tests.HttpUploadTestResults:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
+      - type: object
+        properties:
+          httpUploadResults:
+            type: array
+            items:
+              $ref: '#/components/schemas/on-demand-tests.HttpResultsEntry'
+    on-demand-tests.UdpResultsEntry:
       type: object
       properties:
         testNumber:
           type: number
           description: The test number.
+        packetLoss:
+          type: integer
+          description: Number of packets lost during the test
         timeMilliseconds:
+          type: integer
+          format: int64
+          description: Duration of the test in milliseconds
+        throughputMbps:
           type: number
-          description: The time taken for the test in milliseconds.
+          description: The throughput achieved during the test in Mbps.
         qosCategory:
           type: number
           description: The QoS category for the test.
-    on-demand-tests.HttpUploadTestStatusResponse:
+    on-demand-tests.WebDownloadTestStatusResponse:
       allOf:
       - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
       - type: object
         properties:
           results:
-            $ref: '#/components/schemas/on-demand-tests.HttpUploadTestResults'
+            $ref: '#/components/schemas/on-demand-tests.WebDownloadTestResults'
+    on-demand-tests.NetworkAttachResultsBase:
+      type: object
+      properties:
+        attachTimeMilliseconds:
+          type: number
+          description: Attach time in milliseconds.
+        ipRetrievalTimeMilliseconds:
+          type: number
+          description: IP retrieval time in milliseconds.
+        ipAddress:
+          type: string
+          description: IP address used for the test.
+        gatewayAddress:
+          type: string
+          description: Gateway address used for the test.
+    on-demand-tests.ActiveTestRequestBase:
+      type: object
+      required:
+      - accessPointId
+      - ipAddress
+      properties:
+        testType:
+          type: string
+          description: Network interface used for the test
+          default: WLAN
+          enum:
+          - WLAN
+          - Ethernet
+        accessPointId:
+          type: integer
+          minimum: 1
+          description: Access point ID on which the test is executed
+        maxAttachTimeoutMilliseconds:
+          type: integer
+          default: 20000
+          description: Maximum time to wait for network attach
+        maxIpAddressWaitTimeMilliseconds:
+          type: integer
+          default: 60000
+          description: Maximum time to wait for IP address assignment
+        customMacAddress:
+          type: string
+          default: 00:00:00:00:00:00
+          description: Optional custom MAC address
+    on-demand-tests.PacketCaptureTestRequest:
+      type: object
+      required:
+      - mode
+      - captureTimeSeconds
+      properties:
+        mode:
+          type: string
+          enum:
+          - CHANNEL
+          - ACCESS_POINT
+        accessPointId:
+          type: integer
+        captureTimeSeconds:
+          type: integer
+        captureFilter:
+          type: string
+        band:
+          type: number
+          enum:
+          - 2.4
+          - 5.0
+          - 6.0
+        channel:
+          type: integer
     on-demand-tests.IpAddressSettings:
       type: object
       required:
@@ -2053,45 +1993,29 @@ components:
           type: string
           example: '::'
           description: IPv6 gateway address
-    on-demand-tests.UdpDownloadTestResults:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
-      - type: object
-        properties:
-          udpDownloadResults:
-            type: array
-            items:
-              $ref: '#/components/schemas/on-demand-tests.UdpResultsEntry'
-    on-demand-tests.WebDownloadResultsEntry:
-      type: object
-      properties:
-        url:
-          type: string
-          description: The URL that was tested.
-        status:
-          type: string
-          enum:
-          - successful
-          - unsuccessful
-          description: Result status for the URL.
-        timeMilliseconds:
-          type: integer
-          format: int64
-          description: Time taken to download the URL in milliseconds.
-    on-demand-tests.WebDownloadTestStatusResponse:
+    on-demand-tests.SpeedtestStatusResponse:
       allOf:
       - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
       - type: object
         properties:
           results:
-            $ref: '#/components/schemas/on-demand-tests.WebDownloadTestResults'
-    on-demand-tests.UdpDownloadTestStatusResponse:
+            $ref: '#/components/schemas/on-demand-tests.SpeedtestResults'
+    on-demand-tests.UdpDownloadTestRequest:
       allOf:
-      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
+      - $ref: '#/components/schemas/on-demand-tests.UdpTestRequest'
       - type: object
         properties:
-          results:
-            $ref: '#/components/schemas/on-demand-tests.UdpDownloadTestResults'
+          downloadMegabytes:
+            type: string
+            default: FOUR
+            enum:
+            - ONE
+            - FOUR
+            - TEN
+            - HUNDRED
+            - TWOHUNDRED
+            - FIVEHUNDRED
+            description: Download payload size in megabytes
     on-demand-tests.SpeedtestResults:
       type: object
       properties:
@@ -2111,6 +2035,497 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/on-demand-tests.SpeedtestServerCandidate'
+    on-demand-tests.UdpTestRequest:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequest'
+      - type: object
+        required:
+        - testEndpoint
+        properties:
+          testEndpoint:
+            $ref: '#/components/schemas/on-demand-tests.TestEndpointSettings'
+          packetSize:
+            type: string
+            enum:
+            - SMALL_PACKET_SIZE
+            - MEDIUM_PACKET_SIZE
+            - LARGE_PACKET_SIZE
+            default: SMALL_PACKET_SIZE
+            description: 'UDP payload size:
+
+              - SMALL_PACKET_SIZE = 256 bytes
+
+              - MEDIUM_PACKET_SIZE = 1024 bytes
+
+              - LARGE_PACKET_SIZE = 32768 bytes'
+          testCount:
+            type: integer
+            default: 1
+            minimum: 1
+            description: Number of UDP throughput tests to perform
+          senderPort:
+            type: integer
+            default: 0
+            description: UDP sender port (0 = auto-assign)
+          receiverPort:
+            type: integer
+            default: 0
+            description: UDP receiver port (0 = auto-assign)
+          qosCategory:
+            $ref: '#/components/schemas/on-demand-tests.QosCategoryInRequest'
+          sonarDSCP:
+            type: integer
+            default: 0
+            description: DSCP value for Sonar traffic
+    on-demand-tests.TcpUploadTestRequest:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.TcpTestRequest'
+      - type: object
+        properties:
+          uploadMegabytes:
+            type: string
+            default: FOUR
+            enum:
+            - ONE
+            - FOUR
+            - TEN
+            - HUNDRED
+            - TWOHUNDRED
+            - FIVEHUNDRED
+            description: Upload payload size in megabytes
+    on-demand-tests.HttpTestRequest:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequest'
+      - type: object
+        required:
+        - testEndpoint
+        properties:
+          testEndpoint:
+            $ref: '#/components/schemas/on-demand-tests.TestEndpointSettings'
+          durationSeconds:
+            type: integer
+            default: 2
+            description: Duration of the http download test in seconds
+          testCount:
+            type: integer
+            default: 1
+            description: Number of download tests to perform
+          qosCategory:
+            $ref: '#/components/schemas/on-demand-tests.QosCategoryInRequest'
+          sonarDSCP:
+            type: integer
+            default: 0
+            description: DSCP value for Sonar traffic
+    on-demand-tests.MosTestRequest:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.TestEndpointSettings'
+      - type: object
+        properties:
+          direction:
+            type: string
+            default: DOWNLINK
+            enum:
+            - UPLINK
+            - DOWNLINK
+            description: Direction of the MOS test
+          codec:
+            type: string
+            default: PCM_LINEAR_16
+            enum:
+            - PCM_LINEAR_16
+            - GSM
+            description: VOIP codec. Packet size defaults to 188 bytes for PCM_LINEAR_16 and 48 bytes for GSM.
+          fec:
+            type: string
+            default: NO_FEC
+            enum:
+            - NO_FEC
+            - GSM_PIGGYBACK_OFFSET_1
+            - GSM_PIGGYBACK_OFFSET_2
+            - GSM_PIGGYBACK_OFFSET_3
+            description: Forward error correction mode for the MOS stream
+          qosCategory:
+            $ref: '#/components/schemas/on-demand-tests.QosCategoryInRequest'
+          sonarDSCP:
+            type: integer
+            default: 0
+            description: DSCP value for Sonar traffic
+          sender:
+            $ref: '#/components/schemas/on-demand-tests.MosTestSender'
+          receiver:
+            $ref: '#/components/schemas/on-demand-tests.MosTestReceiver'
+    on-demand-tests.TcpResultsEntry:
+      type: object
+      properties:
+        testNumber:
+          type: number
+          description: The test number.
+        timeMilliseconds:
+          type: integer
+          format: int64
+          description: Duration of the test in milliseconds
+        throughputMbps:
+          type: number
+          description: The throughput achieved during the test in Mbps.
+        qosCategory:
+          type: number
+          description: The QoS category for the test.
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    on-demand-tests.PingResultsEntry:
+      type: object
+      properties:
+        testNumber:
+          type: number
+          description: The test number.
+        timeMilliseconds:
+          type: number
+          description: The time taken for the test in milliseconds.
+        qosCategory:
+          type: number
+          description: The QoS category for the test.
+    on-demand-tests.TcpTestRequest:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequest'
+      - type: object
+        required:
+        - testEndpoint
+        properties:
+          testEndpoint:
+            $ref: '#/components/schemas/on-demand-tests.TestEndpointSettings'
+          testCount:
+            type: integer
+            default: 1
+            minimum: 1
+            description: Number of TCP throughput tests to perform
+          qosCategory:
+            $ref: '#/components/schemas/on-demand-tests.QosCategoryInRequest'
+          sonarDSCP:
+            type: integer
+            default: 0
+            description: DSCP value for Sonar traffic
+    on-demand-tests.WebDownloadResultsEntry:
+      type: object
+      properties:
+        url:
+          type: string
+          description: The URL that was tested.
+        status:
+          type: string
+          enum:
+          - successful
+          - unsuccessful
+          description: Result status for the URL.
+        timeMilliseconds:
+          type: integer
+          format: int64
+          description: Time taken to download the URL in milliseconds.
+    on-demand-tests.UdpDownloadTestResults:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
+      - type: object
+        properties:
+          udpDownloadResults:
+            type: array
+            items:
+              $ref: '#/components/schemas/on-demand-tests.UdpResultsEntry'
+    on-demand-tests.ActiveTestRequestWithDns:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequestBase'
+      - type: object
+        required:
+        - ipAddress
+        properties:
+          ipAddress:
+            $ref: '#/components/schemas/on-demand-tests.IpAddressSettingsWithDns'
+    on-demand-tests.TcpDownloadTestResults:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
+      - type: object
+        properties:
+          tcpDownloadResults:
+            type: array
+            items:
+              $ref: '#/components/schemas/on-demand-tests.TcpResultsEntry'
+    on-demand-tests.TcpDownloadTestRequest:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.TcpTestRequest'
+      - type: object
+        properties:
+          downloadMegabytes:
+            type: string
+            default: FOUR
+            enum:
+            - ONE
+            - FOUR
+            - TEN
+            - HUNDRED
+            - TWOHUNDRED
+            - FIVEHUNDRED
+            description: Download payload size in megabytes
+    on-demand-tests.WebDownloadTestRequest:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequestWithDns'
+      - type: object
+        properties:
+          proxyServerUrl:
+            type: string
+            description: Optional proxy server URL used for the web download test
+            example: http://proxy.example.com:8080
+          timeoutSeconds:
+            type: integer
+            default: 60
+            description: Maximum duration of the web download test in seconds
+          webServerId:
+            type: integer
+            description: Optional predefined web server identifier
+          testHosts:
+            type: array
+            description: List of URLs or hostnames to be tested
+            items:
+              type: string
+              example: www.google.com
+          resolveDNSOnSensor:
+            type: boolean
+            default: false
+            description: Whether DNS resolution should occur on the sensor
+    on-demand-tests.ActiveTestRequest:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequestBase'
+      - type: object
+        required:
+        - ipAddress
+        properties:
+          ipAddress:
+            $ref: '#/components/schemas/on-demand-tests.IpAddressSettings'
+    on-demand-tests.TracerouteTestResults:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
+      - type: object
+        properties:
+          traceRouteResults:
+            type: array
+            items:
+              $ref: '#/components/schemas/on-demand-tests.TraceRouteResultsEntry'
+    on-demand-tests.HttpUploadTestStatusResponse:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
+      - type: object
+        properties:
+          results:
+            $ref: '#/components/schemas/on-demand-tests.HttpUploadTestResults'
+    on-demand-tests.SpeedtestServerCandidate:
+      type: object
+      properties:
+        id:
+          type: integer
+        latency:
+          type: number
+          format: double
+        name:
+          type: string
+        host:
+          type: string
+        port:
+          type: integer
+        location:
+          type: string
+        country:
+          type: string
+    on-demand-tests.TcpUploadTestStatusResponse:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
+      - type: object
+        properties:
+          results:
+            $ref: '#/components/schemas/on-demand-tests.TcpUploadTestResults'
+    on-demand-tests.SpeedtestTransfer:
+      type: object
+      properties:
+        throughputMbps:
+          type: number
+          format: double
+        bytes:
+          type: integer
+          format: int64
+        elapsedMilliseconds:
+          type: integer
+        latencyMilliseconds:
+          type: number
+          format: double
+        latencyLowMilliseconds:
+          type: number
+          format: double
+        latencyHighMilliseconds:
+          type: number
+          format: double
+        jitterMilliseconds:
+          type: number
+          format: double
+        startTime:
+          type: string
+          format: date-time
+        endTime:
+          type: string
+          format: date-time
+    on-demand-tests.PacketCaptureTestStatusResponse:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
+      - type: object
+        properties:
+          captureStatus:
+            type: string
+            description: Additional indicator in case of packet capture failures.
+            enum:
+            - SUCCESS
+            - CAPTURE_ERROR
+            - FILE_SIZE_EXCEEDED
+            - CHANNEL_SET_ERROR
+            - UNDEFINED
+    on-demand-tests.MosResultsEntry:
+      type: object
+      description: MOS measurement results for a sampling interval
+      properties:
+        mos:
+          type: number
+          description: Mean Opinion Score value
+        elapsedSeconds:
+          type: number
+          description: Elapsed time since start of the test in seconds
+        estimatedPacketCount:
+          type: integer
+          description: Estimated number of packets processed
+        lossRatePercentage:
+          type: number
+          description: Packet loss rate as a percentage
+        averageBurstSize:
+          type: number
+          description: Average burst size of lost packets
+        averageJitterMilliseconds:
+          type: number
+          description: Average jitter in milliseconds
+    on-demand-tests.PingTestEndpointSettings:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.TestEndpointSettings'
+      - type: object
+        required:
+        - pingEndpointId
+        properties:
+          pingEndpointId:
+            type: integer
+            minimum: 1
+            description: Identifier of the ping endpoint configuration
+      description: Ping-specific endpoint settings (testPort is not externally configurable)
+    on-demand-tests.PacketCaptureListResponse:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/common.ZeroBasedPagination'
+        items:
+          type: array
+          description: List of packet capture test metadata
+          items:
+            $ref: '#/components/schemas/on-demand-tests.PacketCaptureItem'
+    on-demand-tests.PingTestResults:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
+      - type: object
+        properties:
+          pingResults:
+            type: array
+            items:
+              $ref: '#/components/schemas/on-demand-tests.PingResultsEntry'
+    on-demand-tests.MosTestStatusResponse:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
+      - type: object
+        properties:
+          results:
+            $ref: '#/components/schemas/on-demand-tests.MosTestResults'
+    on-demand-tests.ActiveTestsListResponse:
+      type: object
+      properties:
+        pagination:
+          $ref: '#/components/schemas/common.ZeroBasedPagination'
+        items:
+          type: array
+          description: List of active on-demand test metadata
+          items:
+            $ref: '#/components/schemas/on-demand-tests.ActiveTestsItem'
+    on-demand-tests.PingTestRequest:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequest'
+      - type: object
+        required:
+        - testEndpoint
+        properties:
+          testEndpoint:
+            $ref: '#/components/schemas/on-demand-tests.PingTestEndpointSettings'
+          payloadSizeBytes:
+            type: integer
+            default: 32
+            enum:
+            - 32
+            - 150
+            - 1450
+            - 9600
+            - 64000
+            description: Ping payload size in bytes
+          intervalMilliseconds:
+            type: integer
+            default: 1000
+            description: Interval between ping packets
+          timeoutMilliseconds:
+            type: integer
+            default: 1000
+            description: Timeout for each ping request
+          testCount:
+            type: integer
+            default: 10
+            description: Number of ping requests to send
+          qosCategory:
+            $ref: '#/components/schemas/on-demand-tests.QosCategoryInRequest'
+    on-demand-tests.OnDemandTestResponse:
+      type: object
+      properties:
+        testId:
+          type: string
+        status:
+          type: string
+          example: REQUESTED
+    on-demand-tests.QosCategoryInRequest:
+      type: object
+      description: QoS configuration for the test traffic
+      properties:
+        qosCategory:
+          type: string
+          default: BEST_EFFORT_0
+          enum:
+          - BEST_EFFORT_0
+          - BACKGROUND_1
+          - VIDEO_5
+          - VOICE_6
+          description: QoS category index used for the test (Best Effort, Background, Video, Voice)
     on-demand-tests.Iperf3TestRequest:
       allOf:
       - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequest'
@@ -2208,323 +2623,6 @@ components:
             type: boolean
             default: false
             description: Use zero-copy mode
-    on-demand-tests.PingTestRequest:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequest'
-      - type: object
-        required:
-        - testEndpoint
-        properties:
-          testEndpoint:
-            $ref: '#/components/schemas/on-demand-tests.PingTestEndpointSettings'
-          payloadSizeBytes:
-            type: integer
-            default: 32
-            enum:
-            - 32
-            - 150
-            - 1450
-            - 9600
-            - 64000
-            description: Ping payload size in bytes
-          intervalMilliseconds:
-            type: integer
-            default: 1000
-            description: Interval between ping packets
-          timeoutMilliseconds:
-            type: integer
-            default: 1000
-            description: Timeout for each ping request
-          testCount:
-            type: integer
-            default: 10
-            description: Number of ping requests to send
-          qosCategory:
-            $ref: '#/components/schemas/on-demand-tests.QosCategoryInRequest'
-    on-demand-tests.MosTestStatusResponse:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
-      - type: object
-        properties:
-          results:
-            $ref: '#/components/schemas/on-demand-tests.MosTestResults'
-    on-demand-tests.NetworkAttachResultsBase:
-      type: object
-      properties:
-        attachTimeMilliseconds:
-          type: number
-          description: Attach time in milliseconds.
-        ipRetrievalTimeMilliseconds:
-          type: number
-          description: IP retrieval time in milliseconds.
-        ipAddress:
-          type: string
-          description: IP address used for the test.
-        gatewayAddress:
-          type: string
-          description: Gateway address used for the test.
-    on-demand-tests.PacketCaptureTestRequest:
-      type: object
-      required:
-      - mode
-      - captureTimeSeconds
-      properties:
-        mode:
-          type: string
-          enum:
-          - CHANNEL
-          - ACCESS_POINT
-        accessPointId:
-          type: integer
-        captureTimeSeconds:
-          type: integer
-        captureFilter:
-          type: string
-        band:
-          type: number
-          enum:
-          - 2.4
-          - 5.0
-          - 6.0
-        channel:
-          type: integer
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
-    on-demand-tests.PacketCaptureTestStatusResponse:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
-      - type: object
-        properties:
-          captureStatus:
-            type: string
-            description: Additional indicator in case of packet capture failures.
-            enum:
-            - SUCCESS
-            - CAPTURE_ERROR
-            - FILE_SIZE_EXCEEDED
-            - CHANNEL_SET_ERROR
-            - UNDEFINED
-    on-demand-tests.TcpDownloadTestRequest:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.TcpTestRequest'
-      - type: object
-        properties:
-          downloadMegabytes:
-            type: string
-            default: FOUR
-            enum:
-            - ONE
-            - FOUR
-            - TEN
-            - HUNDRED
-            - TWOHUNDRED
-            - FIVEHUNDRED
-            description: Download payload size in megabytes
-    on-demand-tests.WebDownloadTestRequest:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequestWithDns'
-      - type: object
-        properties:
-          proxyServerUrl:
-            type: string
-            description: Optional proxy server URL used for the web download test
-            example: http://proxy.example.com:8080
-          timeoutSeconds:
-            type: integer
-            default: 60
-            description: Maximum duration of the web download test in seconds
-          webServerId:
-            type: integer
-            description: Optional predefined web server identifier
-          testHosts:
-            type: array
-            description: List of URLs or hostnames to be tested
-            items:
-              type: string
-              example: www.google.com
-          resolveDNSOnSensor:
-            type: boolean
-            default: false
-            description: Whether DNS resolution should occur on the sensor
-    on-demand-tests.OnDemandTestResponse:
-      type: object
-      properties:
-        testId:
-          type: string
-        status:
-          type: string
-          example: REQUESTED
-    on-demand-tests.PingTestEndpointSettings:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.TestEndpointSettings'
-      - type: object
-        required:
-        - pingEndpointId
-        properties:
-          pingEndpointId:
-            type: integer
-            minimum: 1
-            description: Identifier of the ping endpoint configuration
-      description: Ping-specific endpoint settings (testPort is not externally configurable)
-    on-demand-tests.PingTestStatusResponse:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
-      - type: object
-        properties:
-          results:
-            $ref: '#/components/schemas/on-demand-tests.PingTestResults'
-    on-demand-tests.PacketCaptureListResponse:
-      type: object
-      properties:
-        pagination:
-          $ref: '#/components/schemas/common.ZeroBasedPagination'
-        items:
-          type: array
-          description: List of packet capture test metadata
-          items:
-            $ref: '#/components/schemas/on-demand-tests.PacketCaptureItem'
-    on-demand-tests.Iperf3TestStatusResponse:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
-      - type: object
-        properties:
-          results:
-            $ref: '#/components/schemas/on-demand-tests.Iperf3TestResults'
-    on-demand-tests.HttpResultsEntry:
-      type: object
-      properties:
-        testNumber:
-          type: number
-          description: The test number.
-        throughputMbps:
-          type: number
-          description: The throughput achieved during the test in Mbps.
-        qosCategory:
-          type: number
-          description: The QoS category for the test.
-    on-demand-tests.Iperf3TestResults:
-      type: object
-      properties:
-        transferredBytes:
-          type: integer
-          format: int64
-          description: Total number of bytes transferred during the test
-        throughputMbps:
-          type: number
-          format: double
-          description: Measured throughput in megabits per second
-        rawIperf3Output:
-          type: object
-          description: Raw iperf3 JSON output (raw large payload)
-    on-demand-tests.UdpDownloadTestRequest:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.UdpTestRequest'
-      - type: object
-        properties:
-          downloadMegabytes:
-            type: string
-            default: FOUR
-            enum:
-            - ONE
-            - FOUR
-            - TEN
-            - HUNDRED
-            - TWOHUNDRED
-            - FIVEHUNDRED
-            description: Download payload size in megabytes
-    on-demand-tests.TestEndpointSettings:
-      type: object
-      description: Base endpoint configuration for active tests
-      properties:
-        testHost:
-          type: string
-          description: Hostname or IP address of the test endpoint
-        testPort:
-          type: integer
-          description: Port used for the test endpoint (ignored for ping tests)
-        sonarId:
-          type: integer
-          minimum: 1
-          description: Sonar ID of the endpoint
-        resolveDNSOnSensor:
-          type: boolean
-          description: Whether DNS resolution should occur on the sensor
-    on-demand-tests.UdpUploadTestResults:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
-      - type: object
-        properties:
-          udpUploadResults:
-            type: array
-            items:
-              $ref: '#/components/schemas/on-demand-tests.UdpResultsEntry'
-    on-demand-tests.TracerouteTestRequest:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequest'
-      - type: object
-        required:
-        - testEndpoint
-        properties:
-          testEndpoint:
-            $ref: '#/components/schemas/on-demand-tests.TestEndpointSettings'
-          minimumTtl:
-            type: integer
-            default: 1
-            description: Minimum TTL (hop count) to start the traceroute
-          maximumTtl:
-            type: integer
-            default: 255
-            description: Maximum TTL (hop count) for the traceroute
-          queriesPerHop:
-            type: integer
-            default: 5
-            description: Number of probe packets sent per hop
-          timeoutMilliseconds:
-            type: integer
-            default: 2000
-            description: Timeout in milliseconds for each probe
-          testTimeoutSeconds:
-            type: integer
-            default: 20
-            description: Overall timeout for the traceroute test
-          qosCategory:
-            $ref: '#/components/schemas/on-demand-tests.QosCategoryInRequest'
-    on-demand-tests.UdpUploadTestRequest:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.UdpTestRequest'
-      - type: object
-        properties:
-          uploadMegabytes:
-            type: string
-            default: FOUR
-            enum:
-            - ONE
-            - FOUR
-            - TEN
-            - HUNDRED
-            - TWOHUNDRED
-            - FIVEHUNDRED
-            description: Upload payload size in megabytes
     on-demand-tests.WebDownloadTestResults:
       allOf:
       - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
@@ -2559,213 +2657,115 @@ components:
             type: array
             items:
               $ref: '#/components/schemas/on-demand-tests.WebDownloadResultsEntry'
-    on-demand-tests.SpeedtestTransfer:
+    on-demand-tests.HttpResultsEntry:
       type: object
       properties:
+        testNumber:
+          type: number
+          description: The test number.
         throughputMbps:
           type: number
-          format: double
-        bytes:
+          description: The throughput achieved during the test in Mbps.
+        qosCategory:
+          type: number
+          description: The QoS category for the test.
+    on-demand-tests.IpAddressSettingsWithDns:
+      allOf:
+      - $ref: '#/components/schemas/on-demand-tests.IpAddressSettings'
+      - type: object
+        description: IP addressing configuration with optional DNS server overrides
+        properties:
+          dnsIpv4Server:
+            type: string
+            example: 0.0.0.0
+            description: DNS IPv4 server address to be used during the test
+          dnsIpv6Server:
+            type: string
+            example: '::'
+            description: DNS IPv6 server address to be used during the test
+    on-demand-tests.MosTestSender:
+      type: object
+      description: Sender configuration (no IP or port exposure)
+      properties:
+        packetSizeBytes:
           type: integer
-          format: int64
-        elapsedMilliseconds:
+          default: 188
+          description: Packet size in bytes
+        sendTimeSeconds:
           type: integer
-        latencyMilliseconds:
-          type: number
-          format: double
-        latencyLowMilliseconds:
-          type: number
-          format: double
-        latencyHighMilliseconds:
-          type: number
-          format: double
-        jitterMilliseconds:
-          type: number
-          format: double
-        startTime:
-          type: string
-          format: date-time
-        endTime:
-          type: string
-          format: date-time
-    on-demand-tests.PingGatewayTestRequest:
+          default: 30
+          description: Total send time in seconds
+        streamIntervalMilliseconds:
+          type: integer
+          default: 20
+          description: Stream interval in milliseconds
+        samplingIntervalSeconds:
+          type: integer
+          default: 5
+          description: Sampling interval in seconds
+    on-demand-tests.SpeedtestRequest:
       allOf:
       - $ref: '#/components/schemas/on-demand-tests.ActiveTestRequest'
       - type: object
         properties:
-          payloadSizeBytes:
+          testServerId:
             type: integer
-            default: 32
-            enum:
-            - 32
-            - 150
-            - 1450
-            - 9600
-            - 64000
-            description: Ping payload size in bytes
-          intervalMilliseconds:
+            description: Specific Ookla speedtest server ID to use
+          downloadConnectionRangeMin:
             type: integer
-            default: 1000
-            description: Interval between ping packets
-          timeoutMilliseconds:
+            example: 0
+            description: Minimum number of parallel connections for download test
+          downloadConnectionRangeMax:
             type: integer
-            default: 1000
-            description: Timeout for each ping request
-          testCount:
+            example: 0
+            description: Maximum number of parallel connections for download test
+          uploadConnectionRangeMin:
             type: integer
-            default: 10
-            description: Number of ping requests to send
-          qosCategory:
-            $ref: '#/components/schemas/on-demand-tests.QosCategoryInRequest'
-    on-demand-tests.TcpUploadTestStatusResponse:
+            example: 0
+            description: Minimum number of parallel connections for upload test
+          uploadConnectionRangeMax:
+            type: integer
+            example: 0
+            description: Maximum number of parallel connections for upload test
+    on-demand-tests.TcpDownloadTestStatusResponse:
       allOf:
       - $ref: '#/components/schemas/on-demand-tests.OnDemandTestStatusBase'
       - type: object
         properties:
           results:
-            $ref: '#/components/schemas/on-demand-tests.TcpUploadTestResults'
-    on-demand-tests.PacketCaptureItem:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: Unique identifier for the test
-        testKey:
-          type: string
-          format: uuid
-          description: UUID key for the test
-        testId:
-          type: integer
-          format: int64
-          description: Numeric test ID
-        testType:
-          type: string
-          enum:
-          - PacketCapture
-          - AccessPointTraffic
-          description: Type of packet capture test
-        eyeId:
-          type: integer
-          format: int64
-          description: ID of the sensor (eye) that performed the test
-        eyeUuid:
-          type: string
-          format: uuid
-          description: UUID of the sensor
-        eyeName:
-          type: string
-          description: Name of the sensor
-        orgUuid:
-          type: string
-          format: uuid
-          description: UUID of the organization
-        apId:
-          type: integer
-          description: Access point ID
-        ssid:
-          type: string
-          description: SSID of the access point
-        bssid:
-          type: string
-          description: BSSID (MAC address) of the access point
-        band:
-          type: string
-          enum:
-          - '2.4'
-          - '5'
-          - '6'
-          - N/A
-          description: Frequency band
-        channel:
-          type: integer
-          description: WiFi channel number
-        gid:
-          type: integer
-          description: Group ID
-        resultsFileS3Key:
-          type: string
-          description: S3 key for the PCAP file
-        runStatus:
-          type: string
-          enum:
-          - IN_PROGRESS
-          - COMPLETE
-          - ERROR
-          description: Overall run status of the test
-        errorCode:
-          type: integer
-          format: int64
-          description: Error code if the test failed (0 means no error)
-        errorMessage:
-          type: string
-          description: Human-readable error message if the test failed
-        testStatus:
-          type: string
-          description: Additional indicator in case of test failures
-        captureStatus:
-          type: string
-          description: Packet capture specific status indicator
-        createdAt:
-          type: string
-          format: date-time
-          description: Test creation timestamp (UTC)
-        hostname:
-          type: string
-          description: Hostname of the sensor
-    on-demand-tests.TraceRouteResultsEntry:
-      type: object
-      properties:
-        hop:
-          type: integer
-          minimum: 1
-          description: Hop number
-        ipAddress:
-          type: string
-          description: IP address of the responding hop
-        timeMilliseconds:
-          type: array
-          description: Round-trip times in milliseconds for each probe attempt
-          items:
-            type: integer
-        ttl:
-          type: array
-          description: TTL values used for each probe attempt
-          items:
-            type: integer
-    common.ZeroBasedPagination:
-      type: object
-      properties:
-        perPage:
-          type: integer
-          description: Number of records per page
-        page:
-          type: integer
-          description: Current page number (0-based)
-        total:
-          type: integer
-          description: Total number of records available
-        pages:
-          type: integer
-          description: Total number of pages
-    on-demand-tests.TcpUploadTestResults:
-      allOf:
-      - $ref: '#/components/schemas/on-demand-tests.NetworkAttachResultsBase'
-      - type: object
-        properties:
-          udpUploadResults:
-            type: array
-            items:
-              $ref: '#/components/schemas/on-demand-tests.TcpResultsEntry'
+            $ref: '#/components/schemas/on-demand-tests.TcpDownloadTestResults'
+  parameters:
+    on-demand-tests.SensorIdFilterForRunTest:
+      name: sensorId
+      in: path
+      description: Trigger test for the sensor referenced by its id.
+      required: true
+      schema:
+        type: integer
+    on-demand-tests.TestIdFilter:
+      name: testId
+      in: path
+      description: Get test status for the test referenced by its ID
+      required: true
+      schema:
+        type: string
+        format: uuid
+    on-demand-tests.SensorIdFilter:
+      name: sensorId
+      in: path
+      description: Get test status for the sensor referenced by its ID
+      required: true
+      schema:
+        type: integer
   responses:
-    common.404NotFoundResponse:
-      description: Resource Not Found
+    common.403Forbidden:
+      description: Forbidden
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
-    common.403Forbidden:
-      description: Forbidden
+    common.404NotFoundResponse:
+      description: Resource Not Found
       content:
         application/json:
           schema:
