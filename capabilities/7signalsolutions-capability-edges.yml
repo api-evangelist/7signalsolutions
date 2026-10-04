@@ -1,0 +1,57 @@
+slug: 7signalsolutions
+provider: 7SIGNAL
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 4
+edges:
+- tag: Users
+  spec_file: 7signalsolutions-users-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.78
+  evidence: POST /users 'Create a User in Metadata service and mark it as invited'; PUT /users/{userId}/groups
+    'Replace User mapping with one or more Groups'; schemas metadata.Role, metadata.Permission
+  reason: Platform user lifecycle with group, organization, role and permission assignment — classic identity
+    and access administration, not HR employee records.
+- tag: Access Points
+  spec_file: 7signalsolutions-access-points-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.72
+  evidence: GET /access-points/agents 'List the Agent Access Points'; 'Unbind the specified access point
+    from its managing sensor'
+  reason: CRUD over Wi-Fi access points and their BSSIDs is management of network infrastructure assets,
+    squarely IT infrastructure management for the buying enterprise.
+- tag: Eyes
+  spec_file: 7signalsolutions-eyes-api-openapi.yml
+  capability_id: BC-600.40
+  capability_id_l1: BC-600
+  capability_name: IT Operations Management
+  confidence: 0.7
+  evidence: '"List the Agent Eyes available", "Start or stopping automated test on Sensor", schemas eyes.EyesSensor,
+    eyes.PacketCaptureItem'
+  reason: Management of the Sapphire Eye sensors and Mobile Eye agents that perform network monitoring,
+    including automated testing and packet capture — IT operations monitoring and automation. Not a business-domain
+    entity despite the opaque tag.
+- tag: OnDemandTests
+  spec_file: 7signalsolutions-ondemandtests-api-openapi.yml
+  capability_id: BC-600.40
+  capability_id_l1: BC-600
+  capability_name: IT Operations Management
+  confidence: 0.7
+  evidence: POST /on-demand-tests/sensors/{sensorId}/ping 'Trigger ping test'; 'Trigger packet capture
+    test'; 'Get Http download status and results'
+  reason: On-demand network diagnostics (ping, packet capture, throughput/MOS tests) run from sensors
+    — day-to-day IT operations monitoring and troubleshooting. Not a SaaS-product observability surface
+    for the vendor's own service, so the cross-industry IT Operations capability is the honest fit.

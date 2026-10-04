@@ -1115,6 +1115,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/7signalsolutions-capability-edges.yml
+  name: 7SIGNAL Business Capability Map
 - type: Overlay
   url: overlays/7signalsolutions-gateway-v2-overlay.yaml
 - type: DomainSecurity
