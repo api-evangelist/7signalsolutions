@@ -15,7 +15,7 @@ x-type: company
 x-source: harvest:secondary-market
 specificationVersion: '0.20'
 created: '2026-09-05'
-modified: '2026-09-05'
+modified: '2026-10-06'
 position: Producing
 tags:
 - Wireless Network Monitoring
@@ -1115,6 +1115,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- url: https://7signal.com/feed.xml
+  type: BlogRSS
 - type: CapabilityMap
   url: capabilities/7signalsolutions-capability-edges.yml
   name: 7SIGNAL Business Capability Map
