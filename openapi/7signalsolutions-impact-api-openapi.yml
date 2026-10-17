@@ -147,53 +147,97 @@ paths:
       tags:
       - Impact
 components:
+  responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    impact.GranularityParam:
+      name: granularity
+      in: query
+      description: Time-series granularity.
+      required: false
+      schema:
+        type: string
+        enum:
+        - HOUR
+        - DAY
+        - MONTH
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
+    impact.FromRequestParam:
+      name: from
+      in: query
+      description: Start time in milliseconds from the epoch.
+      required: true
+      schema:
+        type: integer
+    impact.TimezoneParam:
+      name: timezone
+      in: query
+      description: Timezone for time-series bucketing (e.g. 'America/New_York').
+      required: false
+      schema:
+        type: string
+    common.PageRequestParam:
+      name: page
+      in: query
+      description: Fetch a particular page of data. The first page is 1.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+    impact.MaxImpactedMinutesParam:
+      name: maxImpactedMinutes
+      in: query
+      description: Filter agents with at most this many impacted minutes.
+      required: false
+      schema:
+        type: integer
+        format: int64
+    impact.MinImpactedMinutesParam:
+      name: minImpactedMinutes
+      in: query
+      description: Filter agents with at least this many impacted minutes.
+      required: false
+      schema:
+        type: integer
+        format: int64
+    common.PerPageRequestParam:
+      name: perPage
+      in: query
+      description: Fetch a specific number of records per page
+      required: false
+      schema:
+        type: integer
+    impact.ToRequestParam:
+      name: to
+      in: query
+      description: End time in milliseconds from the epoch.
+      required: true
+      schema:
+        type: integer
   schemas:
-    impact.GetAgentImpactResponse:
+    impact.LocationImpactRow:
       type: object
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/impact.AgentImpactRow'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    impact.GetAgentTimeSeriesResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/impact.AgentTimeSeriesRow'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    common.Pagination:
-      type: object
-      required:
-      - perPage
-      - page
-      - total
-      - pages
-      properties:
-        perPage:
-          type: integer
-          example: 10
-        page:
-          type: integer
-          description: The current page number. The first page is 1
-          minimum: 1
-          example: 2
-        total:
-          type: integer
-          example: 45
-        pages:
-          type: integer
-          example: 5
-    impact.AgentImpactRow:
-      type: object
-      properties:
-        deviceId:
+        locationId:
           type: string
-        deviceName:
+        locationName:
           type:
           - string
           - 'null'
@@ -275,43 +319,34 @@ components:
         deviceCount:
           type: integer
           format: int64
-    impact.GetLocationImpactResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/impact.LocationImpactRow'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-    common.ResponseStatusException:
+    common.Pagination:
       type: object
       required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
+      - perPage
+      - page
+      - total
+      - pages
       properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
+        perPage:
           type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
-    impact.LocationImpactRow:
+          example: 10
+        page:
+          type: integer
+          description: The current page number. The first page is 1
+          minimum: 1
+          example: 2
+        total:
+          type: integer
+          example: 45
+        pages:
+          type: integer
+          example: 5
+    impact.AgentImpactRow:
       type: object
       properties:
-        locationId:
+        deviceId:
           type: string
-        locationName:
+        deviceName:
           type:
           - string
           - 'null'
@@ -345,90 +380,55 @@ components:
             $ref: '#/components/schemas/impact.AgentSummary'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
-  parameters:
-    impact.ToRequestParam:
-      name: to
-      in: query
-      description: End time in milliseconds from the epoch.
-      required: true
-      schema:
-        type: integer
-    impact.MinImpactedMinutesParam:
-      name: minImpactedMinutes
-      in: query
-      description: Filter agents with at least this many impacted minutes.
-      required: false
-      schema:
-        type: integer
-        format: int64
-    common.PerPageRequestParam:
-      name: perPage
-      in: query
-      description: Fetch a specific number of records per page
-      required: false
-      schema:
-        type: integer
-    impact.TimezoneParam:
-      name: timezone
-      in: query
-      description: Timezone for time-series bucketing (e.g. 'America/New_York').
-      required: false
-      schema:
-        type: string
-    impact.FromRequestParam:
-      name: from
-      in: query
-      description: Start time in milliseconds from the epoch.
-      required: true
-      schema:
-        type: integer
-    common.PageRequestParam:
-      name: page
-      in: query
-      description: Fetch a particular page of data. The first page is 1.
-      required: false
-      schema:
-        type: integer
-        minimum: 1
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
-    impact.GranularityParam:
-      name: granularity
-      in: query
-      description: Time-series granularity.
-      required: false
-      schema:
-        type: string
-        enum:
-        - HOUR
-        - DAY
-        - MONTH
-    impact.MaxImpactedMinutesParam:
-      name: maxImpactedMinutes
-      in: query
-      description: Filter agents with at most this many impacted minutes.
-      required: false
-      schema:
-        type: integer
-        format: int64
-  responses:
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    impact.GetLocationImpactResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/impact.LocationImpactRow'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    impact.GetAgentImpactResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/impact.AgentImpactRow'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
+    impact.GetAgentTimeSeriesResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/impact.AgentTimeSeriesRow'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
   securitySchemes:
     oauth2:
       type: oauth2

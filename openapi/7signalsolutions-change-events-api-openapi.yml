@@ -74,6 +74,19 @@ paths:
       tags:
       - Change Events
 components:
+  responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
     change-events.ChangeEventsSensor:
       type: object
@@ -117,6 +130,15 @@ components:
           type: string
         requestId:
           type: string
+    change-events.GetChangeEventsSensorResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/change-events.ChangeEventsSensor'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
     common.Pagination:
       type: object
       required:
@@ -139,28 +161,6 @@ components:
         pages:
           type: integer
           example: 5
-    change-events.GetChangeEventsSensorResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/change-events.ChangeEventsSensor'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
-  responses:
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

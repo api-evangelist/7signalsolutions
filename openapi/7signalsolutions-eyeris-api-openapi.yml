@@ -149,6 +149,29 @@ paths:
           $ref: '#/components/responses/common.404NotFoundResponse'
 components:
   schemas:
+    eyeris.EyerisAnalysisRequestResponse:
+      type: object
+      properties:
+        response:
+          type: string
+        requestId:
+          type: string
+          format: uuid
+        responseId:
+          type: string
+          format: uuid
+    eyeris.EyerisAnalysisResponse:
+      type: object
+      properties:
+        requestId:
+          type: string
+          format: uuid
+        requestQueueId:
+          type: string
+          format: uuid
+        responseId:
+          type: string
+          format: uuid
     eyeris.EyerisAnalysisRequest:
       required:
       - agentId
@@ -175,20 +198,6 @@ components:
           description: The time in milliseconds from the epoch till which the analysis should be done.
           type: string
           format: datetime
-    eyeris.EyerisSseEmitter:
-      type: array
-      items:
-        type: string
-        description: Chunk of the response message
-      example:
-      - data:# Wi-Fi Network Analysis
-      - 'data:'
-      - data:## SUMMARY
-      - data:The device experienced a brief 2-minute connectivity problem
-      - 'data:'
-      - data:## RECOMMENDATIONS
-      - 'data:'
-      - data:No device-side changes are recommended. The brief disruption followed by sustained 100% SLA indicates normal operation was quickly established and maintained.
     common.ResponseStatusException:
       type: object
       required:
@@ -211,29 +220,6 @@ components:
           type: string
         requestId:
           type: string
-    eyeris.EyerisAnalysisResponse:
-      type: object
-      properties:
-        requestId:
-          type: string
-          format: uuid
-        requestQueueId:
-          type: string
-          format: uuid
-        responseId:
-          type: string
-          format: uuid
-    eyeris.EyerisAnalysisRequestResponse:
-      type: object
-      properties:
-        response:
-          type: string
-        requestId:
-          type: string
-          format: uuid
-        responseId:
-          type: string
-          format: uuid
     eyeris.EyerisCreateStreamRequest:
       type: object
       properties:
@@ -241,14 +227,20 @@ components:
           type: string
         inputData:
           type: object
-  parameters:
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
+    eyeris.EyerisSseEmitter:
+      type: array
+      items:
         type: string
+        description: Chunk of the response message
+      example:
+      - data:# Wi-Fi Network Analysis
+      - 'data:'
+      - data:## SUMMARY
+      - data:The device experienced a brief 2-minute connectivity problem
+      - 'data:'
+      - data:## RECOMMENDATIONS
+      - 'data:'
+      - data:No device-side changes are recommended. The brief disruption followed by sustained 100% SLA indicates normal operation was quickly established and maintained.
   responses:
     common.404NotFoundResponse:
       description: Resource Not Found
@@ -262,6 +254,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
   securitySchemes:
     oauth2:
       type: oauth2

@@ -41,7 +41,27 @@ paths:
       tags:
       - Clients
 components:
+  responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   parameters:
+    clients.MacRequestParam:
+      name: mac
+      in: query
+      description: Filter clients by partial MAC address (case-insensitive).
+      required: false
+      schema:
+        type: string
     clients.FromRequestParam:
       name: from
       in: query
@@ -65,14 +85,22 @@ components:
       schema:
         type: number
         format: datetime
-    clients.MacRequestParam:
-      name: mac
-      in: query
-      description: Filter clients by partial MAC address (case-insensitive).
-      required: false
-      schema:
-        type: string
   schemas:
+    clients.SensorClient:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        macAddress:
+          type: string
+        description:
+          type: string
+        user:
+          type: string
+        vendor:
+          type: string
     common.ResponseStatusException:
       type: object
       required:
@@ -94,21 +122,6 @@ components:
         path:
           type: string
         requestId:
-          type: string
-    clients.SensorClient:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        macAddress:
-          type: string
-        description:
-          type: string
-        user:
-          type: string
-        vendor:
           type: string
     common.Range:
       type: object
@@ -153,19 +166,6 @@ components:
             $ref: '#/components/schemas/clients.SensorClient'
         range:
           $ref: '#/components/schemas/common.Range'
-  responses:
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

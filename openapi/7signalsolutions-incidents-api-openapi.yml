@@ -75,7 +75,29 @@ paths:
       tags:
       - Incidents
 components:
+  responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
+    incidents.GetIncidentsResponse:
+      type: object
+      properties:
+        range:
+          $ref: '#/components/schemas/common.Range'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/incidents.NestedIncident'
     incidents.FlatIncident:
       type: object
       properties:
@@ -150,6 +172,42 @@ components:
           type: string
         requestId:
           type: string
+    common.Range:
+      type: object
+      required:
+      - to
+      - toAsDateString
+      - from
+      - fromAsDateString
+      - total
+      - duration
+      - durationAsString
+      properties:
+        to:
+          type: integer
+          example: 1674055815825
+        toAsDateString:
+          type: string
+          format: date-time
+          example: 2023-01-18T15:51:20.437Z[UTC]
+        from:
+          type: integer
+          example: 1674055815825
+        fromAsDateString:
+          type: string
+          format: date-time
+          example: 2023-01-17T15:51:20.438Z[UTC]
+        total:
+          type: integer
+          example: 5
+        duration:
+          type: integer
+          example: 60000
+        durationAsString:
+          type: string
+          example: 60 seconds
+    incidents.GetIncidentResponse:
+      $ref: '#/components/schemas/incidents.FlatIncident'
     incidents.NestedIncident:
       type: object
       properties:
@@ -205,51 +263,6 @@ components:
               type: number
         locationName:
           type: string
-    common.Range:
-      type: object
-      required:
-      - to
-      - toAsDateString
-      - from
-      - fromAsDateString
-      - total
-      - duration
-      - durationAsString
-      properties:
-        to:
-          type: integer
-          example: 1674055815825
-        toAsDateString:
-          type: string
-          format: date-time
-          example: 2023-01-18T15:51:20.437Z[UTC]
-        from:
-          type: integer
-          example: 1674055815825
-        fromAsDateString:
-          type: string
-          format: date-time
-          example: 2023-01-17T15:51:20.438Z[UTC]
-        total:
-          type: integer
-          example: 5
-        duration:
-          type: integer
-          example: 60000
-        durationAsString:
-          type: string
-          example: 60 seconds
-    incidents.GetIncidentsResponse:
-      type: object
-      properties:
-        range:
-          $ref: '#/components/schemas/common.Range'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/incidents.NestedIncident'
-    incidents.GetIncidentResponse:
-      $ref: '#/components/schemas/incidents.FlatIncident'
   parameters:
     common.OrganizationRequestParam:
       name: organization
@@ -282,19 +295,6 @@ components:
       required: false
       schema:
         type: integer
-  responses:
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

@@ -249,43 +249,20 @@ paths:
       tags:
       - Targets
 components:
-  parameters:
-    targets.SensorTargetId:
-      name: targetId
-      in: path
-      description: Sensor Target Id
-      required: true
-      schema:
-        type: number
+  responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
-    targets.SensorTarget:
-      type: object
-      properties:
-        id:
-          type: number
-        name:
-          type: string
-        description:
-          type: string
-        targetType:
-          type: string
-          enum:
-          - SONAR
-          - WEB_SERVER
-          - PING_ENDPOINT
-          - IPERF3_SERVER
-        tcpPort:
-          type: number
-          description: Only applicable to SONAR/IPERF3_SERVER targets
-        dnsName:
-          type: string
-          description: The URL/DNS name for this target
-        ipV4Address:
-          type: string
-          description: Only applicable to SONAR/PING_ENDPOINT targets
-        ipV6Address:
-          type: string
-          description: Only applicable to SONAR/PING_ENDPOINT targets
     targets.GetSensorTargetsResponse:
       type: object
       properties:
@@ -295,6 +272,31 @@ components:
             $ref: '#/components/schemas/targets.SensorTarget'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
+    targets.PostSensorTargetRequest:
+      type: object
+      properties:
+        targetType:
+          type: string
+          enum:
+          - SONAR
+          - WEB_SERVER
+          - PING_ENDPOINT
+          - IPERF3_SERVER
+          description: Which kind of test endpoint to create - cannot be changed after creation
+        name:
+          type: string
+        description:
+          type: string
+        dnsName:
+          type: string
+          description: Required for WEB_SERVER/IPERF3_SERVER; for SONAR/PING_ENDPOINT, at least one of dnsName/ipV4Address/ipV6Address is required
+        ipV4Address:
+          type: string
+        ipV6Address:
+          type: string
+        tcpPort:
+          type: number
+          description: Only applicable to SONAR (defaults to 80 if omitted) and IPERF3_SERVER (defaults to 5201 if omitted); ignored for WEB_SERVER/PING_ENDPOINT
     targets.PutSensorTargetRequest:
       type: object
       properties:
@@ -336,6 +338,8 @@ components:
           type: string
         requestId:
           type: string
+    targets.GetSensorTargetResponse:
+      $ref: '#/components/schemas/targets.SensorTarget'
     common.Pagination:
       type: object
       required:
@@ -358,9 +362,15 @@ components:
         pages:
           type: integer
           example: 5
-    targets.PostSensorTargetRequest:
+    targets.SensorTarget:
       type: object
       properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
         targetType:
           type: string
           enum:
@@ -368,36 +378,26 @@ components:
           - WEB_SERVER
           - PING_ENDPOINT
           - IPERF3_SERVER
-          description: Which kind of test endpoint to create - cannot be changed after creation
-        name:
-          type: string
-        description:
-          type: string
-        dnsName:
-          type: string
-          description: Required for WEB_SERVER/IPERF3_SERVER; for SONAR/PING_ENDPOINT, at least one of dnsName/ipV4Address/ipV6Address is required
-        ipV4Address:
-          type: string
-        ipV6Address:
-          type: string
         tcpPort:
           type: number
-          description: Only applicable to SONAR (defaults to 80 if omitted) and IPERF3_SERVER (defaults to 5201 if omitted); ignored for WEB_SERVER/PING_ENDPOINT
-    targets.GetSensorTargetResponse:
-      $ref: '#/components/schemas/targets.SensorTarget'
-  responses:
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
+          description: Only applicable to SONAR/IPERF3_SERVER targets
+        dnsName:
+          type: string
+          description: The URL/DNS name for this target
+        ipV4Address:
+          type: string
+          description: Only applicable to SONAR/PING_ENDPOINT targets
+        ipV6Address:
+          type: string
+          description: Only applicable to SONAR/PING_ENDPOINT targets
+  parameters:
+    targets.SensorTargetId:
+      name: targetId
+      in: path
+      description: Sensor Target Id
+      required: true
+      schema:
+        type: number
   securitySchemes:
     oauth2:
       type: oauth2

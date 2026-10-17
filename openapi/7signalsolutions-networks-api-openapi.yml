@@ -271,6 +271,15 @@ paths:
       - Networks
 components:
   schemas:
+    networks.GetAgentNetworksResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/networks.AgentNetwork'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
     networks.SensorNetwork:
       type: object
       properties:
@@ -342,17 +351,6 @@ components:
           type: boolean
         ieee80211rClientSupportEnabled6000MHz:
           type: boolean
-    networks.GetAgentNetworkResponse:
-      $ref: '#/components/schemas/networks.AgentNetwork'
-    networks.GetAgentNetworksResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/networks.AgentNetwork'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
     networks.AgentNetworkRequest:
       type: object
       properties:
@@ -360,6 +358,8 @@ components:
           type: string
         isEnabled:
           type: boolean
+    networks.GetSensorNetworkResponse:
+      $ref: '#/components/schemas/networks.SensorNetwork'
     common.ResponseStatusException:
       type: object
       required:
@@ -382,6 +382,8 @@ components:
           type: string
         requestId:
           type: string
+    networks.GetAgentNetworkResponse:
+      $ref: '#/components/schemas/networks.AgentNetwork'
     common.Pagination:
       type: object
       required:
@@ -404,6 +406,10 @@ components:
         pages:
           type: integer
           example: 5
+    networks.PostAgentNetworksRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/networks.AgentNetworkRequest'
     networks.PostSensorNetworkRequest:
       type: object
       required:
@@ -432,10 +438,6 @@ components:
         updatedAt:
           type: string
           format: date-time
-    networks.PostAgentNetworksRequest:
-      type: array
-      items:
-        $ref: '#/components/schemas/networks.AgentNetworkRequest'
     networks.GetSensorNetworksResponse:
       type: object
       properties:
@@ -445,16 +447,6 @@ components:
             $ref: '#/components/schemas/networks.SensorNetwork'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
-    networks.GetSensorNetworkResponse:
-      $ref: '#/components/schemas/networks.SensorNetwork'
-  parameters:
-    common.OrganizationRequestParam:
-      name: organization
-      in: query
-      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
-      required: false
-      schema:
-        type: string
   responses:
     common.404NotFoundResponse:
       description: Resource Not Found
@@ -468,6 +460,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/common.ResponseStatusException'
+  parameters:
+    common.OrganizationRequestParam:
+      name: organization
+      in: query
+      description: Fetch a specific organization. By default, the organization associated with your JWT token will be used.
+      required: false
+      schema:
+        type: string
   securitySchemes:
     oauth2:
       type: oauth2

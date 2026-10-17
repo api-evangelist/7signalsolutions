@@ -50,13 +50,13 @@ paths:
       - Audit
 components:
   parameters:
-    common.PerPageRequestParam:
-      name: perPage
+    audits.ActorParam:
+      name: actor
       in: query
-      description: Fetch a specific number of records per page
+      description: User or system component responsible for the events
       required: false
       schema:
-        type: integer
+        type: string
     audits.StartTimeRangeParam:
       name: startTimeRange
       in: query
@@ -65,13 +65,6 @@ components:
       schema:
         type: string
         format: date-time
-    common.SortFieldParam:
-      name: sortField
-      in: query
-      description: The field on which to sort the results
-      required: false
-      schema:
-        type: string
     common.OrganizationRequestParam:
       name: organization
       in: query
@@ -86,13 +79,14 @@ components:
       required: false
       schema:
         type: string
-    audits.SourceParam:
-      name: source
+    audits.EndTimeRangeParam:
+      name: endTimeRange
       in: query
-      description: The area of the system from which the event originated
+      description: The end time range of the events to fetch
       required: false
       schema:
         type: string
+        format: date-time
     common.SortOrderParam:
       name: order
       in: query
@@ -103,10 +97,17 @@ components:
         enum:
         - asc
         - desc
-    audits.ActorParam:
-      name: actor
+    audits.ActionParam:
+      name: action
       in: query
-      description: User or system component responsible for the events
+      description: The action taken
+      required: false
+      schema:
+        type: string
+    common.SortFieldParam:
+      name: sortField
+      in: query
+      description: The field on which to sort the results
       required: false
       schema:
         type: string
@@ -118,21 +119,39 @@ components:
       schema:
         type: integer
         minimum: 1
-    audits.ActionParam:
-      name: action
+    audits.SourceParam:
+      name: source
       in: query
-      description: The action taken
+      description: The area of the system from which the event originated
       required: false
       schema:
         type: string
-    audits.EndTimeRangeParam:
-      name: endTimeRange
+    common.PerPageRequestParam:
+      name: perPage
       in: query
-      description: The end time range of the events to fetch
+      description: Fetch a specific number of records per page
       required: false
       schema:
-        type: string
-        format: date-time
+        type: integer
+  responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
     common.ResponseStatusException:
       type: object
@@ -156,6 +175,15 @@ components:
           type: string
         requestId:
           type: string
+    audits.AuditsAgentsResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/audits.AuditAgentRecord'
+        pagination:
+          $ref: '#/components/schemas/common.Pagination'
     common.Pagination:
       type: object
       required:
@@ -178,15 +206,6 @@ components:
         pages:
           type: integer
           example: 5
-    audits.AuditsAgentsResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/audits.AuditAgentRecord'
-        pagination:
-          $ref: '#/components/schemas/common.Pagination'
     audits.AuditAgentRecord:
       type: object
       properties:
@@ -213,25 +232,6 @@ components:
         initiated:
           type: string
           description: How this event was initiated
-  responses:
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2

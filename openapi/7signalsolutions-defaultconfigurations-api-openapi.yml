@@ -55,6 +55,19 @@ paths:
       tags:
       - DefaultConfigurations
 components:
+  responses:
+    common.404NotFoundResponse:
+      description: Resource Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
+    common.400BadRequestResponse:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/common.ResponseStatusException'
   schemas:
     default-configurations.GetSensorDefaultConfigurationsResponse:
       type: object
@@ -65,28 +78,6 @@ components:
             $ref: '#/components/schemas/default-configurations.SensorDefaultConfiguration'
         pagination:
           $ref: '#/components/schemas/common.Pagination'
-    common.ResponseStatusException:
-      type: object
-      required:
-      - timestamp
-      - status
-      - error
-      - path
-      - requestId
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-        status:
-          type: integer
-        error:
-          type: string
-        message:
-          type: string
-        path:
-          type: string
-        requestId:
-          type: string
     default-configurations.SensorDefaultConfiguration:
       type: object
       properties:
@@ -115,6 +106,30 @@ components:
         slaGroupId:
           type: number
           description: id of the SLA group applied by this configuration, if any
+    common.ResponseStatusException:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - path
+      - requestId
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+        requestId:
+          type: string
+    default-configurations.GetSensorDefaultConfigurationResponse:
+      $ref: '#/components/schemas/default-configurations.SensorDefaultConfiguration'
     common.Pagination:
       type: object
       required:
@@ -137,8 +152,6 @@ components:
         pages:
           type: integer
           example: 5
-    default-configurations.GetSensorDefaultConfigurationResponse:
-      $ref: '#/components/schemas/default-configurations.SensorDefaultConfiguration'
   parameters:
     default-configurations.SensorDefaultConfigurationId:
       name: configurationId
@@ -147,19 +160,6 @@ components:
       required: true
       schema:
         type: number
-  responses:
-    common.404NotFoundResponse:
-      description: Resource Not Found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
-    common.400BadRequestResponse:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/common.ResponseStatusException'
   securitySchemes:
     oauth2:
       type: oauth2
