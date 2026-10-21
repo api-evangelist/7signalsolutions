@@ -1,0 +1,43 @@
+generated: '2026-10-21'
+method: searched
+checked:
+- cisco-meraki/integrations/cisco-meraki-integration-edges.yml
+- thousandeyes/integrations/thousandeyes-integration-edges.yml
+source:
+- cisco-meraki/integrations/cisco-meraki-integration-edges.yml
+- thousandeyes/integrations/thousandeyes-integration-edges.yml
+edges:
+- partner_name: Cisco Meraki (own)
+  partner: cisco-meraki
+  partner_match: mirror
+  mirror_match: domain+verified
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.cisco.com/en-US/apps/505874
+  mirror_of: cisco-meraki/integrations/cisco-meraki-integration-edges.yml
+  apps:
+  - 7SIGNAL Platform
+  listing_count: 1
+  detected: '2026-10-21'
+  detected_by: mirror-platform-listings.py
+  category: Client Analytics, Wireless Assurance
+- partner_name: ThousandEyes (own)
+  partner: thousandeyes
+  partner_match: mirror
+  mirror_match: domain+verified
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://marketplace.cisco.com/en-US/apps/505874
+  mirror_of: thousandeyes/integrations/thousandeyes-integration-edges.yml
+  apps:
+  - 7SIGNAL Platform
+  listing_count: 1
+  detected: '2026-10-21'
+  detected_by: mirror-platform-listings.py
+  category: Client Analytics, Wireless Assurance
