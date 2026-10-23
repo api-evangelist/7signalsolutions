@@ -9,6 +9,9 @@ artifacts:
   authentication/7signalsolutions-authentication.yml:
     method: searched
     evidence: declared in the artifact
+  capabilities/7signalsolutions-capability-edges.yml:
+    method: unknown
+    evidence: no authorship recorded
   changelog/7signalsolutions-changelog.yml:
     method: searched
     evidence: declared in the artifact
@@ -27,37 +30,13 @@ artifacts:
   front-door-ai/2026-09-17.yml:
     method: unknown
     evidence: no authorship recorded
-  kin/checks-2026-09-24T161608.yml:
+  integrations/7signalsolutions-integration-edges.yml:
+    method: searched
+    evidence: declared in the artifact
+  integrations/_index.yml:
     method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-05T211839.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T011047.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T211804.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-06T224210.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T200636.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-07T213054.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T214843.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-08T232836.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T204815.yml:
-    method: generated
-    evidence: Kin Score snapshot written by score.rb
-  kin/score-2026-09-10T222408.yml:
+    evidence: carries an API Evangelist house phrase
+  kin/checks-2026-10-11T110117.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-12T062655.yml:
@@ -139,6 +118,21 @@ artifacts:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   kin/score-2026-09-24T161608.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T210408.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-09-25T232841.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T000835.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-03T024842.yml:
+    method: generated
+    evidence: Kin Score snapshot written by score.rb
+  kin/score-2026-10-11T110117.yml:
     method: generated
     evidence: Kin Score snapshot written by score.rb
   lifecycle/7signalsolutions-lifecycle.yml:
@@ -257,21 +251,13 @@ artifacts:
     method: harvested
     evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
       to the provider's source is unverified
-  openapi/_original/7signalsolutions-openapi.json.archived.txt:
-    method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
   openapi/_original/7signalsolutions-openapi_2.json:
     method: harvested
     evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
       to the provider's source is unverified
-  openapi/_original/7signalsolutions-openapi_2.json.archived.txt:
-    method: harvested
-    evidence: found in openapi/_original/; the fetch URL and bytes were not recorded, so byte-identity
-      to the provider's source is unverified
   overlays/7signalsolutions-gateway-v2-overlay.yaml:
-    method: generated
-    evidence: declared in the artifact
+    method: derived
+    evidence: an API Evangelist overlay (title) over the provider's contract
   packages/7signalsolutions-packages.yml:
     method: searched
     evidence: declared in the artifact
