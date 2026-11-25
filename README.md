@@ -128,32 +128,44 @@ Model Context Protocol servers that expose the API to agents.
 
 OpenAPI overlays, including conversational phrasing for each operation.
 
-- [7Signalsolutions Gateway V2 Overlay](https://apis.io/overlays/7signalsolutions/7signalsolutions-gateway-v2-overlay/)
+- [7SIGNAL Gateway V2 Overlay](https://apis.io/overlays/7signalsolutions/7signalsolutions-gateway-v2-overlay/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [7SIGNAL API Rules](https://apis.io/rules/7signalsolutions/7signalsolutions-rules/)
 
 #### Security (2)
 
 Authentication, trust centre, and vulnerability disclosure.
 
-- [7Signalsolutions Authentication](https://apis.io/security/7signalsolutions/7signalsolutions-authentication/)
-- [7Signalsolutions Domain Security](https://apis.io/security/7signalsolutions/7signalsolutions-domain-security/)
+- [7SIGNAL Authentication](https://apis.io/security/7signalsolutions/7signalsolutions-authentication/)
+- [7SIGNAL Domain Security](https://apis.io/security/7signalsolutions/7signalsolutions-domain-security/)
 
 #### OAuth scopes (1)
 
 The permissions the API asks for.
 
-- [7Signalsolutions Scopes](https://apis.io/scopes/7signalsolutions/7signalsolutions-scopes/)
+- [7SIGNAL Scopes](https://apis.io/scopes/7signalsolutions/7signalsolutions-scopes/)
 
 #### Plans and pricing (1)
 
 Published plans, tiers and prices.
 
-- [7Signalsolutions Plans Pricing](https://apis.io/plans/7signalsolutions/7signalsolutions-plans-pricing/)
+- [7SIGNAL Plans Pricing](https://apis.io/plans/7signalsolutions/7signalsolutions-plans-pricing/)
 
 #### Rate limits (1)
 
 Published request limits.
 
-- [7Signalsolutions Rate Limits](https://apis.io/rate-limits/7signalsolutions/7signalsolutions-rate-limits/)
+- [7SIGNAL Rate Limits](https://apis.io/rate-limits/7signalsolutions/7signalsolutions-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [7SIGNAL Finops](https://apis.io/finops/7signalsolutions/7signalsolutions-finops/)
 
 ## Where to find this API
 
@@ -174,18 +186,18 @@ Links to the company's own pages. This repository publishes no copy of their spe
 
 ## API Evangelist rating
 
-**Kin Score 56.7** — strong · rubric 0.25.0 · scored 2026-10-23
+**Kin Score 57.0** — strong · rubric 0.28.1 · scored 2026-11-21
 
 | Facet | Score |
 |---|---|
 | Discoverability | 75.0 |
-| Contract quality | 61.4 |
-| Contract governance | 18.2 |
-| Operational transparency | 50.0 |
+| Contract quality | 58.4 |
+| Contract governance | 31.8 |
+| Operational transparency | 47.6 |
 | Developer ergonomics | 58.9 |
-| Access clarity | 52.6 |
+| Access clarity | 55.3 |
 
-**Agent readiness 51.2** — agent-ready (gated down from agent-native)
+**Agent readiness 54.8** — agent-ready (gated down from agent-native)
 
 | Agent-readiness dimension | Result |
 |---|---|
@@ -195,7 +207,7 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | MCP Server | verified |
 | Auth Clarity | served (partial credit) |
 | Idempotency | — |
-| Error Semantics | derived (partial credit) |
+| Error Semantics | verified |
 | OpenAPI Examples | partial |
 | Rate Limit Signal | documented (partial credit) |
 | Event Surface Described | yes |
@@ -210,8 +222,12 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Agentic Commerce | — |
 | Pagination Ratio | partial |
 | Operation Distinctiveness | mostly (partial credit) |
+| MCP Tool Quality | na |
+| Onboarding Descriptor | — |
+| Dns Aid Index | na |
+| Markdown Negotiation | na |
 
-**Regulatory alignment 39.2** — Horizontal (data, software, accessibility, platform)
+**Regulatory alignment 33.3** — Horizontal (data, software, accessibility, platform)
 
 The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/7signalsolutions/](https://apis.io/providers/7signalsolutions/).
 
